@@ -1,0 +1,30 @@
+stages:
+  - build
+  - package
+
+build:
+  stage: build
+  image: node:24.12.0-alpine
+  script:
+    - npm i
+    - ng build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH
+
+package:
+  stage: package
+  image: docker:27
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - IMAGE=$CI_REGISTRY_IMAGE/frontend
+    - echo "Building image $IMAGE"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login registry.gitlab.com -u "$CI_REGISTRY_USER" --password-stdin
+    - docker build -t $IMAGE:latest .
+    - docker push $IMAGE:latest
+  rules:
+    - if: $CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE != "merge_request_event"
