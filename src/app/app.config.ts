@@ -4,22 +4,22 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {provideClientHydration, withEventReplay} from '@angular/platform-browser';
 import {
-  IPublicClientApplication,
-  PublicClientApplication,
-  InteractionType,
   BrowserCacheLocation,
+  InteractionType,
+  IPublicClientApplication,
   LogLevel,
+  PublicClientApplication,
 } from '@azure/msal-browser';
 import {
-  MsalInterceptor,
-  MSAL_INSTANCE,
-  MsalInterceptorConfiguration,
-  MsalGuardConfiguration,
   MSAL_GUARD_CONFIG,
+  MSAL_INSTANCE,
   MSAL_INTERCEPTOR_CONFIG,
-  MsalService,
-  MsalGuard,
   MsalBroadcastService,
+  MsalGuard,
+  MsalGuardConfiguration,
+  MsalInterceptor,
+  MsalInterceptorConfiguration,
+  MsalService,
 } from '@azure/msal-angular';
 import {environment} from '../../environment/environment';
 import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
@@ -77,14 +77,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideClientHydration(withEventReplay()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true,
-    },
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory,
@@ -96,6 +90,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true,
     },
     MsalService,
     MsalGuard,

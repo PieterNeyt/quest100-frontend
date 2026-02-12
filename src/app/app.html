@@ -1,21 +1,36 @@
-<nav hlmNavigationMenu>
-  @if (!loginDisplay) {
-    <li hlmNavigationMenuItem>
-      <button hlmNavigationMenuTrigger (click)="login()">Login</button>
-    </li>
-  }
+<nav hlmNavigationMenu class="navbar-container">
+  <div class="flex-1">
+    <a routerLink="/" class="text-xl font-bold tracking-tight px-4">
+      Quest 100
+    </a>
+  </div>
 
-  @if (loginDisplay) {
+  <ul hlmNavigationMenuList class="flex-2 justify-center">
     <li hlmNavigationMenuItem>
-      <button hlmNavigationMenuTrigger (click)="logout()">Logout</button>
+      <a hlmNavigationMenuLink routerLink="/profile">Profile</a>
     </li>
-  }
+  </ul>
 
-  <li hlmNavigationMenuItem>
-    <a hlmNavigationMenuLink routerLink="/profile">Profile</a>
-  </li>
+  <div class="flex-1 flex justify-end">
+    <ul hlmNavigationMenuList>
+      @if (!loginDisplay) {
+        <li hlmNavigationMenuItem>
+          <button hlmNavigationMenuTrigger (click)="login()">Login</button>
+        </li>
+      }
+
+      @if (loginDisplay) {
+        <li hlmNavigationMenuItem>
+          <button hlmNavigationMenuTrigger (click)="logout()">Logout</button>
+        </li>
+      }
+    </ul>
+  </div>
 </nav>
 
 <main class="main">
-  <router-outlet/>
+  <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
+  @if (!isIframe) {
+    <router-outlet></router-outlet>
+  }
 </main>

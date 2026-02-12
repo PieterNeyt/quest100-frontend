@@ -4,7 +4,6 @@ import {HlmNavigationMenuImports} from '@spartan-ng/helm/navigation-menu';
 import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalGuardConfiguration, MsalService} from '@azure/msal-angular';
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
-import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +14,7 @@ import {isPlatformBrowser} from '@angular/common';
 export class App implements OnInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
   loginDisplay = false;
+  isIframe = false;
   private readonly _destroying$ = new Subject<void>();
 
   constructor(
@@ -41,11 +41,8 @@ export class App implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
     this.authService.handleRedirectObservable().subscribe();
+    this.isIframe = window !== window.parent && !window.opener;
     this.msalBroadcastService.msalSubject$
       .pipe(
         filter(
@@ -85,6 +82,7 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
+
   logout(popup?: boolean) {
     if (popup) {
       this.authService.logoutPopup({
@@ -93,6 +91,7 @@ export class App implements OnInit, OnDestroy {
     } else {
       this.authService.logoutRedirect();
     }
+
   }
 
   ngOnDestroy(): void {
