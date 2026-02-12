@@ -1,0 +1,47 @@
+<div class="qr-container">
+  <div class="card">
+    <h2>QR Code Generator</h2>
+
+    <div class="input-group">
+      <label for="qr-id">ID voor QR Code:</label>
+      <input
+        type="text"
+        id="qr-id"
+        [(ngModel)]="inputId"
+        placeholder="Voer een ID in"
+        (keyup.enter)="generateQRCode()"
+      />
+    </div>
+
+    <button
+      class="generate-btn"
+      (click)="generateQRCode()"
+      [disabled]="isLoading()"
+    >
+      @if (isLoading()) {
+        <span class="spinner"></span>
+        Bezig met genereren...
+      } @else {
+        Genereer QR Code
+      }
+    </button>
+
+    @if (errorMessage()) {
+      <div class="error-message">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (qrCodeImage()) {
+      <div class="qr-result">
+        <h3>Jouw QR Code:</h3>
+        <div class="qr-image-container">
+          <img [src]="qrCodeImage()" alt="Generated QR Code" />
+        </div>
+        <button class="download-btn" (click)="downloadQRCode()">
+          Download QR Code
+        </button>
+      </div>
+    }
+  </div>
+</div>
