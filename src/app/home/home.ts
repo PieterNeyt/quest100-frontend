@@ -7,5 +7,5 @@ import {Component, signal} from '@angular/core';
   styleUrl: './home.css',
 })
 export class Home {
-  protected readonly title = signal('testProject');
+  protected readonly title = signal('Quest 100');
 }

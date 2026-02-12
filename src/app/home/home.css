@@ -6,8 +6,8 @@
   --hot-red: oklch(61.42% 0.238 15.34);
   --orange-red: oklch(63.32% 0.24 31.68);
 
-  --gray-900: oklch(19.37% 0.006 300.98);
-  --gray-700: oklch(36.98% 0.014 302.71);
+  /*--gray-900: oklch(19.37% 0.006 300.98);*/
+  /*--gray-700: oklch(36.98% 0.014 302.71);*/
   --gray-400: oklch(70.9% 0.015 304.04);
 
   --red-to-pink-to-purple-vertical-gradient: linear-gradient(
@@ -36,7 +36,6 @@
 
 h1 {
   font-size: 3.125rem;
-  color: var(--gray-900);
   font-weight: 500;
   line-height: 100%;
   letter-spacing: -0.125rem;
@@ -48,7 +47,6 @@ h1 {
 
 p {
   margin: 0;
-  color: var(--gray-700);
 }
 
 .angular-logo {
@@ -96,7 +94,6 @@ p {
   border-radius: 2.75rem;
   border: 0;
   transition: background 0.3s ease;
-  font-family: var(--inter-font);
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 500;
@@ -140,10 +137,6 @@ p {
 .social-links path {
   transition: fill 0.3s ease;
   fill: var(--gray-400);
-}
-
-.social-links a:hover svg path {
-  fill: var(--gray-900);
 }
 
 @media screen and (max-width: 650px) {

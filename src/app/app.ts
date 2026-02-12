@@ -1,7 +1,7 @@
-import {Component, inject, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {HlmNavigationMenuImports} from '@spartan-ng/helm/navigation-menu';
-import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalGuardConfiguration, MsalService} from '@azure/msal-angular';
+import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-angular';
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
 
@@ -12,20 +12,15 @@ import {filter, Subject, takeUntil} from 'rxjs';
   styleUrl: './app.css'
 })
 export class App implements OnInit, OnDestroy {
-  private platformId = inject(PLATFORM_ID);
-  loginDisplay = false;
-  isIframe = false;
+  loginDisplay = signal(false);
+  isIframe = signal(false);
   private readonly _destroying$ = new Subject<void>();
-
-  constructor(
-    @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
-    private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
-  ) {
-  }
+  private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
+  private authService = inject(MsalService)
+  private msalBroadcastService = inject(MsalBroadcastService);
 
   setLoginDisplay() {
-    this.loginDisplay = this.authService.instance.getAllAccounts().length > 0;
+    this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
   }
 
   checkAndSetActiveAccount() {
@@ -42,7 +37,7 @@ export class App implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authService.handleRedirectObservable().subscribe();
-    this.isIframe = window !== window.parent && !window.opener;
+    this.isIframe.set(window !== window.parent && !window.opener);
     this.msalBroadcastService.msalSubject$
       .pipe(
         filter(
@@ -51,7 +46,7 @@ export class App implements OnInit, OnDestroy {
             msg.eventType === EventType.ACTIVE_ACCOUNT_CHANGED
         )
       )
-      .subscribe((result: EventMessage) => {
+      .subscribe(() => {
         if (this.authService.instance.getAllAccounts().length === 0) {
           window.location.pathname = '/';
         } else {

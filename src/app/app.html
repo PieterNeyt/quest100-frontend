@@ -13,13 +13,13 @@
 
   <div class="flex-1 flex justify-end">
     <ul hlmNavigationMenuList>
-      @if (!loginDisplay) {
+      @if (!loginDisplay()) {
         <li hlmNavigationMenuItem>
           <button hlmNavigationMenuTrigger (click)="login()">Login</button>
         </li>
       }
 
-      @if (loginDisplay) {
+      @if (loginDisplay()) {
         <li hlmNavigationMenuItem>
           <button hlmNavigationMenuTrigger (click)="logout()">Logout</button>
         </li>
@@ -30,7 +30,7 @@
 
 <main class="main">
   <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
-  @if (!isIframe) {
+  @if (!isIframe()) {
     <router-outlet></router-outlet>
   }
 </main>
