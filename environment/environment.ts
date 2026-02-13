@@ -7,7 +7,7 @@ export const environment = {
     },
   },
   apiConfig: {
-    scopes: ['User.Read'],
-    uri: 'https://graph.microsoft.com/v1.0/me',
+    scopes: ['api://202acdbd-a466-4526-9ab9-895e4371eabe/access_as_user'],
+    uri: 'http://localhost:8080',
   },
 };

@@ -4,6 +4,7 @@ import {HlmNavigationMenuImports} from '@spartan-ng/helm/navigation-menu';
 import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-angular';
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
+import {ProfileService} from './services/profileService';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class App implements OnInit, OnDestroy {
   private readonly _destroying$ = new Subject<void>();
   private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
   private authService = inject(MsalService)
+  private profileService = inject(ProfileService)
   private msalBroadcastService = inject(MsalBroadcastService);
 
   setLoginDisplay() {
@@ -49,6 +51,7 @@ export class App implements OnInit, OnDestroy {
       .subscribe(() => {
         if (this.authService.instance.getAllAccounts().length === 0) {
           window.location.pathname = '/';
+          this.profileService.syncUser()
         } else {
           this.setLoginDisplay();
         }
@@ -64,6 +67,7 @@ export class App implements OnInit, OnDestroy {
       .subscribe(() => {
         this.setLoginDisplay();
         this.checkAndSetActiveAccount();
+        this.profileService.syncUser();
       });
   }
 
