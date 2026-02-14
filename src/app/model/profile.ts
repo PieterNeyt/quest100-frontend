@@ -4,4 +4,5 @@ export interface Profile {
   lastName: string;
   email: string;
   kudos: number;
+  prefferedLanguage: 'NL' | 'EN';
 }

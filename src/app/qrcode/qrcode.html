@@ -1,17 +1,7 @@
 <div class="qr-container">
   <div class="card">
-    <h2>QR Code Generator</h2>
-
-    <div class="input-group">
-      <label for="qr-id">ID voor QR Code:</label>
-      <input
-        type="text"
-        id="qr-id"
-        [(ngModel)]="inputId"
-        placeholder="Voer een ID in"
-        (keyup.enter)="generateQRCode()"
-      />
-    </div>
+    <h2>{{ t.t('qrCode.title') }}</h2>
+    <p class="subtitle">{{ t.t('qrCode.subtitle') }}</p>
 
     <button
       class="generate-btn"
@@ -20,9 +10,9 @@
     >
       @if (isLoading()) {
         <span class="spinner"></span>
-        Bezig met genereren...
+        {{ t.t('qrCode.generating') }}
       } @else {
-        Genereer QR Code
+        {{ t.t('qrCode.generateButton') }}
       }
     </button>
 
@@ -34,13 +24,17 @@
 
     @if (qrCodeImage()) {
       <div class="qr-result">
-        <h3>Jouw QR Code:</h3>
+        <h3>{{ t.t('qrCode.scanTitle') }}</h3>
         <div class="qr-image-container">
-          <img [src]="qrCodeImage()" alt="Generated QR Code" />
+          <img [src]="qrCodeImage()" alt="Aanwezigheids QR Code" />
         </div>
-        <button class="download-btn" (click)="downloadQRCode()">
-          Download QR Code
-        </button>
+        <p class="info-text">{{ t.t('qrCode.infoText') }}</p>
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="success-message">
+        {{ successMessage() }}
       </div>
     }
   </div>

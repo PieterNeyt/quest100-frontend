@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "title": "Quest 100",
+    "profile": "Profiel",
+    "qrCode": "QR Code",
+    "login": "Inloggen",
+    "logout": "Uitloggen"
+  },
+  "attendance": {
+    "registering": "Aanwezigheid registreren...",
+    "pleaseWait": "Even geduld",
+    "registered": "Aanwezigheid geregistreerd! ✓",
+    "successMessage": "Je aanwezigheid is succesvol geregistreerd.",
+    "kudosEarned": "Kudos verdiend:",
+    "totalKudos": "Totaal kudos:",
+    "viewProfile": "Bekijk profiel",
+    "alreadyRegistered": "Al geregistreerd",
+    "alreadyRegisteredMessage": "Je aanwezigheid voor deze les is al eerder geregistreerd.",
+    "noteTitle": "Let op:",
+    "noteMessage": "Je kunt maar één keer per les aanwezig registreren.",
+    "registrationFailed": "Registratie mislukt",
+    "backToHome": "Terug naar home"
+  },
+  "profile": {
+    "firstName": "Voornaam:",
+    "lastName": "Achternaam:",
+    "kudos": "Kudos:",
+    "id": "Id:"
+  },
+  "qrCode": {
+    "title": "Aanwezigheidsregistratie",
+    "subtitle": "Genereer een QR-code voor aanwezigheid",
+    "generateButton": "Genereer QR-code",
+    "generating": "QR-code genereren...",
+    "scanTitle": "Scan deze QR-code voor aanwezigheid",
+    "infoText": "Studenten kunnen deze code scannen om hun aanwezigheid te registreren"
+  }
+}

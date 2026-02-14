@@ -1,55 +1,43 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { QrCode } from '../services/qr-code';
+import { QrCodeService } from '../services/qrcodeService';
+import {TranslationService} from '../services/translationService';
 
 @Component({
-  selector: 'app-qr-code',
+  selector: 'app-qrcode',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './qrcode.html',
   styleUrl: './qrcode.css'
 })
 export class QrCodeComponent {
+  private qrCodeService = inject(QrCodeService);
+  public t = inject(TranslationService);
   qrCodeImage = signal<string | null>(null);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
-  inputId = signal('');
+  successMessage = signal<string | null>(null);
 
-  constructor(private qrCodeService: QrCode) {}
+  // voorlopig gwn hardcoded class id tot timeedit integratie
+  private readonly TEMP_CLASS_ID = '00000000-0000-0000-0000-000000000001';
 
   generateQRCode(): void {
-    const id = this.inputId();
-
-    if (!id.trim()) {
-      this.errorMessage.set('Geef een ID in');
-      return;
-    }
-
     this.isLoading.set(true);
     this.errorMessage.set(null);
+    this.successMessage.set(null);
     this.qrCodeImage.set(null);
 
-    this.qrCodeService.generateQRCode(id).subscribe({
+    this.qrCodeService.generateQRCode(this.TEMP_CLASS_ID).subscribe({
       next: (response) => {
         this.qrCodeImage.set(response.qrCode);
         this.isLoading.set(false);
+        this.successMessage.set('QR-code succesfully generated');
       },
       error: (error) => {
         console.error('Error generating QR code:', error);
-        this.errorMessage.set('Fout bij het genereren van de QR code');
+        this.errorMessage.set('Something went wrong while generating QR-code');
         this.isLoading.set(false);
       }
     });
-  }
-
-  downloadQRCode(): void {
-    const qrCode = this.qrCodeImage();
-    if (!qrCode) return;
-
-    const link = document.createElement('a');
-    link.href = qrCode;
-    link.download = `qrcode-${this.inputId()}.png`;
-    link.click();
   }
 }

@@ -1,4 +1,4 @@
-/* Update this in your CSS file */
+/* Navigation menu cleanup */
 [hlmNavigationMenuList] {
   background: transparent !important;
   border: none !important;
@@ -16,4 +16,131 @@
   padding: 0.5rem 1rem;
   width: 95%;
   max-width: 1200px;
+}
+
+/* Language selector */
+
+.fi {
+  display: inline-block;
+  width: 1.33em;
+  line-height: 1em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 2px;
+}
+
+.language-button .fi {
+  width: 20px;
+  height: 15px;
+}
+
+.language-option .fi {
+  width: 24px;
+  height: 18px;
+}
+
+.language-selector {
+  position: relative;
+}
+
+.language-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: white;
+
+  transition: background 0.2s ease;
+}
+
+.language-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.language-button .flag {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.language-button .language-code {
+  font-weight: 500;
+}
+
+.language-button .dropdown-arrow {
+  transition: transform 0.2s ease;
+}
+
+/* Dropdown menu */
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  border-radius: 6px;
+  min-width: 200px;
+  z-index: 50;
+  overflow: hidden;
+
+  box-shadow: none;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  width: 100%;
+  padding: 0.75rem 1rem;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+  text-align: left;
+
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+
+  transition: background 0.2s ease;
+}
+
+.language-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.language-option.active {
+  background: rgba(255, 255, 255, 0.12);
+  font-weight: 600;
+  color: white;
+}
+
+.language-option .flag {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.language-option .language-name {
+  font-size: 0.875rem;
+}
+.flag, .fi {
+  width: 20px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.language-option .flag {
+  width: 24px;
+  height: 16px;
 }

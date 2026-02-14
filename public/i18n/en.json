@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "title": "Quest 100",
+    "profile": "Profile",
+    "qrCode": "QR Code",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "attendance": {
+    "registering": "Registering attendance...",
+    "pleaseWait": "Please wait",
+    "registered": "Attendance registered! ✓",
+    "successMessage": "Your attendance has been successfully registered.",
+    "kudosEarned": "Kudos earned:",
+    "totalKudos": "Total kudos:",
+    "viewProfile": "View profile",
+    "alreadyRegistered": "Already registered",
+    "alreadyRegisteredMessage": "Your attendance for this class has already been registered.",
+    "noteTitle": "Note:",
+    "noteMessage": "You can only register attendance once per class.",
+    "registrationFailed": "Registration failed",
+    "backToHome": "Back to home"
+  },
+  "profile": {
+    "firstName": "First Name:",
+    "lastName": "Last Name:",
+    "kudos": "Kudos:",
+    "id": "Id:"
+  },
+  "qrCode": {
+    "title": "Attendance Registration",
+    "subtitle": "Generate a QR code for attendance",
+    "generateButton": "Generate QR code",
+    "generating": "Generating QR code...",
+    "scanTitle": "Scan this QR code for attendance",
+    "infoText": "Students can scan this code to register their attendance"
+  }
+}

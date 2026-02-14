@@ -1,27 +1,66 @@
 <nav hlmNavigationMenu class="navbar-container">
   <div class="flex-1">
     <a routerLink="/" class="text-xl font-bold tracking-tight px-4">
-      Quest 100
+      {{ translationService.t('nav.title') }}
     </a>
   </div>
 
   <ul hlmNavigationMenuList class="flex-2 justify-center">
     <li hlmNavigationMenuItem>
-      <a hlmNavigationMenuLink routerLink="/profile">Profile</a>
+      <a hlmNavigationMenuLink routerLink="/profile">
+        {{ translationService.t('nav.profile') }}
+      </a>
     </li>
   </ul>
 
-  <div class="flex-1 flex justify-end">
+  <div class="flex-1 flex justify-end items-center gap-4">
+    <div class="language-selector">
+      <button
+        class="language-button"
+        (click)="toggleLanguageDropdown()"
+        type="button"
+      >
+        <span [class]="translationService.getCurrentFlagClass()"></span>
+        <span class="language-code">{{ translationService.currentLanguage().toUpperCase() }}</span>
+        <svg class="dropdown-arrow" [style.transform]="showLanguageDropdown() ? 'rotate(180deg)' : 'none'" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+          <path d="M6 9L1 4h10L6 9z"/>
+        </svg>
+      </button>
+
+      @if (showLanguageDropdown()) {
+        <div class="language-dropdown">
+          @for (lang of translationService.availableLanguages; track lang.code) {
+            <button
+              class="language-option"
+              [class.active]="lang.code === translationService.currentLanguage()"
+              (click)="changeLanguage(lang.code)"
+              type="button"
+            >
+              <span [class]="lang.flagClass"></span>
+              <span class="language-name">{{ lang.name }}</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
     <ul hlmNavigationMenuList>
       @if (!loginDisplay()) {
         <li hlmNavigationMenuItem>
-          <button hlmNavigationMenuTrigger (click)="login()">Login</button>
+          <button hlmNavigationMenuTrigger (click)="login()">
+            {{ translationService.t('nav.login') }}
+          </button>
         </li>
-      }
-
-      @if (loginDisplay()) {
+      } @else {
         <li hlmNavigationMenuItem>
-          <button hlmNavigationMenuTrigger (click)="logout()">Logout</button>
+          <a hlmNavigationMenuLink routerLink="/qrcode">
+            {{ translationService.t('nav.qrCode') }}
+          </a>
+        </li>
+        <li hlmNavigationMenuItem>
+          <button hlmNavigationMenuTrigger (click)="logout()">
+            {{ translationService.t('nav.logout') }}
+          </button>
         </li>
       }
     </ul>
@@ -29,7 +68,6 @@
 </nav>
 
 <main class="main">
-  <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
   @if (!isIframe()) {
     <router-outlet></router-outlet>
   }

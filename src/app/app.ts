@@ -5,21 +5,27 @@ import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
 import {ProfileService} from './services/profileService';
+import {TranslationService, Language} from './services/translationService';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App implements OnInit, OnDestroy {
   loginDisplay = signal(false);
   isIframe = signal(false);
+  showLanguageDropdown = signal(false);
+
   private readonly _destroying$ = new Subject<void>();
   private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
-  private authService = inject(MsalService)
-  private profileService = inject(ProfileService)
+  private authService = inject(MsalService);
+  private profileService = inject(ProfileService);
   private msalBroadcastService = inject(MsalBroadcastService);
+
+  public translationService = inject(TranslationService);
 
   setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
@@ -81,7 +87,6 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-
   logout(popup?: boolean) {
     if (popup) {
       this.authService.logoutPopup({
@@ -90,7 +95,15 @@ export class App implements OnInit, OnDestroy {
     } else {
       this.authService.logoutRedirect();
     }
+  }
 
+  async changeLanguage(lang: Language): Promise<void> {
+    await this.translationService.setLanguage(lang);
+    this.showLanguageDropdown.set(false);
+  }
+
+  toggleLanguageDropdown(): void {
+    this.showLanguageDropdown.update(val => !val);
   }
 
   ngOnDestroy(): void {
