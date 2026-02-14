@@ -4,6 +4,7 @@ import {switchMap} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {Profile} from '../model/profile';
+import {TranslationService, Language} from './translationService';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ export class ProfileService {
   private url = environment.apiConfig.uri;
   private http = inject(HttpClient)
   private authService = inject(MsalService)
+  private translationService = inject(TranslationService);
   profile = signal<Profile | null>(null);
 
   syncUser() {
@@ -26,6 +28,8 @@ export class ProfileService {
       )
       .subscribe((profile: Profile) => {
         this.profile.set(profile);
+        const lang = profile.prefferedLanguage.toLowerCase() as Language;
+        this.translationService.setLanguageFromProfile(lang);
       });
   }
 }

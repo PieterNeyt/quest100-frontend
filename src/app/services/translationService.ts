@@ -86,7 +86,11 @@ export class TranslationService {
     return typeof value === 'string' ? value : key;
   }
 
-
+  setLanguageFromProfile(lang: Language): void {
+    this.currentLanguage.set(lang);
+    localStorage.setItem('preferredLanguage', lang);
+    this.loadTranslations(lang);
+  }
   t = (key: string) => this.translate(key);
 
   getCurrentFlagClass(): string {
