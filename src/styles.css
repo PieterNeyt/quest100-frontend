@@ -3,73 +3,68 @@
 @import 'tailwindcss/preflight.css' layer(base);
 @import 'tailwindcss/utilities.css';
 
-/* You can add global styles to this file, and also import other style files */
-
 @import "@spartan-ng/brain/hlm-tailwind-preset.css";
 
-:root {
-  color-scheme: light;
+@theme {
+  --color-brand-primary: #FF6B35;
+  --color-brand-secondary: #004E89;
+  --color-brand-accent: #FFD23F;
+  --color-brand-success: #06D6A0;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --animate-bg-shift: backgroundShift 20s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
 
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  @keyframes backgroundShift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, 30px) scale(1.1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 }
 
-:root.dark {
+:root {
   color-scheme: dark;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius: 1rem;
 
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
+  --card: oklch(0.18 0.03 260);
   --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.984 0.003 247.858);
-  --sidebar-primary-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+
+  --primary: 25 100% 61%;
+  --primary-foreground: oklch(1 0 0);
+
+  --accent: 46 100% 62%;
+  --accent-foreground: oklch(0.129 0.042 264.695);
+
+  --border: oklch(0.25 0.02 260);
+}
+
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.1;
+  background-image:
+    radial-gradient(circle at 20% 50%, var(--color-brand-primary) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--color-brand-secondary) 0%, transparent 50%);
+  animation: var(--animate-bg-shift);
+}
+
+.quest-bg-blur {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -1;
+  opacity: 0.15;
+  background-image:
+    radial-gradient(circle at 20% 50%, #FF6B35 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, #004E89 0%, transparent 40%);
+  animation: backgroundShift 20s ease-in-out infinite;
+  filter: blur(80px);
 }
 
 @layer base {
@@ -86,4 +81,67 @@
   main {
     @apply w-full flex flex-col items-center p-4 pt-12;
   }
+}
+
+.cdk-overlay-container hlm-dropdown-menu {
+  background-color: #1a2332 !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid #2d3748 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.5rem !important;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5) !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem],
+.cdk-overlay-container [hlmDropdownMenuItem] span {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem] ng-icon {
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-right: 0.5rem !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'],
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'] span,
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'] ng-icon {
+  color: #ff4444 !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem]:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive']:hover {
+  background-color: rgba(255, 68, 68, 0.1) !important;
+}
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--primary), transparent 60%);
+  border-radius: 10px;
+  border: 2px solid transparent; /* Acts as padding around the thumb */
+  background-clip: content-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--primary), transparent 60%) transparent;
 }

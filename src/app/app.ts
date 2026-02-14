@@ -5,10 +5,20 @@ import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
 import {ProfileService} from './services/profileService';
+import {HlmButtonImports} from '@spartan-ng/helm/button';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {HlmDropdownMenuImports} from '@spartan-ng/helm/dropdown-menu';
+import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
+import {NgOptimizedImage} from '@angular/common';
+import {provideIcons} from '@ng-icons/core';
+import {lucideLogOut, lucideSettings, lucideUser} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage],
+  providers: [
+    provideIcons({lucideUser, lucideSettings, lucideLogOut})
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -20,6 +30,7 @@ export class App implements OnInit, OnDestroy {
   private authService = inject(MsalService)
   private profileService = inject(ProfileService)
   private msalBroadcastService = inject(MsalBroadcastService);
+  profile = this.profileService.profile;
 
   setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
@@ -90,7 +101,6 @@ export class App implements OnInit, OnDestroy {
     } else {
       this.authService.logoutRedirect();
     }
-
   }
 
   ngOnDestroy(): void {

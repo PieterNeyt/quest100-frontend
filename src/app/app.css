@@ -1,19 +1,111 @@
-/* Update this in your CSS file */
-[hlmNavigationMenuList] {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
+@reference "../styles.css";
 
 .navbar-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 1rem;
-  z-index: 50;
-  margin: 1rem auto;
-  padding: 0.5rem 1rem;
-  width: 95%;
-  max-width: 1200px;
+  @apply sticky top-4 z-50 flex items-center justify-between w-[95%] mx-auto px-6 py-2.5;
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.nav-section-left, .nav-section-right, .nav-links-center {
+  @apply flex-1;
+}
+
+.nav-links-center {
+  @apply hidden md:flex justify-center gap-2;
+}
+
+.nav-section-right {
+  @apply flex justify-end items-center gap-4;
+}
+
+.logo-text {
+  @apply text-2xl font-black tracking-tighter cursor-pointer;
+  background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-link {
+  @apply text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200;
+  color: oklch(0.554 0.046 257.417);
+}
+
+.nav-link:hover {
+  color: var(--color-brand-primary);
+  background: color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
+}
+
+.user-profile-pill {
+  @apply flex items-center;
+  background: color-mix(in oklch, var(--background) 60%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+}
+
+.avatar-trigger {
+  @apply flex items-center gap-3 pl-4 pr-1 py-1 h-auto w-auto rounded-full transition-all;
+  border: none ;
+}
+
+.avatar-trigger:hover {
+  @apply bg-white/10;
+}
+
+.user-info {
+  @apply hidden sm:flex flex-col items-end shrink-0;
+}
+
+.user-name {
+  @apply text-sm font-bold text-white leading-none;
+}
+
+.user-level {
+  @apply text-[10px] uppercase tracking-widest font-bold mt-1;
+  color: oklch(0.554 0.046 257.417);
+}
+
+.user-avatar-hlm {
+  @apply size-10 border-2 border-transparent transition-all rounded-full shrink-0;
+  background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent));
+}
+
+.avatar-trigger:hover .user-avatar-hlm {
+  @apply border-white/50 scale-105;
+}
+:host ::ng-deep [hlmDropdownMenuItem] span {
+  @apply text-white opacity-100 ;
+  color: white ;
+}
+
+:host ::ng-deep [hlmDropdownMenuItem] ng-icon {
+  @apply text-white/80 mr-2 ;
+  color: rgba(255, 255, 255, 0.8) ;
+}
+
+:host ::ng-deep hlm-dropdown-menu {
+  @apply shadow-2xl rounded-xl border border-border ;
+  background-color: oklch(0.129 0.042 264.695 / 0.85) ;
+  backdrop-filter: blur(12px) saturate(150%) ;
+  padding: 4px ;
+}
+
+:host ::ng-deep [hlmDropdownMenuItem][variant='destructive'] {
+  @apply text-red-500 ;
+}
+
+:host ::ng-deep [hlmDropdownMenuItem][variant='destructive'] span,
+:host ::ng-deep [hlmDropdownMenuItem][variant='destructive'] ng-icon {
+  @apply text-red-500 ;
+  color: #ef4444 ;
+}
+
+:host ::ng-deep [hlmDropdownMenuItem][variant='destructive']:hover {
+  @apply bg-red-500/10 ;
+}
+
+:host ::ng-deep [hlmDropdownMenuItem]:not([variant='destructive']):hover {
+  @apply bg-white/10 ;
 }
