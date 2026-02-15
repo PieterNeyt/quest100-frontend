@@ -52,11 +52,11 @@
       </div>
     }
 
-    @if (errorMessage() && !isLoading()) {
+    @if (!isSuccess() && !isLoading()) {
       <div class="error-state">
         <div class="error-icon">✗</div>
         <h2>{{ t.t('attendance.registrationFailed') }}</h2>
-        <p class="error-message">{{ errorMessage() }}</p>
+        <p class="error-message">{{ t.t('errors.generic') }}</p>
         <a routerLink="/" class="btn-home">{{ t.t('attendance.backToHome') }}</a>
       </div>
     }

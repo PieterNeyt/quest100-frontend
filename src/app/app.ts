@@ -7,10 +7,11 @@ import {filter, Subject, takeUntil} from 'rxjs';
 import {ProfileService} from './services/profileService';
 import {TranslationService, Language} from './services/translationService';
 import {CommonModule} from '@angular/common';
+import {NgxSonnerToaster} from 'ngx-sonner';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, CommonModule],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, CommonModule, NgxSonnerToaster],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

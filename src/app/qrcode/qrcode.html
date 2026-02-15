@@ -16,12 +16,6 @@
       }
     </button>
 
-    @if (errorMessage()) {
-      <div class="error-message">
-        {{ errorMessage() }}
-      </div>
-    }
-
     @if (qrCodeImage()) {
       <div class="qr-result">
         <h3>{{ t.t('qrCode.scanTitle') }}</h3>
@@ -29,12 +23,6 @@
           <img [src]="qrCodeImage()" alt="Aanwezigheids QR Code" />
         </div>
         <p class="info-text">{{ t.t('qrCode.infoText') }}</p>
-      </div>
-    }
-
-    @if (successMessage()) {
-      <div class="success-message">
-        {{ successMessage() }}
       </div>
     }
   </div>

@@ -33,6 +33,18 @@
     "generateButton": "Genereer QR-code",
     "generating": "QR-code genereren...",
     "scanTitle": "Scan deze QR-code voor aanwezigheid",
-    "infoText": "Studenten kunnen deze code scannen om hun aanwezigheid te registreren"
+    "infoText": "Studenten kunnen deze code scannen om hun aanwezigheid te registreren",
+    "success": "QR-code succesvol gegenereerd",
+    "error": "QR-code genereren mislukt"
+  },
+  "errors": {
+    "generic": "Er is iets misgegaan. Probeer het later opnieuw.",
+    "invalidQrCode": "Ongeldige QR-code",
+    "network": "Netwerkfout. Controleer je internetverbinding.",
+    "unauthorized": "Je hebt geen toestemming voor deze actie."
+  },
+  "success": {
+    "generic": "Actie succesvol uitgevoerd",
+    "saved": "Wijzigingen succesvol opgeslagen"
   }
 }

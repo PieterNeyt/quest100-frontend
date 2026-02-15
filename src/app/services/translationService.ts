@@ -30,17 +30,7 @@ export class TranslationService {
     { code: 'en', name: 'English', flagClass: 'fi fi-gb' }
   ];
 
-  constructor() {
-    this.loadStoredLanguage();
-  }
-
-  private loadStoredLanguage(): void {
-    const stored = localStorage.getItem('preferredLanguage') as Language;
-    if (stored && (stored === 'nl' || stored === 'en')) {
-      this.currentLanguage.set(stored);
-    }
-    this.loadTranslations(this.currentLanguage());
-  }
+  constructor() {}
 
   async loadTranslations(lang: Language): Promise<void> {
     try {
@@ -54,10 +44,8 @@ export class TranslationService {
     }
   }
 
-
   async setLanguage(lang: Language): Promise<void> {
     this.currentLanguage.set(lang);
-    localStorage.setItem('preferredLanguage', lang);
     await this.loadTranslations(lang);
 
     try {
@@ -69,6 +57,11 @@ export class TranslationService {
     } catch (error) {
       console.error('Failed to update language preference:', error);
     }
+  }
+
+  setLanguageFromProfile(lang: Language): void {
+    this.currentLanguage.set(lang);
+    this.loadTranslations(lang);
   }
 
   translate(key: string): string {
@@ -86,11 +79,6 @@ export class TranslationService {
     return typeof value === 'string' ? value : key;
   }
 
-  setLanguageFromProfile(lang: Language): void {
-    this.currentLanguage.set(lang);
-    localStorage.setItem('preferredLanguage', lang);
-    this.loadTranslations(lang);
-  }
   t = (key: string) => this.translate(key);
 
   getCurrentFlagClass(): string {

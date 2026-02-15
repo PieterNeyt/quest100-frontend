@@ -33,6 +33,18 @@
     "generateButton": "Generate QR code",
     "generating": "Generating QR code...",
     "scanTitle": "Scan this QR code for attendance",
-    "infoText": "Students can scan this code to register their attendance"
+    "infoText": "Students can scan this code to register their attendance",
+    "success": "QR code generated successfully",
+    "error": "Failed to generate QR code"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again later.",
+    "invalidQrCode": "Invalid QR code",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to perform this action."
+  },
+  "success": {
+    "generic": "Operation completed successfully",
+    "saved": "Changes saved successfully"
   }
 }

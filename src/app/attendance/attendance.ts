@@ -3,6 +3,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AttendanceService} from '../services/attendanceService';
 import {TranslationService} from '../services/translationService';
+import {ToastService} from '../services/toastService';
 
 @Component({
   selector: 'app-attendance',
@@ -14,11 +15,12 @@ import {TranslationService} from '../services/translationService';
 export class AttendanceComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private attendanceService = inject(AttendanceService);
+  private toastService = inject(ToastService);
   public t = inject(TranslationService);
+
   isLoading = signal(true);
   isSuccess = signal(false);
   alreadyRegistered = signal(false);
-  errorMessage = signal<string | null>(null);
   kudosEarned = signal(0);
   totalKudos = signal(0);
 
@@ -26,7 +28,7 @@ export class AttendanceComponent implements OnInit {
     const classId = this.route.snapshot.paramMap.get('classId');
 
     if (!classId) {
-      this.errorMessage.set('Ongeldige QR-code');
+      this.toastService.error('errors.invalidQrCode');
       this.isLoading.set(false);
       return;
     }
@@ -38,12 +40,14 @@ export class AttendanceComponent implements OnInit {
         this.totalKudos.set(res.totalKudos);
         this.kudosEarned.set(res.kudosEarned);
         this.alreadyRegistered.set(res.alreadyRegistered);
+
+        if (!res.alreadyRegistered) {
+          this.toastService.success('attendance.successMessage');
+        }
       },
       error: (err) => {
         console.error('Error registering attendance:', err);
-        this.errorMessage.set(
-          err.error?.error || 'Er is een fout opgetreden bij het registreren van aanwezigheid'
-        );
+        this.toastService.error('errors.generic');
         this.isLoading.set(false);
       }
     });

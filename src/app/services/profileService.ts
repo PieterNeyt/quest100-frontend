@@ -26,10 +26,21 @@ export class ProfileService {
           });
         })
       )
-      .subscribe((profile: Profile) => {
-        this.profile.set(profile);
-        const lang = profile.prefferedLanguage.toLowerCase() as Language;
-        this.translationService.setLanguageFromProfile(lang);
+      .subscribe({
+        next: (profile: Profile) => {
+          this.profile.set(profile);
+
+          if (profile.preferredLanguage) {
+            const lang = profile.preferredLanguage.toLowerCase() as Language;
+            this.translationService.setLanguageFromProfile(lang);
+          } else {
+            this.translationService.setLanguageFromProfile('en');
+          }
+        },
+        error: (error) => {
+          console.error('Failed to sync user profile:', error);
+          this.translationService.setLanguageFromProfile('en');
+        }
       });
   }
 }
