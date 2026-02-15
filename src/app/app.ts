@@ -12,6 +12,7 @@ import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
 import {NgOptimizedImage} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
 import {lucideLogOut, lucideSettings, lucideUser} from '@ng-icons/lucide';
+import {environment} from '../../environment/environment';
 
 @Component({
   selector: 'app-root',
@@ -32,11 +33,11 @@ export class App implements OnInit, OnDestroy {
   private msalBroadcastService = inject(MsalBroadcastService);
   profile = this.profileService.profile;
 
-  setLoginDisplay() {
+  private setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
   }
 
-  checkAndSetActiveAccount() {
+  private checkAndSetActiveAccount() {
     let activeAccount = this.authService.instance.getActiveAccount();
 
     if (
@@ -48,8 +49,27 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
+  private tryAutoLogin() {
+    const alreadyTried = sessionStorage.getItem('autoLoginAttempted');
+    if (alreadyTried) return;
+    sessionStorage.setItem('autoLoginAttempted', 'true');
+
+    this.authService.loginRedirect({
+      scopes: environment.apiConfig.scopes,
+      prompt: 'none'
+    });
+  }
+
   ngOnInit(): void {
-    this.authService.handleRedirectObservable().subscribe();
+    this.authService.handleRedirectObservable().subscribe({
+      error: (error: any) => {
+        if (error?.name === 'InteractionRequiredAuthError') {
+          return;
+        }
+        console.error('Unexpected redirect error:', error);
+      },
+    });
+
     this.isIframe.set(window !== window.parent && !window.opener);
     this.msalBroadcastService.msalSubject$
       .pipe(
@@ -62,8 +82,8 @@ export class App implements OnInit, OnDestroy {
       .subscribe(() => {
         if (this.authService.instance.getAllAccounts().length === 0) {
           window.location.pathname = '/';
-          this.profileService.syncUser()
         } else {
+          sessionStorage.removeItem('autoLoginAttempted');
           this.setLoginDisplay();
         }
       });
@@ -76,9 +96,15 @@ export class App implements OnInit, OnDestroy {
         takeUntil(this._destroying$)
       )
       .subscribe(() => {
-        this.setLoginDisplay();
-        this.checkAndSetActiveAccount();
-        this.profileService.syncUser();
+        const accounts = this.authService.instance.getAllAccounts();
+
+        if (accounts.length === 0) {
+          this.tryAutoLogin();
+        } else {
+          this.setLoginDisplay();
+          this.checkAndSetActiveAccount();
+          this.profileService.syncUser();
+        }
       });
   }
 
@@ -93,14 +119,8 @@ export class App implements OnInit, OnDestroy {
   }
 
 
-  logout(popup?: boolean) {
-    if (popup) {
-      this.authService.logoutPopup({
-        mainWindowRedirectUri: '/',
-      });
-    } else {
-      this.authService.logoutRedirect();
-    }
+  logout() {
+    this.authService.logoutRedirect();
   }
 
   ngOnDestroy(): void {
