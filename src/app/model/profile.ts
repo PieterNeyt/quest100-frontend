@@ -7,3 +7,8 @@ export interface Profile {
   preferredLanguage?: 'NL' | 'EN';
   customProfilePicture?: string | null;
 }
+
+export interface SyncProfileResponse {
+  profile: Profile;
+  microsoftProfilePicture: string;
+}

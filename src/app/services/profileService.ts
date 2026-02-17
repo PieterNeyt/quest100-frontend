@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {map, switchMap} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
-import {Profile} from '../model/profile';
+import {Profile, SyncProfileResponse} from '../model/profile';
 import {TranslationService, Language} from './translationService';
 
 @Injectable({
@@ -26,24 +26,23 @@ export class ProfileService {
   get hasCustomPicture(): boolean {
     return this.profile()?.customProfilePicture != null;
   }
-
   syncUser() {
-    this.authService.acquireTokenSilent({scopes: ["User.Read"]})
+    this.authService.acquireTokenSilent({ scopes: ["User.Read"] })
       .pipe(
         switchMap(response => {
           const graphToken = response.accessToken;
-          return this.http.get<Profile>(this.url + "/api/profiles/sync", {
-            headers: {'X-Graph-Token': graphToken}
-          }).pipe(map(profile => ({ profile, graphToken })));
+          return this.http.get<SyncProfileResponse>(this.url + "/api/profiles/sync", {
+            headers: { 'X-Graph-Token': graphToken }
+          });
         })
       )
       .subscribe({
-        next: ({ profile, graphToken }) => {
-          this.profile.set(profile);
-          this.loadMicrosoftPicture(graphToken);
+        next: (response) => {
+          this.profile.set(response.profile);
+          this.microsoftProfilePicture.set(response.microsoftProfilePicture);
 
-          if (profile.preferredLanguage) {
-            const lang = profile.preferredLanguage.toLowerCase() as Language;
+          if (response.profile.preferredLanguage) {
+            const lang = response.profile.preferredLanguage.toLowerCase() as Language;
             this.translationService.setLanguageFromProfile(lang);
           } else {
             this.translationService.setLanguageFromProfile('en');
@@ -53,17 +52,6 @@ export class ProfileService {
           console.error('Failed to sync user profile:', error);
           this.translationService.setLanguageFromProfile('en');
         }
-      });
-  }
-
-  private loadMicrosoftPicture(token: string): void {
-    this.http
-      .get<{ profilePicture: string }>(this.url + '/api/profiles/picture', {
-        headers: { 'X-Graph-Token': token },
-      })
-      .subscribe({
-        next: ({ profilePicture }) => this.microsoftProfilePicture.set(profilePicture),
-        error: () => this.microsoftProfilePicture.set(''),
       });
   }
 
