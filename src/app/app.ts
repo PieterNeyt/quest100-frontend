@@ -25,7 +25,6 @@ export class App implements OnInit, OnDestroy {
   private authService = inject(MsalService);
   private profileService = inject(ProfileService);
   private msalBroadcastService = inject(MsalBroadcastService);
-
   public translationService = inject(TranslationService);
 
   setLoginDisplay() {
