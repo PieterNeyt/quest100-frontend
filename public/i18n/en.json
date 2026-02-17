@@ -25,7 +25,9 @@
     "firstName": "First Name:",
     "lastName": "Last Name:",
     "kudos": "Kudos:",
-    "id": "Id:"
+    "id": "Id:",
+    "changePicture": "Change picture",
+    "deletePicture": "Remove picture"
   },
   "qrCode": {
     "title": "Attendance Registration",

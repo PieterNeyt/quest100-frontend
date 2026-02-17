@@ -25,7 +25,9 @@
     "firstName": "Voornaam:",
     "lastName": "Achternaam:",
     "kudos": "Kudos:",
-    "id": "Id:"
+    "id": "Id:",
+    "changePicture": "Foto wijzigen",
+    "deletePicture": "Foto verwijderen"
   },
   "qrCode": {
     "title": "Aanwezigheidsregistratie",

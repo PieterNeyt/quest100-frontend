@@ -5,4 +5,5 @@ export interface Profile {
   email: string;
   kudos: number;
   preferredLanguage?: 'NL' | 'EN';
+  customProfilePicture?: string | null;
 }

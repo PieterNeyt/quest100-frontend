@@ -1,6 +1,36 @@
-<div>
-  <p><strong>{{ t.t('profile.firstName') }}</strong> {{profile()?.firstName}}</p>
-  <p><strong>{{ t.t('profile.lastName') }}</strong> {{profile()?.lastName}}</p>
-  <p><strong>{{ t.t('profile.kudos') }}</strong> {{profile()?.kudos}}</p>
-  <p><strong>{{ t.t('profile.id') }}</strong> {{profile()?.id}}</p>
+<div class="profile-container">
+  <div class="profile-picture-wrapper">
+    @if (profilePicture) {
+      <img
+        [src]="profilePicture"
+        alt="Profile picture"
+        class="profile-picture"
+      />
+    } @else {
+      <div class="profile-placeholder">
+        {{ profile()?.firstName?.[0] }}{{ profile()?.lastName?.[0] }}
+      </div>
+    }
+  </div>
+
+  <div class="profile-actions">
+    <label class="btn-upload">
+      {{ t.t('profile.changePicture') }}
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+    </label>
+
+    @if (hasCustomPicture) {
+      <button class="btn-delete" (click)="deletePicture()">
+        {{ t.t('profile.deletePicture') }}
+      </button>
+    }
+  </div>
+
+  <div class="profile-info">
+    <p><strong>{{ t.t('profile.firstName') }}</strong> {{ profile()?.firstName }}</p>
+    <p><strong>{{ t.t('profile.lastName') }}</strong> {{ profile()?.lastName }}</p>
+    <p><strong>{{ t.t('profile.kudos') }}</strong> {{ profile()?.kudos }}</p>
+    <p><strong>{{ t.t('profile.id') }}</strong> {{ profile()?.id }}</p>
+  </div>
+
 </div>

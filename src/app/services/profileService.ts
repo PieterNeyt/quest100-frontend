@@ -1,6 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {switchMap} from 'rxjs';
+import {map, switchMap} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {Profile} from '../model/profile';
@@ -10,11 +10,22 @@ import {TranslationService, Language} from './translationService';
   providedIn: 'root',
 })
 export class ProfileService {
-  private url = environment.apiConfig.uri;
-  private http = inject(HttpClient)
-  private authService = inject(MsalService)
-  private translationService = inject(TranslationService);
+  private readonly url = environment.apiConfig.uri;
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(MsalService);
+  private readonly translationService = inject(TranslationService);
+
   profile = signal<Profile | null>(null);
+  microsoftProfilePicture = signal('');
+
+
+  get activeProfilePicture(): string {
+    return this.profile()?.customProfilePicture || this.microsoftProfilePicture();
+  }
+
+  get hasCustomPicture(): boolean {
+    return this.profile()?.customProfilePicture != null;
+  }
 
   syncUser() {
     this.authService.acquireTokenSilent({scopes: ["User.Read"]})
@@ -23,12 +34,13 @@ export class ProfileService {
           const graphToken = response.accessToken;
           return this.http.get<Profile>(this.url + "/api/profiles/sync", {
             headers: {'X-Graph-Token': graphToken}
-          });
+          }).pipe(map(profile => ({ profile, graphToken })));
         })
       )
       .subscribe({
-        next: (profile: Profile) => {
+        next: ({ profile, graphToken }) => {
           this.profile.set(profile);
+          this.loadMicrosoftPicture(graphToken);
 
           if (profile.preferredLanguage) {
             const lang = profile.preferredLanguage.toLowerCase() as Language;
@@ -43,4 +55,26 @@ export class ProfileService {
         }
       });
   }
+
+  private loadMicrosoftPicture(token: string): void {
+    this.http
+      .get<{ profilePicture: string }>(this.url + '/api/profiles/picture', {
+        headers: { 'X-Graph-Token': token },
+      })
+      .subscribe({
+        next: ({ profilePicture }) => this.microsoftProfilePicture.set(profilePicture),
+        error: () => this.microsoftProfilePicture.set(''),
+      });
+  }
+
+  updateProfilePicture(base64Img: string): void {
+    this.http.put<Profile>(`${this.url}/api/profiles/picture`, { profilePicture: base64Img })
+      .subscribe((updated) => this.profile.set(updated));
+  }
+
+  deleteProfilePicture(): void {
+    this.http.delete<Profile>(`${this.url}/api/profiles/picture`)
+      .subscribe((updated) => this.profile.set(updated));
+  }
+
 }
