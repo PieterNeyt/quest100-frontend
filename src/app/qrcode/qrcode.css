@@ -1,5 +1,4 @@
 .qr-container {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,7 +9,7 @@
 .card {
   background: rgba(255, 255, 255, 0.05);
 
-border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 8px;
   padding: 2rem;
   max-width: 500px;
@@ -119,6 +118,28 @@ h3 {
   height: auto;
   border-radius: 4px;
   box-shadow: none;
+}
+
+.qr-image-container.is-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  background-color: black !important;
+  margin: 0 !important;
+  padding: 5px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  cursor: zoom-out;
+}
+
+.qr-image-container.is-fullscreen img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: contain !important;
 }
 
 .info-text {

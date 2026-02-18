@@ -1,7 +1,7 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <h1 class="welcome-text">
-      Welcome Back, <span class="brand-name">{{ profile()?.firstName }}!</span>
+      {{ translationService.t('home.title') }}, <span class="brand-name">{{ profile()?.firstName }}!</span>
     </h1>
     <p class="subtitle">
       You're on day 42 of your Quest100 journey. Keep building your community!

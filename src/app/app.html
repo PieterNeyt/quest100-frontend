@@ -1,6 +1,6 @@
 <nav hlmNavigationMenu class="navbar-container">
   <div class="nav-section-left">
-    <a routerLink="/" class="logo-text">{{translationService.t('nav.title')}}</a>
+    <a routerLink="/" class="logo-text">{{ translationService.t('nav.title') }}</a>
   </div>
 
   <ul hlmNavigationMenuList class="nav-links-center">
@@ -24,7 +24,8 @@
       >
         <span [class]="translationService.getCurrentFlagClass()"></span>
         <span class="language-code">{{ translationService.currentLanguage().toUpperCase() }}</span>
-        <svg class="dropdown-arrow" [style.transform]="showLanguageDropdown() ? 'rotate(180deg)' : 'none'" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <svg class="dropdown-arrow" [style.transform]="showLanguageDropdown() ? 'rotate(180deg)' : 'none'" width="12"
+             height="12" viewBox="0 0 12 12" fill="currentColor">
           <path d="M6 9L1 4h10L6 9z"/>
         </svg>
       </button>
@@ -86,13 +87,12 @@
             </button>
             <button hlmDropdownMenuItem routerLink="/settings">
               <ng-icon hlm name="lucideSettings"/>
-              <span>Settings</span>
+              <span>{{ translationService.t("nav.settings") }}</span>
             </button>
-            <li hlmNavigationMenuItem>
-              <a hlmNavigationMenuLink routerLink="/qrcode">
-                {{ translationService.t('nav.qrCode') }}
-              </a>
-            </li>
+            <button hlmDropdownMenuItem routerLink="/qrcode">
+              <ng-icon hlm name="lucideQrCode"/>
+              <span>{{ translationService.t('nav.qrCode') }}</span>
+            </button>
           </hlm-dropdown-menu-group>
           <hlm-dropdown-menu-separator/>
           <hlm-dropdown-menu-group>
@@ -113,4 +113,4 @@
   }
 </main>
 
-<ngx-sonner-toaster position="top-right" richColors />
+<ngx-sonner-toaster position="top-right" richColors/>

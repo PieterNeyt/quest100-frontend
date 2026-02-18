@@ -11,7 +11,7 @@ import {HlmDropdownMenuImports} from '@spartan-ng/helm/dropdown-menu';
 import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
 import {NgOptimizedImage} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
-import {lucideLogOut, lucideSettings, lucideUser} from '@ng-icons/lucide';
+import {lucideLogOut, lucideQrCode, lucideSettings, lucideUser} from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
 import {TranslationService, Language} from './services/translationService';
 import {CommonModule} from '@angular/common';
@@ -21,7 +21,7 @@ import {NgxSonnerToaster} from 'ngx-sonner';
   selector: 'app-root',
   imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
   providers: [
-    provideIcons({lucideUser, lucideSettings, lucideLogOut})
+    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode})
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

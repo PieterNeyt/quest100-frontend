@@ -6,6 +6,7 @@ import {HlmIcon} from "@spartan-ng/helm/icon";
 import {NgIcon, provideIcons} from "@ng-icons/core";
 import {ProfileService} from '../services/profileService';
 import {lucideQrCode, lucideStar, lucideTarget, lucideUsers, lucideZap} from '@ng-icons/lucide';
+import {TranslationService} from '../services/translationService';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ import {lucideQrCode, lucideStar, lucideTarget, lucideUsers, lucideZap} from '@n
 })
 export class Home {
   profile = inject(ProfileService).profile;
+  translationService = inject(TranslationService);
   stats = [
     {label: 'Total Kudos', value: '847', icon: 'lucideStar', color: 'text-yellow-400'},
     {label: 'Day Streak', value: '5', icon: 'lucideZap', color: 'text-orange-500'},

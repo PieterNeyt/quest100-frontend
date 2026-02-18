@@ -19,8 +19,8 @@
     @if (qrCodeImage()) {
       <div class="qr-result">
         <h3>{{ t.t('qrCode.scanTitle') }}</h3>
-        <div class="qr-image-container">
-          <img [src]="qrCodeImage()" alt="Aanwezigheids QR Code" />
+        <div class="qr-image-container" [class.is-fullscreen]="isFullscreen()" (click)="changeFullScreen()">
+          <img [src]="qrCodeImage()" alt="Aanwezigheids QR Code"/>
         </div>
         <p class="info-text">{{ t.t('qrCode.infoText') }}</p>
       </div>

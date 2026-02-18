@@ -4,7 +4,11 @@
     "profile": "Profile",
     "qrCode": "QR Code",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "Welcome back"
   },
   "attendance": {
     "registering": "Registering attendance...",
