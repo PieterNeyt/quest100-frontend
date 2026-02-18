@@ -13,10 +13,13 @@ import {NgOptimizedImage} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
 import {lucideLogOut, lucideSettings, lucideUser} from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
+import {TranslationService, Language} from './services/translationService';
+import {CommonModule} from '@angular/common';
+import {NgxSonnerToaster} from 'ngx-sonner';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
   providers: [
     provideIcons({lucideUser, lucideSettings, lucideLogOut})
   ],
@@ -26,12 +29,15 @@ import {environment} from '../../environment/environment';
 export class App implements OnInit, OnDestroy {
   loginDisplay = signal(false);
   isIframe = signal(false);
+  showLanguageDropdown = signal(false);
+
   private readonly _destroying$ = new Subject<void>();
   private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
-  private authService = inject(MsalService)
-  private profileService = inject(ProfileService)
+  private authService = inject(MsalService);
+  private profileService = inject(ProfileService);
   private msalBroadcastService = inject(MsalBroadcastService);
   profile = this.profileService.profile;
+  public translationService = inject(TranslationService);
 
   private setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
@@ -121,6 +127,15 @@ export class App implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logoutRedirect();
+  }
+
+  async changeLanguage(lang: Language): Promise<void> {
+    await this.translationService.setLanguage(lang);
+    this.showLanguageDropdown.set(false);
+  }
+
+  toggleLanguageDropdown(): void {
+    this.showLanguageDropdown.update(val => !val);
   }
 
   ngOnDestroy(): void {

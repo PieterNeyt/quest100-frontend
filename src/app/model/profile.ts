@@ -4,4 +4,11 @@ export interface Profile {
   lastName: string;
   email: string;
   kudos: number;
+  preferredLanguage?: 'NL' | 'EN';
+  customProfilePicture?: string | null;
+}
+
+export interface SyncProfileResponse {
+  profile: Profile;
+  microsoftProfilePicture: string;
 }

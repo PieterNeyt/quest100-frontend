@@ -1,6 +1,6 @@
 <nav hlmNavigationMenu class="navbar-container">
   <div class="nav-section-left">
-    <a routerLink="/" class="logo-text">Quest100</a>
+    <a routerLink="/" class="logo-text">{{translationService.t('nav.title')}}</a>
   </div>
 
   <ul hlmNavigationMenuList class="nav-links-center">
@@ -15,12 +15,44 @@
     </li>
   </ul>
 
+  <div class="flex-1 flex justify-end items-center gap-4">
+    <div class="language-selector">
+      <button
+        class="language-button"
+        (click)="toggleLanguageDropdown()"
+        type="button"
+      >
+        <span [class]="translationService.getCurrentFlagClass()"></span>
+        <span class="language-code">{{ translationService.currentLanguage().toUpperCase() }}</span>
+        <svg class="dropdown-arrow" [style.transform]="showLanguageDropdown() ? 'rotate(180deg)' : 'none'" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+          <path d="M6 9L1 4h10L6 9z"/>
+        </svg>
+      </button>
+
+      @if (showLanguageDropdown()) {
+        <div class="language-dropdown">
+          @for (lang of translationService.availableLanguages; track lang.code) {
+            <button
+              class="language-option"
+              [class.active]="lang.code === translationService.currentLanguage()"
+              (click)="changeLanguage(lang.code)"
+              type="button"
+            >
+              <span [class]="lang.flagClass"></span>
+              <span class="language-name">{{ lang.name }}</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
   <div class="nav-section-right">
     @if (!loginDisplay()) {
       <ul hlmNavigationMenuList>
         <li hlmNavigationMenuItem>
           <button hlmNavigationMenuTrigger variant="ghost" class="login-btn" (click)="login()">
-            Login
+            {{ translationService.t('nav.login') }}
           </button>
         </li>
       </ul>
@@ -50,12 +82,17 @@
           <hlm-dropdown-menu-group>
             <button hlmDropdownMenuItem routerLink="/profile">
               <ng-icon hlm name="lucideUser"/>
-              <span>Profile</span>
+              <span>{{ translationService.t('nav.profile') }}</span>
             </button>
             <button hlmDropdownMenuItem routerLink="/settings">
               <ng-icon hlm name="lucideSettings"/>
               <span>Settings</span>
             </button>
+            <li hlmNavigationMenuItem>
+              <a hlmNavigationMenuLink routerLink="/qrcode">
+                {{ translationService.t('nav.qrCode') }}
+              </a>
+            </li>
           </hlm-dropdown-menu-group>
           <hlm-dropdown-menu-separator/>
           <hlm-dropdown-menu-group>
@@ -71,8 +108,9 @@
 </nav>
 
 <main class="main">
-  <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
   @if (!isIframe()) {
     <router-outlet></router-outlet>
   }
 </main>
+
+<ngx-sonner-toaster position="top-right" richColors />

@@ -1,0 +1,64 @@
+<div class="attendance-container">
+  <div class="card">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-large"></div>
+        <h2>{{ t.t('attendance.registering') }}</h2>
+        <p>{{ t.t('attendance.pleaseWait') }}</p>
+      </div>
+    }
+
+    @if (isSuccess() && !alreadyRegistered()) {
+      <div class="success-state">
+        <div class="checkmark">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+            <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
+        <h2>{{ t.t('attendance.registered') }}</h2>
+        <p class="success-message">{{ t.t('attendance.successMessage') }}</p>
+        <div class="kudos-display">
+          <span class="kudos-label">{{ t.t('attendance.kudosEarned') }}</span>
+          <span class="kudos-amount">+{{ kudosEarned() }}</span>
+        </div>
+        <div class="total-kudos">
+          <span>{{ t.t('attendance.totalKudos') }} {{ totalKudos() }}</span>
+        </div>
+        <a routerLink="/profile" class="btn-profile">{{ t.t('attendance.viewProfile') }}</a>
+      </div>
+    }
+
+    @if (isSuccess() && alreadyRegistered()) {
+      <div class="already-registered-state">
+        <div class="info-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </div>
+        <h2>{{ t.t('attendance.alreadyRegistered') }}</h2>
+        <p class="info-message">{{ t.t('attendance.alreadyRegisteredMessage') }}</p>
+        <div class="info-box">
+          <p class="info-box-text">
+            <strong>{{ t.t('attendance.noteTitle') }}</strong> {{ t.t('attendance.noteMessage') }}
+          </p>
+        </div>
+        <div class="total-kudos">
+          <span>{{ t.t('attendance.totalKudos') }} {{ totalKudos() }}</span>
+        </div>
+        <a routerLink="/profile" class="btn-profile">{{ t.t('attendance.viewProfile') }}</a>
+      </div>
+    }
+
+    @if (!isSuccess() && !isLoading()) {
+      <div class="error-state">
+        <div class="error-icon">✗</div>
+        <h2>{{ t.t('attendance.registrationFailed') }}</h2>
+        <p class="error-message">{{ t.t('errors.generic') }}</p>
+        <a routerLink="/" class="btn-home">{{ t.t('attendance.backToHome') }}</a>
+      </div>
+    }
+  </div>
+</div>
