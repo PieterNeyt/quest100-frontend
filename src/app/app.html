@@ -51,6 +51,10 @@
             {{ translationService.t('nav.login') }}
           </button>
         </li>
+        <!-- DEMO LOGIN  -->
+        @if (!loginDisplay() && !demoAuth.isDemoUser()) {
+          <app-demo-login (loggedIn)="demoLoggedIn()" />
+        }
       } @else {
         <li hlmNavigationMenuItem>
           <a hlmNavigationMenuLink routerLink="/qrcode">

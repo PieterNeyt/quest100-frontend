@@ -23,6 +23,8 @@ import {
 } from '@azure/msal-angular';
 import {environment} from '../../environment/environment';
 import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
+import {DemoInterceptor} from './interceptors/demoInterceptor';
+import {DemoAwareMsalGuard} from './interceptors/demoAwareMsalGuard';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
@@ -51,7 +53,13 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
-  const protectedResourceMap = new Map<string, Array<string>>();
+  //originele
+ // const protectedResourceMap = new Map<string, Array<string>>();
+  //demo variant met null toegelaten
+  const protectedResourceMap = new Map<string, Array<string> | null>();
+  //DEMO
+  protectedResourceMap.set(`${environment.apiConfig.uri}/api/demo/login`, null);
+
   protectedResourceMap.set(
     environment.apiConfig.uri,
     environment.apiConfig.scopes
@@ -91,13 +99,17 @@ export const appConfig: ApplicationConfig = {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory,
     },
+    { provide: HTTP_INTERCEPTORS, useClass: DemoInterceptor, multi: true }, // DEMO
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true,
     },
     MsalService,
-    MsalGuard,
+    { provide: MsalGuard, useClass: DemoAwareMsalGuard },// DEMO - delete this line to remove demo support
+    // MsalGuard, originele lijn, terug toevoegen als die demos weg zijn
     MsalBroadcastService,
+
+
   ]
 };

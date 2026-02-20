@@ -8,10 +8,12 @@ import {ProfileService} from './services/profileService';
 import {TranslationService, Language} from './services/translationService';
 import {CommonModule} from '@angular/common';
 import {NgxSonnerToaster} from 'ngx-sonner';
+import {DemoAuthService} from './services/demoAuthService';
+import {DemoLoginComponent} from './interceptors/demoLogin';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, CommonModule, NgxSonnerToaster, DemoLoginComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -27,8 +29,17 @@ export class App implements OnInit, OnDestroy {
   private msalBroadcastService = inject(MsalBroadcastService);
   public translationService = inject(TranslationService);
 
-  setLoginDisplay() {
+  public demoAuth = inject(DemoAuthService); // DEMO
+
+  //originele
+/*  setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
+  }*/
+
+  setLoginDisplay() {
+    const hasMsalAccount = this.authService.instance.getAllAccounts().length > 0;
+    const hasDemoAccount = this.demoAuth.isDemoUser();
+    this.loginDisplay.set(hasMsalAccount || hasDemoAccount);
   }
 
   checkAndSetActiveAccount() {
@@ -45,6 +56,12 @@ export class App implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authService.handleRedirectObservable().subscribe();
+
+    //DEMO
+    if (this.demoAuth.isDemoUser()) {
+      this.setLoginDisplay();
+    }
+
     this.isIframe.set(window !== window.parent && !window.opener);
     this.msalBroadcastService.msalSubject$
       .pipe(
@@ -73,7 +90,10 @@ export class App implements OnInit, OnDestroy {
       .subscribe(() => {
         this.setLoginDisplay();
         this.checkAndSetActiveAccount();
-        this.profileService.syncUser();
+      //  this.profileService.syncUser(); originele lijn
+        if (!this.demoAuth.isDemoUser()) { // DEMO if
+          this.profileService.syncUser();
+        }
       });
   }
 
@@ -87,7 +107,8 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  logout(popup?: boolean) {
+  //  originele logout
+/*  logout(popup?: boolean) {
     if (popup) {
       this.authService.logoutPopup({
         mainWindowRedirectUri: '/',
@@ -95,7 +116,16 @@ export class App implements OnInit, OnDestroy {
     } else {
       this.authService.logoutRedirect();
     }
+  }*/
+
+  logout() {
+    if (this.demoAuth.isDemoUser()) {
+      this.logoutDemo();
+    } else {
+      this.authService.logoutRedirect();
+    }
   }
+
 
   async changeLanguage(lang: Language): Promise<void> {
     await this.translationService.setLanguage(lang);
@@ -109,5 +139,17 @@ export class App implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._destroying$.next(undefined);
     this._destroying$.complete();
+  }
+
+
+// DEMO
+  demoLoggedIn() {
+    this.setLoginDisplay();
+  }
+
+  logoutDemo() {
+    this.demoAuth.logout();
+    this.setLoginDisplay();
+    window.location.pathname = '/';
   }
 }
