@@ -30,8 +30,6 @@ export class TranslationService {
     { code: 'en', name: 'English', flagClass: 'fi fi-gb' }
   ];
 
-  constructor() {}
-
   async loadTranslations(lang: Language): Promise<void> {
     try {
       const translations = await firstValueFrom(

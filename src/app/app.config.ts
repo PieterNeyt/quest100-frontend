@@ -1,4 +1,10 @@
-import {ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection} from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection
+} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
@@ -22,6 +28,7 @@ import {
 } from '@azure/msal-angular';
 import {environment} from '../../environment/environment';
 import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
+import {TranslationService} from './services/translationService';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
@@ -76,7 +83,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     {
       provide: MSAL_INSTANCE,
@@ -98,5 +105,9 @@ export const appConfig: ApplicationConfig = {
     MsalService,
     MsalGuard,
     MsalBroadcastService,
+    provideAppInitializer(() => {
+      const translationService = inject(TranslationService);
+      return translationService.loadTranslations("en");
+    })
   ]
 };
