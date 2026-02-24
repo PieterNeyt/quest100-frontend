@@ -9,13 +9,14 @@ import {HlmButtonImports} from '@spartan-ng/helm/button';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
 import {HlmDropdownMenuImports} from '@spartan-ng/helm/dropdown-menu';
 import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
-import {NgOptimizedImage} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
 import {lucideLogOut, lucideQrCode, lucideSettings, lucideUser} from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
-import {TranslationService, Language} from './services/translationService';
-import {CommonModule} from '@angular/common';
+import {Language, TranslationService} from './services/translationService';
 import {NgxSonnerToaster} from 'ngx-sonner';
+import {jwtDecode} from 'jwt-decode';
+import {RoleService} from './services/roleService';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,7 @@ export class App implements OnInit, OnDestroy {
   private profileService = inject(ProfileService);
   private msalBroadcastService = inject(MsalBroadcastService);
   profile = this.profileService.profile;
+  private roleService = inject(RoleService);
   public translationService = inject(TranslationService);
 
   private setLoginDisplay() {
@@ -101,7 +103,7 @@ export class App implements OnInit, OnDestroy {
         ),
         takeUntil(this._destroying$)
       )
-      .subscribe(() => {
+      .subscribe(async () => {
         const accounts = this.authService.instance.getAllAccounts();
 
         if (accounts.length === 0) {
@@ -110,6 +112,17 @@ export class App implements OnInit, OnDestroy {
           this.setLoginDisplay();
           this.checkAndSetActiveAccount();
           this.profileService.syncUser();
+
+          const account = this.authService.instance.getActiveAccount();
+          if (!account) return;
+
+          const tokenResponse = await this.authService.instance.acquireTokenSilent({
+            account,
+            scopes: environment.apiConfig.scopes,
+          });
+
+          const decoded: any = jwtDecode(tokenResponse.accessToken);
+          this.roleService.roles.set(decoded.roles || []);
         }
       });
   }
