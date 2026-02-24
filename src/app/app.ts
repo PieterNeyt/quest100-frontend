@@ -38,7 +38,7 @@ export class App implements OnInit, OnDestroy {
   private profileService = inject(ProfileService);
   private msalBroadcastService = inject(MsalBroadcastService);
   profile = this.profileService.profile;
-  private roleService = inject(RoleService);
+  roleService = inject(RoleService);
   public translationService = inject(TranslationService);
 
   private setLoginDisplay() {

@@ -15,7 +15,7 @@
     </li>
   </ul>
 
-  <div class="flex-1 flex justify-end items-center gap-4">
+  <div class="nav-section-right">
     <div class="language-selector">
       <button
         class="language-button"
@@ -46,17 +46,11 @@
         </div>
       }
     </div>
-  </div>
 
-  <div class="nav-section-right">
     @if (!loginDisplay()) {
-      <ul hlmNavigationMenuList>
-        <li hlmNavigationMenuItem>
-          <button hlmNavigationMenuTrigger variant="ghost" class="login-btn" (click)="login()">
-            {{ translationService.t('nav.login') }}
-          </button>
-        </li>
-      </ul>
+      <button hlmBtn variant="ghost" class="login-btn" (click)="login()">
+        {{ translationService.t('nav.login') }}
+      </button>
     }
 
     @if (loginDisplay() && profile()) {
@@ -89,10 +83,12 @@
               <ng-icon hlm name="lucideSettings"/>
               <span>{{ translationService.t("nav.settings") }}</span>
             </button>
-            <button hlmDropdownMenuItem routerLink="/qrcode">
-              <ng-icon hlm name="lucideQrCode"/>
-              <span>{{ translationService.t('nav.qrCode') }}</span>
-            </button>
+            @if (roleService.hasRole("lector")) {
+              <button hlmDropdownMenuItem routerLink="/qrcode">
+                <ng-icon hlm name="lucideQrCode"/>
+                <span>{{ translationService.t('nav.qrCode') }}</span>
+              </button>
+            }
           </hlm-dropdown-menu-group>
           <hlm-dropdown-menu-separator/>
           <hlm-dropdown-menu-group>
