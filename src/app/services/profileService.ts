@@ -1,10 +1,14 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {switchMap} from 'rxjs';
+import {catchError, EMPTY, map, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {Profile, SyncProfileResponse} from '../model/profile';
 import {Language, TranslationService} from './translationService';
+import {TranslationService, Language} from './translationService';
+import {InteractionRequiredAuthError} from '@azure/msal-browser';
+import {form} from '@angular/forms/signals';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +33,13 @@ export class ProfileService {
   syncUser() {
     this.authService.acquireTokenSilent({scopes: ["User.Read"]})
       .pipe(
+        catchError(error => {
+          if (error instanceof InteractionRequiredAuthError) {
+            this.authService.acquireTokenRedirect({ scopes: ["User.Read"] });
+            return EMPTY;
+          }
+          return throwError(() => error);
+        }),
         switchMap(response => {
           const graphToken = response.accessToken;
           return this.http.get<SyncProfileResponse>(this.url + "/api/profiles/sync", {
