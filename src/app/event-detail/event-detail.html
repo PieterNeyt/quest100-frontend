@@ -1,0 +1,118 @@
+<div class="detail-page">
+
+  <button class="back-btn" (click)="goBack()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    {{ t.t('event.detail.back') }}
+  </button>
+
+  @if (loading()) {
+    <div class="state-center">
+      <div class="spinner"></div>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="state-center">
+      <div class="state-icon">😕</div>
+      <p class="error-text">{{ error() }}</p>
+      <button class="back-btn" (click)="goBack()">← {{ t.t('event.detail.back') }}</button>
+    </div>
+  }
+
+  @if (!loading() && !error() && event()) {
+    <div class="detail-content">
+
+      <div class="hero-wrap">
+        @if (event()!.photo) {
+          <img class="hero-img" [src]="event()!.photo" [alt]="event()!.title" />
+        } @else {
+          <div class="hero-placeholder" [style.background]="'linear-gradient(135deg, ' + categoryColor(event()!.category) + '40, ' + categoryColor(event()!.category) + '90)'">
+            <span class="hero-icon">{{ categoryIcon(event()!.category) }}</span>
+          </div>
+        }
+        <div class="hero-badge-wrap">
+          <span class="category-chip" [style.background]="categoryColor(event()!.category)">
+            {{ categoryIcon(event()!.category) }} {{ categoryLabel(event()!.category) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-main">
+          <h1 class="event-title">{{ event()!.title }}</h1>
+
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <span>{{ formatDate(event()!.eventDate) }}</span>
+            </div>
+          </div>
+
+          @if (event()!.description) {
+            <div class="description-block">
+              <h3>{{ t.t('event.detail.about') }}</h3>
+              <p>{{ event()!.description }}</p>
+            </div>
+          }
+
+          <div class="action-area">
+            @if (!isGoing()) {
+              <button class="btn-join" (click)="join()" [disabled]="joining() || isFull">
+                {{ joining() ? t.t('event.detail.joining') : isFull ? t.t('event.detail.eventFull') : t.t('event.detail.join') }}
+              </button>
+            } @else {
+              <div class="going-state">
+                <span class="going-badge">{{ t.t('event.detail.going') }}</span>
+                <button class="btn-cancel-attend" (click)="cancel()" [disabled]="cancelling()">
+                  {{ cancelling() ? t.t('event.detail.cancelling') : t.t('event.detail.cancelAttend') }}
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="attendees-panel">
+
+          <div class="attendees-header">
+            <h3>
+              {{ t.t('event.detail.attendees') }}
+              ( {{ event()!.attendees.length }}
+              @if (event()!.maxAttendees) { / {{ event()!.maxAttendees }} })
+            </h3>
+          </div>
+
+          @if (event()!.attendees.length === 0) {
+            <p class="no-attendees">{{ t.t('event.detail.noAttendees') }}</p>
+          } @else {
+            <ul class="attendees-list">
+              @for (attendee of event()!.attendees; track attendee.id) {
+                <li class="attendee-item">
+                  <div class="attendee-avatar">
+                    {{ attendee.profileId.slice(0, 2).toUpperCase() }}
+                  </div>
+                  <div class="attendee-info">
+            <span class="attendee-id">
+              {{ attendee.profileId.slice(0, 8) }}...
+            </span>
+                    <span class="attendee-date">
+              {{ attendee.joinedAt | date: 'dd MMM' }}
+            </span>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+
+    </div>
+  }
+
+</div>

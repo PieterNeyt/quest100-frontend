@@ -1,0 +1,193 @@
+<div class="events-page">
+
+  <!-- Header -->
+  <div class="events-header">
+    <div class="header-text">
+      <h1>{{ t.t('event.title') }}</h1>
+      <p>{{ t.t('event.subtitle') }}</p>
+    </div>
+    <button class="btn-create" (click)="openCreateModal()">
+      <span class="btn-icon">+</span>
+      {{ t.t('event.createButton') }}
+    </button>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input
+        class="search-input"
+        type="text"
+        [placeholder]="t.t('event.searchPlaceholder')"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+      />
+    </div>
+
+    <select
+      class="category-select"
+      [ngModel]="selectedCategory()"
+      (ngModelChange)="selectedCategory.set($event)"
+    >
+      <option value="">{{ t.t('event.allCategories') }}</option>
+      @for (cat of categories; track cat) {
+        <option [value]="cat">{{ categoryLabel(cat) }}</option>
+      }
+    </select>
+
+    <div class="sort-buttons">
+      <span class="sort-label">{{ t.t('event.sortLabel') }}</span>
+      <button class="sort-btn" [class.active]="sortBy() === 'date'" (click)="toggleSort('date')">
+        {{ t.t('event.sortDate') }} {{ sortBy() === 'date' ? (sortDir() === 'asc' ? '↑' : '↓') : '' }}
+      </button>
+      <button class="sort-btn" [class.active]="sortBy() === 'title'" (click)="toggleSort('title')">
+        {{ t.t('event.sortTitle') }} {{ sortBy() === 'title' ? (sortDir() === 'asc' ? '↑' : '↓') : '' }}
+      </button>
+      <button class="sort-btn" [class.active]="sortBy() === 'attendees'" (click)="toggleSort('attendees')">
+        {{ t.t('event.sortAttendees') }} {{ sortBy() === 'attendees' ? (sortDir() === 'asc' ? '↑' : '↓') : '' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="state-container">
+      <div class="spinner"></div>
+      <p>{{ t.t('event.loading') }}</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="state-container">
+      <div class="state-icon">😕</div>
+      <p class="error-text">{{ error() }}</p>
+      <button class="btn-retry" (click)="loadEvents()">{{ t.t('event.retry') }}</button>
+    </div>
+  }
+
+  <!-- Empty -->
+  @if (!loading() && !error() && filteredEvents().length === 0) {
+    <div class="state-container">
+      <div class="state-icon">🎪</div>
+      <p>{{ t.t('event.noEvents') }}</p>
+      <button class="btn-create" (click)="openCreateModal()">{{ t.t('event.firstEvent') }}</button>
+    </div>
+  }
+
+  <!-- Events Grid -->
+  @if (!loading() && !error()) {
+    <div class="events-grid">
+      @for (event of filteredEvents(); track event.id) {
+        <div class="event-card" (click)="goToDetail(event)">
+          <div class="card-image-wrap">
+            @if (event.photo) {
+              <img class="card-image" [src]="event.photo" [alt]="event.title" />
+            } @else {
+              <div class="card-image-placeholder" [style.background]="'linear-gradient(135deg, ' + categoryColor(event.category) + '30, ' + categoryColor(event.category) + '70)'">
+                <span class="placeholder-icon">{{ categoryIcon(event.category) }}</span>
+              </div>
+            }
+            <div class="card-category-badge" [style.background]="categoryColor(event.category)">
+              {{ categoryLabel(event.category) }}
+            </div>
+          </div>
+
+          <div class="card-body">
+            <h3 class="card-title">{{ event.title }}</h3>
+            <div class="card-meta">
+              <span class="meta-date">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                {{ formatDate(event.eventDate) }}
+              </span>
+              <span class="meta-attendees">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <strong>{{ event.attendees.length }}</strong>
+                @if (event.maxAttendees) { / {{ event.maxAttendees }} }
+                {{ t.t('event.going') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</div>
+
+<!-- Create Event Modal -->
+@if (showCreateModal()) {
+  <div class="modal-overlay" (click)="closeCreateModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ t.t('event.createModal.title') }}</h2>
+        <button class="modal-close" (click)="closeCreateModal()">✕</button>
+      </div>
+
+      <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="modal-form">
+        <div class="form-group">
+          <label>{{ t.t('event.createModal.fieldTitle') }} *</label>
+          <input type="text" formControlName="title" [placeholder]="t.t('event.createModal.titlePlaceholder')" />
+          @if (createForm.get('title')?.invalid && createForm.get('title')?.touched) {
+            <span class="form-error">{{ t.t('event.createModal.titleRequired') }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>{{ t.t('event.createModal.description') }}</label>
+          <textarea formControlName="description" rows="3" [placeholder]="t.t('event.createModal.descriptionPlaceholder')"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>{{ t.t('event.createModal.category') }} *</label>
+            <select formControlName="category">
+              <option value="">{{ t.t('event.createModal.categoryPlaceholder') }}</option>
+              @for (cat of categories; track cat) {
+                <option [value]="cat">{{ categoryLabel(cat) }}</option>
+              }
+            </select>
+            @if (createForm.get('category')?.invalid && createForm.get('category')?.touched) {
+              <span class="form-error">{{ t.t('event.createModal.categoryRequired') }}</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>{{ t.t('event.createModal.maxAttendees') }}</label>
+            <input type="number" formControlName="maxAttendees" [placeholder]="t.t('event.createModal.maxAttendeesPlaceholder')" min="1" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>{{ t.t('event.createModal.date') }} *</label>
+          <input type="datetime-local" formControlName="eventDate" />
+          @if (createForm.get('eventDate')?.invalid && createForm.get('eventDate')?.touched) {
+            <span class="form-error">{{ t.t('event.createModal.dateRequired') }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>{{ t.t('event.createModal.photo') }}</label>
+          <input type="url" formControlName="photo" [placeholder]="t.t('event.createModal.photoPlaceholder')" />
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-modal-cancel" (click)="closeCreateModal()">
+            {{ t.t('event.createModal.cancel') }}
+          </button>
+          <button type="submit" class="btn-modal-submit" [disabled]="createForm.invalid || creating()">
+            {{ creating() ? t.t('event.createModal.submitting') : t.t('event.createModal.submit') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
