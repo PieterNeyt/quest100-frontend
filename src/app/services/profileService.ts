@@ -1,10 +1,12 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, switchMap} from 'rxjs';
+import {catchError, EMPTY, map, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {Profile, SyncProfileResponse} from '../model/profile';
 import {TranslationService, Language} from './translationService';
+import {InteractionRequiredAuthError} from '@azure/msal-browser';
+import {form} from '@angular/forms/signals';
 
 @Injectable({
   providedIn: 'root',
@@ -26,13 +28,21 @@ export class ProfileService {
   get hasCustomPicture(): boolean {
     return this.profile()?.customProfilePicture != null;
   }
+
   syncUser() {
-    this.authService.acquireTokenSilent({ scopes: ["User.Read"] })
+    this.authService.acquireTokenSilent({scopes: ["User.Read"]})
       .pipe(
+        catchError(error => {
+          if (error instanceof InteractionRequiredAuthError) {
+            this.authService.acquireTokenRedirect({ scopes: ["User.Read"] });
+            return EMPTY;
+          }
+          return throwError(() => error);
+        }),
         switchMap(response => {
           const graphToken = response.accessToken;
           return this.http.get<SyncProfileResponse>(this.url + "/api/profiles/sync", {
-            headers: { 'X-Graph-Token': graphToken }
+            headers: {'X-Graph-Token': graphToken}
           });
         })
       )
@@ -56,7 +66,7 @@ export class ProfileService {
   }
 
   updateProfilePicture(base64Img: string): void {
-    this.http.put<Profile>(`${this.url}/api/profiles/picture`, { profilePicture: base64Img })
+    this.http.put<Profile>(`${this.url}/api/profiles/picture`, {profilePicture: base64Img})
       .subscribe((updated) => this.profile.set(updated));
   }
 

@@ -57,7 +57,6 @@ export class App implements OnInit, OnDestroy {
       .subscribe(() => {
         if (this.authService.instance.getAllAccounts().length === 0) {
           window.location.pathname = '/';
-          this.profileService.syncUser()
         } else {
           this.setLoginDisplay();
         }
