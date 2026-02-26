@@ -58,10 +58,16 @@
           </a>
         </li>
         <li hlmNavigationMenuItem>
+          <a hlmNavigationMenuLink routerLink="/event">
+            {{ translationService.t('nav.event') }}
+          </a>
+        </li>
+        <li hlmNavigationMenuItem>
           <button hlmNavigationMenuTrigger (click)="logout()">
             {{ translationService.t('nav.logout') }}
           </button>
         </li>
+
       }
     </ul>
   </div>
@@ -73,4 +79,10 @@
   }
 </main>
 
-<ngx-sonner-toaster position="top-right" richColors />
+<ngx-sonner-toaster
+  position="bottom-right"
+  [closeButton]="true"
+  [duration]="4000"
+  [expand]="true"
+  [richColors]="true">
+</ngx-sonner-toaster>

@@ -11,7 +11,7 @@ import { ToastService } from '../services/toastService';
   templateUrl: './qrcode.html',
   styleUrl: './qrcode.css'
 })
-export class QrCodeComponent {
+export class Qrcode {
   private qrCodeService = inject(QrCodeService);
   private toastService = inject(ToastService);
   public t = inject(TranslationService);
