@@ -26,3 +26,8 @@ export enum KudoType {
   KudoAtmosphere="KudoAtmosphere",
   KudoEngagement="KudoEngagement"
 }
+
+export interface ProfileAward{
+  profile: Profile;
+  hasSentAward: boolean;
+}

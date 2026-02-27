@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ProfileService } from '../services/profileService';
 import { CommonModule } from '@angular/common';
 import { AwardTransaction, KudoType, Profile } from '../model/profile';
@@ -14,15 +14,21 @@ import { FormsModule } from '@angular/forms';
 export class Userlist implements OnInit {
   private profileService = inject(ProfileService);
 
-  profiles = this.profileService.profiles;
-  kudoTypes = Object.values(KudoType);
+  profileAwards = this.profileService.profilesAwards;
 
+
+  filteredProfileAwards = computed(() => {
+    const myId = this.profileService.profile()?.id;
+    return this.profileAwards()!.filter(pa => pa.profile.id !== myId);
+  });
+
+  kudoTypes = Object.values(KudoType);
   selectedProfile = signal<Profile | null>(null);
   message = '';
   selectedType = KudoType.KudoTeamwork;
 
   ngOnInit() {
-    this.profileService.getAllProfiles();
+    this.profileService.getAllProfilesAwards();
   }
 
   openModal(profile: Profile) {
@@ -36,7 +42,8 @@ export class Userlist implements OnInit {
 
   submitAward() {
     const profile = this.selectedProfile();
-    if (profile) {
+
+    if (profile && this.message.trim()) {
       const award: AwardTransaction = {
         receiver: profile.id,
         type: this.selectedType,
@@ -44,6 +51,7 @@ export class Userlist implements OnInit {
       };
 
       this.profileService.giveAward(award);
+      this.profileService.getAllProfilesAwards();
       this.closeModal();
     }
   }

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, EMPTY, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
-import {AwardTransaction, Profile, SyncProfileResponse} from '../model/profile';
+import {AwardTransaction, Profile, ProfileAward, SyncProfileResponse} from '../model/profile';
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
 
@@ -18,6 +18,7 @@ export class ProfileService {
 
   profile = signal<Profile | null>(null);
   profiles = signal<Profile[] | null>(null);
+  profilesAwards = signal<ProfileAward[] | null>(null);
   microsoftProfilePicture = signal('');
 
 
@@ -89,5 +90,10 @@ export class ProfileService {
         },
         error: (err) => console.error('Fout bij verzenden award:', err)
       });
+  }
+
+  getAllProfilesAwards() {
+    this.http.get<ProfileAward[]>(`${this.url}/api/profiles/award`)
+      .subscribe((profileAwards) => this.profilesAwards.set(profileAwards));
   }
 }

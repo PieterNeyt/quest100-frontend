@@ -5,14 +5,22 @@
   </div>
 
   <div class="user-grid">
-    @for (p of profiles(); track p.id) {
-      <div class="user-card">
+    @for (pa of filteredProfileAwards(); track pa.profile.id) {
+      <div class="user-card" [class.already-sent]="pa.hasSentAward">
         <div class="user-info">
-          <span class="user-name">{{ p.firstName }} {{ p.lastName }}</span>
-          <span class="user-kudos">⭐ {{ p.kudos }} Kudos</span>
+          <span class="user-name">{{ pa.profile.firstName }} {{ pa.profile.lastName }}</span>
+          <span class="user-kudos">⭐ {{ pa.profile.kudos }} Kudos</span>
+
+          @if (pa.hasSentAward) {
+            <span class="already-sent-text">You already sent an award today!</span>
+          }
         </div>
-        <button class="btn-award" (click)="openModal(p)">
-          Give Award
+
+        <button
+          class="btn-award"
+          (click)="openModal(pa.profile)"
+          [disabled]="pa.hasSentAward">
+          {{ pa.hasSentAward ? 'Sent' : 'Give Award' }}
         </button>
       </div>
     } @empty {
