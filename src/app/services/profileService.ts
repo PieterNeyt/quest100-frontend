@@ -80,16 +80,8 @@ export class ProfileService {
     this.http.get<Profile[]>(`${this.url}/api/profiles`)
       .subscribe((profiles) => this.profiles.set(profiles));
   }
-
-  giveAward(award: AwardTransaction): void {
-    this.http.post(`${this.url}/api/profiles/award`, award)
-      .subscribe({
-        next: () => {
-          console.log('Award succesvol verzonden');
-          this.getAllProfiles();
-        },
-        error: (err) => console.error('Fout bij verzenden award:', err)
-      });
+  giveAward(award: AwardTransaction) {
+    return this.http.post(`${this.url}/api/profiles/award`, award);
   }
 
   getAllProfilesAwards() {

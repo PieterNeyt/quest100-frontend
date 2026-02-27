@@ -52,10 +52,21 @@ export class Userlist implements OnInit {
         message: this.message
       };
 
-      this.profileService.giveAward(award);
-      this.profileService.getAllProfilesAwards();
-      this.closeModal();
-      this.toastService.success(`You have successfully given the award ${this.selectedType} to ${profile.firstName} ${profile.lastName}!`);
+      this.profileService.giveAward(award).subscribe({
+        next: () => {
+          this.toastService.success(
+            `You have successfully given the award ${this.selectedType} to ${profile.firstName} ${profile.lastName}!`
+          );
+          this.closeModal();
+          this.profileService.getAllProfilesAwards();
+        },
+        error: (err) => {
+          this.toastService.error(
+            `Failed to give award. Please try again.`
+          );
+          console.error(err);
+        }
+      });
     }
   }
 }

@@ -33,8 +33,8 @@
 /* Grid Layout */
 .user-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr)); /* Iets wijder */
-  gap: 1.75rem; /* Grotere afstand tussen kaarten */
+  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+  gap: 1.75rem;
 }
 
 /* Card Style */
