@@ -6,22 +6,33 @@
 
   <div class="user-grid">
     @for (pa of filteredProfileAwards(); track pa.profile.id) {
-      <div class="user-card" [class.already-sent]="pa.hasSentAward">
-        <div class="user-info">
-          <span class="user-name">{{ pa.profile.firstName }} {{ pa.profile.lastName }}</span>
-          <span class="user-kudos">⭐ {{ pa.profile.kudos }} Kudos</span>
-
-          @if (pa.hasSentAward) {
-            <span class="already-sent-text">You already sent an award today!</span>
+      <div class="user-card">
+        <div class="profile-avatar">
+          @if (pa.profile.customProfilePicture) {
+            <img [src]="pa.profile.customProfilePicture" alt="{{ pa.profile.firstName }} profile picture">
+          } @else {
+            <div class="avatar-placeholder">
+              {{ pa.profile.firstName.charAt(0) }}{{ pa.profile.lastName.charAt(0) }}
+            </div>
           }
         </div>
 
-        <button
-          class="btn-award"
-          (click)="openModal(pa.profile)"
-          [disabled]="pa.hasSentAward">
-          {{ pa.hasSentAward ? 'Sent' : 'Give Award' }}
-        </button>
+        <div class="user-details">
+          <span class="user-name">{{ pa.profile.firstName }} {{ pa.profile.lastName }}</span>
+          <span class="user-kudos">⭐ {{ pa.profile.kudos }} Kudos</span>
+        </div>
+
+        <div class="award-action">
+          @if (pa.hasSentAward) {
+            <span class="award-sent-message">
+              <i class="fas fa-check-circle"></i> Award Sent Today!
+            </span>
+          } @else {
+            <button class="btn-award" (click)="openModal(pa.profile)">
+              Give Award
+            </button>
+          }
+        </div>
       </div>
     } @empty {
       <div class="loading-state">Laden van profielen...</div>
@@ -58,7 +69,9 @@
 
         <div class="modal-footer">
           <button class="btn-secondary" (click)="closeModal()">Annuleren</button>
-          <button class="btn-primary" (click)="submitAward()" [disabled]="!message">
+          <button class="btn-primary"
+                  (click)="submitAward()"
+                  [disabled]="!message.trim()">
             Verzenden
           </button>
         </div>

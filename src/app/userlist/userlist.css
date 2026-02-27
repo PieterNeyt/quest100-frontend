@@ -1,76 +1,148 @@
 :host {
   display: block;
-  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif; /* Modern font */
   color: #e0e0e0;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 3rem 2rem; /* Iets meer padding */
+}
+
+.user-list-container {
+  max-width: 1200px; /* Max breedte voor de container */
+  margin: 0 auto; /* Centraal op de pagina */
 }
 
 .header-section {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   border-bottom: 1px solid #333;
-  padding-bottom: 1rem;
+  padding-bottom: 1.5rem;
+  text-align: center; /* Centraal uitgelijnd */
+}
+
+.header-section h2 {
+  font-size: 2.5rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
 }
 
 .subtitle {
-  color: #888;
-  font-size: 0.9rem;
+  color: #a0a0a0;
+  font-size: 1.1rem;
 }
 
 /* Grid Layout */
 .user-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr)); /* Iets wijder */
+  gap: 1.75rem; /* Grotere afstand tussen kaarten */
 }
 
 /* Card Style */
 .user-card {
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 1.25rem;
-  display: flex;
-  justify-content: space-between;
+  background-color: #2b2b40; /* Donkerder dan de achtergrond */
+  border: 1px solid #3a3a50;
+  border-radius: 16px; /* Meer afgeronde hoeken */
+  padding: 1.5rem;
+  display: flex; /* Flexbox voor inhoud */
   align-items: center;
-  transition: transform 0.2s, border-color 0.2s;
+  gap: 1.25rem; /* Ruimte tussen avatar en tekst */
+  transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .user-card:hover {
-  border-color: #4a90e2;
-  transform: translateY(-2px);
+  border-color: #6a8dff; /* Accentkleur bij hover */
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Profiel Avatar */
+.profile-avatar {
+  width: 60px; /* Grotere avatar */
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0; /* Voorkomt verkleining */
+  background-color: #4a4a6e; /* Achtergrond voor placeholder */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Zorgt dat de afbeelding past */
+}
+
+.avatar-placeholder {
+  font-size: 1.5rem; /* Grotere letters */
+  color: #c0c0d0;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.user-details {
+  flex-grow: 1; /* Neemt beschikbare ruimte in */
 }
 
 .user-name {
   display: block;
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: 700; /* Dikkere letters */
+  font-size: 1.25rem;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
 }
 
 .user-kudos {
-  color: #ffd700;
-  font-size: 0.85rem;
+  color: #ffd700; /* Goudkleur voor kudos */
+  font-size: 0.95rem;
   font-weight: bold;
+}
+
+/* Award Action Section (Knop of Bericht) */
+.award-action {
+  flex-shrink: 0; /* Voorkomt verkleining */
+  min-width: 120px; /* Zorgt voor consistentie in breedte */
+  text-align: right;
+}
+
+.award-sent-message {
+  color: #7aff7a; /* Groene kleur voor succes */
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end; /* Rechts uitlijnen */
+}
+
+.award-sent-message i {
+  font-size: 1.1rem;
 }
 
 /* Buttons */
 button {
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 10px; /* Meer afgerond */
   border: none;
   font-weight: 600;
-  transition: 0.2s;
+  transition: 0.2s ease-out;
+  font-family: 'Inter', sans-serif;
 }
 
 .btn-award {
-  background: rgba(74, 144, 226, 0.1);
-  color: #4a90e2;
-  border: 1px solid #4a90e2;
-  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #6a8dff, #80bfff); /* Gradient voor de knop */
+  color: white;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(106, 141, 255, 0.3);
 }
 
 .btn-award:hover {
-  background: #4a90e2;
-  color: white;
+  background: linear-gradient(135deg, #5a7add, #70aaff);
+  box-shadow: 0 6px 15px rgba(106, 141, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 /* Modal Styling */
@@ -79,7 +151,7 @@ button {
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px); /* Sterkere blur */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,105 +159,165 @@ button {
 }
 
 .modal-content {
-  background: #252525;
-  border: 1px solid #444;
-  border-radius: 16px;
+  background: #25253d; /* Iets donkerder dan card */
+  border: 1px solid #4a4a6e;
+  border-radius: 20px; /* Grotere afronding */
   width: 90%;
-  max-width: 450px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  max-width: 500px; /* Iets breder */
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
 }
 
 .modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #333;
+  padding: 1.5rem 2rem; /* Meer padding */
+  border-bottom: 1px solid #3a3a50;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.modal-header h3 {
+  font-size: 1.7rem;
+  color: #ffffff;
+}
+
 .btn-close {
   background: transparent;
-  color: #888;
-  font-size: 1.5rem;
+  color: #a0a0a0;
+  font-size: 1.8rem;
+  line-height: 1; /* Voor betere centrering van X */
+}
+
+.btn-close:hover {
+  color: #ffffff;
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .input-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 
 label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #bbb;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: #c0c0d0;
+  font-weight: 500;
 }
 
 select, textarea {
   width: 100%;
-  background: #121212;
-  border: 1px solid #444;
-  border-radius: 8px;
+  background: #1e1e32; /* Donkerder input velden */
+  border: 1px solid #4a4a6e;
+  border-radius: 10px;
   color: white;
-  padding: 0.75rem;
+  padding: 0.9rem 1.2rem;
   box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.2s ease-out;
 }
 
 select:focus, textarea:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #6a8dff; /* Accentkleur bij focus */
+  box-shadow: 0 0 0 3px rgba(106, 141, 255, 0.2);
 }
 
 .modal-footer {
-  padding: 1.5rem;
-  border-top: 1px solid #333;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #3a3a50;
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
 }
 
 .btn-primary {
-  background: #4a90e2;
+  background: linear-gradient(135deg, #6a8dff, #80bfff);
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(106, 141, 255, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a7add, #70aaff);
+  box-shadow: 0 6px 15px rgba(106, 141, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 .btn-primary:disabled {
-  background: #333;
-  color: #666;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: transparent;
+  background: #3a3a50;
   color: #888;
-  padding: 0.75rem 1rem;
-}
-
-.user-card.already-sent {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: #222;
-  opacity: 0.7;
-}
-
-.award-status-msg {
-  color: #ffb74d;
-  font-size: 0.75rem;
-  margin-top: 8px;
-  font-style: italic;
-}
-
-.btn-award:disabled {
-  background: #1a1a1a;
-  color: #555;
-  border-color: #333;
   cursor: not-allowed;
+  box-shadow: none;
   transform: none;
 }
 
-.btn-award:disabled:hover {
-  background: #1a1a1a;
+.btn-secondary {
+  background: #3a3a50;
+  color: #c0c0d0;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+}
+
+.btn-secondary:hover {
+  background: #4a4a6e;
+  color: #ffffff;
+}
+
+/* Responsive aanpassingen */
+@media (max-width: 768px) {
+  .user-list-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .header-section h2 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .user-grid {
+    grid-template-columns: 1fr; /* Kolom op kleine schermen */
+  }
+
+  .user-card {
+    flex-wrap: wrap; /* Zodat items naar de volgende regel kunnen */
+    text-align: center;
+    justify-content: center;
+  }
+
+  .profile-avatar {
+    margin-bottom: 1rem; /* Ruimte onder avatar als wrapping plaatsvindt */
+  }
+
+  .user-details {
+    text-align: center;
+  }
+
+  .award-action {
+    width: 100%; /* Knop/bericht neemt hele breedte in */
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .award-sent-message {
+    justify-content: center;
+  }
+
+  .modal-content {
+    border-radius: 12px;
+  }
+
+  .modal-header, .modal-body, .modal-footer {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.4rem;
+  }
 }

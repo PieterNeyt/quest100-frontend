@@ -3,6 +3,7 @@ import { ProfileService } from '../services/profileService';
 import { CommonModule } from '@angular/common';
 import { AwardTransaction, KudoType, Profile } from '../model/profile';
 import { FormsModule } from '@angular/forms';
+import {ToastService} from '../services/toastService';
 
 @Component({
   selector: 'app-userlist',
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class Userlist implements OnInit {
   private profileService = inject(ProfileService);
+  private toastService = inject(ToastService);
 
   profileAwards = this.profileService.profilesAwards;
 
@@ -53,6 +55,7 @@ export class Userlist implements OnInit {
       this.profileService.giveAward(award);
       this.profileService.getAllProfilesAwards();
       this.closeModal();
+      this.toastService.success(`You have successfully given the award ${this.selectedType} to ${profile.firstName} ${profile.lastName}!`);
     }
   }
 }
