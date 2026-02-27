@@ -1,15 +1,16 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventService } from '../services/eventService';
 import { TranslationService } from '../services/translationService';
 import { StudentEvent, EventCategory } from '../model/studentEvent';
+import { CATEGORIES, categoryColor, categoryIconSvg } from '../utils/Categoryutils';
 
 @Component({
   selector: 'app-event',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgOptimizedImage],
   templateUrl: './event.html',
   styleUrl: './event.css',
 })
@@ -31,7 +32,9 @@ export class EventComponent implements OnInit {
   showCreateModal = signal(false);
   creating = signal(false);
 
-  categories: EventCategory[] = ['SPORTS', 'GAMING', 'STUDY', 'FOOD', 'MUSIC', 'OUTDOOR', 'SOCIAL', 'OTHER'];
+  readonly categoryColor = categoryColor;
+  readonly categoryIconSvg = categoryIconSvg;
+  readonly categories = CATEGORIES;
 
   createForm: FormGroup = this.fb.group({
     title: ['', Validators.required],
@@ -44,7 +47,6 @@ export class EventComponent implements OnInit {
 
   filteredEvents = computed(() => {
     let list = [...this.events()];
-
     const q = this.searchQuery().toLowerCase();
     if (q) {
       list = list.filter(e =>
@@ -54,11 +56,8 @@ export class EventComponent implements OnInit {
         this.categoryLabel(e.category).toLowerCase().includes(q)
       );
     }
-
     const cat = this.selectedCategory();
-    if (cat) {
-      list = list.filter(e => e.category === cat);
-    }
+    if (cat) list = list.filter(e => e.category === cat);
 
     const sort = this.sortBy();
     const dir = this.sortDir();
@@ -69,105 +68,59 @@ export class EventComponent implements OnInit {
       else if (sort === 'attendees') val = a.attendees.length - b.attendees.length;
       return dir === 'asc' ? val : -val;
     });
-
     return list;
   });
 
-  ngOnInit() {
-    this.loadEvents();
-  }
+  ngOnInit() { this.loadEvents(); }
 
   loadEvents() {
     this.loading.set(true);
     this.eventService.getAllEvents().subscribe({
-      next: (events) => {
-        this.events.set(events);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set(this.t.t('errors.generic'));
-        this.loading.set(false);
-      }
+      next: (events) => { this.events.set(events); this.loading.set(false); },
+      error: () => { this.error.set(this.t.t('errors.generic')); this.loading.set(false); }
     });
   }
 
-  goToDetail(event: StudentEvent) {
-    this.router.navigate(['/event', event.id]);
-  }
+  goToDetail(event: StudentEvent) { this.router.navigate(['/event', event.id]); }
 
   toggleSort(field: 'date' | 'title' | 'attendees') {
-    if (this.sortBy() === field) {
-      this.sortDir.set(this.sortDir() === 'asc' ? 'desc' : 'asc');
-    } else {
-      this.sortBy.set(field);
-      this.sortDir.set('asc');
-    }
+    if (this.sortBy() === field) this.sortDir.set(this.sortDir() === 'asc' ? 'desc' : 'asc');
+    else { this.sortBy.set(field); this.sortDir.set('asc'); }
   }
 
-  openCreateModal() {
-    this.createForm.reset();
-    this.showCreateModal.set(true);
-  }
-
-  closeCreateModal() {
-    this.showCreateModal.set(false);
-  }
+  openCreateModal() { this.createForm.reset(); this.showCreateModal.set(true); }
+  closeCreateModal() { this.showCreateModal.set(false); }
 
   submitCreate() {
     if (this.createForm.invalid) return;
     this.creating.set(true);
     const val = this.createForm.value;
     const payload: any = {
-      title: val.title,
-      description: val.description || '',
-      photo: val.photo || null,
-      category: val.category,
+      title: val.title, description: val.description || '',
+      photo: val.photo || null, category: val.category,
       eventDate: new Date(val.eventDate).toISOString(),
       maxAttendees: val.maxAttendees ? parseInt(val.maxAttendees) : null,
     };
-
     this.eventService.createEvent(payload).subscribe({
       next: (event) => {
-        this.events.update(list => [event, ...list]);
+        const normalized: StudentEvent = {
+          ...event,
+          attendees: Array.isArray(event.attendees) ? event.attendees : [],
+        };
+        this.events.update(list => [normalized, ...list]);
         this.creating.set(false);
         this.closeCreateModal();
       },
-      error: () => {
-        this.creating.set(false);
-      }
+      error: () => this.creating.set(false)
     });
   }
 
   formatDate(dateStr: string): string {
-    return new Date(dateStr).toLocaleDateString('nl-BE', {
+    const locale = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
+    return new Date(dateStr).toLocaleDateString(locale, {
       day: '2-digit', month: 'short', year: 'numeric'
     });
   }
 
-  /** Returns the translated label for a category key */
-  categoryLabel(cat: EventCategory | string): string {
-    return this.t.t(`event.categories.${cat}`);
-  }
-
-  categoryIcon(cat: EventCategory | string): string {
-    const icons: Record<string, string> = {
-      SPORTS: '⚽', GAMING: '🎮', STUDY: '📚', FOOD: '🍕',
-      MUSIC: '🎵', OUTDOOR: '🌿', SOCIAL: '🎉', OTHER: '✨'
-    };
-    return icons[cat] ?? '📌';
-  }
-
-  categoryColor(cat: EventCategory | string): string {
-    const colors: Record<string, string> = {
-      SPORTS: '#ff9600',
-      GAMING: '#ce82ff',
-      STUDY: '#1cb0f6',
-      FOOD: '#ff4b4b',
-      MUSIC: '#ff86d0',
-      OUTDOOR: '#58cc02',
-      SOCIAL: '#ffd900',
-      OTHER: '#89e219'
-    };
-    return colors[cat] ?? '#afafaf';
-  }
+  categoryLabel(cat: EventCategory | string): string { return this.t.t(`event.categories.${cat}`); }
 }

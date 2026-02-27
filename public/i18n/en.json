@@ -91,6 +91,7 @@
       "about": "About this event",
       "attendees": "Attendees",
       "noAttendees": "Nobody signed up yet. Be the first!",
+      "you": "You",
       "spotsLeft": "spots left",
       "full": "Full!",
       "join": "I'm going!",
@@ -100,7 +101,24 @@
       "cancelling": "Cancelling...",
       "eventFull": "Event is full",
       "person": "person going",
-      "people": "people going"
+      "people": "people going",
+      "edit": "Edit",
+      "delete": "Delete",
+      "organizerLeave": "Leave event",
+      "editModal": {
+        "title": "Edit event",
+        "save": "Save changes"
+      },
+      "organizerLeaveModal": {
+        "title": "You are the organizer",
+        "description": "As the organizer, you can't just leave. Transfer ownership to another attendee, or delete the event entirely.",
+        "transferLabel": "Transfer to",
+        "selectAttendee": "Choose an attendee...",
+        "transferAndLeave": "Transfer & leave",
+        "or": "or",
+        "deleteEvent": "Delete event",
+        "stayOrganizer": "Stay as organizer"
+      }
     }
   },
   "errors": {

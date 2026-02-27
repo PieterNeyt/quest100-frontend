@@ -91,6 +91,7 @@
       "about": "Over dit event",
       "attendees": "Deelnemers",
       "noAttendees": "Nog niemand ingeschreven. Wees de eerste!",
+      "you": "Jij",
       "spotsLeft": "plaatsen vrij",
       "full": "Vol!",
       "join": "Ik ga!",
@@ -100,7 +101,24 @@
       "cancelling": "Bezig...",
       "eventFull": "Event is vol",
       "person": "persoon gaat",
-      "people": "mensen gaan"
+      "people": "mensen gaan",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "organizerLeave": "Verlaat evenement",
+      "editModal": {
+        "title": "Event bewerken",
+        "save": "Opslaan"
+      },
+      "organizerLeaveModal": {
+        "title": "Jij bent de organisator",
+        "description": "Als organisator kan je het evenement niet zomaar verlaten. Draag het over aan iemand anders, of verwijder het evenement.",
+        "transferLabel": "Draag over aan",
+        "selectAttendee": "Kies een deelnemer...",
+        "transferAndLeave": "Overdragen & verlaten",
+        "or": "of",
+        "deleteEvent": "Evenement verwijderen",
+        "stayOrganizer": "Toch blijven als organisator"
+      }
     }
   },
   "errors": {
