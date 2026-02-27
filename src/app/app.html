@@ -13,6 +13,9 @@
     <li hlmNavigationMenuItem>
       <a hlmNavigationMenuLink routerLink="/leaderboard" class="nav-link">Leaderboard</a>
     </li>
+    <li hlmNavigationMenuItem>
+      <a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">Users</a>
+    </li>
   </ul>
 
   <div class="nav-section-right">
@@ -49,6 +52,7 @@
 
     @if (!loginDisplay()) {
       <button hlmBtn variant="ghost" class="login-btn" (click)="login()">
+        {{ translationService.t('nav.login') }}
         {{ translationService.t('nav.login') }}
       </button>
     }

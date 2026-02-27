@@ -2,7 +2,6 @@
   display: block;
   font-family: 'Segoe UI', Roboto, sans-serif;
   color: #e0e0e0;
-  background-color: #121212;
   min-height: 100vh;
   padding: 2rem;
 }
@@ -27,7 +26,6 @@
 
 /* Card Style */
 .user-card {
-  background: #1e1e1e;
   border: 1px solid #333;
   border-radius: 12px;
   padding: 1.25rem;
