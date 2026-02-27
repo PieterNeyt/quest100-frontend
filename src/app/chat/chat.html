@@ -1,0 +1,11 @@
+<div class="chat-container">
+  <div class="messages">
+    @for (m of chatLog(); track $index) {
+      <div [ngClass]="{'own-message': m.senderId === currentUser}">
+        <strong>{{ m.senderId }}:</strong> {{ m.text }}
+      </div>
+    }
+  </div>
+  <input [(ngModel)]="currentInput" (keyup.enter)="send()">
+  <button (click)="send()">Send</button>
+</div>
