@@ -1,12 +1,11 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, EMPTY, map, switchMap, throwError} from 'rxjs';
+import {catchError, EMPTY, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {Profile, SyncProfileResponse} from '../model/profile';
-import {TranslationService, Language} from './translationService';
+import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
-import {form} from '@angular/forms/signals';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +18,6 @@ export class ProfileService {
 
   profile = signal<Profile | null>(null);
   microsoftProfilePicture = signal('');
-
 
   get activeProfilePicture(): string {
     return this.profile()?.customProfilePicture || this.microsoftProfilePicture();

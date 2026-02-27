@@ -14,6 +14,7 @@ import { ToastService } from '../services/toastService';
 export class QrCodeComponent {
   private qrCodeService = inject(QrCodeService);
   private toastService = inject(ToastService);
+  isFullscreen = signal(false);
   public t = inject(TranslationService);
 
   qrCodeImage = signal<string | null>(null);
@@ -37,5 +38,15 @@ export class QrCodeComponent {
         this.isLoading.set(false);
       }
     });
+  }
+
+  changeFullScreen() {
+    this.isFullscreen.set(!this.isFullscreen());
+    console.log(this.isFullscreen());
+    if (this.isFullscreen()) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
   }
 }

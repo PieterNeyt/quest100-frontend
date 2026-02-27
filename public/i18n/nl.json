@@ -4,7 +4,11 @@
     "profile": "Profiel",
     "qrCode": "QR Code",
     "login": "Inloggen",
-    "logout": "Uitloggen"
+    "logout": "Uitloggen",
+    "settings": "Instellingen"
+  },
+  "home": {
+    "title": "Welkom terug"
   },
   "attendance": {
     "registering": "Aanwezigheid registreren...",

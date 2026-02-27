@@ -1,7 +1,8 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {firstValueFrom} from 'rxjs';
+import {firstValueFrom, take} from 'rxjs';
 import {environment} from '../../../environment/environment';
+import {AuthService} from './authService';
 
 export type Language = 'nl' | 'en';
 
@@ -23,14 +24,13 @@ export class TranslationService {
   private url = environment.apiConfig.uri;
   private assetsUrl = environment.apiConfig.assetsUri;
   private translations = signal<Translations>({});
+  private auth = inject(AuthService);
   currentLanguage = signal<Language>('en');
 
   readonly availableLanguages: LanguageOption[] = [
-    { code: 'nl', name: 'Nederlands', flagClass: 'fi fi-nl' },
-    { code: 'en', name: 'English', flagClass: 'fi fi-gb' }
+    {code: 'nl', name: 'Nederlands', flagClass: 'fi fi-nl'},
+    {code: 'en', name: 'English', flagClass: 'fi fi-gb'}
   ];
-
-  constructor() {}
 
   async loadTranslations(lang: Language): Promise<void> {
     try {
@@ -48,15 +48,13 @@ export class TranslationService {
     this.currentLanguage.set(lang);
     await this.loadTranslations(lang);
 
-    try {
-      await firstValueFrom(
-        this.http.put(`${this.url}/api/profiles/language`, {
-          language: lang.toUpperCase()
-        })
-      );
-    } catch (error) {
-      console.error('Failed to update language preference:', error);
-    }
+    if (!this.auth.isLoggedIn()) return;
+
+    this.http.put(`${this.url}/api/profiles/language`, {language: this.currentLanguage})
+      .pipe(take(1))
+      .subscribe({
+        error: err => console.error('Failed to update language preference:', err)
+      });
   }
 
   setLanguageFromProfile(lang: Language): void {
