@@ -1,16 +1,17 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { EventService } from '../services/eventService';
-import { TranslationService } from '../services/translationService';
-import { StudentEvent, EventCategory } from '../model/studentEvent';
-import { CATEGORIES, categoryColor, categoryIconSvg } from '../utils/Categoryutils';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {EventService} from '../services/eventService';
+import {TranslationService} from '../services/translationService';
+import {EventCategory, StudentEvent} from '../model/studentEvent';
+import {CATEGORIES, categoryColor, categoryIconSvg} from '../utils/Categoryutils';
+import {EventFormComponent} from '../event-form/event-form';
 
 @Component({
   selector: 'app-event',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgOptimizedImage],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent],
   templateUrl: './event.html',
   styleUrl: './event.css',
 })
@@ -42,7 +43,7 @@ export class EventComponent implements OnInit {
     photo: [null],
     category: ['', Validators.required],
     eventDate: ['', Validators.required],
-    maxAttendees: [null],
+    maxAttendees: [null, [Validators.min(1), Validators.pattern('^[0-9]+$')]],
   });
 
   filteredEvents = computed(() => {
@@ -123,4 +124,5 @@ export class EventComponent implements OnInit {
   }
 
   categoryLabel(cat: EventCategory | string): string { return this.t.t(`event.categories.${cat}`); }
+
 }

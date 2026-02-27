@@ -118,10 +118,11 @@
             @if (event.photo) {
               <img
                 class="card-image"
-                [ngSrc]="event.photo"
+                [src]="event.photo"
                 [alt]="event.title"
                 width="400"
                 height="225"
+                loading="lazy"
               />
             } @else {
               <div class="card-image-placeholder"
@@ -163,8 +164,7 @@
 
 </div>
 
-<!-- Create Event Modal -->
-@if (showCreateModal()) {
+<!-- Create Event Modal -->@if (showCreateModal()) {
   <div class="modal-overlay" (click)="closeCreateModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -176,61 +176,14 @@
         </button>
       </div>
 
-      <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="modal-form">
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.fieldTitle') }} *</label>
-          <input type="text" formControlName="title" [placeholder]="t.t('event.createModal.titlePlaceholder')" />
-          @if (createForm.get('title')?.invalid && createForm.get('title')?.touched) {
-            <span class="form-error">{{ t.t('event.createModal.titleRequired') }}</span>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.description') }}</label>
-          <textarea formControlName="description" rows="3" [placeholder]="t.t('event.createModal.descriptionPlaceholder')"></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>{{ t.t('event.createModal.category') }} *</label>
-            <select formControlName="category">
-              <option value="">{{ t.t('event.createModal.categoryPlaceholder') }}</option>
-              @for (cat of categories; track cat) {
-                <option [value]="cat">{{ categoryLabel(cat) }}</option>
-              }
-            </select>
-            @if (createForm.get('category')?.invalid && createForm.get('category')?.touched) {
-              <span class="form-error">{{ t.t('event.createModal.categoryRequired') }}</span>
-            }
-          </div>
-          <div class="form-group">
-            <label>{{ t.t('event.createModal.maxAttendees') }}</label>
-            <input type="number" formControlName="maxAttendees" [placeholder]="t.t('event.createModal.maxAttendeesPlaceholder')" min="1" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.date') }} *</label>
-          <input type="datetime-local" formControlName="eventDate" />
-          @if (createForm.get('eventDate')?.invalid && createForm.get('eventDate')?.touched) {
-            <span class="form-error">{{ t.t('event.createModal.dateRequired') }}</span>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.photo') }}</label>
-          <input type="url" formControlName="photo" [placeholder]="t.t('event.createModal.photoPlaceholder')" />
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn-modal-cancel" (click)="closeCreateModal()">
-            {{ t.t('event.createModal.cancel') }}
-          </button>
-          <button type="submit" class="btn-modal-submit" [disabled]="createForm.invalid || creating()">
-            {{ creating() ? t.t('event.createModal.submitting') : t.t('event.createModal.submit') }}
-          </button>
-        </div>
-      </form>
+      <app-event-form
+        [form]="createForm"
+        [saving]="creating()"
+        [submitLabel]="t.t('event.createModal.submit')"
+        [cancelLabel]="t.t('event.createModal.cancel')"
+        (submitted)="submitCreate()"
+        (cancelled)="closeCreateModal()"
+      />
     </div>
   </div>
 }

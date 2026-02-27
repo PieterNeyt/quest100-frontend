@@ -1,8 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
-import {TranslationService} from './translationService';
 import {Observable} from 'rxjs';
 import {StudentEvent} from '../model/studentEvent';
 
@@ -12,8 +10,7 @@ import {StudentEvent} from '../model/studentEvent';
 export class EventService {
   private readonly url = environment.apiConfig.uri;
   private readonly http = inject(HttpClient);
-  private readonly authService = inject(MsalService);
-  private readonly translationService = inject(TranslationService);
+
 
   getAllEvents(): Observable<StudentEvent[]> {
     return this.http.get<StudentEvent[]>(`${this.url}/api/events`);

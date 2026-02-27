@@ -79,6 +79,7 @@
       "maxAttendeesPlaceholder": "Unlimited",
       "date": "Date & time",
       "dateRequired": "Date is required",
+      "datePast": "Date cannot be in the past",
       "photo": "Photo URL (optional)",
       "photoPlaceholder": "https://...",
       "cancel": "Cancel",

@@ -79,6 +79,7 @@
       "maxAttendeesPlaceholder": "Onbeperkt",
       "date": "Datum & tijdstip",
       "dateRequired": "Datum is verplicht",
+      "datePast": "Datum mag niet in het verleden liggen",
       "photo": "Foto URL (optioneel)",
       "photoPlaceholder": "https://...",
       "cancel": "Annuleren",

@@ -36,17 +36,10 @@
       <!-- Hero -->
       <div class="hero-wrap">
         @if (event()!.photo) {
-          <!--
-            width/height match the 21:8 aspect ratio at max container width (1400px).
-            priority marks it as an LCP candidate so Angular preloads it.
-          -->
           <img
             class="hero-img"
-            [ngSrc]="event()!.photo!"
+            [src]="event()!.photo!"
             [alt]="event()!.title"
-            width="1400"
-            height="533"
-            priority
           />
         } @else {
           <div class="hero-placeholder" [style.background]="'linear-gradient(135deg, ' + categoryColor(event()!.category) + '30, ' + categoryColor(event()!.category) + '70)'">
@@ -168,7 +161,7 @@
                 <div class="attendee-avatar">
                   @if (getAttendeeAvatar(attendee.profileId)) {
                     <img
-                      [ngSrc]="getAttendeeAvatar(attendee.profileId)"
+                      [src]="getAttendeeAvatar(attendee.profileId)"
                       [alt]="getAttendeeDisplayName(attendee.profileId)"
                       width="36"
                       height="36"
@@ -213,49 +206,15 @@
           </svg>
         </button>
       </div>
-      <form [formGroup]="editForm" (ngSubmit)="submitEdit()" class="modal-form">
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.fieldTitle') }} *</label>
-          <input type="text" formControlName="title" />
-          @if (editForm.get('title')?.invalid && editForm.get('title')?.touched) {
-            <span class="form-error">{{ t.t('event.createModal.titleRequired') }}</span>
-          }
-        </div>
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.description') }}</label>
-          <textarea formControlName="description" rows="3"></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>{{ t.t('event.createModal.category') }} *</label>
-            <select formControlName="category">
-              @for (cat of categories; track cat) {
-                <option [value]="cat">{{ categoryLabel(cat) }}</option>
-              }
-            </select>
-          </div>
-          <div class="form-group">
-            <label>{{ t.t('event.createModal.maxAttendees') }}</label>
-            <input type="number" formControlName="maxAttendees" min="1" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.date') }} *</label>
-          <input type="datetime-local" formControlName="eventDate" />
-        </div>
-        <div class="form-group">
-          <label>{{ t.t('event.createModal.photo') }}</label>
-          <input type="url" formControlName="photo" />
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-modal-cancel" (click)="closeEditModal()">
-            {{ t.t('event.createModal.cancel') }}
-          </button>
-          <button type="submit" class="btn-modal-submit" [disabled]="editForm.invalid || saving()">
-            {{ saving() ? t.t('event.createModal.submitting') : t.t('event.detail.editModal.save') }}
-          </button>
-        </div>
-      </form>
+
+      <app-event-form
+        [form]="editForm"
+        [saving]="saving()"
+        [submitLabel]="t.t('event.detail.editModal.save')"
+        [cancelLabel]="t.t('event.createModal.cancel')"
+        (submitted)="submitEdit()"
+        (cancelled)="closeEditModal()"
+      />
     </div>
   </div>
 }
