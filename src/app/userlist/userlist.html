@@ -1,0 +1,60 @@
+<div class="user-list-container">
+  <div class="header-section">
+    <h2>Collega's</h2>
+    <p class="subtitle">Waardeer je teamgenoten met een Kudo award</p>
+  </div>
+
+  <div class="user-grid">
+    @for (p of profiles(); track p.id) {
+      <div class="user-card">
+        <div class="user-info">
+          <span class="user-name">{{ p.firstName }} {{ p.lastName }}</span>
+          <span class="user-kudos">⭐ {{ p.kudos }} Kudos</span>
+        </div>
+        <button class="btn-award" (click)="openModal(p)">
+          Give Award
+        </button>
+      </div>
+    } @empty {
+      <div class="loading-state">Laden van profielen...</div>
+    }
+  </div>
+
+  @if (selectedProfile(); as user) {
+    <div class="modal-backdrop" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Award voor {{ user.firstName }}</h3>
+          <button class="btn-close" (click)="closeModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="input-group">
+            <label>Award Categorie</label>
+            <select [(ngModel)]="selectedType">
+              @for (type of kudoTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Persoonlijk Bericht</label>
+            <textarea
+              [(ngModel)]="message"
+              placeholder="Vertel wat deze collega zo goed deed..."
+              rows="4">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">Annuleren</button>
+          <button class="btn-primary" (click)="submitAward()" [disabled]="!message">
+            Verzenden
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
