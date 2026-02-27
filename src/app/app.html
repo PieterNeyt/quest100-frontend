@@ -1,19 +1,21 @@
 <nav hlmNavigationMenu class="navbar-container">
-  <div class="flex-1">
-    <a routerLink="/" class="text-xl font-bold tracking-tight px-4">
-      {{ translationService.t('nav.title') }}
-    </a>
+  <div class="nav-section-left">
+    <a routerLink="/" class="logo-text">{{ translationService.t('nav.title') }}</a>
   </div>
 
-  <ul hlmNavigationMenuList class="flex-2 justify-center">
+  <ul hlmNavigationMenuList class="nav-links-center">
     <li hlmNavigationMenuItem>
-      <a hlmNavigationMenuLink routerLink="/profile">
-        {{ translationService.t('nav.profile') }}
-      </a>
+      <a hlmNavigationMenuLink routerLink="/dashboard" class="nav-link">Dashboard</a>
+    </li>
+    <li hlmNavigationMenuItem>
+      <a hlmNavigationMenuLink routerLink="/quests" class="nav-link">Quests</a>
+    </li>
+    <li hlmNavigationMenuItem>
+      <a hlmNavigationMenuLink routerLink="/leaderboard" class="nav-link">Leaderboard</a>
     </li>
   </ul>
 
-  <div class="flex-1 flex justify-end items-center gap-4">
+  <div class="nav-section-right">
     <div class="language-selector">
       <button
         class="language-button"
@@ -22,7 +24,8 @@
       >
         <span [class]="translationService.getCurrentFlagClass()"></span>
         <span class="language-code">{{ translationService.currentLanguage().toUpperCase() }}</span>
-        <svg class="dropdown-arrow" [style.transform]="showLanguageDropdown() ? 'rotate(180deg)' : 'none'" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <svg class="dropdown-arrow" [style.transform]="showLanguageDropdown() ? 'rotate(180deg)' : 'none'" width="12"
+             height="12" viewBox="0 0 12 12" fill="currentColor">
           <path d="M6 9L1 4h10L6 9z"/>
         </svg>
       </button>
@@ -44,26 +47,59 @@
       }
     </div>
 
-    <ul hlmNavigationMenuList>
-      @if (!loginDisplay()) {
-        <li hlmNavigationMenuItem>
-          <button hlmNavigationMenuTrigger (click)="login()">
-            {{ translationService.t('nav.login') }}
-          </button>
-        </li>
-      } @else {
-        <li hlmNavigationMenuItem>
-          <a hlmNavigationMenuLink routerLink="/qrcode">
-            {{ translationService.t('nav.qrCode') }}
-          </a>
-        </li>
-        <li hlmNavigationMenuItem>
-          <button hlmNavigationMenuTrigger (click)="logout()">
-            {{ translationService.t('nav.logout') }}
-          </button>
-        </li>
-      }
-    </ul>
+    @if (!loginDisplay()) {
+      <button hlmBtn variant="ghost" class="login-btn" (click)="login()">
+        {{ translationService.t('nav.login') }}
+      </button>
+    }
+
+    @if (loginDisplay() && profile()) {
+      <div class="user-profile-pill">
+        <button
+          hlmBtn
+          variant="ghost"
+          class="avatar-trigger"
+          [hlmDropdownMenuTrigger]="menu">
+          <div class="user-info">
+            <span class="user-name">{{ profile()?.firstName }} {{ profile()?.lastName }}</span>
+            <span class="user-level">Lvl 8</span>
+          </div>
+
+          <hlm-avatar class="user-avatar-hlm">
+            <img hlmAvatarImage [ngSrc]="'/'" [alt]="'User avatar'" fill/>
+            <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
+          </hlm-avatar>
+        </button>
+      </div>
+
+      <ng-template #menu>
+        <hlm-dropdown-menu class="w-56">
+          <hlm-dropdown-menu-group>
+            <button hlmDropdownMenuItem routerLink="/profile">
+              <ng-icon hlm name="lucideUser"/>
+              <span>{{ translationService.t('nav.profile') }}</span>
+            </button>
+            <button hlmDropdownMenuItem routerLink="/settings">
+              <ng-icon hlm name="lucideSettings"/>
+              <span>{{ translationService.t("nav.settings") }}</span>
+            </button>
+            @if (roleService.hasRole("lector")) {
+              <button hlmDropdownMenuItem routerLink="/qrcode">
+                <ng-icon hlm name="lucideQrCode"/>
+                <span>{{ translationService.t('nav.qrCode') }}</span>
+              </button>
+            }
+          </hlm-dropdown-menu-group>
+          <hlm-dropdown-menu-separator/>
+          <hlm-dropdown-menu-group>
+            <button hlmDropdownMenuItem variant="destructive" (click)="logout()">
+              <ng-icon hlm name="lucideLogOut"/>
+              <span>Log out</span>
+            </button>
+          </hlm-dropdown-menu-group>
+        </hlm-dropdown-menu>
+      </ng-template>
+    }
   </div>
 </nav>
 
@@ -73,4 +109,4 @@
   }
 </main>
 
-<ngx-sonner-toaster position="top-right" richColors />
+<ngx-sonner-toaster position="top-right" richColors/>
