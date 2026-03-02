@@ -5,13 +5,25 @@ import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
 import {ProfileService} from './services/profileService';
-import {TranslationService, Language} from './services/translationService';
-import {CommonModule} from '@angular/common';
+import {HlmButtonImports} from '@spartan-ng/helm/button';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {HlmDropdownMenuImports} from '@spartan-ng/helm/dropdown-menu';
+import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {provideIcons} from '@ng-icons/core';
+import {lucideLogOut, lucideQrCode, lucideSettings, lucideUser} from '@ng-icons/lucide';
+import {environment} from '../../environment/environment';
+import {Language, TranslationService} from './services/translationService';
 import {NgxSonnerToaster} from 'ngx-sonner';
+import {jwtDecode} from 'jwt-decode';
+import {RoleService} from './services/roleService';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
+  providers: [
+    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode})
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -25,13 +37,15 @@ export class App implements OnInit, OnDestroy {
   private authService = inject(MsalService);
   private profileService = inject(ProfileService);
   private msalBroadcastService = inject(MsalBroadcastService);
+  profile = this.profileService.profile;
+  roleService = inject(RoleService);
   public translationService = inject(TranslationService);
 
-  setLoginDisplay() {
+  private setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
   }
 
-  checkAndSetActiveAccount() {
+  private checkAndSetActiveAccount() {
     let activeAccount = this.authService.instance.getActiveAccount();
 
     if (
@@ -43,8 +57,27 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
+  private tryAutoLogin() {
+    const alreadyTried = sessionStorage.getItem('autoLoginAttempted');
+    if (alreadyTried) return;
+    sessionStorage.setItem('autoLoginAttempted', 'true');
+
+    this.authService.loginRedirect({
+      scopes: environment.apiConfig.scopes,
+      prompt: 'none'
+    });
+  }
+
   ngOnInit(): void {
-    this.authService.handleRedirectObservable().subscribe();
+    this.authService.handleRedirectObservable().subscribe({
+      error: (error: any) => {
+        if (error?.name === 'InteractionRequiredAuthError') {
+          return;
+        }
+        console.error('Unexpected redirect error:', error);
+      },
+    });
+
     this.isIframe.set(window !== window.parent && !window.opener);
     this.msalBroadcastService.msalSubject$
       .pipe(
@@ -57,8 +90,8 @@ export class App implements OnInit, OnDestroy {
       .subscribe(() => {
         if (this.authService.instance.getAllAccounts().length === 0) {
           window.location.pathname = '/';
-          this.profileService.syncUser()
         } else {
+          sessionStorage.removeItem('autoLoginAttempted');
           this.setLoginDisplay();
         }
       });
@@ -70,10 +103,27 @@ export class App implements OnInit, OnDestroy {
         ),
         takeUntil(this._destroying$)
       )
-      .subscribe(() => {
-        this.setLoginDisplay();
-        this.checkAndSetActiveAccount();
-        this.profileService.syncUser();
+      .subscribe(async () => {
+        const accounts = this.authService.instance.getAllAccounts();
+
+        if (accounts.length === 0) {
+          this.tryAutoLogin();
+        } else {
+          this.setLoginDisplay();
+          this.checkAndSetActiveAccount();
+          this.profileService.syncUser();
+
+          const account = this.authService.instance.getActiveAccount();
+          if (!account) return;
+
+          const tokenResponse = await this.authService.instance.acquireTokenSilent({
+            account,
+            scopes: environment.apiConfig.scopes,
+          });
+
+          const decoded: any = jwtDecode(tokenResponse.accessToken);
+          this.roleService.roles.set(decoded.roles || []);
+        }
       });
   }
 
@@ -87,14 +137,9 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  logout(popup?: boolean) {
-    if (popup) {
-      this.authService.logoutPopup({
-        mainWindowRedirectUri: '/',
-      });
-    } else {
-      this.authService.logoutRedirect();
-    }
+
+  logout() {
+    this.authService.logoutRedirect();
   }
 
   async changeLanguage(lang: Language): Promise<void> {

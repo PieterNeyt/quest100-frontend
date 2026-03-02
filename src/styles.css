@@ -5,13 +5,24 @@
 
 @import "@spartan-ng/brain/hlm-tailwind-preset.css";
 
-/* =====================================================
-   DESIGN TOKENS — Duolingo × Canvas palette
-   Primary green : #58cc02  (Duolingo green)
-   Action blue   : #1cb0f6  (Duolingo sky)
-   Canvas red    : #e66000  (Canvas brand)
-   Neutrals      : #f9fafb → #1f2937
-   ===================================================== */
+@theme {
+  --color-brand-primary: #FF6B35;
+  --color-brand-secondary: #004E89;
+  --color-brand-accent: #FFD23F;
+  --color-brand-success: #06D6A0;
+
+  --animate-bg-shift: backgroundShift 20s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
+
+  @keyframes backgroundShift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, 30px) scale(1.1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
 
 :root {
   color-scheme: light;
@@ -95,3 +106,66 @@
   overflow: visible;
 }
 
+
+.cdk-overlay-container hlm-dropdown-menu {
+  background-color: #1a2332 !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid #2d3748 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.5rem !important;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5) !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem],
+.cdk-overlay-container [hlmDropdownMenuItem] span {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem] ng-icon {
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-right: 0.5rem !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'],
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'] span,
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'] ng-icon {
+  color: #ff4444 !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem]:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive']:hover {
+  background-color: rgba(255, 68, 68, 0.1) !important;
+}
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--primary), transparent 60%);
+  border-radius: 10px;
+  border: 2px solid transparent; /* Acts as padding around the thumb */
+  background-clip: content-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--primary), transparent 60%) transparent;
+}

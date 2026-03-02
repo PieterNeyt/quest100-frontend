@@ -5,7 +5,11 @@
     "qrCode": "QR Code",
     "login": "Login",
     "logout": "Logout",
-    "event": "Events"
+    "event": "Events",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "Welcome back"
   },
   "attendance": {
     "registering": "Registering attendance...",

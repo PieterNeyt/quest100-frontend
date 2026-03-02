@@ -5,7 +5,11 @@
     "qrCode": "QR Code",
     "login": "Inloggen",
     "logout": "Uitloggen",
-    "event": "Evenementen"
+    "event": "Evenementen",
+    "settings": "Instellingen"
+  },
+  "home": {
+    "title": "Welkom terug"
   },
   "attendance": {
     "registering": "Aanwezigheid registreren...",
