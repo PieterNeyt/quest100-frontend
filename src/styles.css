@@ -95,9 +95,11 @@
 
 @layer components {
   main {
-    @apply w-full flex flex-col items-stretch;
-    padding: 0;
-    padding-top: 0.5rem;
+    @apply w-full flex flex-col;
+  }
+
+  main > * {
+    @apply w-full max-w-[1400px] mx-auto px-8;
   }
 }
 

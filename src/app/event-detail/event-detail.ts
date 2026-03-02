@@ -4,15 +4,19 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../services/eventService';
 import {ProfileService} from '../services/profileService';
 import {TranslationService} from '../services/translationService';
-import {StudentEvent} from '../model/studentEvent';
+import {EventAttendee, StudentEvent} from '../model/studentEvent';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {categoryColor, categoryIconSvg} from '../utils/Categoryutils';
-import {EventFormComponent} from '../event-form/event-form';
+import {EventFormComponent} from '../components/event-form/event-form';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
+import * as lucideIcons from '@ng-icons/lucide';
+import {HlmIcon} from '@spartan-ng/helm/icon';
 
 @Component({
   selector: 'app-event-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIcon],
+  providers: [provideIcons(lucideIcons)],
   templateUrl: './event-detail.html',
   styleUrl: './event-detail.css',
 })
@@ -90,14 +94,23 @@ export class EventDetailComponent implements OnInit {
     const ev = this.event();
     if (!ev || !this.currentProfile) return;
     this.joining.set(true);
+
+    const p = this.currentProfile;
+    const optimisticAttendee: EventAttendee = {
+      id: crypto.randomUUID(),
+      eventId: ev.id,
+      profileId: this.currentProfileId,
+      joinedAt: new Date().toISOString(),
+      firstName: p.firstName,
+      lastName: p.lastName,
+      customProfilePicture: p.customProfilePicture ?? this.profileService.microsoftProfilePicture() ?? null,
+    };
+
     this.eventService.joinEvent(ev.id).subscribe({
       next: () => {
         this.event.update(e => !e ? e : {
           ...e,
-          attendees: [...e.attendees, {
-            id: crypto.randomUUID(), eventId: e.id,
-            profileId: this.currentProfileId, joinedAt: new Date().toISOString(),
-          }]
+          attendees: [...e.attendees, optimisticAttendee]
         });
         this.joining.set(false);
       },
@@ -180,24 +193,34 @@ export class EventDetailComponent implements OnInit {
     });
   }
 
-  getAttendeeDisplayName(profileId: string): string {
-    if (profileId === this.currentProfileId) {
-      const p = this.currentProfile;
-      return p ? `${p.firstName} ${p.lastName}` : profileId.slice(0, 8);
+  getAttendeeDisplayName(attendee: EventAttendee): string {
+    if (attendee.firstName && attendee.lastName) {
+      return `${attendee.firstName} ${attendee.lastName}`;
     }
-    return profileId.slice(0, 8) + '...';
+    if (attendee.profileId === this.currentProfileId) {
+      const p = this.currentProfile;
+      if (p) return `${p.firstName} ${p.lastName}`;
+    }
+    return attendee.profileId.slice(0, 8);
   }
 
-  getAttendeeAvatar(profileId: string): string {
-    return profileId === this.currentProfileId ? this.profileService.activeProfilePicture : '';
+  getAttendeeAvatar(attendee: EventAttendee): string {
+    if (attendee.customProfilePicture) return attendee.customProfilePicture;
+    if (attendee.profileId === this.currentProfileId) {
+      return this.profileService.activeProfilePicture;
+    }
+    return '';
   }
 
-  getAttendeeInitials(profileId: string): string {
-    if (profileId === this.currentProfileId) {
+  getAttendeeInitials(attendee: EventAttendee): string {
+    const first = attendee.firstName ?? '';
+    const last = attendee.lastName ?? '';
+    if (first && last) return (first[0] + last[0]).toUpperCase();
+    if (attendee.profileId === this.currentProfileId) {
       const p = this.currentProfile;
       if (p) return (p.firstName[0] + p.lastName[0]).toUpperCase();
     }
-    return profileId.slice(0, 2).toUpperCase();
+    return attendee.profileId.slice(0, 2).toUpperCase();
   }
 
   goBack() { this.router.navigate(['/event']); }

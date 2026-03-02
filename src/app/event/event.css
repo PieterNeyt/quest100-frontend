@@ -1,13 +1,5 @@
 :host { display: block; width: 100%; }
 
-.events-page {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 4rem;
-  box-sizing: border-box;
-}
-
 /* ---- Header ---- */
 .events-header {
   display: flex;

@@ -6,12 +6,16 @@ import {EventService} from '../services/eventService';
 import {TranslationService} from '../services/translationService';
 import {EventCategory, StudentEvent} from '../model/studentEvent';
 import {CATEGORIES, categoryColor, categoryIconSvg} from '../utils/Categoryutils';
-import {EventFormComponent} from '../event-form/event-form';
+import {EventFormComponent} from '../components/event-form/event-form';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
+import * as lucideIcons from '@ng-icons/lucide';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
 
 @Component({
   selector: 'app-event',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIconImports],
+  providers: [provideIcons(lucideIcons)],
   templateUrl: './event.html',
   styleUrl: './event.css',
 })

@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { TranslationService } from '../services/translationService';
-import { CATEGORIES } from '../utils/Categoryutils';
+import { TranslationService } from '../../services/translationService';
+import { CATEGORIES } from '../../utils/Categoryutils';
 
 @Component({
   selector: 'app-event-form',

@@ -18,8 +18,10 @@ export interface EventAttendee {
   eventId: string;
   profileId: string;
   joinedAt: string;
+  firstName?: string;
+  lastName?: string;
+  customProfilePicture?: string | null;
 }
-
 export type EventCategory =
   | "SPORTS"
   | "GAMING"

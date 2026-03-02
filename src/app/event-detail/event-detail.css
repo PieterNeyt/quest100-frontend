@@ -1,13 +1,5 @@
 :host { display: block; width: 100%; }
 
-.detail-page {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem 2rem 5rem;
-  box-sizing: border-box;
-}
-
 /* ---- Back button ---- */
 .back-btn {
   display: inline-flex;
@@ -218,7 +210,12 @@
   margin: 0 0 0.75rem 0;
   font-weight: 700;
 }
-.description-block p { margin: 0; color: #374151; line-height: 1.7; font-size: 0.97rem; }
+.description-block p {
+  margin: 0; color: #374151;
+  line-height: 1.7;
+  font-size: 0.97rem;
+  white-space: pre-line;
+}
 
 /* ---- Action area ---- */
 .action-area { margin-top: 0.5rem; }
