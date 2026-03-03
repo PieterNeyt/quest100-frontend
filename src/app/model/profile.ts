@@ -12,3 +12,22 @@ export interface SyncProfileResponse {
   profile: Profile;
   microsoftProfilePicture: string;
 }
+
+export interface AwardTransaction {
+  receiver: string;
+  type: KudoType;
+  message: string;
+}
+
+export enum KudoType {
+  KudoKnowledge="KudoKnowledge",
+  KudoAttendance="KudoAttendance",
+  KudoTeamwork="KudoTeamwork",
+  KudoAtmosphere="KudoAtmosphere",
+  KudoEngagement="KudoEngagement"
+}
+
+export interface ProfileAward{
+  profile: Profile;
+  hasSentAward: boolean;
+}

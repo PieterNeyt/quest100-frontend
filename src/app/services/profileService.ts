@@ -1,9 +1,9 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, EMPTY, switchMap, throwError} from 'rxjs';
+import {catchError, EMPTY, Observable, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
-import {Profile, SyncProfileResponse} from '../model/profile';
+import {AwardTransaction, Profile, ProfileAward, SyncProfileResponse} from '../model/profile';
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
 
@@ -17,7 +17,10 @@ export class ProfileService {
   private readonly translationService = inject(TranslationService);
 
   profile = signal<Profile | null>(null);
+  profiles = signal<Profile[] | null>(null);
+  profilesAwards = signal<ProfileAward[] | null>(null);
   microsoftProfilePicture = signal('');
+
 
   get activeProfilePicture(): string {
     return this.profile()?.customProfilePicture || this.microsoftProfilePicture();
@@ -73,4 +76,28 @@ export class ProfileService {
       .subscribe((updated) => this.profile.set(updated));
   }
 
+  getAllProfiles(): void {
+    this.http.get<Profile[]>(`${this.url}/api/profiles`)
+      .subscribe((profiles) => this.profiles.set(profiles));
+  }
+  giveAward(award: AwardTransaction): Observable<Profile> {
+    return this.http.post<Profile>(`${this.url}/api/profiles/award`, award);
+  }
+
+  getAllProfilesAwards() {
+    this.http.get<ProfileAward[]>(`${this.url}/api/profiles/award`)
+      .subscribe((profileAwards) => this.profilesAwards.set(profileAwards));
+  }
+
+  markProfileAsAwarded(profile: Profile) {
+    this.profilesAwards.update(list => {
+      if (!list) return list;
+
+      return list.map(pa =>
+        pa.profile.id === profile.id
+          ? { ...pa, profile, hasSentAward: true }
+          : pa
+      );
+    });
+  }
 }
