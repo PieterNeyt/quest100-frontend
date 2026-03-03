@@ -1,14 +1,15 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {Websocket} from '../services/websocket';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {ProfileService} from '../services/profileService';
 import {NgClass} from '@angular/common';
+import {Subscription} from 'rxjs';
+import {WebsocketService} from '../services/websocketService';
 
 interface ChatMessage {
   type: 'private' | 'group';
   senderId: string;
-  recipientId?: string; // Used if type is 'private'
-  roomId?: string;      // Used if type is 'group'
+  recipientId?: string;
+  roomId?: string;
   text: string;
 }
 
@@ -21,26 +22,32 @@ interface ChatMessage {
   templateUrl: './chat.html',
   styleUrl: './chat.css',
 })
-export class Chat implements OnInit {
-  private socketService = inject(Websocket);
+export class Chat implements OnInit, OnDestroy {
+  private socketService = inject(WebsocketService);
   private profile = inject(ProfileService).profile;
+  private subscription?: Subscription;
 
-  // Use a proper type for the signal
   chatLog = signal<ChatMessage[]>([]);
   currentInput = '';
   currentUser = this.profile()?.id || "";
 
   ngOnInit() {
-    this.socketService.messages$.subscribe(rawMsg => {
-      // Parse the incoming JSON message
+    this.socketService.connect()
+    this.subscription = this.socketService.messages$.subscribe(rawMsg => {
+
       const msg: ChatMessage = JSON.parse(rawMsg);
       this.chatLog.update(prev => [...prev, msg]);
     });
   }
 
+  ngOnDestroy() {
+    this.socketService.disconnect();
+    this.subscription?.unsubscribe();
+  }
+
   send() {
     if (this.currentInput.trim()) {
-      // Now we need to send JSON, not raw text
+
       const payload: ChatMessage = {
         type: 'private',
         senderId: "",
