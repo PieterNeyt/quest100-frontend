@@ -14,6 +14,12 @@
       <a hlmNavigationMenuLink routerLink="/leaderboard" class="nav-link">Leaderboard</a>
     </li>
     <li hlmNavigationMenuItem>
+      <a hlmNavigationMenuLink routerLink="/event" class="nav-link">Event</a>
+    </li>
+    <li hlmNavigationMenuItem>
+      <a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">Users</a>
+    </li>
+    <li hlmNavigationMenuItem>
       <a hlmNavigationMenuLink routerLink="/chat" class="nav-link">Chat</a>
     </li>
   </ul>
@@ -112,4 +118,10 @@
   }
 </main>
 
-<ngx-sonner-toaster position="top-right" richColors/>
+<ngx-sonner-toaster
+  position="bottom-right"
+  [closeButton]="true"
+  [duration]="4000"
+  [expand]="true"
+  [richColors]="true">
+</ngx-sonner-toaster>

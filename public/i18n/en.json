@@ -5,6 +5,7 @@
     "qrCode": "QR Code",
     "login": "Login",
     "logout": "Logout",
+    "event": "Events",
     "settings": "Settings"
   },
   "home": {
@@ -43,6 +44,88 @@
     "success": "QR code generated successfully",
     "error": "Failed to generate QR code"
   },
+  "event": {
+    "title": "Events",
+    "subtitle": "Discover and join events from your fellow students",
+    "createButton": "New event",
+    "firstEvent": "Create the first event",
+    "noEvents": "No events found",
+    "loading": "Loading events...",
+    "retry": "Try again",
+    "searchPlaceholder": "Search events...",
+    "allCategories": "All categories",
+    "sortLabel": "Sort:",
+    "sortDate": "Date",
+    "sortTitle": "Name",
+    "sortAttendees": "Attendees",
+    "going": "going",
+    "categories": {
+      "SPORTS": "Sports",
+      "GAMING": "Gaming",
+      "STUDY": "Study",
+      "FOOD": "Food",
+      "MUSIC": "Music",
+      "OUTDOOR": "Outdoor",
+      "SOCIAL": "Social",
+      "OTHER": "Other"
+    },
+    "createModal": {
+      "title": "Create new event",
+      "fieldTitle": "Title",
+      "titlePlaceholder": "Give your event a name",
+      "titleRequired": "Title is required",
+      "description": "Description",
+      "descriptionPlaceholder": "What's on the program?",
+      "category": "Category",
+      "categoryPlaceholder": "Choose a category",
+      "categoryRequired": "Category is required",
+      "maxAttendees": "Max. attendees",
+      "maxAttendeesPlaceholder": "Unlimited",
+      "date": "Date & time",
+      "dateRequired": "Date is required",
+      "datePast": "Date cannot be in the past",
+      "photo": "Photo URL (optional)",
+      "photoPlaceholder": "https://...",
+      "cancel": "Cancel",
+      "submit": "Create event",
+      "submitting": "Creating..."
+    },
+    "detail": {
+      "back": "Back to events",
+      "notFound": "Event not found",
+      "about": "About this event",
+      "attendees": "Attendees",
+      "noAttendees": "Nobody signed up yet. Be the first!",
+      "you": "You",
+      "spotsLeft": "spots left",
+      "full": "Full!",
+      "join": "I'm going!",
+      "joining": "Processing...",
+      "going": "You're going!",
+      "cancelAttend": "Cancel attendance",
+      "cancelling": "Cancelling...",
+      "eventFull": "Event is full",
+      "person": "person going",
+      "people": "people going",
+      "edit": "Edit",
+      "delete": "Delete",
+      "organizerLeave": "Leave event",
+      "editModal": {
+        "title": "Edit event",
+        "save": "Save changes"
+      },
+      "organizerLeaveModal": {
+        "title": "You are the organizer",
+        "description": "As the organizer, you can't just leave. Transfer ownership to another attendee, or delete the event entirely.",
+        "transferLabel": "Transfer to",
+        "selectAttendee": "Choose an attendee...",
+        "transferAndLeave": "Transfer & leave",
+        "or": "or",
+        "deleteEvent": "Delete event",
+        "stayOrganizer": "Stay as organizer"
+      }
+    }
+  },
   "errors": {
     "generic": "Something went wrong. Please try again later.",
     "invalidQrCode": "Invalid QR code",
@@ -52,5 +135,28 @@
   "success": {
     "generic": "Operation completed successfully",
     "saved": "Changes saved successfully"
+  },
+  "kudoTypes": {
+    "KudoKnowledge": "Knowledge",
+    "KudoAttendance": "Attendance",
+    "KudoTeamwork": "Teamwork",
+    "KudoAtmosphere": "Atmosphere",
+    "KudoEngagement": "Engagement"
+  },
+  "userlist": {
+    "colleagues": "Colleagues",
+    "awardSubtitle": "Appreciate your teammates with a Kudo award",
+    "kudos": "Kudos",
+    "awardSentToday": "Award Sent Today!",
+    "giveAward": "Give Award",
+    "loadingProfiles": "Loading profiles...",
+    "awardFor": "Award for",
+    "awardCategory": "Award Category",
+    "personalMessage": "Personal Message",
+    "personalMessagePlaceholder": "Share what this teammate did well...",
+    "cancel": "Cancel",
+    "send": "Send",
+    "awardSuccess": "You have successfully given the award {{type}} to {{firstName}} {{lastName}}!",
+    "awardError": "Failed to give award. Please try again."
   }
 }

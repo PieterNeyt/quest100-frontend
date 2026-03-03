@@ -5,6 +5,7 @@
     "qrCode": "QR Code",
     "login": "Inloggen",
     "logout": "Uitloggen",
+    "event": "Evenementen",
     "settings": "Instellingen"
   },
   "home": {
@@ -43,6 +44,88 @@
     "success": "QR-code succesvol gegenereerd",
     "error": "QR-code genereren mislukt"
   },
+  "event": {
+    "title": "Evenementen",
+    "subtitle": "Ontdek en join events van je medestudenten",
+    "createButton": "Nieuw event",
+    "firstEvent": "Maak het eerste event aan",
+    "noEvents": "Geen events gevonden",
+    "loading": "Events laden...",
+    "retry": "Opnieuw proberen",
+    "searchPlaceholder": "Zoek events...",
+    "allCategories": "Alle categorieën",
+    "sortLabel": "Sorteer:",
+    "sortDate": "Datum",
+    "sortTitle": "Naam",
+    "sortAttendees": "Deelnemers",
+    "going": "gaan",
+    "categories": {
+      "SPORTS": "Sport",
+      "GAMING": "Gaming",
+      "STUDY": "Studie",
+      "FOOD": "Eten",
+      "MUSIC": "Muziek",
+      "OUTDOOR": "Buiten",
+      "SOCIAL": "Sociaal",
+      "OTHER": "Overige"
+    },
+    "createModal": {
+      "title": "Nieuw event aanmaken",
+      "fieldTitle": "Titel",
+      "titlePlaceholder": "Geef je event een naam",
+      "titleRequired": "Titel is verplicht",
+      "description": "Beschrijving",
+      "descriptionPlaceholder": "Wat staat er op het programma?",
+      "category": "Categorie",
+      "categoryPlaceholder": "Kies een categorie",
+      "categoryRequired": "Categorie is verplicht",
+      "maxAttendees": "Max. deelnemers",
+      "maxAttendeesPlaceholder": "Onbeperkt",
+      "date": "Datum & tijdstip",
+      "dateRequired": "Datum is verplicht",
+      "datePast": "Datum mag niet in het verleden liggen",
+      "photo": "Foto URL (optioneel)",
+      "photoPlaceholder": "https://...",
+      "cancel": "Annuleren",
+      "submit": "Event aanmaken",
+      "submitting": "Aanmaken..."
+    },
+    "detail": {
+      "back": "Terug naar events",
+      "notFound": "Event niet gevonden",
+      "about": "Over dit event",
+      "attendees": "Deelnemers",
+      "noAttendees": "Nog niemand ingeschreven. Wees de eerste!",
+      "you": "Jij",
+      "spotsLeft": "plaatsen vrij",
+      "full": "Vol!",
+      "join": "Ik ga!",
+      "joining": "Bezig...",
+      "going": "Je gaat!",
+      "cancelAttend": "Aanwezigheid annuleren",
+      "cancelling": "Bezig...",
+      "eventFull": "Event is vol",
+      "person": "persoon gaat",
+      "people": "mensen gaan",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "organizerLeave": "Verlaat evenement",
+      "editModal": {
+        "title": "Event bewerken",
+        "save": "Opslaan"
+      },
+      "organizerLeaveModal": {
+        "title": "Jij bent de organisator",
+        "description": "Als organisator kan je het evenement niet zomaar verlaten. Draag het over aan iemand anders, of verwijder het evenement.",
+        "transferLabel": "Draag over aan",
+        "selectAttendee": "Kies een deelnemer...",
+        "transferAndLeave": "Overdragen & verlaten",
+        "or": "of",
+        "deleteEvent": "Evenement verwijderen",
+        "stayOrganizer": "Toch blijven als organisator"
+      }
+    }
+  },
   "errors": {
     "generic": "Er is iets misgegaan. Probeer het later opnieuw.",
     "invalidQrCode": "Ongeldige QR-code",
@@ -52,5 +135,28 @@
   "success": {
     "generic": "Actie succesvol uitgevoerd",
     "saved": "Wijzigingen succesvol opgeslagen"
+  },
+  "userlist": {
+    "colleagues": "Collega's",
+    "awardSubtitle": "Waardeer je teamgenoten met een Kudo award",
+    "kudos": "Kudos",
+    "awardSentToday": "Award vandaag al verstuurd!",
+    "giveAward": "Geef Award",
+    "loadingProfiles": "Laden van profielen...",
+    "awardFor": "Award voor",
+    "awardCategory": "Award Categorie",
+    "personalMessage": "Persoonlijk Bericht",
+    "personalMessagePlaceholder": "Vertel wat deze collega zo goed deed...",
+    "cancel": "Annuleren",
+    "send": "Verzenden",
+    "awardSuccess": "Je hebt succesvol de award {{type}} gegeven aan {{firstName}} {{lastName}}!",
+    "awardError": "Het geven van de award is mislukt. Probeer het opnieuw."
+  },
+  "kudoTypes": {
+    "KudoKnowledge": "Kennis",
+    "KudoAttendance": "Aanwezigheid",
+    "KudoTeamwork": "Teamwork",
+    "KudoAtmosphere": "Sfeer",
+    "KudoEngagement": "Betrokkenheid"
   }
 }
