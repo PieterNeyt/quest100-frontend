@@ -43,12 +43,12 @@ export class Chat implements OnInit {
       // Now we need to send JSON, not raw text
       const payload: ChatMessage = {
         type: 'private',
-        senderId: this.currentUser,
+        senderId: "",
         recipientId: "d1392c2a-445b-4bd2-8935-20bbe9882de2",
         text: this.currentInput,
       };
 
-      this.socketService.send(JSON.stringify(payload));
+      this.socketService.send(payload);
       this.currentInput = '';
     }
   }
