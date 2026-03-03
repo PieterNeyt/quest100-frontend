@@ -23,11 +23,11 @@
       }
 
       <div class="dropdown-wrapper">
-        <button class="nav-pill-button" (click)="toggleLanguageDropdown(); $event.stopPropagation()">
+        <button class="nav-pill-button" (click)="toggleMenu('languages', $event)">
           <span [class]="translationService.getCurrentFlagClass()"></span>
           <span class="trigger-label">{{ translationService.currentLanguage().toUpperCase() }}</span>
         </button>
-        @if (showLanguageDropdown()) {
+        @if (activeMenu() === 'languages') {
           <div class="custom-dropdown-menu">
             @for (lang of translationService.availableLanguages; track lang.code) {
               <button class="dropdown-item-pill" (click)="changeLanguage(lang.code)">
@@ -45,7 +45,7 @@
 
       @if (loginDisplay() && profile()) {
         <div class="dropdown-wrapper">
-          <button class="user-avatar-trigger" (click)="toggleUserDropdown(); $event.stopPropagation()">
+          <button class="user-avatar-trigger" (click)="toggleMenu('user', $event)">
             <div class="avatar-ring">
               <hlm-avatar class="user-avatar-circle">
                 <img hlmAvatarImage [ngSrc]="'/'" fill class="object-cover"/>
@@ -53,9 +53,9 @@
               </hlm-avatar>
             </div>
           </button>
-          @if (showUserDropdown()) {
+          @if (activeMenu() === 'user') {
             <div class="custom-dropdown-menu">
-              <button class="dropdown-item-pill" routerLink="/profile">Profile</button>
+              <button class="dropdown-item-pill" routerLink="/profile" (click)="activeMenu.set(null)">Profile</button>
               <button class="dropdown-item-pill" (click)="logout()">Log out</button>
             </div>
           }
@@ -63,16 +63,16 @@
       }
     </div>
 
-    <button class="mobile-menu-trigger" (click)="isMobileMenuOpen.set(!isMobileMenuOpen())">
-      <ng-icon [name]="isMobileMenuOpen() ? 'lucideX' : 'lucideMenu'" class="size-7"></ng-icon>
+    <button class="mobile-menu-trigger" (click)="toggleMenu('mobile', $event)">
+      <ng-icon [name]="activeMenu() === 'mobile' ? 'lucideX' : 'lucideMenu'"></ng-icon>
     </button>
   </div>
 </nav>
 
-@if (isMobileMenuOpen()) {
-  <div class="mobile-backdrop" (click)="isMobileMenuOpen.set(false)"></div>
+@if (activeMenu() === 'mobile') {
+  <div class="mobile-backdrop" (click)="activeMenu.set(null)"></div>
 
-  <div class="mobile-sidebar">
+  <div class="mobile-sidebar" (click)="$event.stopPropagation()">
     <div class="sidebar-header">
       @if (loginDisplay() && profile()) {
         <div class="sidebar-user-info">
@@ -92,41 +92,25 @@
       } @else {
         <span class="logo-text-yellow">Quest100</span>
       }
-      <button class="close-sidebar" (click)="isMobileMenuOpen.set(false)">
+      <button class="close-sidebar" (click)="activeMenu.set(null)">
         <ng-icon name="lucideX" class="size-6"></ng-icon>
       </button>
     </div>
 
     <nav class="sidebar-nav">
-      <a routerLink="/" class="sidebar-link" (click)="isMobileMenuOpen.set(false)">
-        <ng-icon name="lucideHome" class="mr-3"></ng-icon> Home
-      </a>
-      <a routerLink="/games" class="sidebar-link" (click)="isMobileMenuOpen.set(false)">
-        <ng-icon name="lucideGamepad2" class="mr-3"></ng-icon> Games
-      </a>
-      <a routerLink="/event" class="sidebar-link" (click)="isMobileMenuOpen.set(false)">
-        <ng-icon name="lucideCalendar" class="mr-3"></ng-icon> Events
-      </a>
-      <a routerLink="/userlist" class="sidebar-link" (click)="isMobileMenuOpen.set(false)">
-        <ng-icon name="lucideUsers" class="mr-3"></ng-icon> Students
-      </a>
-      <a routerLink="/about" class="sidebar-link" (click)="isMobileMenuOpen.set(false)">
-        <ng-icon name="lucideInfo" class="mr-3"></ng-icon> About
-      </a>
+      <a routerLink="/" class="sidebar-link" (click)="activeMenu.set(null)">Home</a>
+      <a routerLink="/games" class="sidebar-link" (click)="activeMenu.set(null)">Games</a>
+      <a routerLink="/event" class="sidebar-link" (click)="activeMenu.set(null)">Events</a>
+      <a routerLink="/userlist" class="sidebar-link" (click)="activeMenu.set(null)">Students</a>
+      <a routerLink="/about" class="sidebar-link" (click)="activeMenu.set(null)">About</a>
 
       <div class="sidebar-divider"></div>
 
       @if (loginDisplay()) {
-        <a routerLink="/profile" class="sidebar-link" (click)="isMobileMenuOpen.set(false)">
-          <ng-icon name="lucideUser" class="mr-3"></ng-icon> Profile
-        </a>
-        <button (click)="logout(); isMobileMenuOpen.set(false)" class="sidebar-link text-red-400">
-          <ng-icon name="lucideLogOut" class="mr-3"></ng-icon> Log out
-        </button>
+        <a routerLink="/profile" class="sidebar-link" (click)="activeMenu.set(null)">Profile</a>
+        <button (click)="logout(); activeMenu.set(null)" class="sidebar-link text-red-400">Log out</button>
       } @else {
-        <button (click)="login(); isMobileMenuOpen.set(false)" class="sidebar-login-btn">
-          Login
-        </button>
+        <button (click)="login(); activeMenu.set(null)" class="sidebar-login-btn">Login</button>
       }
     </nav>
   </div>

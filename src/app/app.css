@@ -9,7 +9,14 @@
 
 /* --- Hoofdcontainer (Desktop & Tablet) --- */
 .navbar-container {
-  @apply sticky top-4 z-50 flex items-center justify-between w-[95%] max-w-[1400px] mx-auto px-6 py-2.5 transition-all duration-300;
+  /* Vaste hoogte om 'shaken' of vergroten bij inloggen te voorkomen */
+  height: 64px;
+  @apply sticky top-4 z-50 flex items-center justify-between w-[95%] max-w-[1400px] mx-auto px-6 transition-all duration-300;
+
+  /* Padding boven/onder verwijderd, centrering gebeurt via flex items-center */
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+
   background: color-mix(in oklch, var(--card) 80%, transparent);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border);
@@ -20,13 +27,15 @@
 /* Mobiele "Full Impact" Navigatiebalk */
 @media (max-width: 1024px) {
   .navbar-container {
-    @apply top-0 w-full max-w-none border-x-0 border-t-0 rounded-none px-4 py-3;
+    @apply top-0 w-full max-w-none border-x-0 border-t-0 rounded-none px-4;
+    height: 60px; /* Iets compacter op mobiel */
   }
 }
 
-.nav-section-left { @apply flex items-center gap-8; }
-.nav-links-left { @apply hidden lg:flex items-center gap-1; }
-.nav-section-right { @apply hidden lg:flex items-center justify-end gap-4 flex-nowrap; }
+/* Flex containers vullen de volledige hoogte voor perfecte centrering */
+.nav-section-left { @apply flex items-center gap-8 h-full; }
+.nav-links-left { @apply hidden lg:flex items-center gap-1 h-full; }
+.nav-section-right { @apply hidden lg:flex items-center justify-end gap-4 flex-nowrap h-full; }
 
 .logo-text-yellow {
   @apply text-2xl font-black tracking-tighter;
@@ -34,7 +43,7 @@
   text-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
 }
 
-/* --- Hamburger Button (Kleiner gemaakt) --- */
+/* --- Hamburger Button --- */
 .mobile-menu-trigger {
   @apply flex lg:hidden items-center justify-center p-1.5 rounded-lg transition-colors;
   color: oklch(0.554 0.046 257.417);
@@ -44,7 +53,7 @@
   color: #fbbf24;
 }
 .mobile-menu-trigger ng-icon {
-  @apply size-6; /* Subtieler formaat */
+  @apply size-6;
 }
 
 /* --- Sidebar & Overlay --- */
@@ -109,7 +118,8 @@
 }
 
 /* --- Dropdowns & Avatars --- */
-.dropdown-wrapper { @apply relative flex-shrink-0; }
+.dropdown-wrapper { @apply relative flex-shrink-0 flex items-center h-full; }
+
 .nav-pill-button {
   @apply flex items-center gap-2 px-3 h-10 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer outline-none border-none bg-transparent whitespace-nowrap;
   color: oklch(0.554 0.046 257.417);
@@ -131,29 +141,27 @@
 }
 .dropdown-item-pill:hover { @apply bg-white/10; color: #fbbf24; }
 
-/* Avatar Styling */
+/* Avatar Styling - Compact gemaakt voor vaste navbar hoogte */
 .user-avatar-trigger {
   @apply cursor-pointer outline-none border-none bg-transparent p-0 transition-transform active:scale-95 flex items-center justify-center flex-shrink-0;
-  min-width: 52px;
-  min-height: 52px;
 }
 .avatar-ring {
   @apply p-0.5 rounded-full border-2 border-yellow-500/30 transition-all duration-200 flex items-center justify-center flex-shrink-0;
-  width: 52px;
-  height: 52px;
+  width: 42px;
+  height: 42px;
 }
 .user-avatar-circle {
-  @apply size-12 border border-white/10 rounded-full overflow-hidden shrink-0 flex items-center justify-center;
+  @apply size-9 border border-white/10 rounded-full overflow-hidden shrink-0 flex items-center justify-center;
   background: #fbbf24;
 }
 
 .hlmAvatarFallback {
-  @apply flex items-center justify-center w-full h-full text-lg font-black text-black uppercase leading-none;
+  @apply flex items-center justify-center w-full h-full text-base font-black text-black uppercase leading-none;
 }
 
 /* Kudos Badge Desktop */
 .kudos-badge {
-  @apply flex items-center gap-2 px-4 h-10 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex-shrink-0;
+  @apply flex items-center gap-2 px-4 h-9 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex-shrink-0;
 }
 .kudos-amount {
   @apply text-sm font-bold text-yellow-500 uppercase whitespace-nowrap tracking-wide;

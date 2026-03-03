@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, HostListener, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {HlmNavigationMenuImports} from '@spartan-ng/helm/navigation-menu';
 import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-angular';
@@ -16,6 +16,8 @@ import {NgxSonnerToaster} from 'ngx-sonner';
 import {jwtDecode} from 'jwt-decode';
 import {RoleService} from './services/roleService';
 
+type MenuState = 'languages' | 'user' | 'mobile' | null;
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
@@ -31,6 +33,7 @@ export class App implements OnInit, OnDestroy {
   showLanguageDropdown = signal(false);
   showUserDropdown = signal(false);
   isMobileMenuOpen = signal(false);
+  activeMenu = signal<MenuState>(null);
 
   private readonly _destroying$ = new Subject<void>();
   private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
@@ -147,13 +150,14 @@ export class App implements OnInit, OnDestroy {
     this.showLanguageDropdown.set(false);
   }
 
-  toggleLanguageDropdown(): void {
-    this.showLanguageDropdown.update(val => !val);
+  toggleMenu(menu: MenuState, event?: Event): void {
+    event?.stopPropagation();
+    this.activeMenu.update(current => current === menu ? null : menu);
   }
 
-  toggleUserDropdown(): void {
-    this.showLanguageDropdown.set(false);
-    this.showUserDropdown.update(val => !val);
+  @HostListener('document:click')
+  closeAll(): void {
+    this.activeMenu.set(null);
   }
 
   ngOnDestroy(): void {
