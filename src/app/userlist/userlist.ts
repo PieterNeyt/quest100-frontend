@@ -3,7 +3,8 @@ import { ProfileService } from '../services/profileService';
 import { CommonModule } from '@angular/common';
 import { AwardTransaction, KudoType, Profile } from '../model/profile';
 import { FormsModule } from '@angular/forms';
-import {ToastService} from '../services/toastService';
+import { ToastService } from '../services/toastService';
+import { TranslationService } from '../services/translationService';
 
 @Component({
   selector: 'app-userlist',
@@ -15,19 +16,20 @@ import {ToastService} from '../services/toastService';
 export class Userlist implements OnInit {
   private profileService = inject(ProfileService);
   private toastService = inject(ToastService);
+  public translate = inject(TranslationService);
 
   profileAwards = this.profileService.profilesAwards;
-
-
-  filteredProfileAwards = computed(() => {
-    const myId = this.profileService.profile()?.id;
-    return this.profileAwards()!.filter(pa => pa.profile.id !== myId);
-  });
-
-  kudoTypes = Object.values(KudoType);
   selectedProfile = signal<Profile | null>(null);
   message = '';
   selectedType = KudoType.KudoTeamwork;
+
+  kudoTypes = Object.values(KudoType);
+
+  filteredProfileAwards = computed(() => {
+    const myId = this.profileService.profile()?.id;
+    const awards = this.profileAwards() ?? [];
+    return awards.filter(pa => pa.profile.id !== myId);
+  });
 
   ngOnInit() {
     this.profileService.getAllProfilesAwards();
@@ -44,29 +46,36 @@ export class Userlist implements OnInit {
 
   submitAward() {
     const profile = this.selectedProfile();
+    if (!profile || !this.message.trim()) return;
 
-    if (profile && this.message.trim()) {
-      const award: AwardTransaction = {
-        receiver: profile.id,
-        type: this.selectedType,
-        message: this.message
-      };
+    const award: AwardTransaction = {
+      receiver: profile.id,
+      type: this.selectedType,
+      message: this.message
+    };
 
-      this.profileService.giveAward(award).subscribe({
-        next: () => {
-          this.toastService.success(
-            `You have successfully given the award ${this.selectedType} to ${profile.firstName} ${profile.lastName}!`
-          );
-          this.closeModal();
-          this.profileService.getAllProfilesAwards();
-        },
-        error: (err) => {
-          this.toastService.error(
-            `Failed to give award. Please try again.`
-          );
-          console.error(err);
-        }
-      });
-    }
+    this.profileService.giveAward(award).subscribe({
+      next: (updatedProfile: Profile) => {
+        const message = this.translate.tp('userlist.awardSuccess', {
+          type: this.translate.tk(this.selectedType),
+          firstName: updatedProfile.firstName,
+          lastName: updatedProfile.lastName
+        });
+        this.toastService.success(message);
+
+        this.profileService.markProfileAsAwarded(updatedProfile);
+
+        this.closeModal();
+      },
+      error: () => {
+        this.toastService.error(
+          this.translate.t('userlist.awardError')
+        );
+      }
+    });
+  }
+
+  getKudoLabel(type: KudoType): string {
+    return this.translate.tk(type);
   }
 }

@@ -1,6 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, EMPTY, switchMap, throwError} from 'rxjs';
+import {catchError, EMPTY, Observable, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {AwardTransaction, Profile, ProfileAward, SyncProfileResponse} from '../model/profile';
@@ -80,12 +80,24 @@ export class ProfileService {
     this.http.get<Profile[]>(`${this.url}/api/profiles`)
       .subscribe((profiles) => this.profiles.set(profiles));
   }
-  giveAward(award: AwardTransaction) {
-    return this.http.post(`${this.url}/api/profiles/award`, award);
+  giveAward(award: AwardTransaction): Observable<Profile> {
+    return this.http.post<Profile>(`${this.url}/api/profiles/award`, award);
   }
 
   getAllProfilesAwards() {
     this.http.get<ProfileAward[]>(`${this.url}/api/profiles/award`)
       .subscribe((profileAwards) => this.profilesAwards.set(profileAwards));
+  }
+
+  markProfileAsAwarded(profile: Profile) {
+    this.profilesAwards.update(list => {
+      if (!list) return list;
+
+      return list.map(pa =>
+        pa.profile.id === profile.id
+          ? { ...pa, profile, hasSentAward: true }
+          : pa
+      );
+    });
   }
 }

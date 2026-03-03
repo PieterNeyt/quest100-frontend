@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {firstValueFrom, take} from 'rxjs';
 import {environment} from '../../../environment/environment';
 import {AuthService} from './authService';
+import {KudoType} from '../model/profile';
 
 export type Language = 'nl' | 'en';
 
@@ -62,6 +63,10 @@ export class TranslationService {
     this.loadTranslations(lang);
   }
 
+  translateKudoType(type: KudoType): string {
+    return this.translateWithParams(`kudoTypes.${type}`, {});
+  }
+
   translate(key: string): string {
     const keys = key.split('.');
     let value: string | Translations | undefined = this.translations();
@@ -77,7 +82,28 @@ export class TranslationService {
     return typeof value === 'string' ? value : key;
   }
 
+  translateWithParams(
+    key: string,
+    params: Record<string, string | number>
+  ): string {
+    let value = this.translate(key);
+
+    Object.keys(params).forEach(paramKey => {
+      value = value.replace(
+        new RegExp(`{{\\s*${paramKey}\\s*}}`, 'g'),
+        String(params[paramKey])
+      );
+    });
+
+    return value;
+  }
+
   t = (key: string) => this.translate(key);
+  tp = (
+    key: string,
+    params: Record<string, string | number>
+  ) => this.translateWithParams(key, params);
+  tk = (type: KudoType) => this.translateWithParams(`kudoTypes.${type}`, {});
 
   getCurrentFlagClass(): string {
     const current = this.availableLanguages.find(

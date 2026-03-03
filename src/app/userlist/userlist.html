@@ -1,12 +1,15 @@
 <div class="user-list-container">
+  <!-- Header -->
   <div class="header-section">
-    <h2>Collega's</h2>
-    <p class="subtitle">Waardeer je teamgenoten met een Kudo award</p>
+    <h2>{{ translate.t('userlist.colleagues') }}</h2>
+    <p class="subtitle">{{ translate.t('userlist.awardSubtitle') }}</p>
   </div>
 
+  <!-- Grid van gebruikers -->
   <div class="user-grid">
     @for (pa of filteredProfileAwards(); track pa.profile.id) {
       <div class="user-card">
+        <!-- Avatar -->
         <div class="profile-avatar">
           @if (pa.profile.customProfilePicture) {
             <img [src]="pa.profile.customProfilePicture" alt="{{ pa.profile.firstName }} profile picture">
@@ -17,62 +20,68 @@
           }
         </div>
 
+        <!-- Details -->
         <div class="user-details">
           <span class="user-name">{{ pa.profile.firstName }} {{ pa.profile.lastName }}</span>
-          <span class="user-kudos">⭐ {{ pa.profile.kudos }} Kudos</span>
+          <span class="user-kudos">⭐ {{ pa.profile.kudos }} {{ translate.t('userlist.kudos') }}</span>
         </div>
 
+        <!-- Award actie -->
         <div class="award-action">
           @if (pa.hasSentAward) {
             <span class="award-sent-message">
-              <i class="fas fa-check-circle"></i> Award Sent Today!
+              <i class="fas fa-check-circle"></i> {{ translate.t('userlist.awardSentToday') }}
             </span>
           } @else {
             <button class="btn-award" (click)="openModal(pa.profile)">
-              Give Award
+              {{ translate.t('userlist.giveAward') }}
             </button>
           }
         </div>
       </div>
     } @empty {
-      <div class="loading-state">Laden van profielen...</div>
+      <div class="loading-state">{{ translate.t('userlist.loadingProfiles') }}</div>
     }
   </div>
 
+  <!-- Modal -->
   @if (selectedProfile(); as user) {
     <div class="modal-backdrop" (click)="closeModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
+        <!-- Header -->
         <div class="modal-header">
-          <h3>Award voor {{ user.firstName }}</h3>
+          <h3>{{ translate.t('userlist.awardFor') }} {{ user.firstName }}</h3>
           <button class="btn-close" (click)="closeModal()">&times;</button>
         </div>
 
+        <!-- Body -->
         <div class="modal-body">
           <div class="input-group">
-            <label>Award Categorie</label>
+            <label>{{ translate.t('userlist.awardCategory') }}</label>
             <select [(ngModel)]="selectedType">
               @for (type of kudoTypes; track type) {
-                <option [value]="type">{{ type }}</option>
+                <option [value]="type">{{ getKudoLabel(type) }}</option>
               }
             </select>
           </div>
 
           <div class="input-group">
-            <label>Persoonlijk Bericht</label>
+            <label>{{ translate.t('userlist.personalMessage') }}</label>
             <textarea
               [(ngModel)]="message"
-              placeholder="Vertel wat deze collega zo goed deed..."
+              placeholder="{{ translate.t('userlist.personalMessagePlaceholder') }}"
               rows="4">
             </textarea>
           </div>
         </div>
 
+        <!-- Footer -->
         <div class="modal-footer">
-          <button class="btn-secondary" (click)="closeModal()">Annuleren</button>
+          <button class="btn-secondary" (click)="closeModal()">{{ translate.t('userlist.cancel') }}</button>
           <button class="btn-primary"
                   (click)="submitAward()"
                   [disabled]="!message.trim()">
-            Verzenden
+            {{ translate.t('userlist.send') }}
           </button>
         </div>
       </div>

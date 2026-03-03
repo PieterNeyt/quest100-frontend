@@ -52,5 +52,28 @@
   "success": {
     "generic": "Operation completed successfully",
     "saved": "Changes saved successfully"
+  },
+  "kudoTypes": {
+    "KudoKnowledge": "Knowledge",
+    "KudoAttendance": "Attendance",
+    "KudoTeamwork": "Teamwork",
+    "KudoAtmosphere": "Atmosphere",
+    "KudoEngagement": "Engagement"
+  },
+  "userlist": {
+    "colleagues": "Colleagues",
+    "awardSubtitle": "Appreciate your teammates with a Kudo award",
+    "kudos": "Kudos",
+    "awardSentToday": "Award Sent Today!",
+    "giveAward": "Give Award",
+    "loadingProfiles": "Loading profiles...",
+    "awardFor": "Award for",
+    "awardCategory": "Award Category",
+    "personalMessage": "Personal Message",
+    "personalMessagePlaceholder": "Share what this teammate did well...",
+    "cancel": "Cancel",
+    "send": "Send",
+    "awardSuccess": "You have successfully given the award {{type}} to {{firstName}} {{lastName}}!",
+    "awardError": "Failed to give award. Please try again."
   }
 }
