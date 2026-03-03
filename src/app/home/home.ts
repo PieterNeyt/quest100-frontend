@@ -1,26 +1,12 @@
 import {Component, inject} from '@angular/core';
-import {HlmBadge} from "@spartan-ng/helm/badge";
-import {HlmButton} from "@spartan-ng/helm/button";
-import {HlmCard, HlmCardContent, HlmCardDescription, HlmCardHeader, HlmCardTitle} from "@spartan-ng/helm/card";
-import {HlmIcon} from "@spartan-ng/helm/icon";
-import {NgIcon, provideIcons} from "@ng-icons/core";
+import {provideIcons} from "@ng-icons/core";
 import {ProfileService} from '../services/profileService';
 import {lucideQrCode, lucideStar, lucideTarget, lucideUsers, lucideZap} from '@ng-icons/lucide';
 import {TranslationService} from '../services/translationService';
 
 @Component({
   selector: 'app-home',
-  imports: [
-    HlmBadge,
-    HlmButton,
-    HlmCard,
-    HlmCardContent,
-    HlmCardDescription,
-    HlmCardHeader,
-    HlmCardTitle,
-    HlmIcon,
-    NgIcon
-  ],
+  imports: [],
   providers: [provideIcons({lucideQrCode, lucideStar, lucideZap, lucideTarget, lucideUsers})],
   templateUrl: './home.html',
   styleUrl: './home.css',

@@ -1,247 +1,169 @@
 @reference "../styles.css";
+
+/* --- Basis Navigatie Reset --- */
 [hlmNavigationMenuList] {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
 
+/* --- Hoofdcontainer (Desktop & Tablet) --- */
 .navbar-container {
-  @apply sticky top-4 z-50 flex items-center justify-between w-[95%] max-w-[1400px] mx-auto px-6 py-2.5;
+  @apply sticky top-4 z-50 flex items-center justify-between w-[95%] max-w-[1400px] mx-auto px-6 py-2.5 transition-all duration-300;
   background: color-mix(in oklch, var(--card) 80%, transparent);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border);
-  border-radius: 100px;
+  border-radius: 16px;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
-.nav-section-left, .nav-section-right, .nav-links-center {
-  @apply flex-1 flex items-center;
+/* Mobiele "Full Impact" Navigatiebalk */
+@media (max-width: 1024px) {
+  .navbar-container {
+    @apply top-0 w-full max-w-none border-x-0 border-t-0 rounded-none px-4 py-3;
+  }
 }
 
-.nav-section-left {
-  @apply justify-start;
+.nav-section-left { @apply flex items-center gap-8; }
+.nav-links-left { @apply hidden lg:flex items-center gap-1; }
+.nav-section-right { @apply hidden lg:flex items-center justify-end gap-4 flex-nowrap; }
+
+.logo-text-yellow {
+  @apply text-2xl font-black tracking-tighter;
+  color: #fbbf24;
+  text-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
 }
 
-.nav-links-center {
-  @apply hidden md:flex justify-center gap-2;
+/* --- Hamburger Button (Kleiner gemaakt) --- */
+.mobile-menu-trigger {
+  @apply flex lg:hidden items-center justify-center p-1.5 rounded-lg transition-colors;
+  color: oklch(0.554 0.046 257.417);
+}
+.mobile-menu-trigger:hover {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+}
+.mobile-menu-trigger ng-icon {
+  @apply size-6; /* Subtieler formaat */
 }
 
-.nav-section-right {
-  @apply justify-end gap-4;
+/* --- Sidebar & Overlay --- */
+.mobile-backdrop {
+  @apply fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm lg:hidden;
 }
 
-.login-btn {
-  @apply text-sm font-semibold px-6 py-2 rounded-full;
+.mobile-sidebar {
+  @apply fixed top-0 right-0 z-[60] h-full w-[300px] lg:hidden flex flex-col p-6 shadow-2xl;
+  background: color-mix(in oklch, var(--card) 98%, black);
+  border-left: 1px solid var(--border);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.logo-text {
-  @apply text-2xl font-black tracking-tighter cursor-pointer;
-  background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
+.sidebar-header {
+  @apply flex items-center justify-between mb-8 pb-6;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-user-info {
+  @apply flex items-center gap-3;
+}
+
+.sidebar-nav {
+  @apply flex flex-col gap-2;
+}
+
+.sidebar-link {
+  @apply flex items-center p-3.5 rounded-xl text-base font-semibold transition-all;
+  color: oklch(0.554 0.046 257.417);
+}
+
+.sidebar-link:hover {
+  @apply bg-yellow-500/10 text-yellow-500;
+}
+
+.sidebar-divider {
+  @apply h-px w-full bg-border my-4;
+}
+
+.sidebar-login-btn {
+  @apply w-full mt-4 py-3.5 rounded-xl bg-yellow-500 text-black font-bold text-center transition-transform active:scale-95;
+}
+
+.close-sidebar {
+  @apply p-1.5 rounded-full hover:bg-white/10 transition-colors text-muted-foreground;
+}
+
+/* --- Desktop Nav Links --- */
 .nav-link {
-  @apply text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200;
+  @apply text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200;
   color: oklch(0.554 0.046 257.417);
 }
-
 .nav-link:hover {
-  color: var(--color-brand-primary);
-  background: color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
 }
 
-.user-profile-pill {
-  @apply flex items-center;
-  background: color-mix(in oklch, var(--background) 60%, transparent);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-}
-
-.avatar-trigger {
-  @apply flex items-center gap-3 pl-4 pr-1 py-1 h-auto w-auto rounded-full transition-all;
-  border: none ;
-}
-
-.avatar-trigger:hover {
-  @apply bg-white/10;
-}
-
-.user-info {
-  @apply hidden sm:flex flex-col items-end shrink-0;
-}
-
-.user-name {
-  @apply text-sm font-bold text-white leading-none;
-}
-
-.user-level {
-  @apply text-[10px] uppercase tracking-widest font-bold mt-1;
+/* --- Dropdowns & Avatars --- */
+.dropdown-wrapper { @apply relative flex-shrink-0; }
+.nav-pill-button {
+  @apply flex items-center gap-2 px-3 h-10 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer outline-none border-none bg-transparent whitespace-nowrap;
   color: oklch(0.554 0.046 257.417);
 }
 
-.user-avatar-hlm {
-  @apply size-10 border-2 border-transparent transition-all rounded-full shrink-0;
-  background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent));
+.custom-dropdown-menu {
+  @apply absolute top-[calc(100%+12px)] right-0 min-w-[180px] p-1.5 z-50;
+  background: color-mix(in oklch, var(--card) 95%, transparent);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
 }
 
-.avatar-trigger:hover .user-avatar-hlm {
-  @apply border-white/50 scale-105;
-}
-:host ::ng-deep [hlmDropdownMenuItem] span {
-  @apply text-white opacity-100 ;
-  color: white ;
-}
-
-:host ::ng-deep [hlmDropdownMenuItem] ng-icon {
-  @apply text-white/80 mr-2 ;
-  color: rgba(255, 255, 255, 0.8) ;
-}
-
-:host ::ng-deep hlm-dropdown-menu {
-  @apply shadow-2xl rounded-xl border border-border ;
-  background-color: oklch(0.129 0.042 264.695 / 0.85) ;
-  backdrop-filter: blur(12px) saturate(150%) ;
-  padding: 4px ;
-}
-
-:host ::ng-deep [hlmDropdownMenuItem][variant='destructive'] {
-  @apply text-red-500 ;
-}
-
-:host ::ng-deep [hlmDropdownMenuItem][variant='destructive'] span,
-:host ::ng-deep [hlmDropdownMenuItem][variant='destructive'] ng-icon {
-  @apply text-red-500 ;
-  color: #ef4444 ;
-}
-
-:host ::ng-deep [hlmDropdownMenuItem][variant='destructive']:hover {
-  @apply bg-red-500/10 ;
-}
-
-:host ::ng-deep [hlmDropdownMenuItem]:not([variant='destructive']):hover {
-  @apply bg-white/10 ;
-}
-
-[hlmNavigationMenuLink]:hover {
-  background: #f0fdf4 !important;
-  color: #46a302 !important;
-}
-
-/* Login / Logout button */
-[hlmNavigationMenuTrigger] {
-  color: #374151 !important;
-  font-weight: 600 !important;
-  font-size: 0.92rem !important;
-  padding: 0.45rem 0.9rem !important;
-  border-radius: 8px !important;
-  transition: background 0.15s !important;
-}
-
-[hlmNavigationMenuTrigger]:hover {
-  background: #f3f4f6 !important;
-}
-
-/* ---- Language selector ---- */
-.fi {
-  display: inline-block;
-  width: 1.33em;
-  line-height: 1em;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 2px;
-}
-
-.language-button .fi { width: 20px; height: 15px; }
-.language-option .fi { width: 24px; height: 18px; }
-
-.language-selector {
-  position: relative;
-}
-
-.language-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 0.75rem;
-  border-radius: 8px;
-  background: #f3f4f6;
-  border: 2px solid #e5e7eb;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #374151;
-  font-weight: 600;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.language-button:hover {
-  background: #e5e7eb;
-  border-color: #d1d5db;
-}
-
-.language-button .language-code {
-  font-weight: 700;
-}
-
-.language-button .dropdown-arrow {
-  transition: transform 0.2s ease;
-  color: #9ca3af;
-}
-
-/* Dropdown */
-.language-dropdown {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
-  background: #ffffff;
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  min-width: 180px;
-  z-index: 200;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.language-option {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+.dropdown-item-pill {
+  @apply flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer outline-none border-none bg-transparent;
+  color: oklch(0.554 0.046 257.417);
   text-align: left;
-  color: #374151;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background 0.15s;
+}
+.dropdown-item-pill:hover { @apply bg-white/10; color: #fbbf24; }
+
+/* Avatar Styling */
+.user-avatar-trigger {
+  @apply cursor-pointer outline-none border-none bg-transparent p-0 transition-transform active:scale-95 flex items-center justify-center flex-shrink-0;
+  min-width: 52px;
+  min-height: 52px;
+}
+.avatar-ring {
+  @apply p-0.5 rounded-full border-2 border-yellow-500/30 transition-all duration-200 flex items-center justify-center flex-shrink-0;
+  width: 52px;
+  height: 52px;
+}
+.user-avatar-circle {
+  @apply size-12 border border-white/10 rounded-full overflow-hidden shrink-0 flex items-center justify-center;
+  background: #fbbf24;
 }
 
-.language-option:hover {
-  background: #f0fdf4;
-  color: #46a302;
+.hlmAvatarFallback {
+  @apply flex items-center justify-center w-full h-full text-lg font-black text-black uppercase leading-none;
 }
 
-.language-option.active {
-  background: #dcfce7;
-  font-weight: 700;
-  color: #16a34a;
+/* Kudos Badge Desktop */
+.kudos-badge {
+  @apply flex items-center gap-2 px-4 h-10 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex-shrink-0;
+}
+.kudos-amount {
+  @apply text-sm font-bold text-yellow-500 uppercase whitespace-nowrap tracking-wide;
 }
 
-.language-option .language-name {
-  font-size: 0.875rem;
+.login-btn-highlight {
+  @apply bg-yellow-500 !text-black hover:bg-yellow-400;
 }
 
-.flag, .fi {
-  width: 20px;
-  height: 14px;
-  border-radius: 3px;
-  display: inline-block;
-}
-
-.language-option .flag {
-  width: 24px;
-  height: 16px;
+/* --- Main Content Spacing --- */
+.main {
+  @apply pt-4;
 }

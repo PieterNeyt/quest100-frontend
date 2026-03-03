@@ -5,13 +5,11 @@ import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
 import {ProfileService} from './services/profileService';
-import {HlmButtonImports} from '@spartan-ng/helm/button';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
-import {HlmDropdownMenuImports} from '@spartan-ng/helm/dropdown-menu';
 import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
-import {lucideLogOut, lucideQrCode, lucideSettings, lucideUser} from '@ng-icons/lucide';
+import {lucideLogOut, lucideMenu, lucideQrCode, lucideSettings, lucideUser, lucideX, lucideZap} from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
 import {Language, TranslationService} from './services/translationService';
 import {NgxSonnerToaster} from 'ngx-sonner';
@@ -20,9 +18,9 @@ import {RoleService} from './services/roleService';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
   providers: [
-    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode})
+    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap})
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -31,6 +29,8 @@ export class App implements OnInit, OnDestroy {
   loginDisplay = signal(false);
   isIframe = signal(false);
   showLanguageDropdown = signal(false);
+  showUserDropdown = signal(false);
+  isMobileMenuOpen = signal(false);
 
   private readonly _destroying$ = new Subject<void>();
   private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
@@ -149,6 +149,11 @@ export class App implements OnInit, OnDestroy {
 
   toggleLanguageDropdown(): void {
     this.showLanguageDropdown.update(val => !val);
+  }
+
+  toggleUserDropdown(): void {
+    this.showLanguageDropdown.set(false);
+    this.showUserDropdown.update(val => !val);
   }
 
   ngOnDestroy(): void {
