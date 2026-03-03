@@ -1,0 +1,225 @@
+<button class="back-btn" (click)="goBack()">
+  <ng-icon hlm name="lucideArrowLeft" size="sm"/>
+  {{ t.t('event.detail.back') }}
+</button>
+
+@if (loading()) {
+  <div class="state-center">
+    <div class="spinner"></div>
+  </div>
+}
+
+@if (error()) {
+  <div class="state-center">
+    <ng-icon hlm name="lucideCircleAlert" class="h-14 w-14 text-destructive"/>
+    <p class="error-text">{{ error() }}</p>
+    <button class="back-btn" (click)="goBack()">
+      <ng-icon hlm name="lucideArrowLeft" size="sm"/>
+      {{ t.t('event.detail.back') }}
+    </button>
+  </div>
+}
+
+@if (!loading() && !error() && event()) {
+  <div class="detail-content">
+
+    <!-- Hero -->
+    <div class="hero-wrap">
+      @if (event()!.photo) {
+        <img class="hero-img" [src]="event()!.photo!" [alt]="event()!.title"/>
+      } @else {
+        <div class="hero-placeholder"
+             [style.background]="'linear-gradient(135deg, ' + categoryColor(event()!.category) + '30, ' + categoryColor(event()!.category) + '70)'">
+          <span class="hero-icon" [style.color]="categoryColor(event()!.category)"
+                [innerHTML]="categoryIconSvg(event()!.category, 72)"></span>
+        </div>
+      }
+      <div class="hero-badge-wrap">
+        <span class="category-chip" [style.background]="categoryColor(event()!.category)">
+          <span [innerHTML]="categoryIconSvg(event()!.category, 13)"></span>
+          {{ categoryLabel(event()!.category) }}
+        </span>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-main">
+
+        <!-- Title + organizer actions -->
+        <div class="title-row">
+          <h1 class="event-title">{{ event()!.title }}</h1>
+          @if (isOrganizer()) {
+            <div class="organizer-actions">
+              <button class="btn-edit" (click)="openEditModal()">
+                <ng-icon hlm name="lucidePencil" size="sm"/>
+                {{ t.t('event.detail.edit') }}
+              </button>
+              <button class="btn-delete" (click)="deleteEventAsOrganizer()" [disabled]="deleting()">
+                <ng-icon hlm name="lucideTrash2" size="sm"/>
+                {{ deleting() ? '...' : t.t('event.detail.delete') }}
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Date info -->
+        <div class="info-row">
+          <div class="info-item">
+            <div class="info-icon-wrap">
+              <ng-icon hlm name="lucideCalendar" size="sm"/>
+            </div>
+            <span>{{ formatDate(event()!.eventDate) }}</span>
+          </div>
+        </div>
+
+        @if (event()!.description) {
+          <div class="description-block">
+            <h3>{{ t.t('event.detail.about') }}</h3>
+            <p>{{ event()!.description }}</p>
+          </div>
+        }
+
+        <!-- Join / Going area -->
+        <div class="action-area">
+          @if (!isGoing()) {
+            <button class="btn-join" (click)="join()" [disabled]="joining() || isFull">
+              @if (!joining() && !isFull) {
+                <ng-icon hlm name="lucideGift" size="sm"/>
+              }
+              {{ joining() ? t.t('event.detail.joining') : isFull ? t.t('event.detail.eventFull') : t.t('event.detail.join') }}
+            </button>
+          } @else {
+            <div class="going-state">
+              <div class="going-info">
+                <span class="going-check">
+                  <ng-icon hlm name="lucideCheck" size="sm"/>
+                </span>
+                <span class="going-label">{{ t.t('event.detail.going') }}</span>
+              </div>
+              @if (!isOrganizer()) {
+                <button class="btn-cancel-attend" (click)="cancel()" [disabled]="cancelling()">
+                  <ng-icon hlm name="lucideX" size="sm"/>
+                  {{ cancelling() ? t.t('event.detail.cancelling') : t.t('event.detail.cancelAttend') }}
+                </button>
+              } @else {
+                <button class="btn-cancel-attend organizer-leave" (click)="cancel()">
+                  <ng-icon hlm name="lucideLogOut" size="sm"/>
+                  {{ t.t('event.detail.organizerLeave') }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Attendees Panel -->
+      <div class="attendees-panel">
+        <div class="attendees-header">
+          <h3>
+            {{ t.t('event.detail.attendees') }}
+            ({{ event()!.attendees.length }}@if (event()!.maxAttendees) {
+            / {{ event()!.maxAttendees }}
+          })
+          </h3>
+        </div>
+
+        <ul class="attendees-list">
+          @for (attendee of event()!.attendees; track attendee.profileId) {
+            <li class="attendee-item" [class.is-me]="attendee.profileId === currentProfileId">
+              <div class="attendee-avatar">
+                @if (getAttendeeAvatar(attendee)) {
+                  <img [src]="getAttendeeAvatar(attendee)" [alt]="getAttendeeDisplayName(attendee)" width="36" height="36"/>
+                } @else {
+                  {{ getAttendeeInitials(attendee) }}
+                }
+              </div>
+              <div class="attendee-info">
+                <span class="attendee-name">
+                  @if (attendee.profileId === event()!.organizerId) {
+                    <span class="organizer-badge" title="Organisator">
+                      <ng-icon hlm name="lucideStar" size="xs"/>
+                    </span>
+                  }
+                  {{ getAttendeeDisplayName(attendee) }}
+                  @if (attendee.profileId === currentProfileId) {
+                    <span class="me-tag">{{ t.t('event.detail.you') }}</span>
+                  }
+                </span>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Edit Modal -->
+@if (showEditModal()) {
+  <div class="modal-overlay" (click)="closeEditModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ t.t('event.detail.editModal.title') }}</h2>
+        <button class="modal-close" (click)="closeEditModal()">
+          <ng-icon hlm name="lucideX" size="sm"/>
+        </button>
+      </div>
+      <app-event-form
+        [form]="editForm"
+        [saving]="saving()"
+        [submitLabel]="t.t('event.detail.editModal.save')"
+        [cancelLabel]="t.t('event.createModal.cancel')"
+        (submitted)="submitEdit()"
+        (cancelled)="closeEditModal()"
+      />
+    </div>
+  </div>
+}
+
+<!-- Organizer Leave Modal -->
+@if (showOrganizerCancelModal()) {
+  <div class="modal-overlay" (click)="showOrganizerCancelModal.set(false)">
+    <div class="modal modal-warning" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-header-inner">
+          <span class="modal-warning-icon">
+            <ng-icon hlm name="lucideAlertTriangle" size="md"/>
+          </span>
+          <h2>{{ t.t('event.detail.organizerLeaveModal.title') }}</h2>
+        </div>
+        <button class="modal-close" (click)="showOrganizerCancelModal.set(false)">
+          <ng-icon hlm name="lucideX" size="sm"/>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t.t('event.detail.organizerLeaveModal.description') }}</p>
+
+        @if (otherAttendees().length > 0) {
+          <div class="form-group">
+            <label>{{ t.t('event.detail.organizerLeaveModal.transferLabel') }}</label>
+            <select [(ngModel)]="transferToProfileId">
+              <option value="">{{ t.t('event.detail.organizerLeaveModal.selectAttendee') }}</option>
+              @for (a of otherAttendees(); track a.profileId) {
+                <option [value]="a.profileId">{{ getAttendeeDisplayName(a) }}</option>
+              }
+            </select>
+          </div>
+          <button class="btn-modal-submit with-icon" [disabled]="!transferToProfileId() || cancelling()"
+                  (click)="transferAndLeave()">
+            <ng-icon hlm name="lucideUsers" size="sm"/>
+            {{ t.t('event.detail.organizerLeaveModal.transferAndLeave') }}
+          </button>
+          <div class="modal-divider">{{ t.t('event.detail.organizerLeaveModal.or') }}</div>
+        }
+
+        <button class="btn-delete full-width" [disabled]="deleting()" (click)="deleteEventAsOrganizer()">
+          <ng-icon hlm name="lucideTrash2" size="sm"/>
+          {{ t.t('event.detail.organizerLeaveModal.deleteEvent') }}
+        </button>
+        <button class="btn-modal-cancel full-width mt-sm" (click)="showOrganizerCancelModal.set(false)">
+          {{ t.t('event.detail.organizerLeaveModal.stayOrganizer') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

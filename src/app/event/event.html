@@ -1,0 +1,156 @@
+<div class="events-header">
+  <div class="header-text">
+    <h1>{{ t.t('event.title') }}</h1>
+    <p>{{ t.t('event.subtitle') }}</p>
+  </div>
+  <button class="btn-create" (click)="openCreateModal()">
+    <ng-icon hlm name="lucidePlus" size="sm"/>
+    {{ t.t('event.createButton') }}
+  </button>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="filter-bar">
+  <div class="search-wrap">
+    <ng-icon hlm name="lucideSearch" class="search-icon" size="sm"/>
+    <input
+      class="search-input"
+      type="text"
+      [placeholder]="t.t('event.searchPlaceholder')"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)"
+    />
+  </div>
+
+  <select
+    class="category-select"
+    [ngModel]="selectedCategory()"
+    (ngModelChange)="selectedCategory.set($event)"
+  >
+    <option value="">{{ t.t('event.allCategories') }}</option>
+    @for (cat of categories; track cat) {
+      <option [value]="cat">{{ categoryLabel(cat) }}</option>
+    }
+  </select>
+
+  <div class="sort-buttons">
+    <span class="sort-label">{{ t.t('event.sortLabel') }}</span>
+    <button class="sort-btn" [class.active]="sortBy() === 'date'" (click)="toggleSort('date')">
+      {{ t.t('event.sortDate') }}
+      @if (sortBy() === 'date') {
+        <ng-icon hlm [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'" size="xs"/>
+      }
+    </button>
+    <button class="sort-btn" [class.active]="sortBy() === 'title'" (click)="toggleSort('title')">
+      {{ t.t('event.sortTitle') }}
+      @if (sortBy() === 'title') {
+        <ng-icon hlm [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'" size="xs"/>
+      }
+    </button>
+    <button class="sort-btn" [class.active]="sortBy() === 'attendees'" (click)="toggleSort('attendees')">
+      {{ t.t('event.sortAttendees') }}
+      @if (sortBy() === 'attendees') {
+        <ng-icon hlm [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'" size="xs"/>
+      }
+    </button>
+  </div>
+</div>
+
+<!-- Loading -->
+@if (loading()) {
+  <div class="state-container">
+    <div class="spinner"></div>
+    <p>{{ t.t('event.loading') }}</p>
+  </div>
+}
+
+<!-- Error -->
+@if (error()) {
+  <div class="state-container">
+    <ng-icon hlm name="lucideCircleAlert" size="56" class="text-destructive"/>
+    <p class="error-text">{{ error() }}</p>
+    <button class="btn-create" (click)="loadEvents()">
+      {{ t.t('event.retry') }}
+    </button>
+  </div>
+}
+
+<!-- Empty -->
+@if (!loading() && !error() && filteredEvents().length === 0) {
+  <div class="state-container">
+    <ng-icon hlm name="lucideCalendarX" size="56"/>
+    <p>{{ t.t('event.noEvents') }}</p>
+    <button class="btn-create" (click)="openCreateModal()">{{ t.t('event.firstEvent') }}</button>
+  </div>
+}
+
+<!-- Events Grid -->
+@if (!loading() && !error()) {
+  <div class="events-grid">
+    @for (event of filteredEvents(); track event.id) {
+      <div class="event-card" (click)="goToDetail(event)">
+        <div class="card-image-wrap">
+          @if (event.photo) {
+            <img
+              class="card-image"
+              [src]="event.photo"
+              [alt]="event.title"
+              width="400"
+              height="225"
+              loading="lazy"
+            />
+          } @else {
+            <div class="card-image-placeholder"
+                 [style.background]="'linear-gradient(135deg, ' + categoryColor(event.category) + '25, ' + categoryColor(event.category) + '60)'">
+              <span class="placeholder-icon" [style.color]="categoryColor(event.category)"
+                    [innerHTML]="categoryIconSvg(event.category, 44)"></span>
+            </div>
+          }
+          <div class="card-category-badge" [style.background]="categoryColor(event.category)">
+            {{ categoryLabel(event.category) }}
+          </div>
+        </div>
+
+        <div class="card-body">
+          <h3 class="card-title">{{ event.title }}</h3>
+          <div class="card-meta">
+            <span class="meta-date">
+              <ng-icon hlm name="lucideCalendar" size="xs"/>
+              {{ formatDate(event.eventDate) }}
+            </span>
+            <span class="meta-attendees">
+              <ng-icon hlm name="lucideUsers" size="xs"/>
+              <strong>{{ event.attendees.length }}</strong>
+              @if (event.maxAttendees) {
+                / {{ event.maxAttendees }}
+              }
+              {{ t.t('event.going') }}
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
+
+<!-- Create Event Modal -->
+@if (showCreateModal()) {
+  <div class="modal-overlay" (click)="closeCreateModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ t.t('event.createModal.title') }}</h2>
+        <button class="modal-close" (click)="closeCreateModal()">
+          <ng-icon hlm name="lucideX" size="sm"/>
+        </button>
+      </div>
+      <app-event-form
+        [form]="createForm"
+        [saving]="creating()"
+        [submitLabel]="t.t('event.createModal.submit')"
+        [cancelLabel]="t.t('event.createModal.cancel')"
+        (submitted)="submitCreate()"
+        (cancelled)="closeCreateModal()"
+      />
+    </div>
+  </div>
+}

@@ -1,4 +1,9 @@
 @reference "../styles.css";
+[hlmNavigationMenuList] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 
 .navbar-container {
   @apply sticky top-4 z-50 flex items-center justify-between w-[95%] max-w-[1400px] mx-auto px-6 py-2.5;
@@ -118,8 +123,26 @@
   @apply bg-white/10 ;
 }
 
-/* Language selector */
+[hlmNavigationMenuLink]:hover {
+  background: #f0fdf4 !important;
+  color: #46a302 !important;
+}
 
+/* Login / Logout button */
+[hlmNavigationMenuTrigger] {
+  color: #374151 !important;
+  font-weight: 600 !important;
+  font-size: 0.92rem !important;
+  padding: 0.45rem 0.9rem !important;
+  border-radius: 8px !important;
+  transition: background 0.15s !important;
+}
+
+[hlmNavigationMenuTrigger]:hover {
+  background: #f3f4f6 !important;
+}
+
+/* ---- Language selector ---- */
 .fi {
   display: inline-block;
   width: 1.33em;
@@ -130,15 +153,8 @@
   border-radius: 2px;
 }
 
-.language-button .fi {
-  width: 20px;
-  height: 15px;
-}
-
-.language-option .fi {
-  width: 24px;
-  height: 18px;
-}
+.language-button .fi { width: 20px; height: 15px; }
+.language-option .fi { width: 24px; height: 18px; }
 
 .language-selector {
   position: relative;
@@ -148,98 +164,83 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
   cursor: pointer;
   font-size: 0.875rem;
-  color: white;
-
-  transition: background 0.2s ease;
+  color: #374151;
+  font-weight: 600;
+  transition: border-color 0.15s, background 0.15s;
 }
 
 .language-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.language-button .flag {
-  font-size: 1.25rem;
-  line-height: 1;
+  background: #e5e7eb;
+  border-color: #d1d5db;
 }
 
 .language-button .language-code {
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .language-button .dropdown-arrow {
   transition: transform 0.2s ease;
+  color: #9ca3af;
 }
 
-/* Dropdown menu */
+/* Dropdown */
 .language-dropdown {
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
-
-  background: rgba(20, 20, 20, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  border-radius: 6px;
-  min-width: 200px;
-  z-index: 50;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  min-width: 180px;
+  z-index: 200;
   overflow: hidden;
-
-  box-shadow: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .language-option {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-
   width: 100%;
   padding: 0.75rem 1rem;
-
   border: none;
   background: transparent;
-
   cursor: pointer;
   text-align: left;
-
-  color: rgba(255, 255, 255, 0.85);
+  color: #374151;
   font-size: 0.875rem;
-
-  transition: background 0.2s ease;
+  font-weight: 500;
+  transition: background 0.15s;
 }
 
 .language-option:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #f0fdf4;
+  color: #46a302;
 }
 
 .language-option.active {
-  background: rgba(255, 255, 255, 0.12);
-  font-weight: 600;
-  color: white;
-}
-
-.language-option .flag {
-  font-size: 1.5rem;
-  line-height: 1;
+  background: #dcfce7;
+  font-weight: 700;
+  color: #16a34a;
 }
 
 .language-option .language-name {
   font-size: 0.875rem;
 }
+
 .flag, .fi {
   width: 20px;
   height: 14px;
   border-radius: 3px;
   display: inline-block;
 }
+
 .language-option .flag {
   width: 24px;
   height: 16px;
