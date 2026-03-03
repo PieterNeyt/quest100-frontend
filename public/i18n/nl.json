@@ -135,5 +135,28 @@
   "success": {
     "generic": "Actie succesvol uitgevoerd",
     "saved": "Wijzigingen succesvol opgeslagen"
+  },
+  "userlist": {
+    "colleagues": "Collega's",
+    "awardSubtitle": "Waardeer je teamgenoten met een Kudo award",
+    "kudos": "Kudos",
+    "awardSentToday": "Award vandaag al verstuurd!",
+    "giveAward": "Geef Award",
+    "loadingProfiles": "Laden van profielen...",
+    "awardFor": "Award voor",
+    "awardCategory": "Award Categorie",
+    "personalMessage": "Persoonlijk Bericht",
+    "personalMessagePlaceholder": "Vertel wat deze collega zo goed deed...",
+    "cancel": "Annuleren",
+    "send": "Verzenden",
+    "awardSuccess": "Je hebt succesvol de award {{type}} gegeven aan {{firstName}} {{lastName}}!",
+    "awardError": "Het geven van de award is mislukt. Probeer het opnieuw."
+  },
+  "kudoTypes": {
+    "KudoKnowledge": "Kennis",
+    "KudoAttendance": "Aanwezigheid",
+    "KudoTeamwork": "Teamwork",
+    "KudoAtmosphere": "Sfeer",
+    "KudoEngagement": "Betrokkenheid"
   }
 }
