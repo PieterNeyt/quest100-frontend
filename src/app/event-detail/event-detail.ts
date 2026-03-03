@@ -197,10 +197,6 @@ export class EventDetailComponent implements OnInit {
     if (attendee.firstName && attendee.lastName) {
       return `${attendee.firstName} ${attendee.lastName}`;
     }
-    if (attendee.profileId === this.currentProfileId) {
-      const p = this.currentProfile;
-      if (p) return `${p.firstName} ${p.lastName}`;
-    }
     return attendee.profileId.slice(0, 8);
   }
 
@@ -216,10 +212,6 @@ export class EventDetailComponent implements OnInit {
     const first = attendee.firstName ?? '';
     const last = attendee.lastName ?? '';
     if (first && last) return (first[0] + last[0]).toUpperCase();
-    if (attendee.profileId === this.currentProfileId) {
-      const p = this.currentProfile;
-      if (p) return (p.firstName[0] + p.lastName[0]).toUpperCase();
-    }
     return attendee.profileId.slice(0, 2).toUpperCase();
   }
 
