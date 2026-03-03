@@ -1,4 +1,4 @@
-import {Component, effect, inject} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {ProfileService} from '../services/profileService';
 import {TranslationService} from '../services/translationService';
 
