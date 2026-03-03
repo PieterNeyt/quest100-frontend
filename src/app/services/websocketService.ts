@@ -41,7 +41,9 @@ export class WebsocketService {
   send(msg: ChatMessage) {
     if (this.socket?.readyState === WebSocket.OPEN) {
       msg.senderId = this.profile()?.id || "";
+      console.log(msg);
       this.socket.send(JSON.stringify(msg));
+      console.log("message sent");
     }
   }
 

@@ -2,7 +2,7 @@
   <div class="messages">
     @for (m of chatLog(); track $index) {
       <div [ngClass]="{'own-message': m.senderId === currentUser}">
-        <strong>{{ m.senderId }}:</strong> {{ m.text }}
+        <strong>{{ m.senderId }}:</strong> {{ m.content }}
       </div>
     }
   </div>

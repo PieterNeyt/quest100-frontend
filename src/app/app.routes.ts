@@ -8,16 +8,14 @@ import {roleGuard} from './guards/role-guard';
 import {EventDetailComponent} from './event-detail/event-detail';
 import {Qrcode} from './qrcode/qrcode';
 import {EventComponent} from './event/event';
-import {Chat} from './chat/chat';
 
 export const routes: Routes = [
-  { path: '', component: Home },
-  { path: 'profile', component: Profile, canActivate: [MsalGuard] },
-  { path: 'event/:eventId', component: EventDetailComponent, canActivate: [MsalGuard] },
-  { path: 'event', component: EventComponent, canActivate: [MsalGuard] },
-  { path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard] },
+  {path: '', component: Home},
+  {path: 'profile', component: Profile, canActivate: [MsalGuard]},
+  {path: 'event/:eventId', component: EventDetailComponent, canActivate: [MsalGuard]},
+  {path: 'event', component: EventComponent, canActivate: [MsalGuard]},
+  {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
   {path: 'qrcode', component: Qrcode, canActivate: [MsalGuard, roleGuard], data: {role: 'lector'}},
   {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
-  { path: 'userlist', component: Userlist, canActivate: [MsalGuard] },
-  {path: "chat", component: Chat, canActivate: [MsalGuard]},
+  {path: 'userlist', component: Userlist, canActivate: [MsalGuard]},
 ];
