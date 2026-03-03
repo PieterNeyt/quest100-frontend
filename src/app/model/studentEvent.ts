@@ -14,7 +14,6 @@ export interface StudentEvent {
 }
 
 export interface EventAttendee {
-  id: string;
   eventId: string;
   profileId: string;
   joinedAt: string;

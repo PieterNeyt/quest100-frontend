@@ -97,7 +97,6 @@ export class EventDetailComponent implements OnInit {
 
     const p = this.currentProfile;
     const optimisticAttendee: EventAttendee = {
-      id: crypto.randomUUID(),
       eventId: ev.id,
       profileId: this.currentProfileId,
       joinedAt: new Date().toISOString(),

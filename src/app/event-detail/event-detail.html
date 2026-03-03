@@ -124,7 +124,7 @@
         </div>
 
         <ul class="attendees-list">
-          @for (attendee of event()!.attendees; track attendee.id) {
+          @for (attendee of event()!.attendees; track attendee.profileId) {
             <li class="attendee-item" [class.is-me]="attendee.profileId === currentProfileId">
               <div class="attendee-avatar">
                 @if (getAttendeeAvatar(attendee)) {
@@ -199,7 +199,7 @@
             <label>{{ t.t('event.detail.organizerLeaveModal.transferLabel') }}</label>
             <select [(ngModel)]="transferToProfileId">
               <option value="">{{ t.t('event.detail.organizerLeaveModal.selectAttendee') }}</option>
-              @for (a of otherAttendees(); track a.id) {
+              @for (a of otherAttendees(); track a.profileId) {
                 <option [value]="a.profileId">{{ getAttendeeDisplayName(a) }}</option>
               }
             </select>
