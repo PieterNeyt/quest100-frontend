@@ -5,6 +5,7 @@ import {ProfileService} from '../../services/profileService';
 import {Subscription} from 'rxjs';
 import {NgClass} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
+import {ChatService} from '../../services/chatService';
 
 @Component({
   selector: 'app-chat',
@@ -20,6 +21,7 @@ export class Chat implements OnInit, OnDestroy {
   private socketService = inject(WebsocketService);
   private profile = inject(ProfileService).profile;
   private subscription?: Subscription;
+  private chatService = inject(ChatService);
 
   chatLog = signal<ChatMessage[]>([]);
   currentInput = '';
@@ -29,7 +31,6 @@ export class Chat implements OnInit, OnDestroy {
     effect(() => {
       if (this.socketService.isConnected()) {
         const eventId = this.route.snapshot.paramMap.get('eventId');
-        console.log(eventId);
         if (eventId !== null) {
           const payload: ChatMessage = {
             type: "join",
@@ -51,6 +52,14 @@ export class Chat implements OnInit, OnDestroy {
       const msg: ChatMessage = JSON.parse(rawMsg);
       this.chatLog.update(prev => [...prev, msg]);
     });
+    const eventId = this.route.snapshot.paramMap.get('eventId');
+    if (eventId !== null) {
+      this.chatService.getAllChatsOfChatRoom(eventId).subscribe({
+        next: msg => {
+          this.chatLog.update(prev => [...prev, ...msg]);
+        }
+      })
+    }
   }
 
   ngOnDestroy() {
