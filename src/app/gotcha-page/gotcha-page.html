@@ -1,0 +1,219 @@
+<div class="page-wrap">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <button class="btn-back" (click)="goBack()">
+      <ng-icon hlm name="lucideArrowLeft" size="sm" />
+      {{ t.t('gotcha.page.back') }}
+    </button>
+
+    <div class="page-title-row">
+      <span class="page-icon">🎯</span>
+      <h1 class="page-title">Gotcha</h1>
+      @if (currentGame()?.status) {
+        <span class="status-pill" [class]="'status-' + currentGame()!.status.toLowerCase()">
+          {{ t.t('gotcha.status.' + currentGame()!.status.toLowerCase()) }}
+        </span>
+      }
+    </div>
+
+    <!-- Submit kill knop — alleen zichtbaar als het spel actief is en je nog leeft -->
+    @if (canSubmitKill()) {
+      <button class="btn-submit-kill" (click)="openSubmitModal()">
+        <ng-icon hlm name="lucideSwords" size="sm" />
+        {{ t.t('gotcha.submitKill.button') }}
+      </button>
+    }
+  </div>
+
+  <!-- Feed header -->
+  <div class="feed-header">
+    <div class="feed-header-left">
+      <span class="feed-icon">💀</span>
+      <h2 class="feed-title">{{ t.t('gotcha.feed.title') }}</h2>
+    </div>
+    <button class="btn-refresh" (click)="loadFeed()" [disabled]="loading()">
+      <ng-icon hlm name="lucideRefreshCw" size="sm" [class.spinning]="loading()" />
+    </button>
+  </div>
+
+  <!-- Loading skeletons -->
+  @if (loading()) {
+    <div class="feed-list">
+      @for (_ of [1,2,3]; track $index) {
+        <div class="feed-card feed-card--skeleton">
+          <div class="sk-header">
+            <div class="sk-avatar"></div>
+            <div class="sk-lines">
+              <div class="sk-line sk-line--short"></div>
+              <div class="sk-line sk-line--tiny"></div>
+            </div>
+          </div>
+          <div class="sk-photo"></div>
+          <div class="sk-footer">
+            <div class="sk-line sk-line--medium"></div>
+            <div class="sk-line sk-line--tiny"></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (isEmpty()) {
+    <div class="feed-empty">
+      <ng-icon hlm name="lucideCrosshair" size="48" />
+      <p>{{ t.t('gotcha.feed.empty') }}</p>
+    </div>
+  }
+
+  <!-- Feed list -->
+  @if (!loading()) {
+    <div class="feed-list">
+      @for (item of items(); track item.id) {
+        <div class="feed-card" [class]="statusClass(item.status)">
+
+          <div class="card-header">
+            <div class="profile-row">
+              <div class="avatar">
+                @if (item.hunter.profilePicture) {
+                  <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
+                } @else {
+                  <span class="avatar-initials">{{ initials(item.hunter) }}</span>
+                }
+              </div>
+              <div class="profile-info">
+                <span class="profile-name">{{ fullName(item.hunter) }}</span>
+                <span class="post-time">{{ formatTime(item.createdAt) }}</span>
+              </div>
+            </div>
+            <span class="status-badge" [class]="statusClass(item.status)">
+              @if (item.status === 'PENDING') {
+                <ng-icon hlm name="lucideClock" size="xs" />
+                {{ t.t('gotcha.feed.statusPending') }}
+              } @else if (item.status === 'APPROVED') {
+                <ng-icon hlm name="lucideCheckCircle" size="xs" />
+                {{ t.t('gotcha.feed.statusApproved') }}
+              } @else {
+                <ng-icon hlm name="lucideXCircle" size="xs" />
+                {{ t.t('gotcha.feed.statusDenied') }}
+              }
+            </span>
+          </div>
+
+          <div class="kill-caption">
+            <span class="kill-text">
+              <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
+              {{ t.t('gotcha.feed.killedCaption') }}
+              <strong>{{ fullName(item.victim) }}</strong>
+            </span>
+            @if (item.prop) {
+              <span class="prop-badge">
+                <ng-icon hlm name="lucidePackage" size="xs" />
+                {{ item.prop.name }}
+              </span>
+            }
+          </div>
+
+          <div class="card-photo-wrap">
+            <img
+              class="card-photo"
+              [src]="item.photoUrl"
+              [alt]="t.t('gotcha.feed.photoAlt')"
+              loading="lazy"
+            />
+            <div class="victim-overlay">
+              <div class="victim-avatar">
+                @if (item.victim.profilePicture) {
+                  <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" />
+                } @else {
+                  <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span>
+                }
+              </div>
+              <span class="victim-name">{{ fullName(item.victim) }}</span>
+              <span class="victim-label">{{ t.t('gotcha.feed.victim') }}</span>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <button
+              class="like-btn"
+              [class.liked]="item.likedByMe"
+              [disabled]="isLiking(item.id)"
+              (click)="toggleLike(item)"
+            >
+              @if (isLiking(item.id)) {
+                <span class="like-spinner"></span>
+              } @else {
+                <ng-icon hlm name="lucideHeart" size="sm" [class.heart-filled]="item.likedByMe" />
+              }
+              <span class="like-count">{{ item.likeCount }}</span>
+            </button>
+          </div>
+
+        </div>
+      }
+
+      @if (hasMore()) {
+        <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadMore()">
+          @if (loadingMore()) {
+            <span class="load-spinner"></span>
+            {{ t.t('gotcha.feed.loadingMore') }}
+          } @else {
+            {{ t.t('gotcha.feed.loadMore') }}
+          }
+        </button>
+      }
+    </div>
+  }
+
+</div>
+
+<!-- Submit Kill Modal -->
+@if (showSubmitModal()) {
+  <div class="modal-overlay" (click)="closeSubmitModal()">
+    <div class="submit-modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h2>
+          <ng-icon hlm name="lucideSwords" size="sm" />
+          {{ t.t('gotcha.submitKill.title') }}
+        </h2>
+        <button class="modal-close" (click)="closeSubmitModal()">
+          <ng-icon hlm name="lucideX" size="sm" />
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-hint">{{ t.t('gotcha.submitKill.hint') }}</p>
+        <label class="field-label">{{ t.t('gotcha.submitKill.photoLabel') }}</label>
+        <input
+          class="field-input"
+          type="url"
+          [placeholder]="t.t('gotcha.submitKill.photoPlaceholder')"
+          [value]="photoUrl()"
+          (input)="photoUrl.set($any($event.target).value)"
+        />
+        @if (photoUrl()) {
+          <img class="photo-preview" [src]="photoUrl()" alt="preview" />
+        }
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeSubmitModal()">
+          {{ t.t('gotcha.submitKill.cancel') }}
+        </button>
+        <button
+          class="btn-submit"
+          [disabled]="submitting() || !photoUrl().trim()"
+          (click)="submitKill()"
+        >
+          @if (submitting()) { <span class="btn-spinner"></span> }
+          <ng-icon hlm name="lucideSwords" size="sm" />
+          {{ submitting() ? t.t('gotcha.submitKill.submitting') : t.t('gotcha.submitKill.confirm') }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

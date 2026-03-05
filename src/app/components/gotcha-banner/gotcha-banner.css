@@ -1,0 +1,437 @@
+:host { display: block; }
+
+/* ── Banner ─────────────────────────────── */
+.gotcha-banner {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 55%, #0f3460 100%);
+  border: 2px solid #e5383b;
+  border-bottom: 4px solid #c1121f;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  position: relative;
+  color: white;
+}
+.gotcha-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 40px,
+    rgba(255,255,255,0.013) 40px,
+    rgba(255,255,255,0.013) 80px
+  );
+  pointer-events: none;
+}
+
+/* ── Skeleton ────────────────────────────── */
+.banner-skeleton {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.skeleton-block {
+  height: 18px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 6px;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.w-32 { width: 128px; }
+.w-56 { width: 224px; }
+.w-40 { width: 160px; }
+@keyframes shimmer { 0%,100% { opacity:.5 } 50% { opacity:1 } }
+
+/* ── Inner layout ────────────────────────── */
+.banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Left ────────────────────────────────── */
+.banner-left { flex: 1; min-width: 160px; }
+
+.banner-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+  flex-wrap: wrap;
+}
+.gotcha-logo { font-size: 1.4rem; line-height: 1; }
+.gotcha-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.2px;
+}
+
+.status-pill {
+  padding: 0.18rem 0.55rem;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+.status-opt_in   { background: rgba(88,204,2,.2);    color: #a3e635; border: 1px solid rgba(88,204,2,.35); }
+.status-active   { background: rgba(229,56,59,.2);   color: #fca5a5; border: 1px solid rgba(229,56,59,.35); }
+.status-finished { background: rgba(156,163,175,.2); color: #d1d5db; border: 1px solid rgba(156,163,175,.35); }
+
+.banner-desc {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.4;
+}
+
+/* ── Center countdown ────────────────────── */
+.banner-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 200px;
+}
+
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+.countdown-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  font-weight: 600;
+}
+.countdown-blocks {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.cd-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.3rem 0.55rem;
+  min-width: 42px;
+}
+.cd-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.cd-unit {
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-top: 0.1rem;
+}
+.cd-sep {
+  font-size: 1rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 0.5rem;
+}
+
+.coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgba(255,255,255,0.45);
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(255,255,255,0.05);
+  border: 1px dashed rgba(255,255,255,0.18);
+  border-radius: 10px;
+  padding: 0.55rem 1rem;
+}
+
+/* ── Right actions ───────────────────────── */
+.banner-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+  min-width: 140px;
+}
+
+.opted-in-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  background: rgba(88,204,2,0.12);
+  border: 2px solid rgba(88,204,2,0.35);
+  border-radius: 10px;
+  color: #a3e635;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Opt-in knop */
+.btn-optin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  background: #e5383b;
+  border: none;
+  border-bottom: 3px solid #c1121f;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: filter .15s, transform .1s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn-optin:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-optin:active:not(:disabled) { transform: translateY(1px); border-bottom-width: 1px; }
+.btn-optin:disabled { opacity: .65; cursor: not-allowed; }
+
+/* Opt-out knop */
+.btn-optout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  background: rgba(229,56,59,0.1);
+  border: 1px solid rgba(229,56,59,0.4);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn-optout:hover:not(:disabled) {
+  background: rgba(229,56,59,0.22);
+  border-color: rgba(229,56,59,0.65);
+  color: #fff;
+}
+.btn-optout:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Edit knop */
+.btn-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.85rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn-edit:hover {
+  background: rgba(255,255,255,0.11);
+  color: white;
+  border-color: rgba(255,255,255,0.32);
+}
+
+/* ── Spinners ────────────────────────────── */
+.btn-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  flex-shrink: 0;
+}
+.btn-spinner--dark {
+  border-color: rgba(0,0,0,.15);
+  border-top-color: #1f2937;
+}
+.btn-spinner--red {
+  border-color: rgba(252,165,165,0.3);
+  border-top-color: #fca5a5;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Modal ───────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn .15s ease;
+}
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+.gotcha-modal {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+  animation: slideUp .2s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  overflow: hidden;
+}
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(14px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+.gotcha-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+.gotcha-modal-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+.modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 8px;
+  transition: background .15s, color .15s;
+}
+.modal-close:hover { background: #fee2e2; color: #ef4444; }
+
+.gotcha-modal-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.field-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 0.4rem;
+}
+.field-label.mt { margin-top: 1rem; }
+.field-input {
+  padding: 0.6rem 0.85rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #1f2937;
+  outline: none;
+  font-family: inherit;
+  transition: border-color .2s, box-shadow .2s;
+}
+.field-input:focus {
+  border-color: #e5383b;
+  box-shadow: 0 0 0 3px rgba(229,56,59,0.1);
+}
+.field-hint {
+  font-size: 0.73rem;
+  color: #9ca3af;
+  margin-top: 0.3rem;
+}
+
+.gotcha-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 2px solid #f3f4f6;
+}
+.btn-cancel {
+  padding: 0.55rem 1.1rem;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .15s, color .15s;
+}
+.btn-cancel:hover { border-color: #d1d5db; color: #374151; }
+
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.2rem;
+  background: #e5383b;
+  border: none;
+  border-bottom: 3px solid #c1121f;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter .15s, transform .1s;
+}
+.btn-save:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-save:active:not(:disabled) { transform: translateY(1px); border-bottom-width: 1px; }
+.btn-save:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ── Responsive ──────────────────────────── */
+@media (max-width: 768px) {
+  .banner-inner { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .banner-right { align-items: flex-start; width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .banner-center { width: 100%; justify-content: flex-start; }
+}
+
+/* Voeg deze regels toe aan je bestaande gotcha-banner.css */
+
+/* Klikbare banner */
+.gotcha-banner.clickable {
+  cursor: pointer;
+  transition: box-shadow .15s, transform .15s;
+}
+.gotcha-banner.clickable:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .08);
+  transform: translateY(-1px);
+}
+.gotcha-banner.clickable:active {
+  transform: translateY(0);
+}
+
+/* Chevron hint rechts in de banner */
+.banner-chevron {
+  color: #9ca3af;
+  flex-shrink: 0;
+  transition: color .15s, transform .15s;
+}
+.gotcha-banner.clickable:hover .banner-chevron {
+  color: #1cb0f6;
+  transform: translateX(3px);
+}

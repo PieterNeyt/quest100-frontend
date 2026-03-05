@@ -136,6 +136,13 @@
     "generic": "Actie succesvol uitgevoerd",
     "saved": "Wijzigingen succesvol opgeslagen"
   },
+  "kudoTypes": {
+    "KudoKnowledge": "Kennis",
+    "KudoAttendance": "Aanwezigheid",
+    "KudoTeamwork": "Teamwork",
+    "KudoAtmosphere": "Sfeer",
+    "KudoEngagement": "Betrokkenheid"
+  },
   "userlist": {
     "colleagues": "Collega's",
     "awardSubtitle": "Waardeer je teamgenoten met een Kudo award",
@@ -152,11 +159,77 @@
     "awardSuccess": "Je hebt succesvol de award {{type}} gegeven aan {{firstName}} {{lastName}}!",
     "awardError": "Het geven van de award is mislukt. Probeer het opnieuw."
   },
-  "kudoTypes": {
-    "KudoKnowledge": "Kennis",
-    "KudoAttendance": "Aanwezigheid",
-    "KudoTeamwork": "Teamwork",
-    "KudoAtmosphere": "Sfeer",
-    "KudoEngagement": "Betrokkenheid"
+  "gotcha": {
+    "bannerDescription": "De grote campus eliminatiegame. Wie overleeft het?",
+    "startsIn": "Start over",
+    "days": "dagen",
+    "hours": "uur",
+    "minutes": "min",
+    "seconds": "sec",
+    "comingSoon": "Startdatum nog niet ingesteld",
+    "joinGame": "Doe mee",
+    "joiningGame": "Aanmelden...",
+    "optedIn": "Je doet mee!",
+    "optOut": "Uitschrijven",
+    "optingOut": "Uitschrijven...",
+    "editStartDate": "Startdatum aanpassen",
+    "status": {
+      "opt_in": "Inschrijven",
+      "active": "Actief",
+      "finished": "Afgelopen"
+    },
+    "toasts": {
+      "optedIn": "Je bent ingeschreven voor Gotcha!",
+      "alreadyOptedIn": "Je bent al ingeschreven.",
+      "optInError": "Inschrijven mislukt. Probeer opnieuw.",
+      "optedOut": "Je bent uitgeschreven.",
+      "optOutError": "Uitschrijven mislukt. Probeer opnieuw.",
+      "optOutGameStarted": "Je kan niet meer uitschrijven, het spel is al gestart.",
+      "startDateSaved": "Startdatum opgeslagen!",
+      "startDateError": "Startdatum opslaan mislukt.",
+      "noStartDate": "Selecteer een startdatum."
+    },
+    "editModal": {
+      "title": "Startdatum instellen",
+      "startDate": "Startdatum & tijd",
+      "killDeadline": "Kill deadline (uren)",
+      "killDeadlineHint": "Aantal uren dat een speler heeft om zijn target uit te schakelen",
+      "cancel": "Annuleren",
+      "save": "Opslaan"
+    },
+    "page": {
+      "back": "Terug naar events"
+    },
+    "feed": {
+      "title": "Kill feed",
+      "empty": "Nog geen kills. Het spel moet nog beginnen!",
+      "loadError": "Feed laden mislukt.",
+      "likeError": "Like actie mislukt.",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden...",
+      "justNow": "Zojuist",
+      "minutesAgo": "m geleden",
+      "hoursAgo": "u geleden",
+      "daysAgo": "d geleden",
+      "killedCaption": "heeft uitgeschakeld",
+      "victim": "Slachtoffer",
+      "photoAlt": "Kill bewijs foto",
+      "statusPending": "In afwachting",
+      "statusApproved": "Goedgekeurd",
+      "statusDenied": "Afgekeurd"
+    },
+    "submitKill": {
+      "button": "Kill indienen",
+      "title": "Kill indienen",
+      "hint": "Jouw target wordt automatisch ingevuld. Upload een bewijs foto.",
+      "photoLabel": "Foto URL",
+      "photoPlaceholder": "https://...",
+      "cancel": "Annuleren",
+      "confirm": "Kill bevestigen",
+      "submitting": "Indienen...",
+      "success": "Kill ingediend! Wacht op goedkeuring.",
+      "error": "Kill indienen mislukt.",
+      "noPhoto": "Voeg een foto URL toe."
+    }
   }
 }

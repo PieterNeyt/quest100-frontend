@@ -158,5 +158,78 @@
     "send": "Send",
     "awardSuccess": "You have successfully given the award {{type}} to {{firstName}} {{lastName}}!",
     "awardError": "Failed to give award. Please try again."
+  },
+  "gotcha": {
+    "bannerDescription": "The ultimate campus elimination game. Who will survive?",
+    "startsIn": "Starts in",
+    "days": "days",
+    "hours": "hrs",
+    "minutes": "min",
+    "seconds": "sec",
+    "comingSoon": "Start date not set yet",
+    "joinGame": "Join Game",
+    "joiningGame": "Joining...",
+    "optedIn": "You're in!",
+    "optOut": "Opt out",
+    "optingOut": "Opting out...",
+    "editStartDate": "Edit start date",
+    "status": {
+      "opt_in": "Opt-in",
+      "active": "Active",
+      "finished": "Finished"
+    },
+    "toasts": {
+      "optedIn": "You've joined Gotcha!",
+      "alreadyOptedIn": "You're already signed up.",
+      "optInError": "Failed to join. Please try again.",
+      "optedOut": "You've opted out.",
+      "optOutError": "Failed to opt out. Please try again.",
+      "optOutGameStarted": "You can no longer opt out, the game has already started.",
+      "startDateSaved": "Start date saved!",
+      "startDateError": "Failed to save start date.",
+      "noStartDate": "Please select a start date."
+    },
+    "editModal": {
+      "title": "Set start date",
+      "startDate": "Start date & time",
+      "killDeadline": "Kill deadline (hours)",
+      "killDeadlineHint": "Hours a player has to eliminate their target",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "page": {
+      "back": "Back to events"
+    },
+    "feed": {
+      "title": "Kill feed",
+      "empty": "No kills yet. The game hasn't started!",
+      "loadError": "Failed to load feed.",
+      "likeError": "Like action failed.",
+      "loadMore": "Load more",
+      "loadingMore": "Loading...",
+      "justNow": "Just now",
+      "minutesAgo": "m ago",
+      "hoursAgo": "h ago",
+      "daysAgo": "d ago",
+      "killedCaption": "eliminated",
+      "victim": "Victim",
+      "photoAlt": "Kill proof photo",
+      "statusPending": "Pending",
+      "statusApproved": "Approved",
+      "statusDenied": "Denied"
+    },
+    "submitKill": {
+      "button": "Submit kill",
+      "title": "Submit kill",
+      "hint": "Your target is automatically filled in. Upload a proof photo.",
+      "photoLabel": "Photo URL",
+      "photoPlaceholder": "https://...",
+      "cancel": "Cancel",
+      "confirm": "Confirm kill",
+      "submitting": "Submitting...",
+      "success": "Kill submitted! Waiting for approval.",
+      "error": "Failed to submit kill.",
+      "noPhoto": "Please add a photo URL."
+    }
   }
 }
