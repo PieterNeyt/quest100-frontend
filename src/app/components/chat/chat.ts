@@ -7,12 +7,16 @@ import {NgClass} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {ChatService} from '../../services/chatService';
 import {ReceiveMessage, SendMessage} from '../../model/chat';
+import {NgIcon} from '@ng-icons/core';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
 
 @Component({
   selector: 'app-chat',
   imports: [
     FormsModule,
-    NgClass
+    NgClass,
+    NgIcon,
+    HlmIconImports
   ],
   templateUrl: './chat.html',
   styleUrl: './chat.css',

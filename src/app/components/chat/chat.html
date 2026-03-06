@@ -1,11 +1,30 @@
 <div class="chat-container">
-  <div class="messages">
+  <div class="chat-header">
+    <h3>Live Chat</h3>
+  </div>
+
+  <div class="messages-area">
     @for (m of chatLog(); track $index) {
-      <div [ngClass]="{'own-message': m.senderId === currentUser}">
-        <strong>{{ m.sender.firstName }}:</strong> {{ m.message }}
+      <div class="message-wrapper" [ngClass]="{'own-message': m.senderId === currentUser}">
+        <div class="message-bubble">
+          @if (m.senderId !== currentUser) {
+            <span class="sender-name">{{ m.sender.firstName }}</span>
+          }
+          <div class="message-text">{{ m.message }}</div>
+        </div>
       </div>
     }
   </div>
-  <input [(ngModel)]="currentInput" (keyup.enter)="send()">
-  <button (click)="send()">Send</button>
+
+  <div class="input-area">
+    <input
+      type="text"
+      placeholder="Type a message..."
+      [(ngModel)]="currentInput"
+      (keyup.enter)="send()">
+
+    <button class="send-btn" (click)="send()" [disabled]="!currentInput">
+      <ng-icon hlm size="base" name="lucideSendHorizonal"/>
+    </button>
+  </div>
 </div>
