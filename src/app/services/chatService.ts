@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../environment/environment';
 import {HttpClient} from '@angular/common/http';
+import {ReceiveMessage} from '../model/chat';
 
 @Injectable({
   providedIn: 'root',

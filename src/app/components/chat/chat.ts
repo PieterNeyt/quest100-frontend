@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs';
 import {NgClass} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {ChatService} from '../../services/chatService';
+import {ReceiveMessage, SendMessage} from '../../model/chat';
 
 @Component({
   selector: 'app-chat',
@@ -23,7 +24,7 @@ export class Chat implements OnInit, OnDestroy {
   private subscription?: Subscription;
   private chatService = inject(ChatService);
 
-  chatLog = signal<SendMessage[]>([]);
+  chatLog = signal<ReceiveMessage[]>([]);
   currentInput = '';
   currentUser = this.profile()?.id || "";
 
@@ -47,20 +48,17 @@ export class Chat implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.socketService.connect()
-    this.subscription = this.socketService.messages$.subscribe(rawMsg => {
-
-      const msg: SendMessage = JSON.parse(rawMsg);
-      this.chatLog.update(prev => [...prev, msg]);
+    this.subscription = this.socketService.messages$.subscribe({
+      next: rawMsg => {
+        const msg: ReceiveMessage = JSON.parse(rawMsg);
+        this.chatLog.update(prev => [...prev, msg]);
+      }
     });
     const eventId = this.route.snapshot.paramMap.get('eventId');
     if (eventId !== null) {
       this.chatService.getAllChatsOfChatRoom(eventId).subscribe({
         next: msg => {
-          this.chatLog.update(prev => [...prev, ...msg.map(msg => ({
-            type: "group",
-            senderId: msg.senderId,
-            content: msg.message
-          } as SendMessage))]);
+          this.chatLog.update(prev => [...prev, ...msg]);
         }
       })
     }

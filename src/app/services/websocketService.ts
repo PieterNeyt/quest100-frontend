@@ -1,6 +1,7 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {Subject} from 'rxjs';
 import {ProfileService} from './profileService';
+import {SendMessage} from '../model/chat';
 
 @Injectable({
   providedIn: 'root',
