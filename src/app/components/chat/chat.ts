@@ -23,7 +23,7 @@ export class Chat implements OnInit, OnDestroy {
   private subscription?: Subscription;
   private chatService = inject(ChatService);
 
-  chatLog = signal<ChatMessage[]>([]);
+  chatLog = signal<SendMessage[]>([]);
   currentInput = '';
   currentUser = this.profile()?.id || "";
 
@@ -32,7 +32,7 @@ export class Chat implements OnInit, OnDestroy {
       if (this.socketService.isConnected()) {
         const eventId = this.route.snapshot.paramMap.get('eventId');
         if (eventId !== null) {
-          const payload: ChatMessage = {
+          const payload: SendMessage = {
             type: "join",
             senderId: "",
             roomId: eventId,
@@ -49,14 +49,18 @@ export class Chat implements OnInit, OnDestroy {
     this.socketService.connect()
     this.subscription = this.socketService.messages$.subscribe(rawMsg => {
 
-      const msg: ChatMessage = JSON.parse(rawMsg);
+      const msg: SendMessage = JSON.parse(rawMsg);
       this.chatLog.update(prev => [...prev, msg]);
     });
     const eventId = this.route.snapshot.paramMap.get('eventId');
     if (eventId !== null) {
       this.chatService.getAllChatsOfChatRoom(eventId).subscribe({
         next: msg => {
-          this.chatLog.update(prev => [...prev, ...msg]);
+          this.chatLog.update(prev => [...prev, ...msg.map(msg => ({
+            type: "group",
+            senderId: msg.senderId,
+            content: msg.message
+          } as SendMessage))]);
         }
       })
     }
@@ -71,7 +75,7 @@ export class Chat implements OnInit, OnDestroy {
     const eventId = this.route.snapshot.paramMap.get('eventId');
     if (this.currentInput.trim() && eventId !== null) {
 
-      const payload: ChatMessage = {
+      const payload: SendMessage = {
         type: 'group',
         senderId: "",
         roomId: eventId,
