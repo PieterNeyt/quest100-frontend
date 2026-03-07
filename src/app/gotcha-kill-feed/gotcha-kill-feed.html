@@ -1,0 +1,252 @@
+<div class="page-wrap">
+
+  <div class="tabs">
+    <button class="tab" [class.tab--active]="activeTab() === 'feed'" (click)="activeTab.set('feed')">
+      💀 {{ t.t('gotcha.tabs.feed') }}
+      @if (pendingCount() > 0) {
+        <span class="tab-badge">{{ pendingCount() }}</span>
+      }
+    </button>
+    <button class="tab" [class.tab--active]="activeTab() === 'review'" (click)="activeTab.set('review')">
+      ⚖️ {{ t.t('gotcha.tabs.review') }}
+    </button>
+  </div>
+
+  <!-- ── FEED TAB ── -->
+  @if (activeTab() === 'feed') {
+
+    <div class="feed-toolbar">
+      <button class="btn-refresh" (click)="loadFeed()" [disabled]="loading()">
+        <ng-icon hlm name="lucideRefreshCw" size="sm" [class.spinning]="loading()" />
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="feed-list">
+        @for (_ of [1,2,3]; track $index) {
+          <div class="feed-card feed-card--skeleton">
+            <div class="sk-header">
+              <div class="sk-avatar"></div>
+              <div class="sk-lines">
+                <div class="sk-line sk-line--short"></div>
+                <div class="sk-line sk-line--tiny"></div>
+              </div>
+            </div>
+            <div class="sk-photo"></div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (isEmpty()) {
+      <div class="feed-empty">
+        <ng-icon hlm name="lucideCrosshair" size="48" />
+        <p>{{ t.t('gotcha.feed.empty') }}</p>
+      </div>
+    }
+
+    @if (!loading()) {
+      <div class="feed-list">
+        @for (item of items(); track item.id) {
+          <div class="feed-card" [class]="statusClass(item.status)">
+
+            <div class="card-header">
+              <div class="profile-row">
+                <div class="avatar">
+                  @if (item.hunter.profilePicture) {
+                    <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
+                  } @else {
+                    <span class="avatar-initials">{{ initials(item.hunter) }}</span>
+                  }
+                </div>
+                <div class="profile-info">
+                  <span class="profile-name">{{ fullName(item.hunter) }}</span>
+                  <span class="post-time">{{ formatTime(item.createdAt) }}</span>
+                </div>
+              </div>
+              <span class="status-badge" [class]="statusClass(item.status)">
+                @if (item.status === 'PENDING') {
+                  <ng-icon hlm name="lucideClock" size="xs" />
+                  {{ t.t('gotcha.feed.statusPending') }}
+                } @else if (item.status === 'APPROVED') {
+                  <ng-icon hlm name="lucideCheckCircle" size="xs" />
+                  {{ t.t('gotcha.feed.statusApproved') }}
+                } @else {
+                  <ng-icon hlm name="lucideXCircle" size="xs" />
+                  {{ t.t('gotcha.feed.statusDenied') }}
+                }
+              </span>
+            </div>
+
+            <div class="kill-caption">
+              <span class="kill-text">
+                <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
+                {{ t.t('gotcha.feed.killedCaption') }}
+                <strong>{{ fullName(item.victim) }}</strong>
+              </span>
+              @if (item.prop) {
+                <span class="prop-badge">
+                  <ng-icon hlm name="lucidePackage" size="xs" />
+                  {{ item.prop.name }}
+                </span>
+              }
+            </div>
+
+            <div class="card-photo-wrap">
+              <img class="card-photo" [src]="item.photoUrl" [alt]="t.t('gotcha.feed.photoAlt')" loading="lazy" />
+              <div class="victim-overlay">
+                <div class="victim-avatar">
+                  @if (item.victim.profilePicture) {
+                    <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" />
+                  } @else {
+                    <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span>
+                  }
+                </div>
+                <span class="victim-name">{{ fullName(item.victim) }}</span>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <button class="like-btn" [class.liked]="item.likedByMe" [disabled]="isLiking(item.id)" (click)="toggleLike(item)">
+                @if (isLiking(item.id)) {
+                  <span class="like-spinner"></span>
+                } @else {
+                  <ng-icon hlm name="lucideHeart" size="sm" [class.heart-filled]="item.likedByMe" />
+                }
+                <span class="like-count">{{ item.likeCount }}</span>
+              </button>
+            </div>
+
+          </div>
+        }
+
+        @if (hasMore()) {
+          <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadMore()">
+            @if (loadingMore()) {
+              <span class="load-spinner"></span>
+              {{ t.t('gotcha.feed.loadingMore') }}
+            } @else {
+              {{ t.t('gotcha.feed.loadMore') }}
+            }
+          </button>
+        }
+      </div>
+    }
+
+  }
+
+  <!-- ── REVIEW TAB ── -->
+  @if (activeTab() === 'review') {
+
+    <div class="feed-toolbar">
+      <button class="btn-refresh" (click)="loadReviewFeed()" [disabled]="reviewLoading()">
+        <ng-icon hlm name="lucideRefreshCw" size="sm" [class.spinning]="reviewLoading()" />
+      </button>
+    </div>
+
+    @if (reviewLoading()) {
+      <div class="feed-list">
+        @for (_ of [1,2]; track $index) {
+          <div class="feed-card feed-card--skeleton">
+            <div class="sk-header">
+              <div class="sk-avatar"></div>
+              <div class="sk-lines">
+                <div class="sk-line sk-line--short"></div>
+                <div class="sk-line sk-line--tiny"></div>
+              </div>
+            </div>
+            <div class="sk-photo"></div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (reviewItems().length === 0 && !reviewLoading()) {
+      <div class="feed-empty">
+        <ng-icon hlm name="lucideCheckCircle" size="48" />
+        <p>{{ t.t('gotcha.review.empty') }}</p>
+      </div>
+    }
+
+    @if (!reviewLoading()) {
+      <div class="feed-list">
+        @for (item of reviewItems(); track item.id) {
+          <div class="feed-card status-pending">
+
+            <div class="card-header">
+              <div class="profile-row">
+                <div class="avatar">
+                  @if (item.hunter.profilePicture) {
+                    <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
+                  } @else {
+                    <span class="avatar-initials">{{ initials(item.hunter) }}</span>
+                  }
+                </div>
+                <div class="profile-info">
+                  <span class="profile-name">{{ fullName(item.hunter) }}</span>
+                  <span class="post-time">{{ formatTime(item.createdAt) }}</span>
+                </div>
+              </div>
+              <span class="status-badge status-pending">
+                <ng-icon hlm name="lucideClock" size="xs" />
+                {{ t.t('gotcha.feed.statusPending') }}
+              </span>
+            </div>
+
+            <div class="kill-caption">
+              <span class="kill-text">
+                <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
+                {{ t.t('gotcha.feed.killedCaption') }}
+                <strong>{{ fullName(item.victim) }}</strong>
+              </span>
+              @if (item.prop) {
+                <span class="prop-badge">
+                  <ng-icon hlm name="lucidePackage" size="xs" />
+                  {{ item.prop.name }}
+                </span>
+              }
+            </div>
+
+            <div class="card-photo-wrap">
+              <img class="card-photo" [src]="item.photoUrl" [alt]="t.t('gotcha.feed.photoAlt')" loading="lazy" />
+              <div class="victim-overlay">
+                <div class="victim-avatar">
+                  @if (item.victim.profilePicture) {
+                    <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" />
+                  } @else {
+                    <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span>
+                  }
+                </div>
+                <span class="victim-name">{{ fullName(item.victim) }}</span>
+              </div>
+            </div>
+
+            <div class="card-footer review-actions">
+              <button
+                class="btn-approve"
+                [disabled]="isReviewing(item.id)"
+                (click)="reviewKill(item, true)"
+              >
+                @if (isReviewing(item.id)) { <span class="like-spinner"></span> }
+                <ng-icon hlm name="lucideCheck" size="sm" />
+                {{ t.t('gotcha.review.approve') }}
+              </button>
+              <button
+                class="btn-deny"
+                [disabled]="isReviewing(item.id)"
+                (click)="reviewKill(item, false)"
+              >
+                @if (isReviewing(item.id)) { <span class="like-spinner"></span> }
+                <ng-icon hlm name="lucideX" size="sm" />
+                {{ t.t('gotcha.review.deny') }}
+              </button>
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+
+  }
+
+</div>

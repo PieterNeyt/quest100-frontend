@@ -1,0 +1,93 @@
+/* Extend gotcha-page.css with these additions */
+
+/* ── Tabs ────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  color: #6b7280;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color .15s, border-color .15s;
+}
+.tab:hover { color: #1f2937; }
+.tab--active { color: #1f2937; border-bottom-color: #1cb0f6; }
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: #e5383b;
+  color: white;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+/* ── Feed toolbar ────────────────────────────── */
+.feed-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+/* ── Review actions ──────────────────────────── */
+.review-actions {
+  gap: 0.6rem;
+}
+
+.btn-approve {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  background: #dcfce7;
+  border: 2px solid #86efac;
+  border-bottom: 3px solid #4ade80;
+  border-radius: 10px;
+  color: #15803d;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter .15s;
+}
+.btn-approve:hover:not(:disabled) { filter: brightness(.95); }
+.btn-approve:disabled { opacity: .6; cursor: not-allowed; }
+
+.btn-deny {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  background: #fee2e2;
+  border: 2px solid #fca5a5;
+  border-bottom: 3px solid #f87171;
+  border-radius: 10px;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter .15s;
+}
+.btn-deny:hover:not(:disabled) { filter: brightness(.95); }
+.btn-deny:disabled { opacity: .6; cursor: not-allowed; }
