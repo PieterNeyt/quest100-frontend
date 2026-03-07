@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService, KillFeedItem } from '../services/gotchaService';
+import { GotchaService } from '../services/gotchaService';
+import { KillFeedItem, TargetInfo } from '../model/gotcha';
 import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
 
@@ -28,40 +29,63 @@ export class GotchaPageComponent implements OnInit {
   private readonly router = inject(Router);
   readonly t = inject(TranslationService);
 
+  // ── tabs ──────────────────────────────────────
+  activeTab = signal<'feed' | 'review'>('feed');
+
+  // ── feed ──────────────────────────────────────
   items = signal<KillFeedItem[]>([]);
   loading = signal(true);
   loadingMore = signal(false);
   hasMore = signal(true);
   likingIds = signal<Set<string>>(new Set());
 
+  private offset = 0;
+  private readonly limit = 10;
+
+  isEmpty = computed(() => !this.loading() && this.items().length === 0);
+
+  // ── review ────────────────────────────────────
+  reviewItems = signal<KillFeedItem[]>([]);
+  reviewLoading = signal(false);
+  reviewingIds = signal<Set<string>>(new Set());
+  pendingCount = computed(() => this.reviewItems().length);
+
+  // ── submit kill modal ─────────────────────────
   showSubmitModal = signal(false);
   photoUrl = signal('');
   submitting = signal(false);
 
-  private offset = 0;
-  private readonly limit = 10;
-
+  // ── game & player state ───────────────────────
   myStatus = this.gotchaService.myStatus;
   currentGame = this.gotchaService.currentGame;
+  targetInfo = this.gotchaService.targetInfo;
 
   isActive = computed(() => this.currentGame()?.status === 'ACTIVE');
   isAlive = computed(() => this.myStatus()?.isAlive ?? false);
   hasTarget = computed(() => !!this.myStatus()?.targetId);
-
   canSubmitKill = computed(() => this.isActive() && this.isAlive() && this.hasTarget());
-
-  isEmpty = computed(() => !this.loading() && this.items().length === 0);
+  isParticipant = computed(() => !!this.myStatus());
 
   ngOnInit() {
     this.gotchaService.getCurrentGame().subscribe();
-    this.gotchaService.getMyStatus().subscribe();
+    this.gotchaService.getMyStatus().subscribe({
+      next: () => {
+        // Only load target info once we know we're a participant in an active game
+        if (this.isActive()) {
+          this.gotchaService.getTargetInfo().subscribe();
+        }
+      },
+      error: () => { /* not a participant, ignore */ },
+    });
     this.loadFeed();
+    this.loadReviewFeed();
   }
 
   goBack() {
     this.router.navigate(['/event']);
   }
 
+  // ── feed ──────────────────────────────────────
   loadFeed() {
     this.loading.set(true);
     this.offset = 0;
@@ -92,36 +116,6 @@ export class GotchaPageComponent implements OnInit {
       error: () => {
         this.loadingMore.set(false);
         this.toastService.error('gotcha.feed.loadError');
-      },
-    });
-  }
-
-  openSubmitModal() {
-    this.photoUrl.set('');
-    this.showSubmitModal.set(true);
-  }
-
-  closeSubmitModal() {
-    this.showSubmitModal.set(false);
-  }
-
-  submitKill() {
-    if (!this.photoUrl().trim()) {
-      this.toastService.error('gotcha.submitKill.noPhoto');
-      return;
-    }
-    this.submitting.set(true);
-    this.gotchaService.submitKill(this.photoUrl().trim()).subscribe({
-      next: () => {
-        this.submitting.set(false);
-        this.closeSubmitModal();
-        this.toastService.success('gotcha.submitKill.success');
-        this.loadFeed();
-      },
-      error: (err) => {
-        this.submitting.set(false);
-        const msg = err?.error?.error ?? 'gotcha.submitKill.error';
-        this.toastService.error(msg);
       },
     });
   }
@@ -163,6 +157,78 @@ export class GotchaPageComponent implements OnInit {
 
   isLiking(id: string): boolean { return this.likingIds().has(id); }
 
+  // ── review ────────────────────────────────────
+  loadReviewFeed() {
+    this.reviewLoading.set(true);
+    this.gotchaService.getPendingKills().subscribe({
+      next: (items) => {
+        this.reviewItems.set(items);
+        this.reviewLoading.set(false);
+      },
+      error: () => {
+        this.reviewLoading.set(false);
+        this.toastService.error('gotcha.review.loadError');
+      },
+    });
+  }
+
+  reviewKill(item: KillFeedItem, approve: boolean) {
+    if (this.reviewingIds().has(item.id)) return;
+    this.reviewingIds.update((s) => new Set([...s, item.id]));
+
+    this.gotchaService.reviewKill(item.id, approve).subscribe({
+      next: () => {
+        this.reviewItems.update((list) => list.filter((i) => i.id !== item.id));
+        this.reviewingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
+
+        const newStatus = approve ? 'APPROVED' as const : 'DENIED' as const;
+        this.items.update((list) =>
+          list.map((i) => i.id === item.id ? { ...i, status: newStatus } : i)
+        );
+
+        this.toastService.success(approve ? 'gotcha.review.approved' : 'gotcha.review.denied');
+      },
+      error: () => {
+        this.reviewingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
+        this.toastService.error('gotcha.review.error');
+      },
+    });
+  }
+
+  isReviewing(id: string): boolean { return this.reviewingIds().has(id); }
+
+  // ── submit kill modal ─────────────────────────
+  openSubmitModal() {
+    this.photoUrl.set('');
+    this.showSubmitModal.set(true);
+  }
+
+  closeSubmitModal() {
+    this.showSubmitModal.set(false);
+  }
+
+  submitKill() {
+    if (!this.photoUrl().trim()) {
+      this.toastService.error('gotcha.submitKill.noPhoto');
+      return;
+    }
+    this.submitting.set(true);
+    this.gotchaService.submitKill(this.photoUrl().trim()).subscribe({
+      next: () => {
+        this.submitting.set(false);
+        this.closeSubmitModal();
+        this.toastService.success('gotcha.submitKill.success');
+        this.loadFeed();
+      },
+      error: (err) => {
+        this.submitting.set(false);
+        const msg = err?.error?.error ?? 'gotcha.submitKill.error';
+        this.toastService.error(msg);
+      },
+    });
+  }
+
+  // ── helpers ───────────────────────────────────
   formatTime(dateStr: string): string {
     const locale = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
     const date = new Date(dateStr);
@@ -188,5 +254,15 @@ export class GotchaPageComponent implements OnInit {
 
   statusClass(status: string): string {
     return ({ PENDING: 'status-pending', APPROVED: 'status-approved', DENIED: 'status-denied' }[status] ?? '');
+  }
+
+  targetInitials(info: TargetInfo): string {
+    if (!info.target) return '?';
+    return `${info.target.firstName?.[0] ?? ''}${info.target.lastName?.[0] ?? ''}`.toUpperCase();
+  }
+
+  targetFullName(info: TargetInfo): string {
+    if (!info.target) return '';
+    return `${info.target.firstName} ${info.target.lastName}`.trim();
   }
 }

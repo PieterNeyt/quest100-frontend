@@ -160,76 +160,85 @@
     "awardError": "Failed to give award. Please try again."
   },
   "gotcha": {
-    "bannerDescription": "The ultimate campus elimination game. Who will survive?",
+    "bannerDescription": "Join the Gotcha game and eliminate your assigned target.",
     "startsIn": "Starts in",
-    "days": "days",
-    "hours": "hrs",
-    "minutes": "min",
-    "seconds": "sec",
-    "comingSoon": "Start date not set yet",
-    "joinGame": "Join Game",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "comingSoon": "Coming soon",
+    "optedIn": "You're in the game",
+    "optOut": "Leave game",
+    "optingOut": "Leaving...",
+    "joinGame": "Join game",
     "joiningGame": "Joining...",
-    "optedIn": "You're in!",
-    "optOut": "Opt out",
-    "optingOut": "Opting out...",
     "editStartDate": "Edit start date",
+
+    "page": {
+      "back": "Back"
+    },
     "status": {
-      "opt_in": "Opt-in",
+      "opt_in": "Sign-up",
       "active": "Active",
       "finished": "Finished"
     },
-    "toasts": {
-      "optedIn": "You've joined Gotcha!",
-      "alreadyOptedIn": "You're already signed up.",
-      "optInError": "Failed to join. Please try again.",
-      "optedOut": "You've opted out.",
-      "optOutError": "Failed to opt out. Please try again.",
-      "optOutGameStarted": "You can no longer opt out, the game has already started.",
-      "startDateSaved": "Start date saved!",
-      "startDateError": "Failed to save start date.",
-      "noStartDate": "Please select a start date."
+    "tabs": {
+      "feed": "Kill Feed",
+      "review": "Review"
     },
-    "editModal": {
-      "title": "Set start date",
-      "startDate": "Start date & time",
-      "killDeadline": "Kill deadline (hours)",
-      "killDeadlineHint": "Hours a player has to eliminate their target",
-      "cancel": "Cancel",
-      "save": "Save"
-    },
-    "page": {
-      "back": "Back to events"
+    "target": {
+      "label": "Your target",
+      "propLabel": "Your prop",
+      "none": "No target assigned yet",
+      "eliminated": "You are eliminated"
     },
     "feed": {
-      "title": "Kill feed",
-      "empty": "No kills yet. The game hasn't started!",
-      "loadError": "Failed to load feed.",
-      "likeError": "Like action failed.",
+      "title": "Kill Feed",
+      "empty": "No kills yet. The hunt is on!",
       "loadMore": "Load more",
       "loadingMore": "Loading...",
-      "justNow": "Just now",
+      "loadError": "Failed to load the kill feed.",
+      "likeError": "Failed to update like.",
+      "justNow": "just now",
       "minutesAgo": "m ago",
       "hoursAgo": "h ago",
       "daysAgo": "d ago",
       "killedCaption": "eliminated",
       "victim": "Victim",
-      "photoAlt": "Kill proof photo",
+      "photoAlt": "Kill photo",
       "statusPending": "Pending",
       "statusApproved": "Approved",
       "statusDenied": "Denied"
     },
+    "review": {
+      "empty": "Nothing to review — all clear!",
+      "approve": "Approve",
+      "deny": "Deny",
+      "approved": "Kill approved.",
+      "denied": "Kill denied.",
+      "loadError": "Failed to load pending kills.",
+      "error": "Failed to review this kill."
+    },
     "submitKill": {
-      "button": "Submit kill",
-      "title": "Submit kill",
-      "hint": "Your target is automatically filled in. Upload a proof photo.",
+      "button": "Submit Kill",
+      "title": "Submit Kill",
+      "hint": "Upload a photo proving you eliminated your target while using your assigned prop.",
       "photoLabel": "Photo URL",
       "photoPlaceholder": "https://...",
       "cancel": "Cancel",
-      "confirm": "Confirm kill",
+      "confirm": "Submit",
       "submitting": "Submitting...",
-      "success": "Kill submitted! Waiting for approval.",
-      "error": "Failed to submit kill.",
-      "noPhoto": "Please add a photo URL."
+      "noPhoto": "Please provide a photo URL.",
+      "success": "Kill submitted! Awaiting review.",
+      "error": "Failed to submit kill."
+    },
+    "editModal": {
+      "title": "Edit game settings",
+      "startDate": "Start date & time",
+      "killDeadline": "Kill deadline (hours)",
+      "killDeadlineHint": "How many hours a player has to eliminate their target before the chain moves on.",
+      "cancel": "Cancel",
+      "save": "Save changes"
     }
   }
 }

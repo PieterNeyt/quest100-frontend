@@ -2,61 +2,16 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environment/environment';
+import {
+  GotchaGame,
+  GotchaParticipant,
+  KillFeedItem,
+  TargetInfo,
+  UpdateStartDateRequest,
+} from '../model/gotcha';
 
-export interface GotchaGame {
-  id: string;
-  campus: string;
-  status: 'OPT_IN' | 'ACTIVE' | 'FINISHED';
-  startDate: string | null;
-  killDeadlineHours: number;
-  winnerId?: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface GotchaParticipant {
-  id: string;
-  gameId: string;
-  profileId: string;
-  targetId?: string | null;
-  isAlive: boolean;
-  killDeadline: string;
-  killedAt?: string | null;
-  killedBy?: string | null;
-  optedInAt: string;
-  assignedPropId?: string | null;
-}
-
-export interface UpdateStartDateRequest {
-  startDate: string;
-  killDeadlineHours: number;
-}
-
-export interface KillFeedProfile {
-  id: string;
-  firstName: string;
-  lastName: string;
-  profilePicture?: string | null;
-}
-
-export interface KillFeedProp {
-  id: string;
-  name: string;
-}
-
-export interface KillFeedItem {
-  id: string;
-  gameId: string;
-  photoUrl: string;
-  status: 'PENDING' | 'APPROVED' | 'DENIED';
-  createdAt: string;
-  reviewedAt?: string | null;
-  hunter: KillFeedProfile;
-  victim: KillFeedProfile;
-  prop?: KillFeedProp | null;
-  likeCount: number;
-  likedByMe: boolean;
-}
+// Re-export for components that previously imported from here
+export type { GotchaGame, GotchaParticipant, KillFeedItem, TargetInfo, UpdateStartDateRequest };
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +22,7 @@ export class GotchaService {
 
   myStatus = signal<GotchaParticipant | null>(null);
   currentGame = signal<GotchaGame | null>(null);
+  targetInfo = signal<TargetInfo | null>(null);
 
   getCurrentGame(): Observable<GotchaGame | null> {
     return this.http.get<GotchaGame | null>(`${this.url}/api/gotcha/game`).pipe(
@@ -77,6 +33,12 @@ export class GotchaService {
   getMyStatus(): Observable<GotchaParticipant> {
     return this.http.get<GotchaParticipant>(`${this.url}/api/gotcha/me`).pipe(
       tap((status) => this.myStatus.set(status))
+    );
+  }
+
+  getTargetInfo(): Observable<TargetInfo> {
+    return this.http.get<TargetInfo>(`${this.url}/api/gotcha/me/target`).pipe(
+      tap((info) => this.targetInfo.set(info))
     );
   }
 
@@ -94,7 +56,6 @@ export class GotchaService {
     );
   }
 
-
   submitKill(photoUrl: string): Observable<unknown> {
     return this.http.post(`${this.url}/api/gotcha/kills`, { photoUrl });
   }
@@ -111,5 +72,13 @@ export class GotchaService {
 
   unlikeKill(killId: string): Observable<void> {
     return this.http.delete<void>(`${this.url}/api/gotcha/kills/${killId}/like`);
+  }
+
+  getPendingKills(): Observable<KillFeedItem[]> {
+    return this.http.get<KillFeedItem[]>(`${this.url}/api/gotcha/kills/pending`);
+  }
+
+  reviewKill(killId: string, approve: boolean): Observable<void> {
+    return this.http.put<void>(`${this.url}/api/gotcha/kills/${killId}/review`, { approve });
   }
 }
