@@ -270,6 +270,28 @@
       "gameOver": "Game Over!",
       "gameOverSub": "Het toernooi is afgelopen. Bekijk wie gewonnen heeft!",
       "viewResults": "Bekijk resultaten"
+    },
+    "winner": "Winnaar",
+    "settings": {
+      "title": "Spelinstellingen",
+      "gameSettings": "Spelinstellingen",
+      "props": "Voorwerpen",
+      "addProp": "Voorwerp toevoegen",
+      "noProps": "Nog geen voorwerpen. Voeg er een toe!",
+      "propNameEN": "Naam (Engels)",
+      "propNameNL": "Naam (Nederlands)",
+      "bothLangsRequired": "Beide taalvelden zijn verplicht.",
+      "propAdded": "Voorwerp toegevoegd!",
+      "propDeleted": "Voorwerp verwijderd.",
+      "cancel": "Annuleren"
+    },
+    "toasts": {
+      "optedIn": "Je doet nu mee aan het spel!",
+      "alreadyOptedIn": "Je doet al mee aan het spel.",
+      "optInError": "Deelname mislukt.",
+      "optedOut": "Je hebt het spel verlaten.",
+      "optOutGameStarted": "Je kunt niet meer uitstappen nadat het spel gestart is.",
+      "optOutError": "Verlaten mislukt."
     }
   }
 }

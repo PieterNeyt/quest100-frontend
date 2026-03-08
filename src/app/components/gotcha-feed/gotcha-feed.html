@@ -50,7 +50,6 @@
           <!-- Card header: hunter info + timestamp + status badge -->
           <div class="card-header">
             <div class="profile-row">
-              <!-- Hunter avatar -->
               <div class="avatar">
                 @if (item.hunter.profilePicture) {
                   <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
@@ -87,7 +86,7 @@
             @if (item.prop) {
               <span class="prop-badge">
                 <ng-icon hlm name="lucidePackage" size="xs" />
-                {{ item.prop.name }}
+                {{ propName(item.prop) }}
               </span>
             }
           </div>
@@ -96,7 +95,7 @@
           <div class="card-photo-wrap">
             <img
               class="card-photo"
-              [src]="item.photoUrl"
+              [src]="photoSrc(item.photoBase64)"
               [alt]="t.t('gotcha.feed.photoAlt')"
               loading="lazy"
             />
@@ -127,7 +126,7 @@
               } @else {
                 <ng-icon
                   hlm
-                  [name]="item.likedByMe ? 'lucideHeart' : 'lucideHeart'"
+                  name="lucideHeart"
                   size="sm"
                   [class.heart-filled]="item.likedByMe"
                 />

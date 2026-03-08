@@ -270,6 +270,28 @@
       "gameOver": "Game Over!",
       "gameOverSub": "The tournament has ended. See who won!",
       "viewResults": "View results"
+    },
+    "winner": "Winner",
+    "settings": {
+      "title": "Game settings",
+      "gameSettings": "Game settings",
+      "props": "Props",
+      "addProp": "Add prop",
+      "noProps": "No props yet. Add some!",
+      "propNameEN": "Name (English)",
+      "propNameNL": "Name (Dutch)",
+      "bothLangsRequired": "Both language fields are required.",
+      "propAdded": "Prop added!",
+      "propDeleted": "Prop removed.",
+      "cancel": "Cancel"
+    },
+    "toasts": {
+      "optedIn": "You've joined the game!",
+      "alreadyOptedIn": "You're already in the game.",
+      "optInError": "Failed to join the game.",
+      "optedOut": "You've left the game.",
+      "optOutGameStarted": "You can't leave after the game has started.",
+      "optOutError": "Failed to leave the game."
     }
   }
 }

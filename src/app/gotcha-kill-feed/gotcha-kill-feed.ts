@@ -12,6 +12,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService, KillFeedItem } from '../services/gotchaService';
 import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
+import { KillFeedProp } from '../model/gotcha';
 
 @Component({
   selector: 'app-gotcha-kill-feed',
@@ -23,28 +24,28 @@ import { ToastService } from '../services/toastService';
 })
 export class GotchaKillFeedComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
-  private readonly toastService = inject(ToastService);
+  private readonly toastService  = inject(ToastService);
   readonly t = inject(TranslationService);
 
   // ── tabs ──────────────────────────────────────
   activeTab = signal<'feed' | 'review'>('feed');
 
   // ── feed ──────────────────────────────────────
-  items = signal<KillFeedItem[]>([]);
-  loading = signal(true);
+  items       = signal<KillFeedItem[]>([]);
+  loading     = signal(true);
   loadingMore = signal(false);
-  hasMore = signal(true);
-  likingIds = signal<Set<string>>(new Set());
+  hasMore     = signal(true);
+  likingIds   = signal<Set<string>>(new Set());
   private offset = 0;
   private readonly limit = 10;
   isEmpty = computed(() => !this.loading() && this.items().length === 0);
 
   // ── review — FIFO stack ───────────────────────
   currentReviewItem = signal<KillFeedItem | null>(null);
-  pendingCount = signal(0);
-  reviewLoading = signal(false);
-  isReviewingKill = signal(false);
-  reviewDone = computed(() => !this.reviewLoading() && this.currentReviewItem() === null);
+  pendingCount      = signal(0);
+  reviewLoading     = signal(false);
+  isReviewingKill   = signal(false);
+  reviewDone        = computed(() => !this.reviewLoading() && this.currentReviewItem() === null);
 
   ngOnInit() {
     this.loadFeed();
@@ -52,6 +53,7 @@ export class GotchaKillFeedComponent implements OnInit {
   }
 
   // ── feed ──────────────────────────────────────
+
   loadFeed() {
     this.loading.set(true);
     this.offset = 0;
@@ -107,6 +109,7 @@ export class GotchaKillFeedComponent implements OnInit {
   isLiking(id: string): boolean { return this.likingIds().has(id); }
 
   // ── FIFO review ───────────────────────────────
+
   loadNextReviewItem() {
     this.reviewLoading.set(true);
     this.currentReviewItem.set(null);
@@ -144,17 +147,39 @@ export class GotchaKillFeedComponent implements OnInit {
   get stackDepth(): number { return Math.min(this.pendingCount() - 1, 2); }
 
   // ── helpers ───────────────────────────────────
+
+  /**
+   * Returns the localised prop name based on the current UI language.
+   * Falls back to the other language if the preferred one is empty.
+   */
+  propName(prop: KillFeedProp | null | undefined): string {
+    if (!prop) return '';
+    return this.t.currentLanguage() === 'nl'
+      ? (prop.nameNL || prop.nameEN)
+      : (prop.nameEN || prop.nameNL);
+  }
+
+  /**
+   * Converts a raw base64 string to a usable img src.
+   * Handles both plain base64 and strings that already have the data URI prefix.
+   */
+  photoSrc(base64: string | null | undefined): string {
+    if (!base64) return '';
+    if (base64.startsWith('data:')) return base64;
+    return `data:image/jpeg;base64,${base64}`;
+  }
+
   formatTime(dateStr: string): string {
-    const locale = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
-    const date = new Date(dateStr);
-    const diffMs = Date.now() - date.getTime();
-    const diffMin = Math.floor(diffMs / 60000);
+    const locale   = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
+    const date     = new Date(dateStr);
+    const diffMs   = Date.now() - date.getTime();
+    const diffMin  = Math.floor(diffMs / 60000);
     const diffHour = Math.floor(diffMin / 60);
-    const diffDay = Math.floor(diffHour / 24);
-    if (diffMin < 1) return this.t.t('gotcha.feed.justNow');
-    if (diffMin < 60) return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
+    const diffDay  = Math.floor(diffHour / 24);
+    if (diffMin < 1)   return this.t.t('gotcha.feed.justNow');
+    if (diffMin < 60)  return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
     if (diffHour < 24) return `${diffHour}${this.t.t('gotcha.feed.hoursAgo')}`;
-    if (diffDay < 7) return `${diffDay}${this.t.t('gotcha.feed.daysAgo')}`;
+    if (diffDay < 7)   return `${diffDay}${this.t.t('gotcha.feed.daysAgo')}`;
     return date.toLocaleDateString(locale, { day: '2-digit', month: 'short' });
   }
 

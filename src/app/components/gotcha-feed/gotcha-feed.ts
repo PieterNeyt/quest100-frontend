@@ -23,14 +23,14 @@ import { ToastService } from '../../services/toastService';
 })
 export class GotchaFeedComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
-  private readonly toastService = inject(ToastService);
+  private readonly toastService  = inject(ToastService);
   readonly t = inject(TranslationService);
 
-  items = signal<KillFeedItem[]>([]);
-  loading = signal(true);
+  items       = signal<KillFeedItem[]>([]);
+  loading     = signal(true);
   loadingMore = signal(false);
-  hasMore = signal(true);
-  likingIds = signal<Set<string>>(new Set());
+  hasMore     = signal(true);
+  likingIds   = signal<Set<string>>(new Set());
 
   private offset = 0;
   private readonly limit = 10;
@@ -103,6 +103,7 @@ export class GotchaFeedComponent implements OnInit {
         });
       },
       error: () => {
+        // Roll back optimistic update
         this.items.update((list) =>
           list.map((i) =>
             i.id === item.id
@@ -124,19 +125,34 @@ export class GotchaFeedComponent implements OnInit {
     return this.likingIds().has(id);
   }
 
-  formatTime(dateStr: string): string {
-    const locale = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
-    const date = new Date(dateStr);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMin = Math.floor(diffMs / 60000);
-    const diffHour = Math.floor(diffMin / 60);
-    const diffDay = Math.floor(diffHour / 24);
+  /**
+   * Converts a raw base64 string to a usable img src.
+   * Handles both plain base64 and strings that already have the data URI prefix.
+   */
+  photoSrc(base64: string): string {
+    if (!base64) return '';
+    if (base64.startsWith('data:')) return base64;
+    return `data:image/jpeg;base64,${base64}`;
+  }
 
-    if (diffMin < 1) return this.t.t('gotcha.feed.justNow');
-    if (diffMin < 60) return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
+  propName(prop: { nameEN: string; nameNL: string } | null | undefined): string {
+    if (!prop) return '';
+    return this.t.currentLanguage() === 'nl' ? (prop.nameNL || prop.nameEN) : prop.nameEN;
+  }
+
+  formatTime(dateStr: string): string {
+    const date     = new Date(dateStr);
+    const now      = new Date();
+    const diffMs   = now.getTime() - date.getTime();
+    const diffMin  = Math.floor(diffMs / 60000);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay  = Math.floor(diffHour / 24);
+    const locale   = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
+
+    if (diffMin < 1)   return this.t.t('gotcha.feed.justNow');
+    if (diffMin < 60)  return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
     if (diffHour < 24) return `${diffHour}${this.t.t('gotcha.feed.hoursAgo')}`;
-    if (diffDay < 7) return `${diffDay}${this.t.t('gotcha.feed.daysAgo')}`;
+    if (diffDay < 7)   return `${diffDay}${this.t.t('gotcha.feed.daysAgo')}`;
     return date.toLocaleDateString(locale, { day: '2-digit', month: 'short' });
   }
 
@@ -149,10 +165,8 @@ export class GotchaFeedComponent implements OnInit {
   }
 
   statusClass(status: string): string {
-    return {
-      PENDING: 'status-pending',
-      APPROVED: 'status-approved',
-      DENIED: 'status-denied',
-    }[status] ?? '';
+    return (
+      { PENDING: 'status-pending', APPROVED: 'status-approved', DENIED: 'status-denied' }[status] ?? ''
+    );
   }
 }

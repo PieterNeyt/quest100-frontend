@@ -66,17 +66,28 @@
             <div class="card-header">
               <div class="profile-row">
                 <div class="avatar">
-                  @if (item.hunter.profilePicture) { <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" /> }
-                  @else { <span class="avatar-initials">{{ initials(item.hunter) }}</span> }
+                  @if (item.hunter.profilePicture) {
+                    <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
+                  } @else {
+                    <span class="avatar-initials">{{ initials(item.hunter) }}</span>
+                  }
                 </div>
                 <div class="profile-info">
                   <span class="profile-name">{{ fullName(item.hunter) }}</span>
                   <span class="post-time">{{ formatTime(item.createdAt) }}</span>
                 </div>
               </div>
-              <span class="status-badge status-approved">
-                <ng-icon hlm name="lucideCheckCircle" size="xs" />
-                {{ t.t('gotcha.feed.statusApproved') }}
+              <span class="status-badge" [class]="statusClass(item.status)">
+                @if (item.status === 'PENDING') {
+                  <ng-icon hlm name="lucideClock" size="xs" />
+                  {{ t.t('gotcha.feed.statusPending') }}
+                } @else if (item.status === 'APPROVED') {
+                  <ng-icon hlm name="lucideCheckCircle" size="xs" />
+                  {{ t.t('gotcha.feed.statusApproved') }}
+                } @else {
+                  <ng-icon hlm name="lucideXCircle" size="xs" />
+                  {{ t.t('gotcha.feed.statusDenied') }}
+                }
               </span>
             </div>
 
@@ -88,26 +99,39 @@
               </span>
               @if (item.prop) {
                 <span class="prop-badge">
-                  <ng-icon hlm name="lucidePackage" size="xs" />{{ item.prop.name }}
+                  <ng-icon hlm name="lucidePackage" size="xs" />
+                  {{ propName(item.prop) }}
                 </span>
               }
             </div>
 
             <div class="card-photo-wrap">
-              <img class="card-photo" [src]="item.photoUrl" [alt]="t.t('gotcha.feed.photoAlt')" loading="lazy" />
+              <img class="card-photo"
+                   [src]="photoSrc(item.photoBase64)"
+                   [alt]="t.t('gotcha.feed.photoAlt')"
+                   loading="lazy" />
               <div class="victim-overlay">
                 <div class="victim-avatar">
-                  @if (item.victim.profilePicture) { <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" /> }
-                  @else { <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span> }
+                  @if (item.victim.profilePicture) {
+                    <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" />
+                  } @else {
+                    <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span>
+                  }
                 </div>
                 <span class="victim-name">{{ fullName(item.victim) }}</span>
               </div>
             </div>
 
             <div class="card-footer">
-              <button class="like-btn" [class.liked]="item.likedByMe" [disabled]="isLiking(item.id)" (click)="toggleLike(item)">
-                @if (isLiking(item.id)) { <span class="like-spinner"></span> }
-                @else { <ng-icon hlm name="lucideHeart" size="sm" [class.heart-filled]="item.likedByMe" /> }
+              <button class="like-btn"
+                      [class.liked]="item.likedByMe"
+                      [disabled]="isLiking(item.id)"
+                      (click)="toggleLike(item)">
+                @if (isLiking(item.id)) {
+                  <span class="like-spinner"></span>
+                } @else {
+                  <ng-icon hlm name="lucideHeart" size="sm" [class.heart-filled]="item.likedByMe" />
+                }
                 <span class="like-count">{{ item.likeCount }}</span>
               </button>
             </div>
@@ -117,8 +141,12 @@
 
         @if (hasMore()) {
           <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadMore()">
-            @if (loadingMore()) { <span class="load-spinner"></span> {{ t.t('gotcha.feed.loadingMore') }} }
-            @else { {{ t.t('gotcha.feed.loadMore') }} }
+            @if (loadingMore()) {
+              <span class="load-spinner"></span>
+              {{ t.t('gotcha.feed.loadingMore') }}
+            } @else {
+              {{ t.t('gotcha.feed.loadMore') }}
+            }
           </button>
         }
       </div>
@@ -169,7 +197,8 @@
             <div class="profile-row">
               <div class="avatar">
                 @if (currentReviewItem()!.hunter.profilePicture) {
-                  <img [src]="currentReviewItem()!.hunter.profilePicture" [alt]="fullName(currentReviewItem()!.hunter)" />
+                  <img [src]="currentReviewItem()!.hunter.profilePicture"
+                       [alt]="fullName(currentReviewItem()!.hunter)" />
                 } @else {
                   <span class="avatar-initials">{{ initials(currentReviewItem()!.hunter) }}</span>
                 }
@@ -193,19 +222,26 @@
             </span>
             @if (currentReviewItem()!.prop) {
               <span class="prop-badge">
-                <ng-icon hlm name="lucidePackage" size="xs" />{{ currentReviewItem()!.prop!.name }}
+                <ng-icon hlm name="lucidePackage" size="xs" />
+                {{ propName(currentReviewItem()!.prop) }}
               </span>
             }
           </div>
 
           <div class="card-photo-wrap">
-            <img class="card-photo" [src]="currentReviewItem()!.photoUrl" [alt]="t.t('gotcha.feed.photoAlt')" loading="lazy" />
+            <img class="card-photo"
+                 [src]="photoSrc(currentReviewItem()!.photoBase64)"
+                 [alt]="t.t('gotcha.feed.photoAlt')"
+                 loading="lazy" />
             <div class="victim-overlay">
               <div class="victim-avatar">
                 @if (currentReviewItem()!.victim.profilePicture) {
-                  <img [src]="currentReviewItem()!.victim.profilePicture" [alt]="fullName(currentReviewItem()!.victim)" />
+                  <img [src]="currentReviewItem()!.victim.profilePicture"
+                       [alt]="fullName(currentReviewItem()!.victim)" />
                 } @else {
-                  <span class="avatar-initials avatar-initials--sm">{{ initials(currentReviewItem()!.victim) }}</span>
+                  <span class="avatar-initials avatar-initials--sm">
+                    {{ initials(currentReviewItem()!.victim) }}
+                  </span>
                 }
               </div>
               <span class="victim-name">{{ fullName(currentReviewItem()!.victim) }}</span>

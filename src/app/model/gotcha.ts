@@ -25,13 +25,16 @@ export interface GotchaParticipant {
   assignedPropId?: string | null;
 }
 
-export interface UpdateStartDateRequest {
+export interface UpdateGameRequest {
   startDate: string;
   killDeadlineHours: number;
   prizePhotoBase64?: string;
   prizeDescriptionEN?: string;
   prizeDescriptionNL?: string;
 }
+
+// Keep old alias for compatibility
+export type UpdateStartDateRequest = UpdateGameRequest;
 
 export interface KillFeedProfile {
   id: string;
@@ -40,18 +43,21 @@ export interface KillFeedProfile {
   profilePicture?: string | null;
 }
 
+/** Both language variants are returned; pick at render time based on user preference. */
 export interface KillFeedProp {
   id: string;
-  name: string;
+  nameEN: string;
+  nameNL: string;
 }
 
 export interface KillFeedItem {
   id: string;
   gameId: string;
-  photoUrl: string;
+  photoBase64: string;      // ← was photoUrl, now base64
   status: 'PENDING' | 'APPROVED' | 'DENIED';
   createdAt: string;
   reviewedAt?: string | null;
+
   hunter: KillFeedProfile;
   victim: KillFeedProfile;
   prop?: KillFeedProp | null;
@@ -70,7 +76,7 @@ export interface EndScreenKillNode {
   hunter: KillFeedProfile;
   victim: KillFeedProfile;
   prop?: KillFeedProp | null;
-  photoUrl: string;
+  photoBase64: string;      // ← was photoUrl, now base64
   createdAt: string;
 }
 
@@ -90,4 +96,20 @@ export interface EndScreen {
   prizeDescriptionNL?: string;
   stats: EndScreenStats;
   kills: EndScreenKillNode[];
+}
+
+export interface GotchaProp {
+  id: string;
+  nameEN: string;
+  nameNL: string;
+}
+
+export interface CreatePropRequest {
+  nameEN: string;
+  nameNL: string;
+}
+
+export interface UpdatePropRequest {
+  nameEN: string;
+  nameNL: string;
 }

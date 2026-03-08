@@ -33,17 +33,17 @@ interface TimeLeft {
 })
 export class GotchaBannerComponent implements OnInit, OnDestroy {
   private readonly gotchaService = inject(GotchaService);
-  private readonly toastService = inject(ToastService);
-  private readonly router = inject(Router);
+  private readonly toastService  = inject(ToastService);
+  private readonly router        = inject(Router);
   readonly t = inject(TranslationService);
 
   loading = signal(true);
-  acting = signal(false);
+  acting  = signal(false);
 
   timeLeft = signal<TimeLeft | null>(null);
   private timerInterval: ReturnType<typeof setInterval> | null = null;
 
-  endScreen   = this.gotchaService.endScreen;
+  endScreen = this.gotchaService.endScreen;
 
   isOptedIn    = computed(() => this.gotchaService.myStatus() !== null);
   gameStatus   = computed(() => this.gotchaService.currentGame()?.status ?? null);
@@ -60,26 +60,24 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
     this.isOptedIn() && this.gotchaService.currentGame()?.status === 'OPT_IN'
   );
 
-  winner = computed(() => this.endScreen()?.winner ?? null);
-
-  winnerName = computed(() => {
+  winner         = computed(() => this.endScreen()?.winner ?? null);
+  winnerName     = computed(() => {
     const w = this.winner();
     return w ? `${w.firstName} ${w.lastName}`.trim() : '';
   });
-
   winnerInitials = computed(() => {
     const w = this.winner();
     if (!w) return '?';
     return `${w.firstName?.[0] ?? ''}${w.lastName?.[0] ?? ''}`.toUpperCase();
   });
-
   winnerKillCount = computed(() => this.endScreen()?.winnerKillCount ?? 0);
 
-  ngOnInit() { this.loadAll(); }
+  ngOnInit()    { this.loadAll(); }
   ngOnDestroy() { this.clearTimer(); }
 
   navigateToEndScreen() { this.router.navigate(['/gotcha/end']); }
   navigateToGotcha()    { this.router.navigate(['/gotcha']); }
+  navigateToSettings()  { this.router.navigate(['/gotcha/settings']); }
 
   private loadAll() {
     this.loading.set(true);
@@ -90,11 +88,11 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
           this.gotchaService.getEndScreen().subscribe();
         }
         this.gotchaService.getMyStatus().subscribe({
-          next: () => this.loading.set(false),
+          next:  () => this.loading.set(false),
           error: () => this.loading.set(false),
         });
       },
-      error: () => { this.loading.set(false); },
+      error: () => this.loading.set(false),
     });
   }
 
@@ -107,7 +105,7 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
             this.acting.set(false);
             this.toastService.success('gotcha.toasts.optedIn');
             this.gotchaService.getCurrentGame().subscribe({
-              next: () => this.startCountdown(),
+              next:  () => this.startCountdown(),
               error: () => {},
             });
           },
@@ -169,7 +167,10 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
   }
 
   private clearTimer() {
-    if (this.timerInterval) { clearInterval(this.timerInterval); this.timerInterval = null; }
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
   }
 
   pad(n: number): string { return String(n).padStart(2, '0'); }

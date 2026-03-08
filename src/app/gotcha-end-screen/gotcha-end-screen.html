@@ -31,19 +31,16 @@
       </div>
     }
 
-    <!-- 🎁 PRIZE SECTION (Nu terug!) -->
+    <!-- Prize section -->
     @if (data.prizePhotoBase64 || prizeDescription) {
       <div class="prize-card">
         <div class="prize-header">
           <ng-icon hlm name="lucideGift" size="sm" />
-          <span>Gewonnen Prijs</span>
+          <span>{{ t.t('gotcha.endScreen.prize') }}</span>
         </div>
         <div class="prize-body">
           @if (data.prizePhotoBase64) {
-            <!-- Check of de base64 al de header heeft, anders toevoegen -->
-            <img class="prize-photo"
-                 [src]="data.prizePhotoBase64.startsWith('data') ? data.prizePhotoBase64 : 'data:image/jpeg;base64,' + data.prizePhotoBase64"
-                 alt="prize" />
+            <img class="prize-photo" [src]="photoSrc(data.prizePhotoBase64)" alt="prize" />
           }
           @if (prizeDescription) {
             <p class="prize-desc">{{ prizeDescription }}</p>
@@ -62,19 +59,21 @@
     <div class="stats-grid">
       <div class="stat-card">
         <span class="stat-value">{{ mortalityRate }}%</span>
-        <span class="stat-label">Sterftecijfer</span>
+        <span class="stat-label">{{ t.t('gotcha.endScreen.statMortality') }}</span>
       </div>
       <div class="stat-card">
         <span class="stat-value">{{ data.stats.totalParticipants }}</span>
-        <span class="stat-label">Deelnemers</span>
+        <span class="stat-label">{{ t.t('gotcha.endScreen.statParticipants') }}</span>
       </div>
       <div class="stat-card">
-        <span class="stat-value">{{ mostUsedProp }}</span>
-        <span class="stat-label">Meest dodelijke wapen</span>
+        <span class="stat-value">{{ mostUsedProp() }}</span>
+        <span class="stat-label">{{ t.t('gotcha.endScreen.statMostUsedProp') }}</span>
       </div>
       <div class="stat-card">
         <span class="stat-value">{{ data.stats.mostKillsCount }}</span>
-        <span class="stat-label">Record ({{ data.stats.mostKillsName.split(' ')[0] }})</span>
+        <span class="stat-label">
+          {{ t.t('gotcha.endScreen.statMostKills') }} ({{ data.stats.mostKillsName.split(' ')[0] }})
+        </span>
       </div>
     </div>
   </div>
@@ -86,31 +85,37 @@
         <ng-icon hlm name="lucideNetwork" size="sm" />
         {{ t.t('gotcha.endScreen.graph') }}
       </h3>
-      <p class="graph-hint">Scroll om te zoomen. Klik op een speler voor hun kills, klik op een lijn voor de foto.</p>
+      <p class="graph-hint">{{ t.t('gotcha.endScreen.graphHint') }}</p>
 
       <div class="graph-wrap">
         <svg #graphCanvas class="graph-svg"></svg>
       </div>
 
-      <!-- Persoonlijke kill lijst (Verschijnt bij klik op node) -->
+      <!-- Personal kill list (appears on node click) -->
       @if (selectedPersonName()) {
         <div class="personal-kills-box">
           <div class="pk-header">
-            <span>Kills van <strong>{{ selectedPersonName() }}</strong></span>
+            <span>
+              {{ t.t('gotcha.endScreen.killsOf') }}
+              <strong>{{ selectedPersonName() }}</strong>
+            </span>
             <button class="btn-close-pk" (click)="selectedPersonName.set('')">
               <ng-icon hlm name="lucideX" size="xs" />
             </button>
           </div>
           <div class="pk-list">
             @if (selectedPersonKills().length === 0) {
-              <p class="no-kills-text">Geen slachtoffers gemaakt... 🛡️</p>
+              <p class="no-kills-text">{{ t.t('gotcha.endScreen.noKills') }}</p>
             } @else {
               @for (k of selectedPersonKills(); track k.killId) {
                 <div class="pk-item" (click)="openKillDetail(k)">
                   <span class="pk-victim">⚔️ {{ fullName(k.victim) }}</span>
-                  <span class="pk-prop" *ngIf="k.prop">
-                    <ng-icon hlm name="lucidePackage" size="xs" /> {{ k.prop.name }}
-                  </span>
+                  @if (k.prop) {
+                    <span class="pk-prop">
+                      <ng-icon hlm name="lucidePackage" size="xs" />
+                      {{ propName(k.prop) }}
+                    </span>
+                  }
                 </div>
               }
             }
@@ -120,7 +125,7 @@
     </div>
   }
 
-  <!-- ══ CHRONOLOGISCHE FEED ══ -->
+  <!-- ══ CHRONOLOGICAL FEED ══ -->
   <div class="kill-list-section">
     <h3 class="section-title">
       <ng-icon hlm name="lucideList" size="sm" />
@@ -135,6 +140,12 @@
               &rarr;
               {{ fullName(kill.victim) }}
             </span>
+            @if (kill.prop) {
+              <span class="kill-row-prop">
+                <ng-icon hlm name="lucidePackage" size="xs" />
+                {{ propName(kill.prop) }}
+              </span>
+            }
           </div>
           <span class="kill-row-time">{{ formatDate(kill.createdAt) }}</span>
         </div>
@@ -144,19 +155,30 @@
 
 </div>
 
-<!-- Kill detail modal (Popup met foto) -->
+<!-- ══ KILL DETAIL MODAL ══ -->
 @if (showKillDetail() && selectedKill(); as kill) {
   <div class="modal-overlay" (click)="showKillDetail.set(false)">
     <div class="kill-detail-modal" (click)="$event.stopPropagation()">
       <div class="kill-detail-header">
-        <h3>Bewijsmateriaal</h3>
-        <button (click)="showKillDetail.set(false)">✖</button>
+        <h3>{{ t.t('gotcha.endScreen.killDetail') }}</h3>
+        <button (click)="showKillDetail.set(false)">
+          <ng-icon hlm name="lucideX" size="sm" />
+        </button>
       </div>
       <div class="kill-detail-body">
-        <img class="kill-detail-photo" [src]="kill.photoUrl" alt="kill photo" />
+        <img class="kill-detail-photo" [src]="photoSrc(kill.photoBase64)" alt="kill photo" />
         <div class="kill-detail-info">
-          <p><strong>{{ fullName(kill.hunter) }}</strong> elimineerde <strong>{{ fullName(kill.victim) }}</strong></p>
-          <p class="kill-detail-prop" *ngIf="kill.prop">Object: {{ kill.prop.name }}</p>
+          <p>
+            <strong>{{ fullName(kill.hunter) }}</strong>
+            {{ t.t('gotcha.endScreen.eliminated') }}
+            <strong>{{ fullName(kill.victim) }}</strong>
+          </p>
+          @if (kill.prop) {
+            <p class="kill-detail-prop">
+              <ng-icon hlm name="lucidePackage" size="xs" />
+              {{ propName(kill.prop) }}
+            </p>
+          }
         </div>
       </div>
     </div>

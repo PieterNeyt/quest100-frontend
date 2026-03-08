@@ -115,7 +115,7 @@
           }
         </div>
 
-        <!-- Right: opt-in / opt-out actions -->
+        <!-- Right: opt-in / opt-out + settings shortcut -->
         <div class="banner-right" (click)="$event.stopPropagation()">
           @if (isOptedIn()) {
             <div class="opted-in-badge">
@@ -142,6 +142,14 @@
               {{ acting() ? t.t('gotcha.joiningGame') : t.t('gotcha.joinGame') }}
             </button>
           }
+
+          <!-- Settings shortcut — always visible so admins can reach it directly from anywhere -->
+          <button class="btn-settings-shortcut"
+                  [title]="t.t('gotcha.settings.title')"
+                  (click)="navigateToSettings()">
+            <ng-icon hlm name="lucideSettings2" size="sm" />
+          </button>
+
           <ng-icon hlm name="lucideChevronRight" size="sm" class="banner-chevron" />
         </div>
 

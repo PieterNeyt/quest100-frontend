@@ -25,14 +25,13 @@
         </button>
       }
       @if (isFinished()) {
-        <!-- FINISHED: go to end screen -->
         <button class="btn-view-results" (click)="goToEndScreen()">
           <ng-icon hlm name="lucideBarChart2" size="sm" />
           {{ t.t('gotcha.endScreen.viewResults') }}
         </button>
-      } @else if (currentGame()) {
-        <!-- Game settings — single location -->
-        <button class="btn-edit-game" (click)="openEditModal()" [title]="t.t('gotcha.editModal.title')">
+      }
+      @if (currentGame()) {
+        <button class="btn-edit-game" (click)="goToSettings()" [title]="t.t('gotcha.settings.title')">
           <ng-icon hlm name="lucideSettings2" size="sm" />
         </button>
       }
@@ -95,7 +94,7 @@
             </span>
             <span class="prop-name">
               <ng-icon hlm name="lucidePackage" size="sm" />
-              {{ info.assignedProp.name }}
+              {{ propName(info.assignedProp) }}
             </span>
           </div>
         }
@@ -131,7 +130,7 @@
     }
   }
 
-  <!-- ── Feed + Review tabs (embedded component) ── -->
+  <!-- ── Feed + Review tabs ── -->
   <app-gotcha-kill-feed />
 
 </div>
@@ -140,96 +139,56 @@
 @if (showSubmitModal()) {
   <div class="modal-overlay" (click)="closeSubmitModal()">
     <div class="submit-modal" (click)="$event.stopPropagation()">
+
       <div class="modal-header">
-        <h2><ng-icon hlm name="lucideSwords" size="sm" />{{ t.t('gotcha.submitKill.title') }}</h2>
-        <button class="modal-close" (click)="closeSubmitModal()"><ng-icon hlm name="lucideX" size="sm" /></button>
+        <h2>
+          <ng-icon hlm name="lucideSwords" size="sm" />
+          {{ t.t('gotcha.submitKill.title') }}
+        </h2>
+        <button class="modal-close" (click)="closeSubmitModal()">
+          <ng-icon hlm name="lucideX" size="sm" />
+        </button>
       </div>
+
       <div class="modal-body">
         <p class="modal-hint">{{ t.t('gotcha.submitKill.hint') }}</p>
+
         <label class="field-label">{{ t.t('gotcha.submitKill.photoLabel') }}</label>
-        <input class="field-input" type="url"
-               [placeholder]="t.t('gotcha.submitKill.photoPlaceholder')"
-               [value]="photoUrl()"
-               (input)="photoUrl.set($any($event.target).value)" />
-        @if (photoUrl()) {
-          <img class="photo-preview" [src]="photoUrl()" alt="preview" />
+
+        <!-- File picker — triggers the hidden input -->
+        <label class="file-pick-btn" [class.has-file]="!!photoBase64()">
+          <ng-icon hlm name="lucideCamera" size="sm" />
+          @if (photoBase64()) {
+            {{ t.t('gotcha.submitKill.photoChange') }}
+          } @else {
+            {{ t.t('gotcha.submitKill.photoSelect') }}
+          }
+          <input type="file"
+                 accept="image/*"
+                 capture="environment"
+                 class="file-input-hidden"
+                 (change)="onFileSelected($event)" />
+        </label>
+
+        <!-- Preview -->
+        @if (photoPreview()) {
+          <img class="photo-preview" [src]="photoPreview()!" alt="preview" />
         }
       </div>
+
       <div class="modal-footer">
-        <button class="btn-cancel" (click)="closeSubmitModal()">{{ t.t('gotcha.submitKill.cancel') }}</button>
-        <button class="btn-submit" [disabled]="submitting() || !photoUrl().trim()" (click)="submitKill()">
+        <button class="btn-cancel" (click)="closeSubmitModal()">
+          {{ t.t('gotcha.submitKill.cancel') }}
+        </button>
+        <button class="btn-submit"
+                [disabled]="submitting() || !photoBase64()"
+                (click)="submitKill()">
           @if (submitting()) { <span class="btn-spinner"></span> }
           <ng-icon hlm name="lucideSwords" size="sm" />
           {{ submitting() ? t.t('gotcha.submitKill.submitting') : t.t('gotcha.submitKill.confirm') }}
         </button>
       </div>
-    </div>
-  </div>
-}
 
-<!-- ══ EDIT GAME MODAL (single source of truth) ══ -->
-@if (showEditModal()) {
-  <div class="modal-overlay" (click)="closeEditModal()">
-    <div class="submit-modal edit-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2><ng-icon hlm name="lucideSettings2" size="sm" />{{ t.t('gotcha.editModal.title') }}</h2>
-        <button class="modal-close" (click)="closeEditModal()"><ng-icon hlm name="lucideX" size="sm" /></button>
-      </div>
-      <div class="modal-body">
-        <label class="field-label">{{ t.t('gotcha.editModal.startDate') }}</label>
-        <input class="field-input" type="datetime-local"
-               [value]="editStartDate()"
-               (input)="editStartDate.set($any($event.target).value)" />
-
-        <label class="field-label">{{ t.t('gotcha.editModal.killDeadline') }}</label>
-        <input class="field-input" type="number" min="1" max="336"
-               [value]="editKillDeadline()"
-               (input)="editKillDeadline.set(+$any($event.target).value)" />
-        <p class="modal-hint">{{ t.t('gotcha.editModal.killDeadlineHint') }}</p>
-
-        <label class="field-label">{{ t.t('gotcha.editModal.prizePhoto') }}</label>
-        <div class="file-upload-area">
-          @if (editPrizePhotoPreview()) {
-            <div class="prize-preview-wrap">
-              <img class="prize-preview-img" [src]="editPrizePhotoPreview()" alt="prize preview" />
-              <button class="btn-remove-photo" type="button" (click)="clearPrizePhoto()">
-                <ng-icon hlm name="lucideX" size="xs" />
-              </button>
-            </div>
-          } @else {
-            <label class="file-upload-label" for="prizeFileInput">
-              <ng-icon hlm name="lucideImagePlus" size="lg" />
-              <span>{{ t.t('gotcha.editModal.prizePhotoHint') }}</span>
-            </label>
-          }
-          <input id="prizeFileInput" class="file-input-hidden" type="file"
-                 accept="image/*" (change)="onPrizeFileChange($event)" />
-        </div>
-
-        <label class="field-label">
-          <span class="lang-tag">EN</span>{{ t.t('gotcha.editModal.prizeDescEN') }}
-        </label>
-        <textarea class="field-input field-textarea"
-                  [placeholder]="t.t('gotcha.editModal.prizeDescPlaceholder')"
-                  [value]="editPrizeDescEN()"
-                  (input)="editPrizeDescEN.set($any($event.target).value)"></textarea>
-
-        <label class="field-label">
-          <span class="lang-tag lang-tag--nl">NL</span>{{ t.t('gotcha.editModal.prizeDescNL') }}
-        </label>
-        <textarea class="field-input field-textarea"
-                  [placeholder]="t.t('gotcha.editModal.prizeDescPlaceholder')"
-                  [value]="editPrizeDescNL()"
-                  (input)="editPrizeDescNL.set($any($event.target).value)"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" (click)="closeEditModal()">{{ t.t('gotcha.editModal.cancel') }}</button>
-        <button class="btn-submit" [disabled]="editSaving()" (click)="saveEditModal()">
-          @if (editSaving()) { <span class="btn-spinner"></span> }
-          <ng-icon hlm name="lucideSave" size="sm" />
-          {{ editSaving() ? t.t('gotcha.editModal.saving') : t.t('gotcha.editModal.save') }}
-        </button>
-      </div>
     </div>
   </div>
 }

@@ -15,7 +15,16 @@
   margin-bottom: 1.75rem;
   flex-wrap: wrap;
 }
-
+.file-input-hidden {
+  display: none;
+}
+.file-pick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  /* style naar wens */
+}
 .btn-back {
   display: inline-flex;
   align-items: center;
