@@ -13,7 +13,6 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService } from '../../services/gotchaService';
-import { ProfileService } from '../../services/profileService';
 import { TranslationService } from '../../services/translationService';
 import { ToastService } from '../../services/toastService';
 
@@ -34,26 +33,21 @@ interface TimeLeft {
 })
 export class GotchaBannerComponent implements OnInit, OnDestroy {
   private readonly gotchaService = inject(GotchaService);
-  private readonly profileService = inject(ProfileService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
   readonly t = inject(TranslationService);
 
   loading = signal(true);
   acting = signal(false);
-  showEditModal = signal(false);
-  saving = signal(false);
-
-  editStartDate = signal('');
-  editKillDeadlineHours = signal(72);
 
   timeLeft = signal<TimeLeft | null>(null);
   private timerInterval: ReturnType<typeof setInterval> | null = null;
 
-  currentGame = this.gotchaService.currentGame;
-  myStatus = this.gotchaService.myStatus;
+  endScreen   = this.gotchaService.endScreen;
 
-  isOptedIn = computed(() => this.gotchaService.myStatus() !== null);
+  isOptedIn    = computed(() => this.gotchaService.myStatus() !== null);
+  gameStatus   = computed(() => this.gotchaService.currentGame()?.status ?? null);
+  isFinished   = computed(() => this.gameStatus() === 'FINISHED');
 
   hasStartDate = computed(() => {
     const game = this.gotchaService.currentGame();
@@ -62,36 +56,45 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
     return !isNaN(d.getTime()) && d.getFullYear() > 2000;
   });
 
-  gameStatus = computed(() => this.gotchaService.currentGame()?.status ?? null);
-
   canOptOut = computed(() =>
     this.isOptedIn() && this.gotchaService.currentGame()?.status === 'OPT_IN'
   );
 
-  ngOnInit() {
-    this.loadAll();
-  }
+  winner = computed(() => this.endScreen()?.winner ?? null);
 
-  ngOnDestroy() {
-    this.clearTimer();
-  }
+  winnerName = computed(() => {
+    const w = this.winner();
+    return w ? `${w.firstName} ${w.lastName}`.trim() : '';
+  });
 
-  navigateToGotcha() {
-    if (this.showEditModal()) return;
-    this.router.navigate(['/gotcha']);
-  }
+  winnerInitials = computed(() => {
+    const w = this.winner();
+    if (!w) return '?';
+    return `${w.firstName?.[0] ?? ''}${w.lastName?.[0] ?? ''}`.toUpperCase();
+  });
+
+  winnerKillCount = computed(() => this.endScreen()?.winnerKillCount ?? 0);
+
+  ngOnInit() { this.loadAll(); }
+  ngOnDestroy() { this.clearTimer(); }
+
+  navigateToEndScreen() { this.router.navigate(['/gotcha/end']); }
+  navigateToGotcha()    { this.router.navigate(['/gotcha']); }
 
   private loadAll() {
     this.loading.set(true);
-
     this.gotchaService.getCurrentGame().subscribe({
-      next: () => this.startCountdown(),
-      error: () => {},
-    });
-
-    this.gotchaService.getMyStatus().subscribe({
-      next: () => this.loading.set(false),
-      error: () => this.loading.set(false),
+      next: () => {
+        this.startCountdown();
+        if (this.isFinished()) {
+          this.gotchaService.getEndScreen().subscribe();
+        }
+        this.gotchaService.getMyStatus().subscribe({
+          next: () => this.loading.set(false),
+          error: () => this.loading.set(false),
+        });
+      },
+      error: () => { this.loading.set(false); },
     });
   }
 
@@ -141,57 +144,12 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
     });
   }
 
-  openEditModal() {
-    const game = this.gotchaService.currentGame();
-    if (game?.startDate) {
-      const d = new Date(game.startDate);
-      this.editStartDate.set(this.toDatetimeLocal(d));
-      this.editKillDeadlineHours.set(game.killDeadlineHours ?? 72);
-    } else {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      this.editStartDate.set(this.toDatetimeLocal(tomorrow));
-      this.editKillDeadlineHours.set(72);
-    }
-    this.showEditModal.set(true);
-  }
-
-  closeEditModal() {
-    this.showEditModal.set(false);
-  }
-
-  saveStartDate() {
-    if (!this.editStartDate()) {
-      this.toastService.error('gotcha.toasts.noStartDate');
-      return;
-    }
-    this.saving.set(true);
-    this.gotchaService
-      .updateStartDate({
-        startDate: new Date(this.editStartDate()).toISOString(),
-        killDeadlineHours: this.editKillDeadlineHours(),
-      })
-      .subscribe({
-        next: () => {
-          this.saving.set(false);
-          this.closeEditModal();
-          this.startCountdown();
-          this.toastService.success('gotcha.toasts.startDateSaved');
-        },
-        error: () => {
-          this.saving.set(false);
-          this.toastService.error('gotcha.toasts.startDateError');
-        },
-      });
-  }
-
   private startCountdown() {
     this.clearTimer();
     const game = this.gotchaService.currentGame();
     if (!game?.startDate) return;
     const target = new Date(game.startDate).getTime();
     if (isNaN(target) || target <= 0) return;
-
     const tick = () => {
       const diff = target - Date.now();
       if (diff <= 0) {
@@ -200,8 +158,8 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
         return;
       }
       this.timeLeft.set({
-        days: Math.floor(diff / 86400000),
-        hours: Math.floor((diff % 86400000) / 3600000),
+        days:    Math.floor(diff / 86400000),
+        hours:   Math.floor((diff % 86400000) / 3600000),
         minutes: Math.floor((diff % 3600000) / 60000),
         seconds: Math.floor((diff % 60000) / 1000),
       });
@@ -211,18 +169,8 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
   }
 
   private clearTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
+    if (this.timerInterval) { clearInterval(this.timerInterval); this.timerInterval = null; }
   }
 
-  private toDatetimeLocal(d: Date): string {
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  }
-
-  pad(n: number): string {
-    return String(n).padStart(2, '0');
-  }
+  pad(n: number): string { return String(n).padStart(2, '0'); }
 }

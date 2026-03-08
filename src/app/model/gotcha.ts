@@ -7,6 +7,9 @@ export interface GotchaGame {
   winnerId?: string | null;
   createdAt: string;
   updatedAt: string;
+  prizePhotoBase64?: string;
+  prizeDescriptionEN?: string;
+  prizeDescriptionNL?: string;
 }
 
 export interface GotchaParticipant {
@@ -25,6 +28,9 @@ export interface GotchaParticipant {
 export interface UpdateStartDateRequest {
   startDate: string;
   killDeadlineHours: number;
+  prizePhotoBase64?: string;
+  prizeDescriptionEN?: string;
+  prizeDescriptionNL?: string;
 }
 
 export interface KillFeedProfile {
@@ -56,4 +62,32 @@ export interface KillFeedItem {
 export interface TargetInfo {
   target?: KillFeedProfile | null;
   assignedProp?: KillFeedProp | null;
+  killDeadline?: string | null;
+}
+
+export interface EndScreenKillNode {
+  killId: string;
+  hunter: KillFeedProfile;
+  victim: KillFeedProfile;
+  prop?: KillFeedProp | null;
+  photoUrl: string;
+  createdAt: string;
+}
+
+export interface EndScreenStats {
+  totalKills: number;
+  totalParticipants: number;
+  fastestKillSecs: number;
+  mostKillsName: string;
+  mostKillsCount: number;
+}
+
+export interface EndScreen {
+  winner?: KillFeedProfile | null;
+  winnerKillCount: number;
+  prizePhotoBase64?: string;
+  prizeDescriptionEN?: string;
+  prizeDescriptionNL?: string;
+  stats: EndScreenStats;
+  kills: EndScreenKillNode[];
 }

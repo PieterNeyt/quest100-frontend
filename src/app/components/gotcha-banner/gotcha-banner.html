@@ -1,147 +1,151 @@
-<div class="gotcha-banner" [class.clickable]="!showEditModal()" (click)="navigateToGotcha()">
-  @if (loading()) {
-    <div class="banner-skeleton">
-      <div class="skeleton-block w-32"></div>
-      <div class="skeleton-block w-56"></div>
-      <div class="skeleton-block w-40"></div>
-    </div>
-  } @else {
-    <div class="banner-inner">
-
-      <!-- Left: branding -->
-      <div class="banner-left">
-        <div class="banner-title-row">
-          <span class="gotcha-logo">🎯</span>
-          <span class="gotcha-title">Gotcha</span>
-          @if (gameStatus()) {
-            <span class="status-pill" [class]="'status-' + gameStatus()!.toLowerCase()">
-              {{ t.t('gotcha.status.' + gameStatus()!.toLowerCase()) }}
-            </span>
-          }
-        </div>
-        <p class="banner-desc">{{ t.t('gotcha.bannerDescription') }}</p>
+<!-- ══ FINISHED: entire banner is one big clickable card ══ -->
+@if (isFinished()) {
+  <div class="gotcha-banner gotcha-banner--finished clickable" (click)="navigateToEndScreen()">
+    @if (loading()) {
+      <div class="banner-skeleton">
+        <div class="skeleton-block w-32"></div>
+        <div class="skeleton-block w-56"></div>
       </div>
+    } @else {
+      <div class="banner-inner">
 
-      <!-- Center: countdown of coming soon -->
-      <div class="banner-center">
-        @if (hasStartDate() && timeLeft()) {
-          <div class="countdown">
-            <span class="countdown-label">{{ t.t('gotcha.startsIn') }}</span>
-            <div class="countdown-blocks">
-              <div class="cd-block">
-                <span class="cd-value">{{ pad(timeLeft()!.days) }}</span>
-                <span class="cd-unit">{{ t.t('gotcha.days') }}</span>
-              </div>
-              <span class="cd-sep">:</span>
-              <div class="cd-block">
-                <span class="cd-value">{{ pad(timeLeft()!.hours) }}</span>
-                <span class="cd-unit">{{ t.t('gotcha.hours') }}</span>
-              </div>
-              <span class="cd-sep">:</span>
-              <div class="cd-block">
-                <span class="cd-value">{{ pad(timeLeft()!.minutes) }}</span>
-                <span class="cd-unit">{{ t.t('gotcha.minutes') }}</span>
-              </div>
-              <span class="cd-sep">:</span>
-              <div class="cd-block">
-                <span class="cd-value">{{ pad(timeLeft()!.seconds) }}</span>
-                <span class="cd-unit">{{ t.t('gotcha.seconds') }}</span>
-              </div>
+        <!-- Left: branding -->
+        <div class="banner-left">
+          <div class="banner-title-row">
+            <span class="gotcha-logo">🎯</span>
+            <span class="gotcha-title">Gotcha</span>
+            <span class="status-pill status-finished">
+              {{ t.t('gotcha.status.finished') }}
+            </span>
+          </div>
+          <p class="banner-desc">{{ t.t('gotcha.endScreen.gameOver') }}</p>
+        </div>
+
+        <!-- Center: winner profile -->
+        <div class="banner-center banner-winner-center">
+          <span class="winner-crown-lbl">👑 {{ t.t('gotcha.endScreen.winner') }}</span>
+          <div class="winner-row">
+            <div class="winner-avatar-sm">
+              @if (winner()?.profilePicture) {
+                <img [src]="winner()!.profilePicture" [alt]="winnerName()" />
+              } @else {
+                <span class="winner-initials-sm">{{ winnerInitials() }}</span>
+              }
+            </div>
+            <div class="winner-meta">
+              <span class="winner-name-sm">{{ winnerName() }}</span>
+              <span class="winner-kills-sm">
+                <ng-icon hlm name="lucideSwords" size="xs" />
+                {{ winnerKillCount() }} {{ t.t('gotcha.endScreen.kills') }}
+              </span>
             </div>
           </div>
-        } @else {
-          <div class="coming-soon">
-            <ng-icon hlm name="lucideClock" size="sm" />
-            <span>{{ t.t('gotcha.comingSoon') }}</span>
-          </div>
-        }
+        </div>
+
+        <!-- Right: CTA -->
+        <div class="banner-right">
+          <button class="btn-view-results" (click)="$event.stopPropagation(); navigateToEndScreen()">
+            <ng-icon hlm name="lucideBarChart2" size="sm" />
+            {{ t.t('gotcha.endScreen.viewResults') }}
+          </button>
+          <ng-icon hlm name="lucideChevronRight" size="sm" class="banner-chevron" />
+        </div>
+
       </div>
+    }
+  </div>
+} @else {
+  <!-- ══ ACTIVE / OPT_IN: normal banner ══ -->
+  <div class="gotcha-banner clickable" (click)="navigateToGotcha()">
+    @if (loading()) {
+      <div class="banner-skeleton">
+        <div class="skeleton-block w-32"></div>
+        <div class="skeleton-block w-56"></div>
+        <div class="skeleton-block w-40"></div>
+      </div>
+    } @else {
+      <div class="banner-inner">
 
-      <!-- Right: acties — stopPropagation zodat knoppen de banner-navigatie niet triggeren -->
-      <div class="banner-right" (click)="$event.stopPropagation()">
-        @if (isOptedIn()) {
-          <div class="opted-in-badge">
-            <ng-icon hlm name="lucideCheckCircle" size="sm" />
-            {{ t.t('gotcha.optedIn') }}
+        <!-- Left: branding -->
+        <div class="banner-left">
+          <div class="banner-title-row">
+            <span class="gotcha-logo">🎯</span>
+            <span class="gotcha-title">Gotcha</span>
+            @if (gameStatus()) {
+              <span class="status-pill" [class]="'status-' + gameStatus()!.toLowerCase()">
+                {{ t.t('gotcha.status.' + gameStatus()!.toLowerCase()) }}
+              </span>
+            }
           </div>
+          <p class="banner-desc">{{ t.t('gotcha.bannerDescription') }}</p>
+        </div>
 
-          @if (canOptOut()) {
-            <button class="btn-optout" [disabled]="acting()" (click)="optOut()">
+        <!-- Center: countdown or coming soon -->
+        <div class="banner-center">
+          @if (hasStartDate() && timeLeft()) {
+            <div class="countdown">
+              <span class="countdown-label">{{ t.t('gotcha.startsIn') }}</span>
+              <div class="countdown-blocks">
+                <div class="cd-block">
+                  <span class="cd-value">{{ pad(timeLeft()!.days) }}</span>
+                  <span class="cd-unit">{{ t.t('gotcha.days') }}</span>
+                </div>
+                <span class="cd-sep">:</span>
+                <div class="cd-block">
+                  <span class="cd-value">{{ pad(timeLeft()!.hours) }}</span>
+                  <span class="cd-unit">{{ t.t('gotcha.hours') }}</span>
+                </div>
+                <span class="cd-sep">:</span>
+                <div class="cd-block">
+                  <span class="cd-value">{{ pad(timeLeft()!.minutes) }}</span>
+                  <span class="cd-unit">{{ t.t('gotcha.minutes') }}</span>
+                </div>
+                <span class="cd-sep">:</span>
+                <div class="cd-block">
+                  <span class="cd-value">{{ pad(timeLeft()!.seconds) }}</span>
+                  <span class="cd-unit">{{ t.t('gotcha.seconds') }}</span>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="coming-soon">
+              <ng-icon hlm name="lucideClock" size="sm" />
+              <span>{{ t.t('gotcha.comingSoon') }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Right: opt-in / opt-out actions -->
+        <div class="banner-right" (click)="$event.stopPropagation()">
+          @if (isOptedIn()) {
+            <div class="opted-in-badge">
+              <ng-icon hlm name="lucideCheckCircle" size="sm" />
+              {{ t.t('gotcha.optedIn') }}
+            </div>
+            @if (canOptOut()) {
+              <button class="btn-optout" [disabled]="acting()" (click)="optOut()">
+                @if (acting()) {
+                  <span class="btn-spinner btn-spinner--red"></span>
+                } @else {
+                  <ng-icon hlm name="lucideLogOut" size="sm" />
+                }
+                {{ acting() ? t.t('gotcha.optingOut') : t.t('gotcha.optOut') }}
+              </button>
+            }
+          } @else {
+            <button class="btn-optin" [disabled]="acting()" (click)="optIn()">
               @if (acting()) {
-                <span class="btn-spinner btn-spinner--red"></span>
+                <span class="btn-spinner"></span>
               } @else {
-                <ng-icon hlm name="lucideLogOut" size="sm" />
+                <ng-icon hlm name="lucideSwords" size="sm" />
               }
-              {{ acting() ? t.t('gotcha.optingOut') : t.t('gotcha.optOut') }}
+              {{ acting() ? t.t('gotcha.joiningGame') : t.t('gotcha.joinGame') }}
             </button>
           }
-        } @else {
-          <button class="btn-optin" [disabled]="acting()" (click)="optIn()">
-            @if (acting()) {
-              <span class="btn-spinner"></span>
-            } @else {
-              <ng-icon hlm name="lucideSwords" size="sm" />
-            }
-            {{ acting() ? t.t('gotcha.joiningGame') : t.t('gotcha.joinGame') }}
-          </button>
-        }
+          <ng-icon hlm name="lucideChevronRight" size="sm" class="banner-chevron" />
+        </div>
 
-        <button class="btn-edit" (click)="openEditModal()">
-          <ng-icon hlm name="lucidePencil" size="sm" />
-          {{ t.t('gotcha.editStartDate') }}
-        </button>
-
-        <!-- Expliciete "Naar Gotcha" chevron als visuele hint -->
-        <ng-icon hlm name="lucideChevronRight" size="sm" class="banner-chevron" />
       </div>
-
-    </div>
-  }
-</div>
-
-<!-- Edit modal -->
-@if (showEditModal()) {
-  <div class="modal-overlay" (click)="closeEditModal()">
-    <div class="gotcha-modal" (click)="$event.stopPropagation()">
-
-      <div class="gotcha-modal-header">
-        <h2>{{ t.t('gotcha.editModal.title') }}</h2>
-        <button class="modal-close" (click)="closeEditModal()">
-          <ng-icon hlm name="lucideX" size="sm" />
-        </button>
-      </div>
-
-      <div class="gotcha-modal-body">
-        <label class="field-label">{{ t.t('gotcha.editModal.startDate') }}</label>
-        <input
-          class="field-input"
-          type="datetime-local"
-          [ngModel]="editStartDate()"
-          (ngModelChange)="editStartDate.set($event)"
-        />
-
-        <label class="field-label mt">{{ t.t('gotcha.editModal.killDeadline') }}</label>
-        <input
-          class="field-input"
-          type="number"
-          min="1"
-          max="168"
-          [ngModel]="editKillDeadlineHours()"
-          (ngModelChange)="editKillDeadlineHours.set(+$event)"
-        />
-        <span class="field-hint">{{ t.t('gotcha.editModal.killDeadlineHint') }}</span>
-      </div>
-
-      <div class="gotcha-modal-footer">
-        <button class="btn-cancel" (click)="closeEditModal()">
-          {{ t.t('gotcha.editModal.cancel') }}
-        </button>
-        <button class="btn-save" [disabled]="saving() || !editStartDate()" (click)="saveStartDate()">
-          @if (saving()) { <span class="btn-spinner btn-spinner--dark"></span> }
-          {{ t.t('gotcha.editModal.save') }}
-        </button>
-      </div>
-
-    </div>
+    }
   </div>
 }

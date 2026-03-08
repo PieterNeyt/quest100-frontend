@@ -20,7 +20,18 @@ import {RoleService} from './services/roleService';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    ...HlmNavigationMenuImports,
+    ...HlmButtonImports,
+    ...HlmIconImports,
+    ...HlmDropdownMenuImports,
+    ...HlmAvatarImports,
+    NgOptimizedImage,
+    CommonModule,
+    NgxSonnerToaster
+  ],
   providers: [
     provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode})
   ],

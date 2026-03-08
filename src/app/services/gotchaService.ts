@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environment/environment';
 import {
+  EndScreen,
   GotchaGame,
   GotchaParticipant,
   KillFeedItem,
@@ -10,12 +11,9 @@ import {
   UpdateStartDateRequest,
 } from '../model/gotcha';
 
-// Re-export for components that previously imported from here
-export type { GotchaGame, GotchaParticipant, KillFeedItem, TargetInfo, UpdateStartDateRequest };
+export type { GotchaGame, GotchaParticipant, KillFeedItem, TargetInfo, UpdateStartDateRequest, EndScreen };
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class GotchaService {
   private readonly url = environment.apiConfig.uri;
   private readonly http = inject(HttpClient);
@@ -23,6 +21,7 @@ export class GotchaService {
   myStatus = signal<GotchaParticipant | null>(null);
   currentGame = signal<GotchaGame | null>(null);
   targetInfo = signal<TargetInfo | null>(null);
+  endScreen = signal<EndScreen | null>(null);
 
   getCurrentGame(): Observable<GotchaGame | null> {
     return this.http.get<GotchaGame | null>(`${this.url}/api/gotcha/game`).pipe(
@@ -39,6 +38,12 @@ export class GotchaService {
   getTargetInfo(): Observable<TargetInfo> {
     return this.http.get<TargetInfo>(`${this.url}/api/gotcha/me/target`).pipe(
       tap((info) => this.targetInfo.set(info))
+    );
+  }
+
+  getEndScreen(): Observable<EndScreen> {
+    return this.http.get<EndScreen>(`${this.url}/api/gotcha/end-screen`).pipe(
+      tap((data) => this.endScreen.set(data))
     );
   }
 
@@ -74,8 +79,19 @@ export class GotchaService {
     return this.http.delete<void>(`${this.url}/api/gotcha/kills/${killId}/like`);
   }
 
+  /** @deprecated use getNextPendingKill for the FIFO review UI */
   getPendingKills(): Observable<KillFeedItem[]> {
     return this.http.get<KillFeedItem[]>(`${this.url}/api/gotcha/kills/pending`);
+  }
+
+  /** Returns the single oldest pending kill (FIFO). 204 = nothing to review. */
+  getNextPendingKill(): Observable<KillFeedItem | null> {
+    return this.http.get<KillFeedItem | null>(`${this.url}/api/gotcha/kills/pending/next`);
+  }
+
+  /** Returns { count: number } of pending kills waiting for review. */
+  getPendingKillCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.url}/api/gotcha/kills/pending/count`);
   }
 
   reviewKill(killId: string, approve: boolean): Observable<void> {

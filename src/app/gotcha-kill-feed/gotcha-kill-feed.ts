@@ -29,28 +29,26 @@ export class GotchaKillFeedComponent implements OnInit {
   // ── tabs ──────────────────────────────────────
   activeTab = signal<'feed' | 'review'>('feed');
 
-  // ── feed tab ──────────────────────────────────
+  // ── feed ──────────────────────────────────────
   items = signal<KillFeedItem[]>([]);
   loading = signal(true);
   loadingMore = signal(false);
   hasMore = signal(true);
   likingIds = signal<Set<string>>(new Set());
-
   private offset = 0;
   private readonly limit = 10;
-
   isEmpty = computed(() => !this.loading() && this.items().length === 0);
 
-  // ── review tab ────────────────────────────────
-  reviewItems = signal<KillFeedItem[]>([]);
+  // ── review — FIFO stack ───────────────────────
+  currentReviewItem = signal<KillFeedItem | null>(null);
+  pendingCount = signal(0);
   reviewLoading = signal(false);
-  reviewingIds = signal<Set<string>>(new Set());
-
-  pendingCount = computed(() => this.reviewItems().length);
+  isReviewingKill = signal(false);
+  reviewDone = computed(() => !this.reviewLoading() && this.currentReviewItem() === null);
 
   ngOnInit() {
     this.loadFeed();
-    this.loadReviewFeed();
+    this.loadNextReviewItem();
   }
 
   // ── feed ──────────────────────────────────────
@@ -64,10 +62,7 @@ export class GotchaKillFeedComponent implements OnInit {
         this.offset = items.length;
         this.loading.set(false);
       },
-      error: () => {
-        this.loading.set(false);
-        this.toastService.error('gotcha.feed.loadError');
-      },
+      error: () => { this.loading.set(false); this.toastService.error('gotcha.feed.loadError'); },
     });
   }
 
@@ -81,10 +76,7 @@ export class GotchaKillFeedComponent implements OnInit {
         this.offset += newItems.length;
         this.loadingMore.set(false);
       },
-      error: () => {
-        this.loadingMore.set(false);
-        this.toastService.error('gotcha.feed.loadError');
-      },
+      error: () => { this.loadingMore.set(false); this.toastService.error('gotcha.feed.loadError'); },
     });
   }
 
@@ -92,30 +84,19 @@ export class GotchaKillFeedComponent implements OnInit {
     if (this.likingIds().has(item.id)) return;
     this.likingIds.update((s) => new Set([...s, item.id]));
     const wasLiked = item.likedByMe;
-
     this.items.update((list) =>
-      list.map((i) =>
-        i.id === item.id
-          ? { ...i, likedByMe: !wasLiked, likeCount: wasLiked ? i.likeCount - 1 : i.likeCount + 1 }
-          : i
-      )
+      list.map((i) => i.id === item.id
+        ? { ...i, likedByMe: !wasLiked, likeCount: wasLiked ? i.likeCount - 1 : i.likeCount + 1 }
+        : i)
     );
-
-    const req$ = wasLiked
-      ? this.gotchaService.unlikeKill(item.id)
-      : this.gotchaService.likeKill(item.id);
-
+    const req$ = wasLiked ? this.gotchaService.unlikeKill(item.id) : this.gotchaService.likeKill(item.id);
     req$.subscribe({
-      next: () => {
-        this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-      },
+      next: () => { this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; }); },
       error: () => {
         this.items.update((list) =>
-          list.map((i) =>
-            i.id === item.id
-              ? { ...i, likedByMe: wasLiked, likeCount: wasLiked ? i.likeCount + 1 : i.likeCount - 1 }
-              : i
-          )
+          list.map((i) => i.id === item.id
+            ? { ...i, likedByMe: wasLiked, likeCount: wasLiked ? i.likeCount + 1 : i.likeCount - 1 }
+            : i)
         );
         this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
         this.toastService.error('gotcha.feed.likeError');
@@ -125,47 +106,42 @@ export class GotchaKillFeedComponent implements OnInit {
 
   isLiking(id: string): boolean { return this.likingIds().has(id); }
 
-  // ── review ────────────────────────────────────
-  loadReviewFeed() {
+  // ── FIFO review ───────────────────────────────
+  loadNextReviewItem() {
     this.reviewLoading.set(true);
-    this.gotchaService.getPendingKills().subscribe({
-      next: (items) => {
-        this.reviewItems.set(items);
-        this.reviewLoading.set(false);
-      },
-      error: () => {
-        this.reviewLoading.set(false);
-        this.toastService.error('gotcha.review.loadError');
-      },
+    this.currentReviewItem.set(null);
+
+    this.gotchaService.getPendingKillCount().subscribe({
+      next: ({ count }) => this.pendingCount.set(count),
+    });
+
+    this.gotchaService.getNextPendingKill().subscribe({
+      next: (item) => { this.currentReviewItem.set(item); this.reviewLoading.set(false); },
+      error: () => { this.currentReviewItem.set(null); this.reviewLoading.set(false); },
     });
   }
 
-  reviewKill(item: KillFeedItem, approve: boolean) {
-    if (this.reviewingIds().has(item.id)) return;
-    this.reviewingIds.update((s) => new Set([...s, item.id]));
+  reviewKill(approve: boolean) {
+    const item = this.currentReviewItem();
+    if (!item || this.isReviewingKill()) return;
+    this.isReviewingKill.set(true);
 
     this.gotchaService.reviewKill(item.id, approve).subscribe({
       next: () => {
-        // remove from review list
-        this.reviewItems.update((list) => list.filter((i) => i.id !== item.id));
-        this.reviewingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-
-        // update status in main feed if present
+        this.isReviewingKill.set(false);
+        this.pendingCount.update((n) => Math.max(0, n - 1));
+        this.toastService.success(approve ? 'gotcha.review.approved' : 'gotcha.review.denied');
         const newStatus = approve ? 'APPROVED' : 'DENIED';
         this.items.update((list) =>
           list.map((i) => i.id === item.id ? { ...i, status: newStatus } : i)
         );
-
-        this.toastService.success(approve ? 'gotcha.review.approved' : 'gotcha.review.denied');
+        this.loadNextReviewItem();
       },
-      error: () => {
-        this.reviewingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-        this.toastService.error('gotcha.review.error');
-      },
+      error: () => { this.isReviewingKill.set(false); this.toastService.error('gotcha.review.error'); },
     });
   }
 
-  isReviewing(id: string): boolean { return this.reviewingIds().has(id); }
+  get stackDepth(): number { return Math.min(this.pendingCount() - 1, 2); }
 
   // ── helpers ───────────────────────────────────
   formatTime(dateStr: string): string {
@@ -175,7 +151,6 @@ export class GotchaKillFeedComponent implements OnInit {
     const diffMin = Math.floor(diffMs / 60000);
     const diffHour = Math.floor(diffMin / 60);
     const diffDay = Math.floor(diffHour / 24);
-
     if (diffMin < 1) return this.t.t('gotcha.feed.justNow');
     if (diffMin < 60) return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
     if (diffHour < 24) return `${diffHour}${this.t.t('gotcha.feed.hoursAgo')}`;
@@ -183,12 +158,12 @@ export class GotchaKillFeedComponent implements OnInit {
     return date.toLocaleDateString(locale, { day: '2-digit', month: 'short' });
   }
 
-  fullName(profile: { firstName: string; lastName: string }): string {
-    return `${profile.firstName} ${profile.lastName}`.trim();
+  fullName(p: { firstName: string; lastName: string }): string {
+    return `${p.firstName} ${p.lastName}`.trim();
   }
 
-  initials(profile: { firstName: string; lastName: string }): string {
-    return `${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`.toUpperCase();
+  initials(p: { firstName: string; lastName: string }): string {
+    return `${p.firstName?.[0] ?? ''}${p.lastName?.[0] ?? ''}`.toUpperCase();
   }
 
   statusClass(status: string): string {

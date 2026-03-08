@@ -1,25 +1,38 @@
-<div class="page-wrap">
+<div class="kill-feed-wrap">
 
+  <!-- ── Tabs ── -->
   <div class="tabs">
     <button class="tab" [class.tab--active]="activeTab() === 'feed'" (click)="activeTab.set('feed')">
       💀 {{ t.t('gotcha.tabs.feed') }}
+    </button>
+    <button class="tab" [class.tab--active]="activeTab() === 'review'" (click)="activeTab.set('review')">
+      ⚖️ {{ t.t('gotcha.tabs.review') }}
       @if (pendingCount() > 0) {
         <span class="tab-badge">{{ pendingCount() }}</span>
       }
     </button>
-    <button class="tab" [class.tab--active]="activeTab() === 'review'" (click)="activeTab.set('review')">
-      ⚖️ {{ t.t('gotcha.tabs.review') }}
-    </button>
   </div>
 
-  <!-- ── FEED TAB ── -->
-  @if (activeTab() === 'feed') {
+  <!-- ── Toolbar ── -->
+  <div class="feed-toolbar">
+    <button class="btn-refresh"
+            (click)="activeTab() === 'feed' ? loadFeed() : loadNextReviewItem()"
+            [disabled]="activeTab() === 'feed' ? loading() : reviewLoading()">
+      <ng-icon hlm name="lucideRefreshCw" size="sm"
+               [class.spinning]="activeTab() === 'feed' ? loading() : reviewLoading()" />
+    </button>
+    @if (activeTab() === 'review' && pendingCount() > 0) {
+      <span class="queue-label">
+        <ng-icon hlm name="lucideLayers" size="xs" />
+        {{ pendingCount() }} {{ t.t('gotcha.review.inQueue') }}
+      </span>
+    }
+  </div>
 
-    <div class="feed-toolbar">
-      <button class="btn-refresh" (click)="loadFeed()" [disabled]="loading()">
-        <ng-icon hlm name="lucideRefreshCw" size="sm" [class.spinning]="loading()" />
-      </button>
-    </div>
+  <!-- ════════════════════════════════════
+       FEED TAB
+  ════════════════════════════════════ -->
+  @if (activeTab() === 'feed') {
 
     @if (loading()) {
       <div class="feed-list">
@@ -53,28 +66,17 @@
             <div class="card-header">
               <div class="profile-row">
                 <div class="avatar">
-                  @if (item.hunter.profilePicture) {
-                    <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
-                  } @else {
-                    <span class="avatar-initials">{{ initials(item.hunter) }}</span>
-                  }
+                  @if (item.hunter.profilePicture) { <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" /> }
+                  @else { <span class="avatar-initials">{{ initials(item.hunter) }}</span> }
                 </div>
                 <div class="profile-info">
                   <span class="profile-name">{{ fullName(item.hunter) }}</span>
                   <span class="post-time">{{ formatTime(item.createdAt) }}</span>
                 </div>
               </div>
-              <span class="status-badge" [class]="statusClass(item.status)">
-                @if (item.status === 'PENDING') {
-                  <ng-icon hlm name="lucideClock" size="xs" />
-                  {{ t.t('gotcha.feed.statusPending') }}
-                } @else if (item.status === 'APPROVED') {
-                  <ng-icon hlm name="lucideCheckCircle" size="xs" />
-                  {{ t.t('gotcha.feed.statusApproved') }}
-                } @else {
-                  <ng-icon hlm name="lucideXCircle" size="xs" />
-                  {{ t.t('gotcha.feed.statusDenied') }}
-                }
+              <span class="status-badge status-approved">
+                <ng-icon hlm name="lucideCheckCircle" size="xs" />
+                {{ t.t('gotcha.feed.statusApproved') }}
               </span>
             </div>
 
@@ -86,8 +88,7 @@
               </span>
               @if (item.prop) {
                 <span class="prop-badge">
-                  <ng-icon hlm name="lucidePackage" size="xs" />
-                  {{ item.prop.name }}
+                  <ng-icon hlm name="lucidePackage" size="xs" />{{ item.prop.name }}
                 </span>
               }
             </div>
@@ -96,11 +97,8 @@
               <img class="card-photo" [src]="item.photoUrl" [alt]="t.t('gotcha.feed.photoAlt')" loading="lazy" />
               <div class="victim-overlay">
                 <div class="victim-avatar">
-                  @if (item.victim.profilePicture) {
-                    <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" />
-                  } @else {
-                    <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span>
-                  }
+                  @if (item.victim.profilePicture) { <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" /> }
+                  @else { <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span> }
                 </div>
                 <span class="victim-name">{{ fullName(item.victim) }}</span>
               </div>
@@ -108,11 +106,8 @@
 
             <div class="card-footer">
               <button class="like-btn" [class.liked]="item.likedByMe" [disabled]="isLiking(item.id)" (click)="toggleLike(item)">
-                @if (isLiking(item.id)) {
-                  <span class="like-spinner"></span>
-                } @else {
-                  <ng-icon hlm name="lucideHeart" size="sm" [class.heart-filled]="item.likedByMe" />
-                }
+                @if (isLiking(item.id)) { <span class="like-spinner"></span> }
+                @else { <ng-icon hlm name="lucideHeart" size="sm" [class.heart-filled]="item.likedByMe" /> }
                 <span class="like-count">{{ item.likeCount }}</span>
               </button>
             </div>
@@ -122,131 +117,117 @@
 
         @if (hasMore()) {
           <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadMore()">
-            @if (loadingMore()) {
-              <span class="load-spinner"></span>
-              {{ t.t('gotcha.feed.loadingMore') }}
-            } @else {
-              {{ t.t('gotcha.feed.loadMore') }}
-            }
+            @if (loadingMore()) { <span class="load-spinner"></span> {{ t.t('gotcha.feed.loadingMore') }} }
+            @else { {{ t.t('gotcha.feed.loadMore') }} }
           </button>
         }
       </div>
     }
-
   }
 
-  <!-- ── REVIEW TAB ── -->
+  <!-- ════════════════════════════════════
+       REVIEW TAB — FIFO stack
+  ════════════════════════════════════ -->
   @if (activeTab() === 'review') {
 
-    <div class="feed-toolbar">
-      <button class="btn-refresh" (click)="loadReviewFeed()" [disabled]="reviewLoading()">
-        <ng-icon hlm name="lucideRefreshCw" size="sm" [class.spinning]="reviewLoading()" />
-      </button>
-    </div>
-
+    <!-- Loading skeleton -->
     @if (reviewLoading()) {
-      <div class="feed-list">
-        @for (_ of [1,2]; track $index) {
-          <div class="feed-card feed-card--skeleton">
-            <div class="sk-header">
-              <div class="sk-avatar"></div>
-              <div class="sk-lines">
-                <div class="sk-line sk-line--short"></div>
-                <div class="sk-line sk-line--tiny"></div>
-              </div>
+      <div class="review-stack-wrap">
+        <div class="stack-ghost stack-ghost--2"></div>
+        <div class="stack-ghost stack-ghost--1"></div>
+        <div class="feed-card feed-card--skeleton">
+          <div class="sk-header">
+            <div class="sk-avatar"></div>
+            <div class="sk-lines">
+              <div class="sk-line sk-line--short"></div>
+              <div class="sk-line sk-line--tiny"></div>
             </div>
-            <div class="sk-photo"></div>
           </div>
-        }
+          <div class="sk-photo"></div>
+        </div>
       </div>
     }
 
-    @if (reviewItems().length === 0 && !reviewLoading()) {
+    <!-- Queue empty -->
+    @if (reviewDone()) {
       <div class="feed-empty">
         <ng-icon hlm name="lucideCheckCircle" size="48" />
         <p>{{ t.t('gotcha.review.empty') }}</p>
       </div>
     }
 
-    @if (!reviewLoading()) {
-      <div class="feed-list">
-        @for (item of reviewItems(); track item.id) {
-          <div class="feed-card status-pending">
+    <!-- Stack card -->
+    @if (currentReviewItem() && !reviewLoading()) {
+      <div class="review-stack-wrap">
 
-            <div class="card-header">
-              <div class="profile-row">
-                <div class="avatar">
-                  @if (item.hunter.profilePicture) {
-                    <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
-                  } @else {
-                    <span class="avatar-initials">{{ initials(item.hunter) }}</span>
-                  }
-                </div>
-                <div class="profile-info">
-                  <span class="profile-name">{{ fullName(item.hunter) }}</span>
-                  <span class="post-time">{{ formatTime(item.createdAt) }}</span>
-                </div>
+        @if (stackDepth >= 2) { <div class="stack-ghost stack-ghost--2"></div> }
+        @if (stackDepth >= 1) { <div class="stack-ghost stack-ghost--1"></div> }
+
+        <div class="feed-card status-pending review-card" [class.reviewing]="isReviewingKill()">
+
+          <div class="card-header">
+            <div class="profile-row">
+              <div class="avatar">
+                @if (currentReviewItem()!.hunter.profilePicture) {
+                  <img [src]="currentReviewItem()!.hunter.profilePicture" [alt]="fullName(currentReviewItem()!.hunter)" />
+                } @else {
+                  <span class="avatar-initials">{{ initials(currentReviewItem()!.hunter) }}</span>
+                }
               </div>
-              <span class="status-badge status-pending">
-                <ng-icon hlm name="lucideClock" size="xs" />
-                {{ t.t('gotcha.feed.statusPending') }}
-              </span>
-            </div>
-
-            <div class="kill-caption">
-              <span class="kill-text">
-                <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
-                {{ t.t('gotcha.feed.killedCaption') }}
-                <strong>{{ fullName(item.victim) }}</strong>
-              </span>
-              @if (item.prop) {
-                <span class="prop-badge">
-                  <ng-icon hlm name="lucidePackage" size="xs" />
-                  {{ item.prop.name }}
-                </span>
-              }
-            </div>
-
-            <div class="card-photo-wrap">
-              <img class="card-photo" [src]="item.photoUrl" [alt]="t.t('gotcha.feed.photoAlt')" loading="lazy" />
-              <div class="victim-overlay">
-                <div class="victim-avatar">
-                  @if (item.victim.profilePicture) {
-                    <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" />
-                  } @else {
-                    <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span>
-                  }
-                </div>
-                <span class="victim-name">{{ fullName(item.victim) }}</span>
+              <div class="profile-info">
+                <span class="profile-name">{{ fullName(currentReviewItem()!.hunter) }}</span>
+                <span class="post-time">{{ formatTime(currentReviewItem()!.createdAt) }}</span>
               </div>
             </div>
-
-            <div class="card-footer review-actions">
-              <button
-                class="btn-approve"
-                [disabled]="isReviewing(item.id)"
-                (click)="reviewKill(item, true)"
-              >
-                @if (isReviewing(item.id)) { <span class="like-spinner"></span> }
-                <ng-icon hlm name="lucideCheck" size="sm" />
-                {{ t.t('gotcha.review.approve') }}
-              </button>
-              <button
-                class="btn-deny"
-                [disabled]="isReviewing(item.id)"
-                (click)="reviewKill(item, false)"
-              >
-                @if (isReviewing(item.id)) { <span class="like-spinner"></span> }
-                <ng-icon hlm name="lucideX" size="sm" />
-                {{ t.t('gotcha.review.deny') }}
-              </button>
-            </div>
-
+            <span class="status-badge status-pending">
+              <ng-icon hlm name="lucideClock" size="xs" />
+              {{ t.t('gotcha.feed.statusPending') }}
+            </span>
           </div>
-        }
+
+          <div class="kill-caption">
+            <span class="kill-text">
+              <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
+              {{ t.t('gotcha.feed.killedCaption') }}
+              <strong>{{ fullName(currentReviewItem()!.victim) }}</strong>
+            </span>
+            @if (currentReviewItem()!.prop) {
+              <span class="prop-badge">
+                <ng-icon hlm name="lucidePackage" size="xs" />{{ currentReviewItem()!.prop!.name }}
+              </span>
+            }
+          </div>
+
+          <div class="card-photo-wrap">
+            <img class="card-photo" [src]="currentReviewItem()!.photoUrl" [alt]="t.t('gotcha.feed.photoAlt')" loading="lazy" />
+            <div class="victim-overlay">
+              <div class="victim-avatar">
+                @if (currentReviewItem()!.victim.profilePicture) {
+                  <img [src]="currentReviewItem()!.victim.profilePicture" [alt]="fullName(currentReviewItem()!.victim)" />
+                } @else {
+                  <span class="avatar-initials avatar-initials--sm">{{ initials(currentReviewItem()!.victim) }}</span>
+                }
+              </div>
+              <span class="victim-name">{{ fullName(currentReviewItem()!.victim) }}</span>
+            </div>
+          </div>
+
+          <div class="card-footer review-actions">
+            <button class="btn-deny" [disabled]="isReviewingKill()" (click)="reviewKill(false)">
+              @if (isReviewingKill()) { <span class="like-spinner"></span> }
+              <ng-icon hlm name="lucideX" size="sm" />
+              {{ t.t('gotcha.review.deny') }}
+            </button>
+            <button class="btn-approve" [disabled]="isReviewingKill()" (click)="reviewKill(true)">
+              @if (isReviewingKill()) { <span class="like-spinner"></span> }
+              <ng-icon hlm name="lucideCheck" size="sm" />
+              {{ t.t('gotcha.review.approve') }}
+            </button>
+          </div>
+
+        </div>
       </div>
     }
-
   }
 
 </div>

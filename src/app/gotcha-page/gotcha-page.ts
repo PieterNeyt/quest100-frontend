@@ -1,261 +1,183 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  computed,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, inject, OnDestroy, OnInit, signal,} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService } from '../services/gotchaService';
-import { KillFeedItem, TargetInfo } from '../model/gotcha';
-import { TranslationService } from '../services/translationService';
-import { ToastService } from '../services/toastService';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {GotchaService} from '../services/gotchaService';
+import {TargetInfo} from '../model/gotcha';
+import {TranslationService} from '../services/translationService';
+import {ToastService} from '../services/toastService';
+import {GotchaKillFeedComponent} from '../gotcha-kill-feed/gotcha-kill-feed';
 
 @Component({
   selector: 'app-gotcha-page',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, HlmIconImports],
+  imports: [CommonModule, NgIconComponent, HlmIconImports, GotchaKillFeedComponent],
   providers: [provideIcons(lucideIcons)],
   templateUrl: './gotcha-page.html',
   styleUrl: './gotcha-page.css',
 })
-export class GotchaPageComponent implements OnInit {
+export class GotchaPageComponent implements OnInit, OnDestroy {
   private readonly gotchaService = inject(GotchaService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
   readonly t = inject(TranslationService);
-
-  // ── tabs ──────────────────────────────────────
-  activeTab = signal<'feed' | 'review'>('feed');
-
-  // ── feed ──────────────────────────────────────
-  items = signal<KillFeedItem[]>([]);
-  loading = signal(true);
-  loadingMore = signal(false);
-  hasMore = signal(true);
-  likingIds = signal<Set<string>>(new Set());
-
-  private offset = 0;
-  private readonly limit = 10;
-
-  isEmpty = computed(() => !this.loading() && this.items().length === 0);
-
-  // ── review ────────────────────────────────────
-  reviewItems = signal<KillFeedItem[]>([]);
-  reviewLoading = signal(false);
-  reviewingIds = signal<Set<string>>(new Set());
-  pendingCount = computed(() => this.reviewItems().length);
 
   // ── submit kill modal ─────────────────────────
   showSubmitModal = signal(false);
   photoUrl = signal('');
   submitting = signal(false);
 
-  // ── game & player state ───────────────────────
-  myStatus = this.gotchaService.myStatus;
-  currentGame = this.gotchaService.currentGame;
-  targetInfo = this.gotchaService.targetInfo;
+  // ── edit game modal ───────────────────────────
+  showEditModal = signal(false);
+  editStartDate = signal('');
+  editKillDeadline = signal(72);
+  editPrizePhotoBase64 = signal('');
+  editPrizePhotoPreview = signal('');
+  editPrizeDescEN = signal('');
+  editPrizeDescNL = signal('');
+  editSaving = signal(false);
 
-  isActive = computed(() => this.currentGame()?.status === 'ACTIVE');
-  isAlive = computed(() => this.myStatus()?.isAlive ?? false);
-  hasTarget = computed(() => !!this.myStatus()?.targetId);
+  // ── game & player state ───────────────────────
+  myStatus    = this.gotchaService.myStatus;
+  currentGame = this.gotchaService.currentGame;
+  targetInfo  = this.gotchaService.targetInfo;
+
+  isActive      = computed(() => this.currentGame()?.status === 'ACTIVE');
+  isFinished    = computed(() => this.currentGame()?.status === 'FINISHED');
+  isOptIn       = computed(() => this.currentGame()?.status === 'OPT_IN');
+  isAlive       = computed(() => this.myStatus()?.isAlive ?? false);
+  hasTarget     = computed(() => !!this.myStatus()?.targetId);
   canSubmitKill = computed(() => this.isActive() && this.isAlive() && this.hasTarget());
   isParticipant = computed(() => !!this.myStatus());
+
+  // ── countdown ─────────────────────────────────
+  countdown = signal<{ h: number; m: number; s: number } | null>(null);
+  private countdownInterval?: ReturnType<typeof setInterval>;
 
   ngOnInit() {
     this.gotchaService.getCurrentGame().subscribe();
     this.gotchaService.getMyStatus().subscribe({
       next: () => {
-        // Only load target info once we know we're a participant in an active game
         if (this.isActive()) {
-          this.gotchaService.getTargetInfo().subscribe();
+          this.gotchaService.getTargetInfo().subscribe({
+            next: () => this.startCountdown(),
+          });
         }
       },
-      error: () => { /* not a participant, ignore */ },
-    });
-    this.loadFeed();
-    this.loadReviewFeed();
-  }
-
-  goBack() {
-    this.router.navigate(['/event']);
-  }
-
-  // ── feed ──────────────────────────────────────
-  loadFeed() {
-    this.loading.set(true);
-    this.offset = 0;
-    this.gotchaService.getFeed(this.limit, 0).subscribe({
-      next: (items) => {
-        this.items.set(items);
-        this.hasMore.set(items.length === this.limit);
-        this.offset = items.length;
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-        this.toastService.error('gotcha.feed.loadError');
-      },
+      error: () => { /* not a participant */ },
     });
   }
 
-  loadMore() {
-    if (this.loadingMore() || !this.hasMore()) return;
-    this.loadingMore.set(true);
-    this.gotchaService.getFeed(this.limit, this.offset).subscribe({
-      next: (newItems) => {
-        this.items.update((prev) => [...prev, ...newItems]);
-        this.hasMore.set(newItems.length === this.limit);
-        this.offset += newItems.length;
-        this.loadingMore.set(false);
-      },
-      error: () => {
-        this.loadingMore.set(false);
-        this.toastService.error('gotcha.feed.loadError');
-      },
+  ngOnDestroy() { this.stopCountdown(); }
+
+  goBack()        { this.router.navigate(['/event']); }
+  goToEndScreen() { this.router.navigate(['/gotcha/end']); }
+
+  // ── countdown ─────────────────────────────────
+  private startCountdown() {
+    this.stopCountdown();
+    this.updateCountdown();
+    this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
+  }
+
+  private stopCountdown() {
+    if (this.countdownInterval) { clearInterval(this.countdownInterval); this.countdownInterval = undefined; }
+  }
+
+  private updateCountdown() {
+    const deadline = this.targetInfo()?.killDeadline;
+    if (!deadline) { this.countdown.set(null); return; }
+    const diffMs = new Date(deadline).getTime() - Date.now();
+    if (diffMs <= 0) { this.countdown.set({ h: 0, m: 0, s: 0 }); return; }
+    const totalSecs = Math.floor(diffMs / 1000);
+    this.countdown.set({
+      h: Math.floor(totalSecs / 3600),
+      m: Math.floor((totalSecs % 3600) / 60),
+      s: totalSecs % 60,
     });
   }
 
-  toggleLike(item: KillFeedItem) {
-    if (this.likingIds().has(item.id)) return;
-    this.likingIds.update((s) => new Set([...s, item.id]));
-    const wasLiked = item.likedByMe;
-
-    this.items.update((list) =>
-      list.map((i) =>
-        i.id === item.id
-          ? { ...i, likedByMe: !wasLiked, likeCount: wasLiked ? i.likeCount - 1 : i.likeCount + 1 }
-          : i
-      )
-    );
-
-    const req$ = wasLiked
-      ? this.gotchaService.unlikeKill(item.id)
-      : this.gotchaService.likeKill(item.id);
-
-    req$.subscribe({
-      next: () => {
-        this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-      },
-      error: () => {
-        this.items.update((list) =>
-          list.map((i) =>
-            i.id === item.id
-              ? { ...i, likedByMe: wasLiked, likeCount: wasLiked ? i.likeCount + 1 : i.likeCount - 1 }
-              : i
-          )
-        );
-        this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-        this.toastService.error('gotcha.feed.likeError');
-      },
-    });
+  get countdownUrgent(): boolean {
+    const cd = this.countdown(); return !!cd && cd.h === 0 && cd.m < 60;
   }
-
-  isLiking(id: string): boolean { return this.likingIds().has(id); }
-
-  // ── review ────────────────────────────────────
-  loadReviewFeed() {
-    this.reviewLoading.set(true);
-    this.gotchaService.getPendingKills().subscribe({
-      next: (items) => {
-        this.reviewItems.set(items);
-        this.reviewLoading.set(false);
-      },
-      error: () => {
-        this.reviewLoading.set(false);
-        this.toastService.error('gotcha.review.loadError');
-      },
-    });
+  get countdownCritical(): boolean {
+    const cd = this.countdown(); return !!cd && cd.h === 0 && cd.m < 10;
   }
-
-  reviewKill(item: KillFeedItem, approve: boolean) {
-    if (this.reviewingIds().has(item.id)) return;
-    this.reviewingIds.update((s) => new Set([...s, item.id]));
-
-    this.gotchaService.reviewKill(item.id, approve).subscribe({
-      next: () => {
-        this.reviewItems.update((list) => list.filter((i) => i.id !== item.id));
-        this.reviewingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-
-        const newStatus = approve ? 'APPROVED' as const : 'DENIED' as const;
-        this.items.update((list) =>
-          list.map((i) => i.id === item.id ? { ...i, status: newStatus } : i)
-        );
-
-        this.toastService.success(approve ? 'gotcha.review.approved' : 'gotcha.review.denied');
-      },
-      error: () => {
-        this.reviewingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-        this.toastService.error('gotcha.review.error');
-      },
-    });
-  }
-
-  isReviewing(id: string): boolean { return this.reviewingIds().has(id); }
+  padTwo(n: number): string { return n.toString().padStart(2, '0'); }
 
   // ── submit kill modal ─────────────────────────
-  openSubmitModal() {
-    this.photoUrl.set('');
-    this.showSubmitModal.set(true);
-  }
-
-  closeSubmitModal() {
-    this.showSubmitModal.set(false);
-  }
+  openSubmitModal()  { this.photoUrl.set(''); this.showSubmitModal.set(true); }
+  closeSubmitModal() { this.showSubmitModal.set(false); }
 
   submitKill() {
-    if (!this.photoUrl().trim()) {
-      this.toastService.error('gotcha.submitKill.noPhoto');
-      return;
-    }
+    if (!this.photoUrl().trim()) { this.toastService.error('gotcha.submitKill.noPhoto'); return; }
     this.submitting.set(true);
     this.gotchaService.submitKill(this.photoUrl().trim()).subscribe({
       next: () => {
         this.submitting.set(false);
         this.closeSubmitModal();
         this.toastService.success('gotcha.submitKill.success');
-        this.loadFeed();
       },
       error: (err) => {
         this.submitting.set(false);
-        const msg = err?.error?.error ?? 'gotcha.submitKill.error';
-        this.toastService.error(msg);
+        this.toastService.error(err?.error?.error ?? 'gotcha.submitKill.error');
       },
     });
   }
 
+  // ── edit game modal (single source of truth for all game settings) ────────
+  openEditModal() {
+    const game = this.currentGame();
+
+    // Default to current date/time if no start date is set yet
+    const defaultDate = game?.startDate
+      ? new Date(game.startDate)
+      : new Date(); // ← NOW as default
+
+    this.editStartDate.set(this.toDatetimeLocal(defaultDate));
+    this.editKillDeadline.set(game?.killDeadlineHours ?? 72);
+    this.editPrizePhotoBase64.set(game?.prizePhotoBase64 ?? '');
+    this.editPrizePhotoPreview.set(
+      game?.prizePhotoBase64 ? `data:image/jpeg;base64,${game.prizePhotoBase64}` : ''
+    );
+    this.editPrizeDescEN.set(game?.prizeDescriptionEN ?? '');
+    this.editPrizeDescNL.set(game?.prizeDescriptionNL ?? '');
+    this.showEditModal.set(true);
+  }
+  closeEditModal() { this.showEditModal.set(false); }
+
+  onPrizeFileChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      this.editPrizePhotoBase64.set(result.split(',')[1]);
+      this.editPrizePhotoPreview.set(result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  clearPrizePhoto() { this.editPrizePhotoBase64.set(''); this.editPrizePhotoPreview.set(''); }
+
+  saveEditModal() {
+    if (!this.editStartDate()) { this.toastService.error('gotcha.editModal.startDateRequired'); return; }
+    this.editSaving.set(true);
+    this.gotchaService.updateStartDate({
+      startDate: new Date(this.editStartDate()).toISOString(),
+      killDeadlineHours: this.editKillDeadline(),
+      prizePhotoBase64: this.editPrizePhotoBase64(),
+      prizeDescriptionEN: this.editPrizeDescEN(),
+      prizeDescriptionNL: this.editPrizeDescNL(),
+    }).subscribe({
+      next: () => { this.editSaving.set(false); this.closeEditModal(); this.toastService.success('success.saved'); },
+      error: () => { this.editSaving.set(false); this.toastService.error('errors.generic'); },
+    });
+  }
+
   // ── helpers ───────────────────────────────────
-  formatTime(dateStr: string): string {
-    const locale = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
-    const date = new Date(dateStr);
-    const diffMs = Date.now() - date.getTime();
-    const diffMin = Math.floor(diffMs / 60000);
-    const diffHour = Math.floor(diffMin / 60);
-    const diffDay = Math.floor(diffHour / 24);
-
-    if (diffMin < 1) return this.t.t('gotcha.feed.justNow');
-    if (diffMin < 60) return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
-    if (diffHour < 24) return `${diffHour}${this.t.t('gotcha.feed.hoursAgo')}`;
-    if (diffDay < 7) return `${diffDay}${this.t.t('gotcha.feed.daysAgo')}`;
-    return date.toLocaleDateString(locale, { day: '2-digit', month: 'short' });
-  }
-
-  fullName(profile: { firstName: string; lastName: string }): string {
-    return `${profile.firstName} ${profile.lastName}`.trim();
-  }
-
-  initials(profile: { firstName: string; lastName: string }): string {
-    return `${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`.toUpperCase();
-  }
-
-  statusClass(status: string): string {
-    return ({ PENDING: 'status-pending', APPROVED: 'status-approved', DENIED: 'status-denied' }[status] ?? '');
-  }
-
   targetInitials(info: TargetInfo): string {
     if (!info.target) return '?';
     return `${info.target.firstName?.[0] ?? ''}${info.target.lastName?.[0] ?? ''}`.toUpperCase();
@@ -264,5 +186,10 @@ export class GotchaPageComponent implements OnInit {
   targetFullName(info: TargetInfo): string {
     if (!info.target) return '';
     return `${info.target.firstName} ${info.target.lastName}`.trim();
+  }
+
+  private toDatetimeLocal(d: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 }

@@ -173,7 +173,6 @@
     "joinGame": "Join game",
     "joiningGame": "Joining...",
     "editStartDate": "Edit start date",
-
     "page": {
       "back": "Back"
     },
@@ -190,7 +189,8 @@
       "label": "Your target",
       "propLabel": "Your prop",
       "none": "No target assigned yet",
-      "eliminated": "You are eliminated"
+      "eliminated": "You are eliminated",
+      "timeLeft": "Time to kill"
     },
     "feed": {
       "title": "Kill Feed",
@@ -237,8 +237,39 @@
       "startDate": "Start date & time",
       "killDeadline": "Kill deadline (hours)",
       "killDeadlineHint": "How many hours a player has to eliminate their target before the chain moves on.",
+      "prizePhoto": "Prize photo",
+      "prizeDescEN": "Prize description (English)",
+      "prizeDescNL": "Prize description (Dutch)",
       "cancel": "Cancel",
-      "save": "Save changes"
+      "save": "Save changes",
+      "prizePhotoHint": "Click or drag to upload a photo",
+      "prizeDescPlaceholder": "Describe the prize...",
+      "saving": "Saving...",
+      "startDateRequired": "Please set a start date."
+    },
+    "endScreen": {
+      "loading": "Loading tournament results...",
+      "title": "Game Over!",
+      "kills": "kills",
+      "prize": "Prize",
+      "stats": "Tournament Statistics",
+      "statParticipants": "Participants",
+      "statKills": "Total kills",
+      "statFastest": "Fastest kill",
+      "statMostKills": "Most kills",
+      "graph": "Tournament Map",
+      "graphHint": "Drag nodes · Scroll to zoom · Click an arrow for kill details",
+      "legendWinner": "Winner",
+      "legendKillCount": "Kill count",
+      "legendClickEdge": "Click arrow for kill details",
+      "killList": "Kill history",
+      "killDetail": "Kill details",
+      "hunter": "Hunter",
+      "victim": "Victim",
+      "loadError": "Failed to load results.",
+      "gameOver": "Game Over!",
+      "gameOverSub": "The tournament has ended. See who won!",
+      "viewResults": "View results"
     }
   }
 }

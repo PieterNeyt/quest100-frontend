@@ -1,0 +1,164 @@
+<div class="end-wrap">
+
+  <!-- ══ WINNER HERO ══ -->
+  <div class="end-hero">
+    <div class="confetti-bg">
+      @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
+        <span class="confetti-piece" [style.--i]="i"></span>
+      }
+    </div>
+
+    <div class="trophy-icon">🏆</div>
+    <h2 class="end-title">{{ t.t('gotcha.endScreen.title') }}</h2>
+
+    @if (data.winner) {
+      <div class="winner-card">
+        <div class="winner-avatar">
+          @if (data.winner.profilePicture) {
+            <img [src]="data.winner.profilePicture" [alt]="winnerName" />
+          } @else {
+            <span class="winner-initials">{{ winnerInitials }}</span>
+          }
+          <span class="winner-crown">👑</span>
+        </div>
+        <div class="winner-info">
+          <span class="winner-name">{{ winnerName }}</span>
+          <span class="winner-kills">
+            <ng-icon hlm name="lucideSwords" size="xs" />
+            {{ data.winnerKillCount }} {{ t.t('gotcha.endScreen.kills') }}
+          </span>
+        </div>
+      </div>
+    }
+
+    <!-- 🎁 PRIZE SECTION (Nu terug!) -->
+    @if (data.prizePhotoBase64 || prizeDescription) {
+      <div class="prize-card">
+        <div class="prize-header">
+          <ng-icon hlm name="lucideGift" size="sm" />
+          <span>Gewonnen Prijs</span>
+        </div>
+        <div class="prize-body">
+          @if (data.prizePhotoBase64) {
+            <!-- Check of de base64 al de header heeft, anders toevoegen -->
+            <img class="prize-photo"
+                 [src]="data.prizePhotoBase64.startsWith('data') ? data.prizePhotoBase64 : 'data:image/jpeg;base64,' + data.prizePhotoBase64"
+                 alt="prize" />
+          }
+          @if (prizeDescription) {
+            <p class="prize-desc">{{ prizeDescription }}</p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ══ STATS ══ -->
+  <div class="stats-section">
+    <h3 class="section-title">
+      <ng-icon hlm name="lucideBarChart2" size="sm" />
+      {{ t.t('gotcha.endScreen.stats') }}
+    </h3>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-value">{{ mortalityRate }}%</span>
+        <span class="stat-label">Sterftecijfer</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ data.stats.totalParticipants }}</span>
+        <span class="stat-label">Deelnemers</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ mostUsedProp }}</span>
+        <span class="stat-label">Meest dodelijke wapen</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ data.stats.mostKillsCount }}</span>
+        <span class="stat-label">Record ({{ data.stats.mostKillsName.split(' ')[0] }})</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ KILL GRAPH ══ -->
+  @if (data.kills.length > 0) {
+    <div class="graph-section">
+      <h3 class="section-title">
+        <ng-icon hlm name="lucideNetwork" size="sm" />
+        {{ t.t('gotcha.endScreen.graph') }}
+      </h3>
+      <p class="graph-hint">Scroll om te zoomen. Klik op een speler voor hun kills, klik op een lijn voor de foto.</p>
+
+      <div class="graph-wrap">
+        <svg #graphCanvas class="graph-svg"></svg>
+      </div>
+
+      <!-- Persoonlijke kill lijst (Verschijnt bij klik op node) -->
+      @if (selectedPersonName()) {
+        <div class="personal-kills-box">
+          <div class="pk-header">
+            <span>Kills van <strong>{{ selectedPersonName() }}</strong></span>
+            <button class="btn-close-pk" (click)="selectedPersonName.set('')">
+              <ng-icon hlm name="lucideX" size="xs" />
+            </button>
+          </div>
+          <div class="pk-list">
+            @if (selectedPersonKills().length === 0) {
+              <p class="no-kills-text">Geen slachtoffers gemaakt... 🛡️</p>
+            } @else {
+              @for (k of selectedPersonKills(); track k.killId) {
+                <div class="pk-item" (click)="openKillDetail(k)">
+                  <span class="pk-victim">⚔️ {{ fullName(k.victim) }}</span>
+                  <span class="pk-prop" *ngIf="k.prop">
+                    <ng-icon hlm name="lucidePackage" size="xs" /> {{ k.prop.name }}
+                  </span>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ══ CHRONOLOGISCHE FEED ══ -->
+  <div class="kill-list-section">
+    <h3 class="section-title">
+      <ng-icon hlm name="lucideList" size="sm" />
+      {{ t.t('gotcha.endScreen.killList') }}
+    </h3>
+    <div class="kill-timeline">
+      @for (kill of data.kills; track kill.killId) {
+        <div class="kill-row" (click)="openKillDetail(kill)">
+          <div class="kill-row-info">
+            <span class="kill-row-names">
+              <strong>{{ fullName(kill.hunter) }}</strong>
+              &rarr;
+              {{ fullName(kill.victim) }}
+            </span>
+          </div>
+          <span class="kill-row-time">{{ formatDate(kill.createdAt) }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+</div>
+
+<!-- Kill detail modal (Popup met foto) -->
+@if (showKillDetail() && selectedKill(); as kill) {
+  <div class="modal-overlay" (click)="showKillDetail.set(false)">
+    <div class="kill-detail-modal" (click)="$event.stopPropagation()">
+      <div class="kill-detail-header">
+        <h3>Bewijsmateriaal</h3>
+        <button (click)="showKillDetail.set(false)">✖</button>
+      </div>
+      <div class="kill-detail-body">
+        <img class="kill-detail-photo" [src]="kill.photoUrl" alt="kill photo" />
+        <div class="kill-detail-info">
+          <p><strong>{{ fullName(kill.hunter) }}</strong> elimineerde <strong>{{ fullName(kill.victim) }}</strong></p>
+          <p class="kill-detail-prop" *ngIf="kill.prop">Object: {{ kill.prop.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,4 +1,6 @@
-/* Extend gotcha-page.css with these additions */
+:host { display: block; width: 100%; }
+
+.kill-feed-wrap { width: 100%; }
 
 /* ── Tabs ────────────────────────────────────── */
 .tabs {
@@ -26,7 +28,7 @@
   transition: color .15s, border-color .15s;
 }
 .tab:hover { color: #1f2937; }
-.tab--active { color: #1f2937; border-bottom-color: #1cb0f6; }
+.tab--active { color: #1f2937; border-bottom-color: #e5383b; }
 
 .tab-badge {
   display: inline-flex;
@@ -40,54 +42,314 @@
   border-radius: 20px;
   font-size: 0.65rem;
   font-weight: 800;
+  margin-left: 6px;
+  line-height: 1;
 }
 
 /* ── Feed toolbar ────────────────────────────── */
 .feed-toolbar {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
 }
+
+.btn-refresh {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-refresh:hover:not(:disabled) { border-color: #1cb0f6; color: #1cb0f6; }
+.btn-refresh:disabled { opacity: .5; cursor: not-allowed; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinning { animation: spin .7s linear infinite; }
+
+/* ── Queue label ─────────────────────────────── */
+.queue-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.02em;
+}
+
+/* ── Feed list ───────────────────────────────── */
+.feed-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.feed-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* ── Feed card ───────────────────────────────── */
+/*
+ * IMPORTANT: no overflow:hidden on .feed-card
+ * The review stack ghost cards need to be visible below the main card.
+ * Photo clipping is handled by .card-photo-wrap instead.
+ */
+.feed-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-bottom: 4px solid #d1d5db;
+  border-radius: 16px;
+  transition: transform .15s, box-shadow .15s;
+}
+.feed-card:not(.review-card):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.07);
+}
+
+.feed-card.status-approved { border-color: #86efac; border-bottom-color: #4ade80; }
+.feed-card.status-pending  { border-color: #fde68a; border-bottom-color: #fbbf24; }
+.feed-card.status-denied   { border-color: #fca5a5; border-bottom-color: #f87171; }
+
+/* ── Card header ─────────────────────────────── */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem 0.65rem;
+  gap: 0.5rem;
+}
+.profile-row { display: flex; align-items: center; gap: 0.6rem; }
+
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1cb0f6, #0a98d6);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar-initials { font-size: .75rem; font-weight: 800; color: white; letter-spacing: .5px; }
+.avatar-initials--sm { font-size: .6rem; }
+
+.profile-info { display: flex; flex-direction: column; gap: .1rem; }
+.profile-name { font-size: .88rem; font-weight: 700; color: #1f2937; }
+.post-time { font-size: .72rem; color: #9ca3af; }
+
+.status-badge {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .22rem .6rem; border-radius: 20px;
+  font-size: .65rem; font-weight: 800; letter-spacing: .5px;
+  text-transform: uppercase; white-space: nowrap;
+}
+.status-badge.status-approved { background: #dcfce7; color: #15803d; }
+.status-badge.status-pending  { background: #fef9c3; color: #a16207; }
+.status-badge.status-denied   { background: #fee2e2; color: #b91c1c; }
+
+/* ── Kill caption ────────────────────────────── */
+.kill-caption {
+  display: flex; align-items: center; gap: .6rem;
+  padding: 0 1rem .65rem; flex-wrap: wrap;
+}
+.kill-text {
+  font-size: .85rem; color: #374151;
+  display: flex; align-items: center; gap: .3rem;
+}
+.kill-text strong { color: #1f2937; }
+.kill-icon { color: #e5383b; flex-shrink: 0; }
+.prop-badge {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .2rem .55rem; background: #f3f4f6;
+  border: 1px solid #e5e7eb; border-radius: 20px;
+  font-size: .7rem; font-weight: 600; color: #4b5563;
+}
+
+/* ── Photo wrap — clips photo without clipping ghost cards ── */
+.card-photo-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;     /* ← only this element clips, not the card itself */
+  background: #f3f4f6;
+}
+
+.card-photo {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .3s;
+}
+.feed-card:hover .card-photo { transform: scale(1.02); }
+
+.victim-overlay {
+  position: absolute; bottom: .65rem; left: .65rem;
+  display: flex; align-items: center; gap: .4rem;
+  background: rgba(0,0,0,.55); backdrop-filter: blur(6px);
+  border-radius: 10px; padding: .3rem .65rem .3rem .35rem;
+}
+.victim-overlay .victim-avatar {
+  width: 26px; height: 26px; border-radius: 50%; overflow: hidden;
+  background: linear-gradient(135deg, #e5383b, #c1121f);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.victim-overlay .victim-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.victim-name { font-size: .75rem; font-weight: 700; color: white; }
+
+/* ── Card footer ─────────────────────────────── */
+.card-footer {
+  display: flex;
+  align-items: center;
+  padding: .7rem 1rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* ── Like button ─────────────────────────────── */
+.like-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .4rem .85rem; background: transparent;
+  border: 2px solid #e5e7eb; border-radius: 10px;
+  color: #6b7280; font-size: .82rem; font-weight: 600;
+  cursor: pointer; transition: all .15s; font-family: inherit;
+}
+.like-btn:hover:not(:disabled) { border-color: #fca5a5; color: #e5383b; }
+.like-btn.liked { background: #fff1f2; border-color: #fca5a5; color: #e5383b; }
+.like-btn:disabled { opacity: .6; cursor: not-allowed; }
+.heart-filled { color: #e5383b; }
+.like-count { font-variant-numeric: tabular-nums; }
+.like-spinner {
+  display: inline-block; width: 13px; height: 13px;
+  border: 2px solid rgba(229,56,59,.25); border-top-color: #e5383b;
+  border-radius: 50%; animation: spin .6s linear infinite;
+}
+
+/* ── Load more ───────────────────────────────── */
+.btn-load-more {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  width: 100%; padding: .75rem; background: white;
+  border: 2px solid #e5e7eb; border-radius: 12px;
+  color: #6b7280; font-size: .88rem; font-weight: 600;
+  cursor: pointer; transition: all .15s; font-family: inherit;
+}
+.btn-load-more:hover:not(:disabled) { border-color: #1cb0f6; color: #1cb0f6; }
+.btn-load-more:disabled { opacity: .6; cursor: not-allowed; }
+.load-spinner {
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid #e5e7eb; border-top-color: #1cb0f6;
+  border-radius: 50%; animation: spin .6s linear infinite;
+}
+
+/* ── Skeleton ────────────────────────────────── */
+.feed-card--skeleton { pointer-events: none; }
+.sk-header { display: flex; align-items: center; gap: .6rem; padding: .85rem 1rem .65rem; }
+.sk-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #e5e7eb; flex-shrink: 0;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.sk-lines { flex: 1; display: flex; flex-direction: column; gap: .4rem; }
+.sk-line {
+  height: 12px; background: #e5e7eb; border-radius: 6px;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.sk-line--short { width: 40%; }
+.sk-line--tiny  { width: 25%; height: 9px; }
+.sk-photo {
+  width: 100%; aspect-ratio: 4/3;
+  background: #e5e7eb; animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer { 0%,100% { opacity: .6 } 50% { opacity: 1 } }
 
 /* ── Review actions ──────────────────────────── */
 .review-actions {
+  display: flex;
   gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #f3f4f6;
 }
 
 .btn-approve {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1.1rem;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  flex: 1; justify-content: center;
+  padding: 0.6rem 1rem;
   background: #dcfce7;
-  border: 2px solid #86efac;
-  border-bottom: 3px solid #4ade80;
-  border-radius: 10px;
-  color: #15803d;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-  transition: filter .15s;
+  border: 2px solid #86efac; border-bottom: 3px solid #4ade80;
+  border-radius: 10px; color: #15803d;
+  font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: filter .15s, transform .1s;
 }
-.btn-approve:hover:not(:disabled) { filter: brightness(.95); }
+.btn-approve:hover:not(:disabled) { filter: brightness(0.95); transform: translateY(-1px); }
+.btn-approve:active { transform: translateY(1px); border-bottom-width: 2px; }
 .btn-approve:disabled { opacity: .6; cursor: not-allowed; }
 
 .btn-deny {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1.1rem;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  flex: 1; justify-content: center;
+  padding: 0.6rem 1rem;
   background: #fee2e2;
-  border: 2px solid #fca5a5;
-  border-bottom: 3px solid #f87171;
-  border-radius: 10px;
-  color: #b91c1c;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-  transition: filter .15s;
+  border: 2px solid #fca5a5; border-bottom: 3px solid #f87171;
+  border-radius: 10px; color: #b91c1c;
+  font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: filter .15s, transform .1s;
 }
-.btn-deny:hover:not(:disabled) { filter: brightness(.95); }
+.btn-deny:hover:not(:disabled) { filter: brightness(0.95); transform: translateY(-1px); }
+.btn-deny:active { transform: translateY(1px); border-bottom-width: 2px; }
 .btn-deny:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ── Review stack ────────────────────────────── */
+/*
+ * padding-bottom gives the ghost cards room to peek out below the main card.
+ * overflow must stay at default (visible) — do NOT add overflow:hidden here.
+ */
+.review-stack-wrap {
+  position: relative;
+  padding-bottom: 20px;
+  margin-top: 4px;
+}
+
+.stack-ghost {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 16px;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-bottom: 4px solid #d1d5db;
+}
+
+.stack-ghost--1 {
+  top: 10px;
+  bottom: 4px;
+  transform: scaleX(0.95);
+  transform-origin: center bottom;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.stack-ghost--2 {
+  top: 20px;
+  bottom: 0;
+  transform: scaleX(0.88);
+  transform-origin: center bottom;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.review-card {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.review-card.reviewing {
+  opacity: 0.55;
+  pointer-events: none;
+  transform: scale(0.985);
+}
