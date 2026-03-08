@@ -21,4 +21,10 @@ export const routes: Routes = [
   { path: 'userlist', component: Userlist, canActivate: [MsalGuard] },
   { path: 'gotcha', component: GotchaPageComponent, canActivate: [MsalGuard] },
   { path: 'gotcha/end', component: GotchaEndPageComponent, canActivate: [MsalGuard] },
+  {path: 'event/:eventId', component: EventDetailComponent, canActivate: [MsalGuard]},
+  {path: 'event', component: EventComponent, canActivate: [MsalGuard]},
+  {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
+  {path: 'qrcode', component: Qrcode, canActivate: [MsalGuard, roleGuard], data: {role: 'lector'}},
+  {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
+  {path: 'userlist', component: Userlist, canActivate: [MsalGuard]},
 ];

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, EMPTY, Observable, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
-import {AwardTransaction, Profile, ProfileAward, SyncProfileResponse} from '../model/profile';
+import {AwardTransaction, Profile, ProfileAward, ProfileStatistics, SyncProfileResponse} from '../model/profile';
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
 
@@ -79,6 +79,10 @@ export class ProfileService {
   getAllProfiles(): void {
     this.http.get<Profile[]>(`${this.url}/api/profiles`)
       .subscribe((profiles) => this.profiles.set(profiles));
+  }
+
+  getPlayerStats(): Observable<ProfileStatistics> {
+    return this.http.get<ProfileStatistics>(`${this.url}/api/profiles/stats`)
   }
   giveAward(award: AwardTransaction): Observable<Profile> {
     return this.http.post<Profile>(`${this.url}/api/profiles/award`, award);

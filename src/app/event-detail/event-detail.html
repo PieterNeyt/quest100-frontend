@@ -183,7 +183,7 @@
       <div class="modal-header">
         <div class="modal-header-inner">
           <span class="modal-warning-icon">
-            <ng-icon hlm name="lucideAlertTriangle" size="md"/>
+            <ng-icon hlm name="lucideAlertTriangle" size="base"/>
           </span>
           <h2>{{ t.t('event.detail.organizerLeaveModal.title') }}</h2>
         </div>
@@ -222,4 +222,8 @@
       </div>
     </div>
   </div>
+}
+
+@if (isGoing()) {
+  <app-chat/>
 }

@@ -6,8 +6,8 @@
 @import "@spartan-ng/brain/hlm-tailwind-preset.css";
 
 @theme {
-  --color-brand-primary: #FF6B35;
-  --color-brand-secondary: #004E89;
+  --color-brand-primary: #5aaab4;
+  --color-brand-secondary: #8cc8d2;
   --color-brand-accent: #FFD23F;
   --color-brand-success: #06D6A0;
 
@@ -27,15 +27,19 @@
 :root {
   color-scheme: light;
 
+  --background: oklch(0.90 0.012 90);
+  --background-hex: #e1dcc3;
+  --card: oklch(0.95 0.005 90);
+
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 
   /* Brand */
   --color-green:        #58cc02;
   --color-green-dark:   #46a302;
   --color-green-light:  #d1fae5;
-  --color-blue:         #1cb0f6;
-  --color-blue-dark:    #0a98d6;
-  --color-blue-light:   #e0f2fe;
+  --color-blue:         #5aaab4;
+  --color-blue-dark:    #4a8f98;
+  --color-blue-light:   #e0f5f7;
   --color-red:          #ef4444;
   --color-red-light:    #fee2e2;
   --color-orange:       #f97316;
@@ -53,34 +57,24 @@
   --color-gray-700:     #374151;
   --color-gray-900:     #1f2937;
 
-  /* Spartan/Tailwind tokens — light */
+  /* Spartan/Tailwind tokens */
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.72 0.22 142);      /* green */
+  --foreground: oklch(0.25 0.02 264);
+  --card-foreground: oklch(0.25 0.02 264);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.65 0.09 205);   /* #5aaab4 */
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.67 0.17 220);       /* blue */
+  --secondary: oklch(0.80 0.06 205); /* #8cc8d2 */
+  --secondary-foreground: oklch(0.2 0.02 264);
+  --muted: oklch(0.92 0.01 90);
+  --muted-foreground: oklch(0.4 0.02 264);
+  --accent: oklch(0.80 0.06 205);    /* #8cc8d2 */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.72 0.22 142);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.72 0.22 142);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.72 0.22 142);
+  --border: oklch(0.85 0.02 90);
+  --input: oklch(0.85 0.02 90);
+  --ring: oklch(0.65 0.09 205);      /* #5aaab4 */
 }
 
 @layer base {
@@ -88,14 +82,23 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    background-color: var(--color-gray-50);
+    background-color: var(--background-hex) !important;
+    color: var(--foreground);
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  app-root {
+    display: block;
+    min-height: 100vh;
+    background-color: var(--background-hex) !important;
   }
 }
 
 @layer components {
   main {
     @apply w-full flex flex-col;
+    background-color: var(--background-hex);
   }
 
   main > * {
@@ -103,12 +106,7 @@
   }
 }
 
-[data-sonner-toast] {
-  position: relative;
-  overflow: visible;
-}
-
-
+/* --- Dropdown Menu (Overlays) --- */
 .cdk-overlay-container hlm-dropdown-menu {
   background-color: #1a2332 !important;
   backdrop-filter: blur(16px) !important;
@@ -124,26 +122,7 @@
   font-weight: 500 !important;
 }
 
-.cdk-overlay-container [hlmDropdownMenuItem] ng-icon {
-  color: rgba(255, 255, 255, 0.7) !important;
-  margin-right: 0.5rem !important;
-}
-
-.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'],
-.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'] span,
-.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive'] ng-icon {
-  color: #ff4444 !important;
-}
-
-.cdk-overlay-container [hlmDropdownMenuItem]:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-.cdk-overlay-container [hlmDropdownMenuItem][variant='destructive']:hover {
-  background-color: rgba(255, 68, 68, 0.1) !important;
-}
-
-
+/* --- Scrollbar --- */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -156,17 +135,10 @@
 ::-webkit-scrollbar-thumb {
   background: color-mix(in oklch, var(--primary), transparent 60%);
   border-radius: 10px;
-  border: 2px solid transparent; /* Acts as padding around the thumb */
+  border: 2px solid transparent;
   background-clip: content-box;
-  transition: background 0.3s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
-  box-shadow: 0 0 10px var(--primary);
-}
-
-/* Firefox Support */
 * {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklch, var(--primary), transparent 60%) transparent;

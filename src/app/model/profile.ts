@@ -9,6 +9,15 @@ export interface Profile {
   campus: string;
 }
 
+export interface ProfileStatistics {
+  profileId: string;
+  kudoKnowledge: number;
+  kudoAttendance: number;
+  kudoTeamwork: number;
+  kudoAtmosphere: number;
+  kudoEngagement: number;
+}
+
 export interface SyncProfileResponse {
   profile: Profile;
   microsoftProfilePicture: string;

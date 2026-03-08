@@ -1,323 +1,435 @@
+@reference "../../styles.css";
+
 :host {
   display: block;
-  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif; /* Modern font */
-  color: #e0e0e0;
   min-height: 100vh;
-  padding: 3rem 2rem; /* Iets meer padding */
+  padding: 2.5rem 1.5rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-.user-list-container {
-  max-width: 1200px; /* Max breedte voor de container */
-  margin: 0 auto; /* Centraal op de pagina */
+.userlist-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+/* --- Header --- */
 .header-section {
+  text-align: center;
   margin-bottom: 2.5rem;
-  border-bottom: 1px solid #333;
-  padding-bottom: 1.5rem;
-  text-align: center; /* Centraal uitgelijnd */
 }
 
 .header-section h2 {
-  font-size: 2.5rem;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.05em;
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: oklch(0.25 0.02 264);
+  margin-bottom: 0.4rem;
+}
+
+.header-section h2 span {
+  color: #5aaab4;
 }
 
 .subtitle {
-  color: #a0a0a0;
-  font-size: 1.1rem;
+  color: oklch(0.5 0.02 264);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
-/* Grid Layout */
+/* --- Filter Bar --- */
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5aaab4;
+  pointer-events: none;
+  font-size: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.75rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  color: oklch(0.25 0.02 264);
+  font-size: 0.95rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: oklch(0.6 0.02 264);
+}
+
+.search-input:focus {
+  border-color: #5aaab4;
+  box-shadow: 0 0 0 3px rgba(90, 170, 180, 0.15);
+}
+
+.class-select {
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  color: oklch(0.25 0.02 264);
+  font-size: 0.95rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.class-select:focus {
+  border-color: #5aaab4;
+  box-shadow: 0 0 0 3px rgba(90, 170, 180, 0.15);
+}
+
+/* --- Results count --- */
+.results-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: oklch(0.5 0.02 264);
+  margin-bottom: 1.25rem;
+}
+
+.results-count span {
+  color: #5aaab4;
+  font-weight: 700;
+}
+
+/* --- User Grid --- */
 .user-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
-  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+  gap: 1rem;
 }
 
-/* Card Style */
+/* --- User Card --- */
 .user-card {
-  background-color: #2b2b40; /* Donkerder dan de achtergrond */
-  border: 1px solid #3a3a50;
-  border-radius: 16px; /* Meer afgeronde hoeken */
-  padding: 1.5rem;
-  display: flex; /* Flexbox voor inhoud */
+  display: flex;
   align-items: center;
-  gap: 1.25rem; /* Ruimte tussen avatar en tekst */
-  transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 18px;
+  background: color-mix(in oklch, var(--card) 70%, transparent);
+  border: 1.5px solid var(--border);
+  backdrop-filter: blur(12px);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
 
 .user-card:hover {
-  border-color: #6a8dff; /* Accentkleur bij hover */
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+  border-color: #8cc8d2;
+  box-shadow: 0 8px 24px rgba(90, 170, 180, 0.15);
 }
 
-/* Profiel Avatar */
+/* --- Avatar --- */
 .profile-avatar {
-  width: 60px; /* Grotere avatar */
-  height: 60px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   overflow: hidden;
-  flex-shrink: 0; /* Voorkomt verkleining */
-  background-color: #4a4a6e; /* Achtergrond voor placeholder */
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #5aaab4, #8cc8d2);
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid rgba(90, 170, 180, 0.25);
 }
 
 .profile-avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Zorgt dat de afbeelding past */
+  object-fit: cover;
 }
 
 .avatar-placeholder {
-  font-size: 1.5rem; /* Grotere letters */
-  color: #c0c0d0;
-  font-weight: bold;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: white;
   text-transform: uppercase;
+  letter-spacing: -0.03em;
 }
 
+/* --- User Info --- */
 .user-details {
-  flex-grow: 1; /* Neemt beschikbare ruimte in */
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .user-name {
   display: block;
-  font-weight: 700; /* Dikkere letters */
-  font-size: 1.25rem;
-  color: #ffffff;
-  margin-bottom: 0.25rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: oklch(0.25 0.02 264);
+  margin-bottom: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .user-kudos {
-  color: #ffd700; /* Goudkleur voor kudos */
-  font-size: 0.95rem;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #5aaab4;
 }
 
-/* Award Action Section (Knop of Bericht) */
+.user-class-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(90, 170, 180, 0.12);
+  color: #4a8f98;
+  border: 1px solid rgba(90, 170, 180, 0.25);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* --- Award Action --- */
 .award-action {
-  flex-shrink: 0; /* Voorkomt verkleining */
-  min-width: 120px; /* Zorgt voor consistentie in breedte */
-  text-align: right;
+  flex-shrink: 0;
 }
 
 .award-sent-message {
-  color: #7aff7a; /* Groene kleur voor succes */
-  font-size: 0.9rem;
-  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  justify-content: flex-end; /* Rechts uitlijnen */
-}
-
-.award-sent-message i {
-  font-size: 1.1rem;
-}
-
-/* Buttons */
-button {
-  cursor: pointer;
-  border-radius: 10px; /* Meer afgerond */
-  border: none;
-  font-weight: 600;
-  transition: 0.2s ease-out;
-  font-family: 'Inter', sans-serif;
+  gap: 0.4rem;
+  color: #06D6A0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .btn-award {
-  background: linear-gradient(135deg, #6a8dff, #80bfff); /* Gradient voor de knop */
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #5aaab4, #8cc8d2);
   color: white;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 10px rgba(106, 141, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(90, 170, 180, 0.3);
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .btn-award:hover {
-  background: linear-gradient(135deg, #5a7add, #70aaff);
-  box-shadow: 0 6px 15px rgba(106, 141, 255, 0.4);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(90, 170, 180, 0.4);
+  background: linear-gradient(135deg, #4a8f98, #5aaab4);
 }
 
-/* Modal Styling */
+/* --- Empty / Loading state --- */
+.loading-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  color: oklch(0.5 0.02 264);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* --- Modal --- */
 .modal-backdrop {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px); /* Sterkere blur */
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 1rem;
 }
 
 .modal-content {
-  background: #25253d; /* Iets donkerder dan card */
-  border: 1px solid #4a4a6e;
-  border-radius: 20px; /* Grotere afronding */
-  width: 90%;
-  max-width: 500px; /* Iets breder */
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  background: var(--background-hex);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+  overflow: hidden;
 }
 
 .modal-header {
-  padding: 1.5rem 2rem; /* Meer padding */
-  border-bottom: 1px solid #3a3a50;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .modal-header h3 {
-  font-size: 1.7rem;
-  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: oklch(0.25 0.02 264);
+  letter-spacing: -0.02em;
+}
+
+.modal-header h3 span {
+  color: #5aaab4;
 }
 
 .btn-close {
   background: transparent;
-  color: #a0a0a0;
-  font-size: 1.8rem;
-  line-height: 1; /* Voor betere centrering van X */
+  border: none;
+  color: oklch(0.5 0.02 264);
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
 }
 
 .btn-close:hover {
-  color: #ffffff;
+  color: oklch(0.25 0.02 264);
+  background: rgba(0,0,0,0.06);
 }
 
 .modal-body {
-  padding: 2rem;
+  padding: 1.75rem;
 }
 
 .input-group {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-group:last-child {
+  margin-bottom: 0;
 }
 
 label {
   display: block;
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
-  color: #c0c0d0;
-  font-weight: 500;
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: oklch(0.35 0.02 264);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 select, textarea {
   width: 100%;
-  background: #1e1e32; /* Donkerder input velden */
-  border: 1px solid #4a4a6e;
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  border: 1.5px solid var(--border);
   border-radius: 10px;
-  color: white;
-  padding: 0.9rem 1.2rem;
+  color: oklch(0.25 0.02 264);
+  padding: 0.85rem 1rem;
   box-sizing: border-box;
-  font-size: 1rem;
-  transition: border-color 0.2s ease-out;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
 }
 
 select:focus, textarea:focus {
-  outline: none;
-  border-color: #6a8dff; /* Accentkleur bij focus */
-  box-shadow: 0 0 0 3px rgba(106, 141, 255, 0.2);
+  border-color: #5aaab4;
+  box-shadow: 0 0 0 3px rgba(90, 170, 180, 0.15);
 }
 
 .modal-footer {
-  padding: 1.5rem 2rem;
-  border-top: 1px solid #3a3a50;
+  padding: 1.25rem 1.75rem;
+  border-top: 1px solid var(--border);
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   justify-content: flex-end;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6a8dff, #80bfff);
+  padding: 0.8rem 1.75rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #5aaab4, #8cc8d2);
   color: white;
-  padding: 0.85rem 1.75rem;
-  font-size: 1rem;
-  box-shadow: 0 4px 10px rgba(106, 141, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(90, 170, 180, 0.3);
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #5a7add, #70aaff);
-  box-shadow: 0 6px 15px rgba(106, 141, 255, 0.4);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(90, 170, 180, 0.4);
 }
 
 .btn-primary:disabled {
-  background: #3a3a50;
-  color: #888;
+  background: var(--muted);
+  color: oklch(0.6 0.02 264);
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
 }
 
 .btn-secondary {
-  background: #3a3a50;
-  color: #c0c0d0;
-  padding: 0.85rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: oklch(0.4 0.02 264);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .btn-secondary:hover {
-  background: #4a4a6e;
-  color: #ffffff;
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  color: oklch(0.25 0.02 264);
 }
 
-/* Responsive aanpassingen */
+/* --- Responsive --- */
 @media (max-width: 768px) {
-  .user-list-container {
-    padding: 1.5rem 1rem;
-  }
+  :host { padding: 1.5rem 1rem; }
 
-  .header-section h2 {
-    font-size: 2rem;
-  }
+  .header-section h2 { font-size: 2rem; }
 
-  .subtitle {
-    font-size: 1rem;
-  }
+  .search-wrapper { flex: 1; min-width: 0; }
 
-  .user-grid {
-    grid-template-columns: 1fr; /* Kolom op kleine schermen */
-  }
+  .user-grid { grid-template-columns: 1fr; }
 
-  .user-card {
-    flex-wrap: wrap; /* Zodat items naar de volgende regel kunnen */
-    text-align: center;
-    justify-content: center;
-  }
+  .user-card { flex-wrap: wrap; }
 
-  .profile-avatar {
-    margin-bottom: 1rem; /* Ruimte onder avatar als wrapping plaatsvindt */
-  }
-
-  .user-details {
-    text-align: center;
-  }
-
-  .award-action {
-    width: 100%; /* Knop/bericht neemt hele breedte in */
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  .award-sent-message {
-    justify-content: center;
-  }
-
-  .modal-content {
-    border-radius: 12px;
-  }
-
-  .modal-header, .modal-body, .modal-footer {
-    padding: 1rem 1.25rem;
-  }
-
-  .modal-header h3 {
-    font-size: 1.4rem;
-  }
+  .award-action { width: 100%; margin-top: 0.5rem; }
+  .btn-award { width: 100%; text-align: center; justify-content: center; display: flex; }
 }
