@@ -11,11 +11,12 @@ import {EventFormComponent} from '../components/event-form/event-form';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import {HlmIcon} from '@spartan-ng/helm/icon';
+import {Chat} from '../components/chat/chat';
 
 @Component({
   selector: 'app-event-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIcon],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIcon, Chat],
   providers: [provideIcons(lucideIcons)],
   templateUrl: './event-detail.html',
   styleUrl: './event-detail.css',
