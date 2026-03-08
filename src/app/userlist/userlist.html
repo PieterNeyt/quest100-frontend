@@ -1,14 +1,43 @@
-<div class="user-list-container">
+<div class="userlist-wrapper">
+
   <!-- Header -->
   <div class="header-section">
-    <h2>{{ translate.t('userlist.colleagues') }}</h2>
+    <h2>{{ translate.t('userlist.colleagues') }} <span>Quest100</span></h2>
     <p class="subtitle">{{ translate.t('userlist.awardSubtitle') }}</p>
   </div>
 
-  <!-- Grid van gebruikers -->
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="search-wrapper">
+      <ng-icon name="lucideSearch" class="search-icon"></ng-icon>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search students..."
+      />
+    </div>
+
+    <select class="class-select">
+      <option value="">All Classes</option>
+      <option value="101">101</option>
+      <option value="102">102</option>
+      <option value="201">201</option>
+      <option value="202">202</option>
+      <option value="301">301</option>
+      <option value="302">302</option>
+    </select>
+  </div>
+
+  <!-- Results count -->
+  <p class="results-count">
+    Showing <span>{{ filteredProfileAwards().length }}</span> students
+  </p>
+
+  <!-- User Grid -->
   <div class="user-grid">
     @for (pa of filteredProfileAwards(); track pa.profile.id) {
       <div class="user-card">
+
         <!-- Avatar -->
         <div class="profile-avatar">
           @if (pa.profile.customProfilePicture) {
@@ -23,14 +52,20 @@
         <!-- Details -->
         <div class="user-details">
           <span class="user-name">{{ pa.profile.firstName }} {{ pa.profile.lastName }}</span>
-          <span class="user-kudos">⭐ {{ pa.profile.kudos }} {{ translate.t('userlist.kudos') }}</span>
+          <div class="user-meta">
+            <span class="user-kudos">
+              <ng-icon name="lucideZap" class="size-3.5"></ng-icon>
+              {{ pa.profile.kudos }} {{ translate.t('userlist.kudos') }}
+            </span>
+          </div>
         </div>
 
-        <!-- Award actie -->
+        <!-- Award action -->
         <div class="award-action">
           @if (pa.hasSentAward) {
             <span class="award-sent-message">
-              <i class="fas fa-check-circle"></i> {{ translate.t('userlist.awardSentToday') }}
+              <ng-icon name="lucideCheckCircle" class="size-4"></ng-icon>
+              {{ translate.t('userlist.awardSentToday') }}
             </span>
           } @else {
             <button class="btn-award" (click)="openModal(pa.profile)">
@@ -38,53 +73,52 @@
             </button>
           }
         </div>
+
       </div>
     } @empty {
       <div class="loading-state">{{ translate.t('userlist.loadingProfiles') }}</div>
     }
   </div>
 
-  <!-- Modal -->
-  @if (selectedProfile(); as user) {
-    <div class="modal-backdrop" (click)="closeModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <!-- Header -->
-        <div class="modal-header">
-          <h3>{{ translate.t('userlist.awardFor') }} {{ user.firstName }}</h3>
-          <button class="btn-close" (click)="closeModal()">&times;</button>
+</div>
+
+<!-- Modal -->
+@if (selectedProfile(); as user) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>{{ translate.t('userlist.awardFor') }} <span>{{ user.firstName }}</span></h3>
+        <button class="btn-close" (click)="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="input-group">
+          <label>{{ translate.t('userlist.awardCategory') }}</label>
+          <select [(ngModel)]="selectedType">
+            @for (type of kudoTypes; track type) {
+              <option [value]="type">{{ getKudoLabel(type) }}</option>
+            }
+          </select>
         </div>
 
-        <!-- Body -->
-        <div class="modal-body">
-          <div class="input-group">
-            <label>{{ translate.t('userlist.awardCategory') }}</label>
-            <select [(ngModel)]="selectedType">
-              @for (type of kudoTypes; track type) {
-                <option [value]="type">{{ getKudoLabel(type) }}</option>
-              }
-            </select>
-          </div>
-
-          <div class="input-group">
-            <label>{{ translate.t('userlist.personalMessage') }}</label>
-            <textarea
-              [(ngModel)]="message"
-              placeholder="{{ translate.t('userlist.personalMessagePlaceholder') }}"
-              rows="4">
-            </textarea>
-          </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="modal-footer">
-          <button class="btn-secondary" (click)="closeModal()">{{ translate.t('userlist.cancel') }}</button>
-          <button class="btn-primary"
-                  (click)="submitAward()"
-                  [disabled]="!message.trim()">
-            {{ translate.t('userlist.send') }}
-          </button>
+        <div class="input-group">
+          <label>{{ translate.t('userlist.personalMessage') }}</label>
+          <textarea
+            [(ngModel)]="message"
+            placeholder="{{ translate.t('userlist.personalMessagePlaceholder') }}"
+            rows="4">
+          </textarea>
         </div>
       </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">{{ translate.t('userlist.cancel') }}</button>
+        <button class="btn-primary" (click)="submitAward()" [disabled]="!message.trim()">
+          {{ translate.t('userlist.send') }}
+        </button>
+      </div>
+
     </div>
-  }
-</div>
+  </div>
+}

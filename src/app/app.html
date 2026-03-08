@@ -48,7 +48,7 @@
           <button class="user-avatar-trigger" (click)="toggleMenu('user', $event)">
             <div class="avatar-ring">
               <hlm-avatar class="user-avatar-circle">
-                <img hlmAvatarImage [ngSrc]="'/'" fill class="object-cover"/>
+                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover"/>
                 <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
               </hlm-avatar>
             </div>
@@ -77,13 +77,14 @@
       @if (loginDisplay() && profile()) {
         <div class="sidebar-user-info">
           <div class="avatar-ring !w-12 !h-12">
-            <div class="user-avatar-circle !size-10">
-              <span class="hlmAvatarFallback">{{ profile()?.firstName?.charAt(0) }}</span>
-            </div>
+              <hlm-avatar class="user-avatar-circle  !size-10">
+                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover"/>
+                <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
+              </hlm-avatar>
           </div>
           <div class="flex flex-col">
             <span class="font-bold text-lg leading-tight">{{ profile()?.firstName }}</span>
-            <div class="flex items-center gap-1 text-yellow-500 text-sm font-bold">
+            <div class="flex items-center gap-1 text-[#5aaab4] text-sm font-bold">
               <ng-icon name="lucideZap" class="size-4"></ng-icon>
               <span>{{ profile()?.kudos }} Kudos</span>
             </div>
@@ -117,7 +118,9 @@
 }
 
 <main class="main">
-  @if (!isIframe()) { <router-outlet></router-outlet> }
+  @if (!isIframe()) {
+    <router-outlet></router-outlet>
+  }
 </main>
 
 <ngx-sonner-toaster position="bottom-right" [duration]="4000" [richColors]="true"></ngx-sonner-toaster>

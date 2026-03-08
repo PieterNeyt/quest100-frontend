@@ -9,11 +9,9 @@
 
 /* --- Hoofdcontainer (Desktop & Tablet) --- */
 .navbar-container {
-  /* Vaste hoogte om 'shaken' of vergroten bij inloggen te voorkomen */
   height: 64px;
   @apply sticky top-4 z-50 flex items-center justify-between w-[95%] max-w-[1400px] mx-auto px-6 transition-all duration-300;
 
-  /* Padding boven/onder verwijderd, centrering gebeurt via flex items-center */
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 
@@ -24,23 +22,21 @@
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
-/* Mobiele "Full Impact" Navigatiebalk */
 @media (max-width: 1024px) {
   .navbar-container {
     @apply top-0 w-full max-w-none border-x-0 border-t-0 rounded-none px-4;
-    height: 60px; /* Iets compacter op mobiel */
+    height: 60px;
   }
 }
 
-/* Flex containers vullen de volledige hoogte voor perfecte centrering */
 .nav-section-left { @apply flex items-center gap-8 h-full; }
 .nav-links-left { @apply hidden lg:flex items-center gap-1 h-full; }
 .nav-section-right { @apply hidden lg:flex items-center justify-end gap-4 flex-nowrap h-full; }
 
 .logo-text-yellow {
   @apply text-2xl font-black tracking-tighter;
-  color: #fbbf24;
-  text-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+  color: #5aaab4;
+  text-shadow: 0 0 15px rgba(90, 170, 180, 0.3);
 }
 
 /* --- Hamburger Button --- */
@@ -49,8 +45,8 @@
   color: oklch(0.554 0.046 257.417);
 }
 .mobile-menu-trigger:hover {
-  background: rgba(251, 191, 36, 0.1);
-  color: #fbbf24;
+  background: rgba(90, 170, 180, 0.1);
+  color: #5aaab4;
 }
 .mobile-menu-trigger ng-icon {
   @apply size-6;
@@ -92,7 +88,8 @@
 }
 
 .sidebar-link:hover {
-  @apply bg-yellow-500/10 text-yellow-500;
+  background: rgba(90, 170, 180, 0.1);
+  color: #5aaab4;
 }
 
 .sidebar-divider {
@@ -100,7 +97,9 @@
 }
 
 .sidebar-login-btn {
-  @apply w-full mt-4 py-3.5 rounded-xl bg-yellow-500 text-black font-bold text-center transition-transform active:scale-95;
+  @apply w-full mt-4 py-3.5 rounded-xl font-bold text-center transition-transform active:scale-95;
+  background: #5aaab4;
+  color: #ffffff;
 }
 
 .close-sidebar {
@@ -113,8 +112,8 @@
   color: oklch(0.554 0.046 257.417);
 }
 .nav-link:hover {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.1);
+  color: #5aaab4;
+  background: rgba(90, 170, 180, 0.1);
 }
 
 /* --- Dropdowns & Avatars --- */
@@ -139,36 +138,47 @@
   color: oklch(0.554 0.046 257.417);
   text-align: left;
 }
-.dropdown-item-pill:hover { @apply bg-white/10; color: #fbbf24; }
+.dropdown-item-pill:hover {
+  background: rgba(90, 170, 180, 0.1);
+  color: #5aaab4;
+}
 
-/* Avatar Styling - Compact gemaakt voor vaste navbar hoogte */
+/* Avatar Styling */
 .user-avatar-trigger {
   @apply cursor-pointer outline-none border-none bg-transparent p-0 transition-transform active:scale-95 flex items-center justify-center flex-shrink-0;
 }
 .avatar-ring {
-  @apply p-0.5 rounded-full border-2 border-yellow-500/30 transition-all duration-200 flex items-center justify-center flex-shrink-0;
+  @apply p-0.5 rounded-full border-2 transition-all duration-200 flex items-center justify-center flex-shrink-0;
+  border-color: rgba(90, 170, 180, 0.3);
   width: 42px;
   height: 42px;
 }
 .user-avatar-circle {
   @apply size-9 border border-white/10 rounded-full overflow-hidden shrink-0 flex items-center justify-center;
-  background: #fbbf24;
+  background: #5aaab4;
 }
 
 .hlmAvatarFallback {
-  @apply flex items-center justify-center w-full h-full text-base font-black text-black uppercase leading-none;
+  @apply flex items-center justify-center w-full h-full text-base font-black text-white uppercase leading-none;
 }
 
 /* Kudos Badge Desktop */
 .kudos-badge {
-  @apply flex items-center gap-2 px-4 h-9 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex-shrink-0;
+  @apply flex items-center gap-2 px-4 h-9 rounded-lg flex-shrink-0;
+  background: rgba(90, 170, 180, 0.1);
+  border: 1px solid rgba(90, 170, 180, 0.2);
 }
 .kudos-amount {
-  @apply text-sm font-bold text-yellow-500 uppercase whitespace-nowrap tracking-wide;
+  @apply text-sm font-bold uppercase whitespace-nowrap tracking-wide;
+  color: #5aaab4;
 }
 
 .login-btn-highlight {
-  @apply bg-yellow-500 !text-black hover:bg-yellow-400;
+  background: #5aaab4 !important;
+  color: #ffffff !important;
+}
+.login-btn-highlight:hover {
+  background: #8cc8d2 !important;
 }
 
 /* --- Main Content Spacing --- */
