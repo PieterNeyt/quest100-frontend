@@ -1,15 +1,16 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ProfileService } from '../services/profileService';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { AwardTransaction, KudoType, Profile } from '../model/profile';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../services/toastService';
 import { TranslationService } from '../services/translationService';
+import {NgIcon} from '@ng-icons/core';
 
 @Component({
   selector: 'app-userlist',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgIcon, NgOptimizedImage],
   templateUrl: './userlist.html',
   styleUrl: './userlist.css',
 })

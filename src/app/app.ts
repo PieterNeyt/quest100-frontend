@@ -1,28 +1,28 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, HostListener, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {HlmNavigationMenuImports} from '@spartan-ng/helm/navigation-menu';
 import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-angular';
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
 import {filter, Subject, takeUntil} from 'rxjs';
 import {ProfileService} from './services/profileService';
-import {HlmButtonImports} from '@spartan-ng/helm/button';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
-import {HlmDropdownMenuImports} from '@spartan-ng/helm/dropdown-menu';
 import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
-import {lucideLogOut, lucideQrCode, lucideSettings, lucideUser} from '@ng-icons/lucide';
+import {lucideLogOut, lucideMenu, lucideQrCode, lucideSettings, lucideUser, lucideX, lucideZap} from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
 import {Language, TranslationService} from './services/translationService';
 import {NgxSonnerToaster} from 'ngx-sonner';
 import {jwtDecode} from 'jwt-decode';
 import {RoleService} from './services/roleService';
 
+type MenuState = 'languages' | 'user' | 'mobile' | null;
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmButtonImports, HlmIconImports, HlmDropdownMenuImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
   providers: [
-    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode})
+    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap})
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -31,6 +31,9 @@ export class App implements OnInit, OnDestroy {
   loginDisplay = signal(false);
   isIframe = signal(false);
   showLanguageDropdown = signal(false);
+  showUserDropdown = signal(false);
+  isMobileMenuOpen = signal(false);
+  activeMenu = signal<MenuState>(null);
 
   private readonly _destroying$ = new Subject<void>();
   private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
@@ -147,8 +150,14 @@ export class App implements OnInit, OnDestroy {
     this.showLanguageDropdown.set(false);
   }
 
-  toggleLanguageDropdown(): void {
-    this.showLanguageDropdown.update(val => !val);
+  toggleMenu(menu: MenuState, event?: Event): void {
+    event?.stopPropagation();
+    this.activeMenu.update(current => current === menu ? null : menu);
+  }
+
+  @HostListener('document:click')
+  closeAll(): void {
+    this.activeMenu.set(null);
   }
 
   ngOnDestroy(): void {
