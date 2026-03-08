@@ -19,7 +19,10 @@
 
     <div class="page-header-actions">
       @if (canSubmitKill()) {
-        <button class="btn-submit-kill" (click)="openSubmitModal()">
+        <button
+          class="btn-submit-kill"
+          [disabled]="hasPendingKill()"
+          (click)="openSubmitModal()">
           <ng-icon hlm name="lucideSwords" size="sm" />
           {{ t.t('gotcha.submitKill.button') }}
         </button>
@@ -99,32 +102,43 @@
           </div>
         }
 
-        @if (countdown(); as cd) {
-          <div class="countdown-section"
-               [class.countdown--urgent]="countdownUrgent"
-               [class.countdown--critical]="countdownCritical">
-            <span class="target-label">
-              <ng-icon hlm name="lucideTimer" size="xs" />
-              {{ t.t('gotcha.target.timeLeft') }}
-            </span>
-            <div class="countdown-display">
-              <div class="countdown-unit">
-                <span class="countdown-val">{{ padTwo(cd.h) }}</span>
-                <span class="countdown-lbl">{{ t.t('gotcha.hours') }}</span>
-              </div>
-              <span class="countdown-sep">:</span>
-              <div class="countdown-unit">
-                <span class="countdown-val">{{ padTwo(cd.m) }}</span>
-                <span class="countdown-lbl">{{ t.t('gotcha.minutes') }}</span>
-              </div>
-              <span class="countdown-sep">:</span>
-              <div class="countdown-unit">
-                <span class="countdown-val">{{ padTwo(cd.s) }}</span>
-                <span class="countdown-lbl">{{ t.t('gotcha.seconds') }}</span>
-              </div>
+        <!-- ── Countdown of "waiting for review" ── -->
+        <div class="countdown-section"
+             [class.countdown--pending]="hasPendingKill()"
+             [class.countdown--urgent]="!hasPendingKill() && countdownUrgent"
+             [class.countdown--critical]="!hasPendingKill() && countdownCritical">
+
+          <span class="target-label">
+            <ng-icon hlm name="lucideTimer" size="xs" />
+            {{ t.t('gotcha.target.timeLeft') }}
+          </span>
+
+          @if (hasPendingKill()) {
+            <!-- Pending kill ingediend: countdown gepauzeerd, wacht op review -->
+            <div class="pending-review-notice">
+              <ng-icon hlm name="lucideClock" size="sm" />
+              <span>{{ t.t('gotcha.target.waitingForReview') }}</span>
+            </div>
+          }
+          @if (countdown(); as cd) {
+          <div class="countdown-display">
+            <div class="countdown-unit">
+              <span class="countdown-val">{{ padTwo(cd.h) }}</span>
+              <span class="countdown-lbl">{{ t.t('gotcha.hours') }}</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-val">{{ padTwo(cd.m) }}</span>
+              <span class="countdown-lbl">{{ t.t('gotcha.minutes') }}</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-val">{{ padTwo(cd.s) }}</span>
+              <span class="countdown-lbl">{{ t.t('gotcha.seconds') }}</span>
             </div>
           </div>
         }
+        </div>
 
       </div>
     }
@@ -155,7 +169,6 @@
 
         <label class="field-label">{{ t.t('gotcha.submitKill.photoLabel') }}</label>
 
-        <!-- File picker — triggers the hidden input -->
         <label class="file-pick-btn" [class.has-file]="!!photoBase64()">
           <ng-icon hlm name="lucideCamera" size="sm" />
           @if (photoBase64()) {
@@ -170,7 +183,6 @@
                  (change)="onFileSelected($event)" />
         </label>
 
-        <!-- Preview -->
         @if (photoPreview()) {
           <img class="photo-preview" [src]="photoPreview()!" alt="preview" />
         }

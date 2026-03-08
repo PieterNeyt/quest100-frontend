@@ -23,6 +23,7 @@ export interface GotchaParticipant {
   killedBy?: string | null;
   optedInAt: string;
   assignedPropId?: string | null;
+  pendingKillAt?: string | null;
 }
 
 export interface UpdateGameRequest {
@@ -33,7 +34,6 @@ export interface UpdateGameRequest {
   prizeDescriptionNL?: string;
 }
 
-// Keep old alias for compatibility
 export type UpdateStartDateRequest = UpdateGameRequest;
 
 export interface KillFeedProfile {
@@ -43,7 +43,6 @@ export interface KillFeedProfile {
   profilePicture?: string | null;
 }
 
-/** Both language variants are returned; pick at render time based on user preference. */
 export interface KillFeedProp {
   id: string;
   nameEN: string;
@@ -53,11 +52,10 @@ export interface KillFeedProp {
 export interface KillFeedItem {
   id: string;
   gameId: string;
-  photoBase64: string;      // ← was photoUrl, now base64
+  photoBase64: string;
   status: 'PENDING' | 'APPROVED' | 'DENIED';
   createdAt: string;
   reviewedAt?: string | null;
-
   hunter: KillFeedProfile;
   victim: KillFeedProfile;
   prop?: KillFeedProp | null;
@@ -76,7 +74,7 @@ export interface EndScreenKillNode {
   hunter: KillFeedProfile;
   victim: KillFeedProfile;
   prop?: KillFeedProp | null;
-  photoBase64: string;      // ← was photoUrl, now base64
+  photoBase64: string;
   createdAt: string;
 }
 
@@ -87,6 +85,25 @@ export interface EndScreenStats {
   mostKillsName: string;
   mostKillsCount: number;
 }
+
+// ── Awards ────────────────────────────────────────────────────────────────────
+
+export type AwardCategory = 'core' | 'skill' | 'social' | 'prop' | 'game' | 'meme';
+
+export interface GameAward {
+  id: string;
+  emoji: string;
+  titleKey: string;
+  descriptionKey: string;
+  category: AwardCategory;
+  profile?: KillFeedProfile;
+  count?: number;
+  propName?: string;
+  day?: string;
+  profiles?: KillFeedProfile[];
+}
+
+// ── EndScreen ─────────────────────────────────────────────────────────────────
 
 export interface EndScreen {
   winner?: KillFeedProfile | null;

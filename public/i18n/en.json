@@ -190,7 +190,8 @@
       "propLabel": "Your prop",
       "none": "No target assigned yet",
       "eliminated": "You are eliminated",
-      "timeLeft": "Time to kill"
+      "timeLeft": "Time to kill",
+      "waitingForReview": "Waiting for review"
     },
     "feed": {
       "title": "Kill Feed",
@@ -223,12 +224,14 @@
       "button": "Submit Kill",
       "title": "Submit Kill",
       "hint": "Upload a photo proving you eliminated your target while using your assigned prop.",
-      "photoLabel": "Photo URL",
-      "photoPlaceholder": "https://...",
+      "photoLabel": "Evidence Photo",
+      "photoPlaceholder": "Upload photo...",
+      "photoSelect": "Select photo",
+      "photoChange": "Change photo",
       "cancel": "Cancel",
       "confirm": "Submit",
       "submitting": "Submitting...",
-      "noPhoto": "Please provide a photo URL.",
+      "noPhoto": "Please provide a photo.",
       "success": "Kill submitted! Awaiting review.",
       "error": "Failed to submit kill."
     },
@@ -257,6 +260,8 @@
       "statKills": "Total kills",
       "statFastest": "Fastest kill",
       "statMostKills": "Most kills",
+      "statMortality": "Elimination rate",
+      "statMostUsedProp": "Most used prop",
       "graph": "Tournament Map",
       "graphHint": "Drag nodes · Scroll to zoom · Click an arrow for kill details",
       "legendWinner": "Winner",
@@ -264,12 +269,74 @@
       "legendClickEdge": "Click arrow for kill details",
       "killList": "Kill history",
       "killDetail": "Kill details",
+      "eliminated": "eliminated",
       "hunter": "Hunter",
       "victim": "Victim",
       "loadError": "Failed to load results.",
       "gameOver": "Game Over!",
       "gameOverSub": "The tournament has ended. See who won!",
-      "viewResults": "View results"
+      "viewResults": "View results",
+      "killsOf": "Kills by",
+      "noKills": "No kills yet."
+    },
+    "awards": {
+      "title": "Awards",
+      "cat": {
+        "core": "Core Awards",
+        "skill": "Skill Awards",
+        "social": "Social Awards",
+        "prop": "Weapon Awards",
+        "meme": "Meme Awards",
+        "game": "Game Awards"
+      },
+      "lastStanding": {
+        "title": "Last One Standing",
+        "desc": "Survived all the way to the end."
+      },
+      "serialKiller": {
+        "title": "Serial Killer",
+        "desc": "Most eliminations in the entire game."
+      },
+      "firstBlood": {
+        "title": "First Blood",
+        "desc": "First player to make a kill."
+      },
+      "firstVictim": {
+        "title": "First Victim",
+        "desc": "First player to be eliminated."
+      },
+      "finalVictim": {
+        "title": "Final Victim",
+        "desc": "Last player eliminated before the winner."
+      },
+      "speedDemon": {
+        "title": "Speed Demon",
+        "desc": "Fastest back-to-back kills."
+      },
+      "patientHunter": {
+        "title": "Patient Hunter",
+        "desc": "Took the longest time between kills."
+      },
+      "bestDisguise": {
+        "title": "Best Disguise",
+        "desc": "Kill with the most likes from fellow players."
+      },
+      "deadliestWeapon": {
+        "title": "Deadliest Weapon",
+        "desc": "Most kills scored with this prop."
+      },
+      "unlucky": {
+        "title": "Unlucky",
+        "desc": "Gone before the fun even started."
+      },
+      "afkVictim": {
+        "title": "AFK Victim",
+        "desc": "Never made a single kill."
+      },
+      "bloodiestDay": {
+        "title": "Bloodiest Day",
+        "desc": "Most kills recorded on a single day."
+      }
     },
     "winner": "Winner",
     "settings": {

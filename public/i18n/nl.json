@@ -190,7 +190,8 @@
       "propLabel": "Jouw voorwerp",
       "none": "Nog geen doelwit toegewezen",
       "eliminated": "Je bent uitgeschakeld",
-      "timeLeft": "Tijd om te killen"
+      "timeLeft": "Tijd om te killen",
+      "waitingForReview": "Wacht op beoordeling"
     },
     "feed": {
       "title": "Kill Feed",
@@ -223,12 +224,14 @@
       "button": "Kill indienen",
       "title": "Kill indienen",
       "hint": "Upload een foto waarop je bewijst dat je je doelwit hebt uitgeschakeld met jouw toegewezen voorwerp.",
-      "photoLabel": "Foto URL",
-      "photoPlaceholder": "https://...",
+      "photoLabel": "Bewijsfoto",
+      "photoPlaceholder": "Foto uploaden...",
+      "photoSelect": "Foto selecteren",
+      "photoChange": "Foto wijzigen",
       "cancel": "Annuleren",
       "confirm": "Indienen",
       "submitting": "Bezig...",
-      "noPhoto": "Geef een foto-URL op.",
+      "noPhoto": "Selecteer een foto.",
       "success": "Kill ingediend! Wacht op goedkeuring.",
       "error": "Kill kon niet ingediend worden."
     },
@@ -257,6 +260,8 @@
       "statKills": "Totaal kills",
       "statFastest": "Snelste kill",
       "statMostKills": "Meeste kills",
+      "statMortality": "Uitschakelingspercentage",
+      "statMostUsedProp": "Meest gebruikt voorwerp",
       "graph": "Toernooikaart",
       "graphHint": "Sleep knopen · Scroll om in te zoomen · Klik op een pijl voor kill details",
       "legendWinner": "Winnaar",
@@ -264,12 +269,74 @@
       "legendClickEdge": "Klik op pijl voor kill details",
       "killList": "Kill geschiedenis",
       "killDetail": "Kill details",
+      "eliminated": "heeft uitgeschakeld",
       "hunter": "Jager",
       "victim": "Slachtoffer",
       "loadError": "Resultaten konden niet worden geladen.",
       "gameOver": "Game Over!",
       "gameOverSub": "Het toernooi is afgelopen. Bekijk wie gewonnen heeft!",
-      "viewResults": "Bekijk resultaten"
+      "viewResults": "Bekijk resultaten",
+      "killsOf": "Kills van",
+      "noKills": "Nog geen kills."
+    },
+    "awards": {
+      "title": "Awards",
+      "cat": {
+        "core": "Kern Awards",
+        "skill": "Skill Awards",
+        "social": "Sociale Awards",
+        "prop": "Wapen Awards",
+        "meme": "Meme Awards",
+        "game": "Spel Awards"
+      },
+      "lastStanding": {
+        "title": "Laatste Overlever",
+        "desc": "Overleefd tot het bittere einde."
+      },
+      "serialKiller": {
+        "title": "Seriemoordenaar",
+        "desc": "Meeste uitschakelingen in het hele spel."
+      },
+      "firstBlood": {
+        "title": "Eerste Bloed",
+        "desc": "Eerste speler die een kill maakte."
+      },
+      "firstVictim": {
+        "title": "Eerste Slachtoffer",
+        "desc": "Eerste speler die uitgeschakeld werd."
+      },
+      "finalVictim": {
+        "title": "Laatste Slachtoffer",
+        "desc": "Laatste speler uitgeschakeld vóór de winnaar."
+      },
+      "speedDemon": {
+        "title": "Speed Demon",
+        "desc": "Snelste opeenvolgende kills."
+      },
+      "patientHunter": {
+        "title": "Geduldige Jager",
+        "desc": "Langste tijd tussen kills."
+      },
+      "bestDisguise": {
+        "title": "Beste Vermomming",
+        "desc": "Kill met de meeste likes van medespelers."
+      },
+      "deadliestWeapon": {
+        "title": "Dodelijkste Wapen",
+        "desc": "Meeste kills gemaakt met dit voorwerp."
+      },
+      "unlucky": {
+        "title": "Pechvogel",
+        "desc": "Al weg voordat het echt begon."
+      },
+      "afkVictim": {
+        "title": "AFK Slachtoffer",
+        "desc": "Heeft nooit een enkele kill gemaakt."
+      },
+      "bloodiestDay": {
+        "title": "Bloedigste Dag",
+        "desc": "Meeste kills op één dag."
+      }
     },
     "winner": "Winnaar",
     "settings": {

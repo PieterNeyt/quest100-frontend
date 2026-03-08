@@ -26,8 +26,8 @@ export class GotchaPageComponent implements OnInit, OnDestroy {
 
   // ── Submit kill modal ─────────────────────────────────────────────────────
   showSubmitModal = signal(false);
-  photoBase64     = signal<string | null>(null);   // the converted base64 string
-  photoPreview    = signal<string | null>(null);   // data URI for <img> preview
+  photoBase64     = signal<string | null>(null);
+  photoPreview    = signal<string | null>(null);
   submitting      = signal(false);
 
   // ── Game & player state ───────────────────────────────────────────────────
@@ -39,8 +39,11 @@ export class GotchaPageComponent implements OnInit, OnDestroy {
   isFinished    = computed(() => this.currentGame()?.status === 'FINISHED');
   isAlive       = computed(() => this.myStatus()?.isAlive ?? false);
   hasTarget     = computed(() => !!this.myStatus()?.targetId);
-  canSubmitKill = computed(() => this.isActive() && this.isAlive() && this.hasTarget());
+  canSubmitKill = computed(() => this.isActive() && this.isAlive() && this.hasTarget() && !this.hasPendingKill());
   isParticipant = computed(() => !!this.myStatus());
+
+  /** True als de speler een pending kill heeft ingediend die nog beoordeeld moet worden */
+  hasPendingKill = computed(() => !!this.myStatus()?.pendingKillAt);
 
   // ── Countdown ─────────────────────────────────────────────────────────────
   countdown = signal<{ h: number; m: number; s: number } | null>(null);
@@ -82,6 +85,12 @@ export class GotchaPageComponent implements OnInit, OnDestroy {
   }
 
   private updateCountdown() {
+    // Countdown loopt niet als er een pending kill is
+    if (this.hasPendingKill()) {
+      this.countdown.set(null);
+      return;
+    }
+
     const deadline = this.targetInfo()?.killDeadline;
     if (!deadline) { this.countdown.set(null); return; }
     const diffMs = new Date(deadline).getTime() - Date.now();
@@ -122,7 +131,6 @@ export class GotchaPageComponent implements OnInit, OnDestroy {
     const reader = new FileReader();
     reader.onload = () => {
       const dataUri = reader.result as string;
-      // Store the full data URI for preview, strip the prefix for the backend
       this.photoPreview.set(dataUri);
       this.photoBase64.set(dataUri.split(',')[1]);
     };
@@ -141,6 +149,8 @@ export class GotchaPageComponent implements OnInit, OnDestroy {
         this.submitting.set(false);
         this.closeSubmitModal();
         this.toastService.success('gotcha.submitKill.success');
+        // Herlaad status zodat pendingKillAt direct zichtbaar is
+        this.gotchaService.getMyStatus().subscribe();
       },
       error: (err) => {
         this.submitting.set(false);
