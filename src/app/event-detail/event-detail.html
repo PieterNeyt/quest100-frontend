@@ -23,33 +23,30 @@
 @if (!loading() && !error() && event()) {
   <div class="detail-content">
 
-    <!-- Hero -->
-    <div class="hero-wrap">
-      @if (event()!.photo) {
-        <img class="hero-img" [src]="event()!.photo!" [alt]="event()!.title"/>
-      } @else {
-        <div class="hero-placeholder"
-             [style.background]="'linear-gradient(135deg, ' + categoryColor(event()!.category) + '30, ' + categoryColor(event()!.category) + '70)'">
-          <span class="hero-icon" [style.color]="categoryColor(event()!.category)"
-                [innerHTML]="categoryIconSvg(event()!.category, 72)"></span>
-        </div>
-      }
-      <div class="hero-badge-wrap">
+    <!-- TOP SECTION: photo left, info right -->
+    <div class="top-section">
+
+      <div class="top-photo">
+        @if (event()!.photo) {
+          <img class="top-img" [src]="event()!.photo!" [alt]="event()!.title"/>
+        } @else {
+          <div class="top-placeholder"
+               [style.background]="'linear-gradient(135deg, ' + categoryColor(event()!.category) + '22, ' + categoryColor(event()!.category) + '55)'">
+            <span class="top-placeholder-icon" [style.color]="categoryColor(event()!.category)"
+                  [innerHTML]="categoryIconSvg(event()!.category, 64)"></span>
+          </div>
+        }
         <span class="category-chip" [style.background]="categoryColor(event()!.category)">
-          <span [innerHTML]="categoryIconSvg(event()!.category, 13)"></span>
+          <span [innerHTML]="categoryIconSvg(event()!.category, 12)"></span>
           {{ categoryLabel(event()!.category) }}
         </span>
       </div>
-    </div>
 
-    <div class="detail-body">
-      <div class="detail-main">
-
-        <!-- Title + organizer actions -->
-        <div class="title-row">
+      <div class="top-info">
+        <div class="info-title-row">
           <h1 class="event-title">{{ event()!.title }}</h1>
-          @if (isOrganizer()) {
-            <div class="organizer-actions">
+          <div class="title-actions">
+            @if (isOrganizer()) {
               <button class="btn-edit" (click)="openEditModal()">
                 <ng-icon hlm name="lucidePencil" size="sm"/>
                 {{ t.t('event.detail.edit') }}
@@ -58,18 +55,18 @@
                 <ng-icon hlm name="lucideTrash2" size="sm"/>
                 {{ deleting() ? '...' : t.t('event.detail.delete') }}
               </button>
-            </div>
-          }
+            }
+            <button class="btn-report-flag" (click)="openReportModal()" title="Report this event" aria-label="Report this event">
+              <ng-icon hlm name="lucideFlag" size="sm"/>
+            </button>
+          </div>
         </div>
 
-        <!-- Date info -->
-        <div class="info-row">
-          <div class="info-item">
-            <div class="info-icon-wrap">
-              <ng-icon hlm name="lucideCalendar" size="sm"/>
-            </div>
-            <span>{{ formatDate(event()!.eventDate) }}</span>
+        <div class="info-item">
+          <div class="info-icon-wrap">
+            <ng-icon hlm name="lucideCalendar" size="sm"/>
           </div>
+          <span>{{ formatDate(event()!.eventDate) }}</span>
         </div>
 
         @if (event()!.description) {
@@ -79,7 +76,6 @@
           </div>
         }
 
-        <!-- Join / Going area -->
         <div class="action-area">
           @if (!isGoing()) {
             <button class="btn-join" (click)="join()" [disabled]="joining() || isFull">
@@ -111,46 +107,55 @@
           }
         </div>
       </div>
-
-      <!-- Attendees Panel -->
-      <div class="attendees-panel">
-        <div class="attendees-header">
-          <h3>
-            {{ t.t('event.detail.attendees') }}
-            ({{ event()!.attendees.length }}@if (event()!.maxAttendees) {
-            / {{ event()!.maxAttendees }}
-          })
-          </h3>
-        </div>
-
-        <ul class="attendees-list">
-          @for (attendee of event()!.attendees; track attendee.profileId) {
-            <li class="attendee-item" [class.is-me]="attendee.profileId === currentProfileId">
-              <div class="attendee-avatar">
-                @if (getAttendeeAvatar(attendee)) {
-                  <img [src]="getAttendeeAvatar(attendee)" [alt]="getAttendeeDisplayName(attendee)" width="36" height="36"/>
-                } @else {
-                  {{ getAttendeeInitials(attendee) }}
-                }
-              </div>
-              <div class="attendee-info">
-                <span class="attendee-name">
-                  @if (attendee.profileId === event()!.organizerId) {
-                    <span class="organizer-badge" title="Organisator">
-                      <ng-icon hlm name="lucideStar" size="xs"/>
-                    </span>
-                  }
-                  {{ getAttendeeDisplayName(attendee) }}
-                  @if (attendee.profileId === currentProfileId) {
-                    <span class="me-tag">{{ t.t('event.detail.you') }}</span>
-                  }
-                </span>
-              </div>
-            </li>
-          }
-        </ul>
-      </div>
     </div>
+
+    <!-- BOTTOM SECTION: chat left, attendees right -->
+    @if (isGoing()) {
+      <div class="bottom-section">
+        <div class="bottom-chat">
+          <app-chat/>
+        </div>
+        <div class="bottom-attendees">
+          <div class="attendees-panel">
+            <div class="attendees-header">
+              <h3>
+                {{ t.t('event.detail.attendees') }}
+                ({{ event()!.attendees.length }}@if (event()!.maxAttendees) {
+                / {{ event()!.maxAttendees }}
+              })
+              </h3>
+            </div>
+            <ul class="attendees-list">
+              @for (attendee of event()!.attendees; track attendee.profileId) {
+                <li class="attendee-item" [class.is-me]="attendee.profileId === currentProfileId">
+                  <div class="attendee-avatar">
+                    @if (getAttendeeAvatar(attendee)) {
+                      <img [src]="getAttendeeAvatar(attendee)" [alt]="getAttendeeDisplayName(attendee)" width="36" height="36"/>
+                    } @else {
+                      {{ getAttendeeInitials(attendee) }}
+                    }
+                  </div>
+                  <div class="attendee-info">
+                    <span class="attendee-name">
+                      @if (attendee.profileId === event()!.organizerId) {
+                        <span class="organizer-badge" title="Organisator">
+                          <ng-icon hlm name="lucideStar" size="xs"/>
+                        </span>
+                      }
+                      {{ getAttendeeDisplayName(attendee) }}
+                      @if (attendee.profileId === currentProfileId) {
+                        <span class="me-tag">{{ t.t('event.detail.you') }}</span>
+                      }
+                    </span>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    }
+
   </div>
 }
 
@@ -193,7 +198,6 @@
       </div>
       <div class="modal-body">
         <p>{{ t.t('event.detail.organizerLeaveModal.description') }}</p>
-
         @if (otherAttendees().length > 0) {
           <div class="form-group">
             <label>{{ t.t('event.detail.organizerLeaveModal.transferLabel') }}</label>
@@ -211,7 +215,6 @@
           </button>
           <div class="modal-divider">{{ t.t('event.detail.organizerLeaveModal.or') }}</div>
         }
-
         <button class="btn-delete full-width" [disabled]="deleting()" (click)="deleteEventAsOrganizer()">
           <ng-icon hlm name="lucideTrash2" size="sm"/>
           {{ t.t('event.detail.organizerLeaveModal.deleteEvent') }}
@@ -224,6 +227,11 @@
   </div>
 }
 
-@if (isGoing()) {
-  <app-chat/>
+<!-- Report Modal -->
+@if (showReportModal()) {
+  <app-report
+    [eventId]="event()!.id"
+    [eventTitle]="event()!.title"
+    (closed)="closeReportModal()"
+  />
 }

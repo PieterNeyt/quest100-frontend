@@ -10,11 +10,12 @@ import {EventFormComponent} from '../components/event-form/event-form';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {ReportComponent} from '../report/report';
 
 @Component({
   selector: 'app-event',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIconImports],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIconImports, ReportComponent],
   providers: [provideIcons(lucideIcons)],
   templateUrl: './event.html',
   styleUrl: './event.css',
@@ -36,6 +37,9 @@ export class EventComponent implements OnInit {
 
   showCreateModal = signal(false);
   creating = signal(false);
+
+  // Report modal state
+  reportingEvent = signal<StudentEvent | null>(null);
 
   readonly categoryColor = categoryColor;
   readonly categoryIconSvg = categoryIconSvg;
@@ -96,6 +100,13 @@ export class EventComponent implements OnInit {
   openCreateModal() { this.createForm.reset(); this.showCreateModal.set(true); }
   closeCreateModal() { this.showCreateModal.set(false); }
 
+  openReportModal(event: StudentEvent, $event: MouseEvent) {
+    $event.stopPropagation();
+    this.reportingEvent.set(event);
+  }
+
+  closeReportModal() { this.reportingEvent.set(null); }
+
   submitCreate() {
     if (this.createForm.invalid) return;
     this.creating.set(true);
@@ -128,5 +139,4 @@ export class EventComponent implements OnInit {
   }
 
   categoryLabel(cat: EventCategory | string): string { return this.t.t(`event.categories.${cat}`); }
-
 }

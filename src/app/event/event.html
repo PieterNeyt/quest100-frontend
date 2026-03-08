@@ -89,6 +89,17 @@
   <div class="events-grid">
     @for (event of filteredEvents(); track event.id) {
       <div class="event-card" (click)="goToDetail(event)">
+
+        <!-- Report flag button (top-right of card) -->
+        <button
+          class="card-report-btn"
+          (click)="openReportModal(event, $event)"
+          title="Report this event"
+          aria-label="Report this event"
+        >
+          <ng-icon hlm name="lucideFlag" size="sm"/>
+        </button>
+
         <div class="card-image-wrap">
           @if (event.photo) {
             <img
@@ -153,4 +164,13 @@
       />
     </div>
   </div>
+}
+
+<!-- Report Modal -->
+@if (reportingEvent()) {
+  <app-report
+    [eventId]="reportingEvent()!.id"
+    [eventTitle]="reportingEvent()!.title"
+    (closed)="closeReportModal()"
+  />
 }
