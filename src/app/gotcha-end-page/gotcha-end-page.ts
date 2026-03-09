@@ -45,6 +45,10 @@ export class GotchaEndPageComponent implements OnInit {
   }
 
   goBack() {
+    this.router.navigate(['/event'])
+  }
+
+  goToHistory() {
     this.router.navigate(['/gotcha']);
   }
 }

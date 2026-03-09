@@ -176,7 +176,8 @@
     "editStartDate": "Edit start date",
     "winner": "Winner",
     "page": {
-      "back": "Back"
+      "back": "Back",
+      "history": "Kill feed"
     },
     "status": {
       "opt_in": "Sign-up",

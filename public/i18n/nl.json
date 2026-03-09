@@ -176,7 +176,8 @@
     "editStartDate": "Startdatum aanpassen",
     "winner": "Winnaar",
     "page": {
-      "back": "Terug"
+      "back": "Terug",
+      "history": "Kill Feed"
     },
     "status": {
       "opt_in": "Inschrijving",

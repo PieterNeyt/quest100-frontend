@@ -52,7 +52,6 @@ export class GotchaKillFeedComponent implements OnInit {
   isReviewingKill   = signal(false);
   reviewDone        = computed(() => !this.reviewLoading() && this.currentReviewItem() === null);
 
-  /** Swipe-animatie richting voor de review kaart ('approve' | 'deny' | null) */
   swipeDirection = signal<'approve' | 'deny' | null>(null);
 
   ngOnInit() {
@@ -138,7 +137,6 @@ export class GotchaKillFeedComponent implements OnInit {
     if (!item || this.isReviewingKill()) return;
     this.isReviewingKill.set(true);
 
-    // Trigger swipe-animatie, daarna pas de API call afhandelen
     this.swipeDirection.set(approve ? 'approve' : 'deny');
 
     setTimeout(() => {

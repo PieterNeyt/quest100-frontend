@@ -3,9 +3,9 @@
 :host { display: block; width: 100%; }
 
 .end-page-wrap {
-  max-width: 720px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
+  padding: 2rem 1.25rem 4rem;
 }
 
 .end-page-header {
@@ -119,4 +119,24 @@
 .btn-retry:hover {
   border-color: var(--color-blue);
   color: var(--color-blue);
+}
+.btn-history {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  padding: 0.38rem 0.75rem;
+  background: rgba(90, 170, 180, 0.08);
+  border: 1.5px solid rgba(90, 170, 180, 0.25);
+  border-radius: 8px;
+  color: var(--color-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-history:hover {
+  background: rgba(90, 170, 180, 0.15);
+  border-color: rgba(90, 170, 180, 0.45);
 }

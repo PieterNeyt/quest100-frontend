@@ -108,7 +108,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
       profileMap.set(k.victim.id, k.victim);
     });
 
-    // ── SKILL AWARDS ──────────────────────────────────────────────────────────
+    // SKILL AWARDS
 
     // First Blood
     awards.push({
@@ -174,7 +174,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
       });
     }
 
-    // ── SOCIAL AWARDS ─────────────────────────────────────────────────────────
+    // SOCIAL AWARDS
 
     // Best Disguise (Meeste likes)
     const mostLiked = [...kills].sort((a, b) => ((b as any).likeCount ?? 0) - ((a as any).likeCount ?? 0))[0];
@@ -187,7 +187,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
       });
     }
 
-    // ── PROP AWARDS ───────────────────────────────────────────────────────────
+    // PROP AWARDS
 
     // Deadliest Weapon
     const propCounts = new Map<string, { name: string, count: number }>();
@@ -207,7 +207,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
       });
     }
 
-    // ── MEME AWARDS ───────────────────────────────────────────────────────────
+    // MEME AWARDS
 
     // First Victim
     awards.push({
@@ -243,7 +243,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
       });
     }
 
-    // ── GAME AWARDS ───────────────────────────────────────────────────────────
+    // GAME AWARDS
 
     // Final Victim (Het laatste slachtoffer van de winnaar)
     awards.push({
