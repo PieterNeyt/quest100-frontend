@@ -42,23 +42,7 @@
   </div>
 
   <!-- ── FINISHED BANNER ── -->
-  @if (isFinished()) {
-    <div class="finished-banner">
-      <div class="finished-banner-left">
-        <div class="finished-trophy-wrap">
-          <ng-icon hlm name="lucideTrophy" size="md" />
-        </div>
-        <div class="finished-text">
-          <span class="finished-title">{{ t.t('gotcha.endScreen.gameOver') }}</span>
-          <span class="finished-sub">{{ t.t('gotcha.endScreen.gameOverSub') }}</span>
-        </div>
-      </div>
-      <button class="btn-view-results" (click)="goToEndScreen()">
-        <ng-icon hlm name="lucideBarChart2" size="sm" />
-        {{ t.t('gotcha.endScreen.viewResults') }}
-      </button>
-    </div>
-  }
+
 
   <!-- ── TARGET PANEL ── -->
   @if (isActive() && isParticipant()) {

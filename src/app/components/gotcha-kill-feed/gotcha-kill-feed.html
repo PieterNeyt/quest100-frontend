@@ -3,12 +3,14 @@
   <!-- ── Tabs ── -->
   <div class="tabs">
     <button class="tab" [class.tab--active]="activeTab() === 'feed'" (click)="activeTab.set('feed')">
-      💀 {{ t.t('gotcha.tabs.feed') }}
+      <ng-icon hlm name="lucideSkull" size="xs" />
+      {{ t.t('gotcha.tabs.feed') }}
     </button>
     <button class="tab" [class.tab--active]="activeTab() === 'review'" (click)="activeTab.set('review')">
-      ⚖️ {{ t.t('gotcha.tabs.review') }}
+      <ng-icon hlm name="lucideScale" size="xs" />
+      {{ t.t('gotcha.tabs.review') }}
       @if (pendingCount() > 0) {
-        <span class="tab-badge">{{ pendingCount() }}</span>
+        <span class="tab-badge tab-badge--dot"></span>
       }
     </button>
   </div>
@@ -21,12 +23,6 @@
       <ng-icon hlm name="lucideRefreshCw" size="sm"
                [class.spinning]="activeTab() === 'feed' ? loading() : reviewLoading()" />
     </button>
-    @if (activeTab() === 'review' && pendingCount() > 0) {
-      <span class="queue-label">
-        <ng-icon hlm name="lucideLayers" size="xs" />
-        {{ pendingCount() }} {{ t.t('gotcha.review.inQueue') }}
-      </span>
-    }
   </div>
 
   <!-- ════════════════════════════════════
@@ -154,13 +150,14 @@
   }
 
   <!-- ════════════════════════════════════
-       REVIEW TAB — FIFO stack
+       REVIEW TAB — gestapelde kaarten
   ════════════════════════════════════ -->
   @if (activeTab() === 'review') {
 
-    <!-- Loading skeleton -->
     @if (reviewLoading()) {
-      <div class="review-stack-wrap">
+      <!-- Skeleton stack -->
+      <div class="review-stack-scene">
+        <div class="stack-ghost stack-ghost--3"></div>
         <div class="stack-ghost stack-ghost--2"></div>
         <div class="stack-ghost stack-ghost--1"></div>
         <div class="feed-card feed-card--skeleton">
@@ -176,7 +173,6 @@
       </div>
     }
 
-    <!-- Queue empty -->
     @if (reviewDone()) {
       <div class="feed-empty">
         <ng-icon hlm name="lucideCheckCircle" size="48" />
@@ -184,14 +180,25 @@
       </div>
     }
 
-    <!-- Stack card -->
     @if (currentReviewItem() && !reviewLoading()) {
-      <div class="review-stack-wrap">
+      <div class="review-stack-scene">
 
-        @if (stackDepth >= 2) { <div class="stack-ghost stack-ghost--2"></div> }
-        @if (stackDepth >= 1) { <div class="stack-ghost stack-ghost--1"></div> }
+        <!-- Ghost kaarten: pas zichtbaar als er NAAST de huidige kaart nog meer zijn -->
+        @if (pendingCount() > 3) {
+          <div class="stack-ghost stack-ghost--3"></div>
+        }
+        @if (pendingCount() > 2) {
+          <div class="stack-ghost stack-ghost--2"></div>
+        }
+        @if (pendingCount() > 1) {
+          <div class="stack-ghost stack-ghost--1"></div>
+        }
 
-        <div class="feed-card status-pending review-card" [class.reviewing]="isReviewingKill()">
+        <!-- Actieve review kaart -->
+        <div class="feed-card review-card status-pending"
+             [class.reviewing]="isReviewingKill()"
+             [class.swipe-approve]="swipeDirection() === 'approve'"
+             [class.swipe-deny]="swipeDirection() === 'deny'">
 
           <div class="card-header">
             <div class="profile-row">
@@ -233,6 +240,17 @@
                  [src]="photoSrc(currentReviewItem()!.photoBase64)"
                  [alt]="t.t('gotcha.feed.photoAlt')"
                  loading="lazy" />
+
+            <!-- Swipe feedback overlays -->
+            <div class="swipe-hint swipe-hint--approve">
+              <ng-icon hlm name="lucideCheck" size="lg" />
+              <span>{{ t.t('gotcha.review.approve') }}</span>
+            </div>
+            <div class="swipe-hint swipe-hint--deny">
+              <ng-icon hlm name="lucideX" size="lg" />
+              <span>{{ t.t('gotcha.review.deny') }}</span>
+            </div>
+
             <div class="victim-overlay">
               <div class="victim-avatar">
                 @if (currentReviewItem()!.victim.profilePicture) {
@@ -251,12 +269,12 @@
           <div class="card-footer review-actions">
             <button class="btn-deny" [disabled]="isReviewingKill()" (click)="reviewKill(false)">
               @if (isReviewingKill()) { <span class="like-spinner"></span> }
-              <ng-icon hlm name="lucideX" size="sm" />
+              @else { <ng-icon hlm name="lucideThumbsDown" size="sm" /> }
               {{ t.t('gotcha.review.deny') }}
             </button>
             <button class="btn-approve" [disabled]="isReviewingKill()" (click)="reviewKill(true)">
               @if (isReviewingKill()) { <span class="like-spinner"></span> }
-              <ng-icon hlm name="lucideCheck" size="sm" />
+              @else { <ng-icon hlm name="lucideThumbsUp" size="sm" /> }
               {{ t.t('gotcha.review.approve') }}
             </button>
           </div>

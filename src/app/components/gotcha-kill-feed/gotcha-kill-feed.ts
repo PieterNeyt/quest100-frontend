@@ -9,10 +9,10 @@ import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService, KillFeedItem } from '../services/gotchaService';
-import { TranslationService } from '../services/translationService';
-import { ToastService } from '../services/toastService';
-import * as utils from '../utils/gotchaUtils';
+import { GotchaService, KillFeedItem } from '../../services/gotchaService';
+import { TranslationService } from '../../services/translationService';
+import { ToastService } from '../../services/toastService';
+import * as utils from '../../utils/gotchaUtils';
 
 @Component({
   selector: 'app-gotcha-kill-feed',
@@ -52,12 +52,15 @@ export class GotchaKillFeedComponent implements OnInit {
   isReviewingKill   = signal(false);
   reviewDone        = computed(() => !this.reviewLoading() && this.currentReviewItem() === null);
 
+  /** Swipe-animatie richting voor de review kaart ('approve' | 'deny' | null) */
+  swipeDirection = signal<'approve' | 'deny' | null>(null);
+
   ngOnInit() {
     this.loadFeed();
     this.loadNextReviewItem();
   }
 
-  // feed
+  // ── feed ──
 
   loadFeed() {
     this.loading.set(true);
@@ -113,11 +116,12 @@ export class GotchaKillFeedComponent implements OnInit {
 
   isLiking(id: string): boolean { return this.likingIds().has(id); }
 
-  // review
+  // ── review ──
 
   loadNextReviewItem() {
     this.reviewLoading.set(true);
     this.currentReviewItem.set(null);
+    this.swipeDirection.set(null);
 
     this.gotchaService.getPendingKillCount().subscribe({
       next: ({ count }) => this.pendingCount.set(count),
@@ -134,23 +138,29 @@ export class GotchaKillFeedComponent implements OnInit {
     if (!item || this.isReviewingKill()) return;
     this.isReviewingKill.set(true);
 
-    this.gotchaService.reviewKill(item.id, approve).subscribe({
-      next: () => {
-        this.isReviewingKill.set(false);
-        this.pendingCount.update((n) => Math.max(0, n - 1));
-        this.toastService.success(approve ? 'gotcha.review.approved' : 'gotcha.review.denied');
-        const newStatus = approve ? 'APPROVED' : 'DENIED';
-        this.items.update((list) =>
-          list.map((i) => i.id === item.id ? { ...i, status: newStatus } : i)
-        );
-        this.loadNextReviewItem();
-      },
-      error: () => { this.isReviewingKill.set(false); this.toastService.error('gotcha.review.error'); },
-    });
+    // Trigger swipe-animatie, daarna pas de API call afhandelen
+    this.swipeDirection.set(approve ? 'approve' : 'deny');
+
+    setTimeout(() => {
+      this.gotchaService.reviewKill(item.id, approve).subscribe({
+        next: () => {
+          this.isReviewingKill.set(false);
+          this.pendingCount.update((n) => Math.max(0, n - 1));
+          this.toastService.success(approve ? 'gotcha.review.approved' : 'gotcha.review.denied');
+          const newStatus = approve ? 'APPROVED' : 'DENIED';
+          this.items.update((list) =>
+            list.map((i) => i.id === item.id ? { ...i, status: newStatus } : i)
+          );
+          this.loadNextReviewItem();
+        },
+        error: () => {
+          this.isReviewingKill.set(false);
+          this.swipeDirection.set(null);
+          this.toastService.error('gotcha.review.error');
+        },
+      });
+    }, 350);
   }
-
-  get stackDepth(): number { return Math.min(this.pendingCount() - 1, 2); }
-
 
   propName(prop: any): string {
     return utils.propName(prop, this.t.currentLanguage());

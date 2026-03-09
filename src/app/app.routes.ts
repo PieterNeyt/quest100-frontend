@@ -9,7 +9,7 @@ import {EventDetailComponent} from './event-detail/event-detail';
 import {Qrcode} from './qrcode/qrcode';
 import {EventComponent} from './event/event';
 import {GotchaPageComponent} from './gotcha-page/gotcha-page';
-import {GotchaEndPageComponent} from './gotcha-end-screen/gotcha-end-page';
+import {GotchaEndPageComponent} from './gotcha-end-page/gotcha-end-page';
 import {GotchaSettingsComponent} from './gotcha-settings/gotcha-settings';
 
 export const routes: Routes = [

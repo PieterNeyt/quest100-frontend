@@ -7,7 +7,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService } from '../services/gotchaService';
 import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
-import { GotchaKillFeedComponent } from '../gotcha-kill-feed/gotcha-kill-feed';
+import { GotchaKillFeedComponent } from '../components/gotcha-kill-feed/gotcha-kill-feed';
 import * as utils from '../utils/gotchaUtils';
 
 @Component({

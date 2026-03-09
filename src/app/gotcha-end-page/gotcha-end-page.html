@@ -1,0 +1,35 @@
+<div class="end-page-wrap">
+  <div class="end-page-header">
+    <button class="btn-back" (click)="goBack()">
+      <ng-icon hlm name="lucideArrowLeft" size="sm" />
+      {{ t.t('gotcha.page.back') }}
+    </button>
+    <div class="end-page-title-row">
+      <div class="page-icon-wrap">
+        <ng-icon hlm name="lucideTarget" size="sm" />
+      </div>
+      <h1 class="page-title">Gotcha</h1>
+      <span class="status-pill status-finished">
+        {{ t.t('gotcha.status.finished') }}
+      </span>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="end-loading">
+      <div class="end-load-spinner"></div>
+      <p>{{ t.t('gotcha.endScreen.loading') }}</p>
+    </div>
+  } @else if (error()) {
+    <div class="end-error">
+      <ng-icon hlm name="lucideAlertCircle" size="48" />
+      <p>{{ t.t('gotcha.endScreen.loadError') }}</p>
+      <button class="btn-retry" (click)="load()">
+        <ng-icon hlm name="lucideRefreshCw" size="sm" />
+        {{ t.t('event.retry') }}
+      </button>
+    </div>
+  } @else if (data()) {
+    <app-gotcha-end-screen [data]="data()!" />
+  }
+</div>

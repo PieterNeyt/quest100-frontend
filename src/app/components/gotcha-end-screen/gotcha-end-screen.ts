@@ -9,9 +9,9 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
 import type * as d3Type from 'd3';
 import {
   EndScreen, EndScreenKillNode, GameAward, KillFeedProfile,
-} from '../model/gotcha';
-import { TranslationService } from '../services/translationService';
-import * as utils from '../utils/gotchaUtils';
+} from '../../model/gotcha';
+import { TranslationService } from '../../services/translationService';
+import * as utils from '../../utils/gotchaUtils';
 
 interface GraphNode extends d3Type.SimulationNodeDatum {
   id: string;

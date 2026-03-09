@@ -2,6 +2,10 @@
 
   <!-- ══ WINNER HERO ══ -->
   <div class="end-hero">
+    <!-- Vuurwerk — puur CSS via ::before en ::after + extra div -->
+    <div class="firework"></div>
+    <div class="firework-2"></div>
+
     <div class="confetti-bg">
       @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
         <span class="confetti-piece" [style.--i]="i"></span>
@@ -214,7 +218,7 @@
                 <div class="pk-item" (click)="openKillDetail(k)">
                   <div class="pk-item-left">
                     <ng-icon hlm name="lucideChevronRight" size="xs" />
-                    <span class="pk-victim">{{ utils.fullName(k.victim)}}</span>
+                    <span class="pk-victim">{{ utils.fullName(k.victim) }}</span>
                   </div>
                   @if (k.prop) {
                     <span class="pk-prop">
