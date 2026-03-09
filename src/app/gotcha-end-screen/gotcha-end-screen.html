@@ -43,7 +43,7 @@
         </div>
         <div class="prize-body">
           @if (data.prizePhotoBase64) {
-            <img class="prize-photo" [src]="photoSrc(data.prizePhotoBase64)" alt="prize" />
+            <img class="prize-photo" [src]="utils.photoSrc(data.prizePhotoBase64)" alt="prize" />
           }
           @if (prizeDescription) {
             <p class="prize-desc">{{ prizeDescription }}</p>
@@ -119,12 +119,12 @@
                       <div class="award-profile">
                         <div class="award-avatar">
                           @if (award.profile.profilePicture) {
-                            <img [src]="award.profile.profilePicture" [alt]="fullName(award.profile)" />
+                            <img [src]="award.profile.profilePicture" [alt]="utils.fullName(award.profile)" />
                           } @else {
-                            <span class="award-initials">{{ initials(award.profile) }}</span>
+                            <span class="award-initials">{{ utils.initials(award.profile) }}</span>
                           }
                         </div>
-                        <span class="award-name">{{ fullName(award.profile) }}</span>
+                        <span class="award-name">{{ utils.fullName(award.profile) }}</span>
                         @if (award.count !== undefined && award.count > 0) {
                           <span class="award-count">× {{ award.count }}</span>
                         }
@@ -157,9 +157,9 @@
                           <div class="award-profile-chip">
                             <div class="award-avatar award-avatar--sm">
                               @if (p.profilePicture) {
-                                <img [src]="p.profilePicture" [alt]="fullName(p)" />
+                                <img [src]="p.profilePicture" [alt]="utils.fullName(p)" />
                               } @else {
-                                <span class="award-initials award-initials--sm">{{ initials(p) }}</span>
+                                <span class="award-initials award-initials--sm">{{ utils.initials(p) }}</span>
                               }
                             </div>
                             <span class="award-chip-name">{{ p.firstName }}</span>
@@ -214,12 +214,12 @@
                 <div class="pk-item" (click)="openKillDetail(k)">
                   <div class="pk-item-left">
                     <ng-icon hlm name="lucideChevronRight" size="xs" />
-                    <span class="pk-victim">{{ fullName(k.victim) }}</span>
+                    <span class="pk-victim">{{ utils.fullName(k.victim)}}</span>
                   </div>
                   @if (k.prop) {
                     <span class="pk-prop">
                       <ng-icon hlm name="lucidePackage" size="xs" />
-                      {{ propName(k.prop) }}
+                      {{ utils.propName(k.prop, t.currentLanguage()) }}
                     </span>
                   }
                 </div>
@@ -247,39 +247,39 @@
         </button>
       </div>
       <div class="kill-detail-body">
-        <img class="kill-detail-photo" [src]="photoSrc(kill.photoBase64)" alt="kill photo" />
+        <img class="kill-detail-photo" [src]="utils.photoSrc(kill.photoBase64)" alt="kill photo" />
         <div class="kill-detail-info">
           <div class="kill-detail-row">
             <div class="kill-detail-avatar kill-detail-avatar--hunter">
               @if (kill.hunter.profilePicture) {
-                <img [src]="kill.hunter.profilePicture" [alt]="fullName(kill.hunter)" />
+                <img [src]="kill.hunter.profilePicture" [alt]="utils.fullName(kill.hunter)" />
               } @else {
-                {{ initials(kill.hunter) }}
+                {{ utils.initials(kill.hunter) }}
               }
             </div>
             <div>
               <span class="kill-detail-role">{{ t.t('gotcha.endScreen.hunter') }}</span>
-              <span class="kill-detail-name">{{ fullName(kill.hunter) }}</span>
+              <span class="kill-detail-name">{{ utils.fullName(kill.hunter) }}</span>
             </div>
             <div class="kill-detail-sword">
               <ng-icon hlm name="lucideSwords" size="sm" />
             </div>
             <div class="kill-detail-avatar kill-detail-avatar--victim">
               @if (kill.victim.profilePicture) {
-                <img [src]="kill.victim.profilePicture" [alt]="fullName(kill.victim)" />
+                <img [src]="kill.victim.profilePicture" [alt]="utils.fullName(kill.victim)" />
               } @else {
-                {{ initials(kill.victim) }}
+                {{ utils.initials(kill.victim) }}
               }
             </div>
             <div>
               <span class="kill-detail-role">{{ t.t('gotcha.endScreen.victim') }}</span>
-              <span class="kill-detail-name">{{ fullName(kill.victim) }}</span>
+              <span class="kill-detail-name">{{ utils.fullName(kill.victim) }}</span>
             </div>
           </div>
           @if (kill.prop) {
             <div class="kill-detail-prop">
               <ng-icon hlm name="lucidePackage" size="xs" />
-              {{ propName(kill.prop) }}
+              {{ utils.propName(kill.prop, t.currentLanguage()) }}
             </div>
           }
           <span class="kill-detail-time">{{ formatDate(kill.createdAt) }}</span>

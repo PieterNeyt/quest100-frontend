@@ -160,19 +160,20 @@
     "awardError": "Award geven mislukt. Probeer het opnieuw."
   },
   "gotcha": {
-    "bannerDescription": "Doe mee met het Gotcha-spel en schakel je toegewezen doelwit uit.",
+    "bannerDescription": "Doe mee met het Gotcha-spel en schakel je doelwit uit.",
     "startsIn": "Start over",
     "days": "Dagen",
     "hours": "Uren",
     "minutes": "Min",
     "seconds": "Sec",
-    "comingSoon": "Binnenkort beschikbaar",
+    "comingSoon": "Binnenkort",
     "optedIn": "Je doet mee",
     "optOut": "Verlaat spel",
     "optingOut": "Bezig met verlaten...",
     "joinGame": "Doe mee",
-    "joiningGame": "Bezig met deelnemen...",
+    "joiningGame": "Bezig...",
     "editStartDate": "Startdatum aanpassen",
+    "winner": "Winnaar",
     "page": {
       "back": "Terug"
     },
@@ -182,15 +183,15 @@
       "finished": "Afgelopen"
     },
     "tabs": {
-      "feed": "Kills",
+      "feed": "Kill Feed",
       "review": "Beoordelen"
     },
     "target": {
       "label": "Jouw doelwit",
       "propLabel": "Jouw voorwerp",
-      "none": "Nog geen doelwit toegewezen",
+      "none": "Nog geen doelwit",
       "eliminated": "Je bent uitgeschakeld",
-      "timeLeft": "Tijd om te killen",
+      "timeLeft": "Tijd over",
       "waitingForReview": "Wacht op beoordeling"
     },
     "feed": {
@@ -218,12 +219,13 @@
       "approved": "Kill goedgekeurd.",
       "denied": "Kill afgekeurd.",
       "loadError": "Openstaande kills konden niet geladen worden.",
-      "error": "Kon deze kill niet beoordelen."
+      "error": "Kon deze kill niet beoordelen.",
+      "inQueue": "in de wachtrij"
     },
     "submitKill": {
       "button": "Kill indienen",
       "title": "Kill indienen",
-      "hint": "Upload een foto waarop je bewijst dat je je doelwit hebt uitgeschakeld met jouw toegewezen voorwerp.",
+      "hint": "Upload een foto waarop je bewijst dat je je doelwit hebt uitgeschakeld met jouw voorwerp.",
       "photoLabel": "Bewijsfoto",
       "photoPlaceholder": "Foto uploaden...",
       "photoSelect": "Foto selecteren",
@@ -236,37 +238,40 @@
       "error": "Kill kon niet ingediend worden."
     },
     "editModal": {
-      "title": "Spelinstellingen aanpassen",
+      "title": "Spelinstellingen",
       "startDate": "Startdatum & tijd",
       "killDeadline": "Kill deadline (uren)",
-      "killDeadlineHint": "Aantal uren dat een speler heeft om zijn doelwit uit te schakelen voordat de keten verdergaat.",
+      "killDeadlineHint": "Aantal uren dat een speler heeft voordat de keten verdergaat.",
       "prizePhoto": "Foto van de prijs",
       "prizeDescEN": "Prijsbeschrijving (Engels)",
       "prizeDescNL": "Prijsbeschrijving (Nederlands)",
       "cancel": "Annuleren",
-      "save": "Wijzigingen opslaan",
-      "prizePhotoHint": "Klik of sleep om een foto te uploaden",
+      "save": "Opslaan",
+      "prizePhotoHint": "Klik of sleep voor een foto",
       "prizeDescPlaceholder": "Beschrijf de prijs...",
       "saving": "Opslaan...",
       "startDateRequired": "Stel een startdatum in."
     },
     "endScreen": {
-      "loading": "Toernooiresultaten laden...",
+      "loading": "Resultaten laden...",
       "title": "Game Over!",
       "kills": "kills",
       "prize": "Prijs",
+      "winner": "Winnaar",
       "stats": "Toernooistatistieken",
       "statParticipants": "Deelnemers",
       "statKills": "Totaal kills",
+      "statTotalKills": "Totaal kills",
       "statFastest": "Snelste kill",
+      "statFastestKill": "Snelste kill",
       "statMostKills": "Meeste kills",
-      "statMortality": "Uitschakelingspercentage",
+      "statMortality": "Uitschakelpercentage",
       "statMostUsedProp": "Meest gebruikt voorwerp",
       "graph": "Toernooikaart",
-      "graphHint": "Sleep knopen · Scroll om in te zoomen · Klik op een pijl voor kill details",
+      "graphHint": "Sleep knopen · Scroll om te zoomen · Klik op een pijl voor details",
       "legendWinner": "Winnaar",
       "legendKillCount": "Kill teller",
-      "legendClickEdge": "Klik op pijl voor kill details",
+      "legendClickEdge": "Klik op pijl voor details",
       "killList": "Kill geschiedenis",
       "killDetail": "Kill details",
       "eliminated": "heeft uitgeschakeld",
@@ -274,7 +279,7 @@
       "victim": "Slachtoffer",
       "loadError": "Resultaten konden niet worden geladen.",
       "gameOver": "Game Over!",
-      "gameOverSub": "Het toernooi is afgelopen. Bekijk wie gewonnen heeft!",
+      "gameOverSub": "Het toernooi is afgelopen. Bekijk de winnaar!",
       "viewResults": "Bekijk resultaten",
       "killsOf": "Kills van",
       "noKills": "Nog geen kills."
@@ -319,7 +324,7 @@
       },
       "bestDisguise": {
         "title": "Beste Vermomming",
-        "desc": "Kill met de meeste likes van medespelers."
+        "desc": "Kill met de meeste likes."
       },
       "deadliestWeapon": {
         "title": "Dodelijkste Wapen",
@@ -338,26 +343,25 @@
         "desc": "Meeste kills op één dag."
       }
     },
-    "winner": "Winnaar",
     "settings": {
       "title": "Spelinstellingen",
       "gameSettings": "Spelinstellingen",
       "props": "Voorwerpen",
       "addProp": "Voorwerp toevoegen",
-      "noProps": "Nog geen voorwerpen. Voeg er een toe!",
-      "propNameEN": "Naam (Engels)",
-      "propNameNL": "Naam (Nederlands)",
-      "bothLangsRequired": "Beide taalvelden zijn verplicht.",
+      "noProps": "Geen voorwerpen gevonden.",
+      "propNameEN": "Naam (EN)",
+      "propNameNL": "Naam (NL)",
+      "bothLangsRequired": "Beide talen zijn verplicht.",
       "propAdded": "Voorwerp toegevoegd!",
       "propDeleted": "Voorwerp verwijderd.",
       "cancel": "Annuleren"
     },
     "toasts": {
-      "optedIn": "Je doet nu mee aan het spel!",
-      "alreadyOptedIn": "Je doet al mee aan het spel.",
+      "optedIn": "Je doet mee aan het spel!",
+      "alreadyOptedIn": "Je doet al mee.",
       "optInError": "Deelname mislukt.",
       "optedOut": "Je hebt het spel verlaten.",
-      "optOutGameStarted": "Je kunt niet meer uitstappen nadat het spel gestart is.",
+      "optOutGameStarted": "Je kunt nu niet meer uitstappen.",
       "optOutError": "Verlaten mislukt."
     }
   }

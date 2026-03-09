@@ -2,7 +2,6 @@ import {
   Component,
   computed,
   inject,
-  OnDestroy,
   OnInit,
   signal,
 } from '@angular/core';
@@ -15,13 +14,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService } from '../../services/gotchaService';
 import { TranslationService } from '../../services/translationService';
 import { ToastService } from '../../services/toastService';
-
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
+import * as utils from '../../utils/gotchaUtils';
 
 @Component({
   selector: 'app-gotcha-banner',
@@ -31,49 +24,56 @@ interface TimeLeft {
   templateUrl: './gotcha-banner.html',
   styleUrl: './gotcha-banner.css',
 })
-export class GotchaBannerComponent implements OnInit, OnDestroy {
+export class GotchaBannerComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
   private readonly toastService  = inject(ToastService);
   private readonly router        = inject(Router);
   readonly t = inject(TranslationService);
 
+  readonly utils = utils;
+
   loading = signal(true);
   acting  = signal(false);
 
-  timeLeft = signal<TimeLeft | null>(null);
-  private timerInterval: ReturnType<typeof setInterval> | null = null;
+  myStatus    = this.gotchaService.myStatus;
+  currentGame = this.gotchaService.currentGame;
+  endScreen   = this.gotchaService.endScreen;
+  serviceCd   = this.gotchaService.countdown;
 
-  endScreen = this.gotchaService.endScreen;
-
-  isOptedIn    = computed(() => this.gotchaService.myStatus() !== null);
-  gameStatus   = computed(() => this.gotchaService.currentGame()?.status ?? null);
+  isOptedIn    = computed(() => this.myStatus() !== null);
+  gameStatus   = computed(() => this.currentGame()?.status ?? null);
   isFinished   = computed(() => this.gameStatus() === 'FINISHED');
 
+
+  timeLeft = computed(() => {
+    const cd = this.serviceCd();
+    if (!cd) return null;
+
+    return {
+      days:    Math.floor(cd.h / 24),
+      hours:   cd.h % 24,
+      minutes: cd.m,
+      seconds: cd.s
+    };
+  });
+
   hasStartDate = computed(() => {
-    const game = this.gotchaService.currentGame();
-    if (!game?.startDate) return false;
-    const d = new Date(game.startDate);
-    return !isNaN(d.getTime()) && d.getFullYear() > 2000;
+    const game = this.currentGame();
+    return !!game?.startDate;
   });
 
   canOptOut = computed(() =>
-    this.isOptedIn() && this.gotchaService.currentGame()?.status === 'OPT_IN'
+    this.isOptedIn() && this.gameStatus() === 'OPT_IN'
   );
 
-  winner         = computed(() => this.endScreen()?.winner ?? null);
-  winnerName     = computed(() => {
-    const w = this.winner();
-    return w ? `${w.firstName} ${w.lastName}`.trim() : '';
-  });
-  winnerInitials = computed(() => {
-    const w = this.winner();
-    if (!w) return '?';
-    return `${w.firstName?.[0] ?? ''}${w.lastName?.[0] ?? ''}`.toUpperCase();
-  });
+  winner          = computed(() => this.endScreen()?.winner ?? null);
+  winnerName      = computed(() => utils.fullName(this.winner()));
+  winnerInitials  = computed(() => utils.initials(this.winner()));
   winnerKillCount = computed(() => this.endScreen()?.winnerKillCount ?? 0);
 
-  ngOnInit()    { this.loadAll(); }
-  ngOnDestroy() { this.clearTimer(); }
+  ngOnInit() {
+    this.loadAll();
+  }
 
   navigateToEndScreen() { this.router.navigate(['/gotcha/end']); }
   navigateToGotcha()    { this.router.navigate(['/gotcha']); }
@@ -81,9 +81,9 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
 
   private loadAll() {
     this.loading.set(true);
+    // Haal game op, daarna status. De service vult de signals.
     this.gotchaService.getCurrentGame().subscribe({
       next: () => {
-        this.startCountdown();
         if (this.isFinished()) {
           this.gotchaService.getEndScreen().subscribe();
         }
@@ -104,21 +104,13 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
           next: () => {
             this.acting.set(false);
             this.toastService.success('gotcha.toasts.optedIn');
-            this.gotchaService.getCurrentGame().subscribe({
-              next:  () => this.startCountdown(),
-              error: () => {},
-            });
           },
           error: () => this.acting.set(false),
         });
       },
       error: (err) => {
         this.acting.set(false);
-        if (err?.status === 409) {
-          this.toastService.error('gotcha.toasts.alreadyOptedIn');
-        } else {
-          this.toastService.error('gotcha.toasts.optInError');
-        }
+        this.toastService.error(err?.status === 409 ? 'gotcha.toasts.alreadyOptedIn' : 'gotcha.toasts.optInError');
       },
     });
   }
@@ -133,45 +125,15 @@ export class GotchaBannerComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.acting.set(false);
-        if (err?.error?.error === 'cannot opt out after game has started') {
-          this.toastService.error('gotcha.toasts.optOutGameStarted');
-        } else {
-          this.toastService.error('gotcha.toasts.optOutError');
-        }
+        const msg = err?.error?.error === 'cannot opt out after game has started'
+          ? 'gotcha.toasts.optOutGameStarted'
+          : 'gotcha.toasts.optOutError';
+        this.toastService.error(msg);
       },
     });
   }
 
-  private startCountdown() {
-    this.clearTimer();
-    const game = this.gotchaService.currentGame();
-    if (!game?.startDate) return;
-    const target = new Date(game.startDate).getTime();
-    if (isNaN(target) || target <= 0) return;
-    const tick = () => {
-      const diff = target - Date.now();
-      if (diff <= 0) {
-        this.timeLeft.set({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        this.clearTimer();
-        return;
-      }
-      this.timeLeft.set({
-        days:    Math.floor(diff / 86400000),
-        hours:   Math.floor((diff % 86400000) / 3600000),
-        minutes: Math.floor((diff % 3600000) / 60000),
-        seconds: Math.floor((diff % 60000) / 1000),
-      });
-    };
-    tick();
-    this.timerInterval = setInterval(tick, 1000);
+  pad(n: number): string {
+    return String(n).padStart(2, '0');
   }
-
-  private clearTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-  }
-
-  pad(n: number): string { return String(n).padStart(2, '0'); }
 }

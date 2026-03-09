@@ -10,7 +10,6 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService } from '../services/gotchaService';
-import { EndScreen } from '../model/gotcha';
 import { TranslationService } from '../services/translationService';
 import { GotchaEndScreenComponent } from './gotcha-end-screen';
 
@@ -79,18 +78,29 @@ export class GotchaEndPageComponent implements OnInit {
 
   loading = signal(true);
   error = signal(false);
-  data = signal<EndScreen | null>(null);
 
-  ngOnInit() { this.load(); }
+  data = this.gotchaService.endScreen;
+
+  ngOnInit() {
+    this.load();
+  }
 
   load() {
     this.loading.set(true);
     this.error.set(false);
+
     this.gotchaService.getEndScreen().subscribe({
-      next: (es) => { this.data.set(es); this.loading.set(false); },
-      error: () => { this.error.set(true); this.loading.set(false); },
+      next: () => {
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set(true);
+        this.loading.set(false);
+      },
     });
   }
 
-  goBack() { this.router.navigate(['/gotcha']); }
+  goBack() {
+    this.router.navigate(['/gotcha']);
+  }
 }

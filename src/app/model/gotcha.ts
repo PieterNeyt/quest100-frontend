@@ -34,8 +34,6 @@ export interface UpdateGameRequest {
   prizeDescriptionNL?: string;
 }
 
-export type UpdateStartDateRequest = UpdateGameRequest;
-
 export interface KillFeedProfile {
   id: string;
   firstName: string;

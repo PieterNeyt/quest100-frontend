@@ -11,6 +11,7 @@ import {
   EndScreen, EndScreenKillNode, GameAward, KillFeedProfile,
 } from '../model/gotcha';
 import { TranslationService } from '../services/translationService';
+import * as utils from '../utils/gotchaUtils';
 
 interface GraphNode extends d3Type.SimulationNodeDatum {
   id: string;
@@ -20,7 +21,6 @@ interface GraphNode extends d3Type.SimulationNodeDatum {
   isWinner: boolean;
 }
 
-// Extended award with icon instead of emoji
 interface ExtendedAward extends GameAward {
   icon: string;
 }
@@ -40,6 +40,8 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
   readonly t = inject(TranslationService);
   private readonly platformId = inject(PLATFORM_ID);
 
+  readonly utils = utils;
+
   selectedKill        = signal<EndScreenKillNode | null>(null);
   showKillDetail      = signal(false);
   selectedPersonKills = signal<EndScreenKillNode[]>([]);
@@ -56,10 +58,9 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
 
   mostUsedProp = computed(() => {
     const propCounts: Record<string, number> = {};
-    const isNL = this.t.currentLanguage() === 'nl';
     this.data.kills.forEach(k => {
       if (k.prop) {
-        const name = isNL ? k.prop.nameNL : k.prop.nameEN;
+        const name = utils.propName(k.prop, this.t.currentLanguage());
         propCounts[name] = (propCounts[name] || 0) + 1;
       }
     });
@@ -81,8 +82,6 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     }
   }
 
-  // ── Award categories with lucide icons ───────────────────────────────────
-
   readonly awardCategories: Array<{ key: string; labelKey: string; icon: string }> = [
     { key: 'skill',  labelKey: 'gotcha.awards.cat.skill',  icon: 'lucideTarget' },
     { key: 'social', labelKey: 'gotcha.awards.cat.social', icon: 'lucideHeart' },
@@ -91,13 +90,11 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     { key: 'game',   labelKey: 'gotcha.awards.cat.game',   icon: 'lucideBarChart2' },
   ];
 
-  // ── Award calculation ─────────────────────────────────────────────────────
-
   private buildAwards(): ExtendedAward[] {
     const kills = this.data.kills;
     if (kills.length === 0) return [];
 
-    const isNL = this.t.currentLanguage() === 'nl';
+    const lang = this.t.currentLanguage();
     const awards: ExtendedAward[] = [];
 
     const killCountMap = new Map<string, number>();
@@ -109,22 +106,17 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
       profileMap.set(k.victim.id, k.victim);
     });
 
-    // ── SKILL ─────────────────────────────────────────────────────────────────
-
     const sorted = [...kills].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-    // First Blood
     if (sorted.length > 0) {
       awards.push({
-        id: 'first-blood', icon: 'lucideZap', category: 'skill',
-        emoji: '',
+        id: 'first-blood', icon: 'lucideZap', category: 'skill', emoji: '',
         titleKey: 'gotcha.awards.firstBlood.title',
         descriptionKey: 'gotcha.awards.firstBlood.desc',
         profile: sorted[0].hunter,
       });
     }
 
-    // Serial Killer — most kills (exclude winner to avoid double award feel)
     let serialKillerId = '';
     let serialKillerCount = 0;
     killCountMap.forEach((cnt, id) => {
@@ -133,86 +125,31 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     const serialKillerProfile = profileMap.get(serialKillerId);
     if (serialKillerProfile) {
       awards.push({
-        id: 'serial-killer', icon: 'lucideSwords', category: 'skill',
-        emoji: '',
+        id: 'serial-killer', icon: 'lucideSwords', category: 'skill', emoji: '',
         titleKey: 'gotcha.awards.serialKiller.title',
         descriptionKey: 'gotcha.awards.serialKiller.desc',
-        profile: serialKillerProfile,
-        count: serialKillerCount,
+        profile: serialKillerProfile, count: serialKillerCount,
       });
     }
-
-    // Speed Demon — shortest gap between consecutive kills by same hunter
-    const killsByHunter = new Map<string, EndScreenKillNode[]>();
-    kills.forEach(k => {
-      if (!killsByHunter.has(k.hunter.id)) killsByHunter.set(k.hunter.id, []);
-      killsByHunter.get(k.hunter.id)!.push(k);
-    });
-
-    let fastestGapSecs = Infinity;
-    let speedDemonProfile: KillFeedProfile | undefined;
-    killsByHunter.forEach((hKills, hunterId) => {
-      if (hKills.length < 2) return;
-      const s2 = [...hKills].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      for (let i = 1; i < s2.length; i++) {
-        const gap = (new Date(s2[i].createdAt).getTime() - new Date(s2[i - 1].createdAt).getTime()) / 1000;
-        if (gap < fastestGapSecs) { fastestGapSecs = gap; speedDemonProfile = profileMap.get(hunterId); }
-      }
-    });
-    if (speedDemonProfile) {
-      awards.push({
-        id: 'speed-demon', icon: 'lucideTimer', category: 'skill',
-        emoji: '',
-        titleKey: 'gotcha.awards.speedDemon.title',
-        descriptionKey: 'gotcha.awards.speedDemon.desc',
-        profile: speedDemonProfile,
-        count: Math.round(fastestGapSecs / 60),
-      });
-    }
-
-    // Patient Hunter
-    let slowestGapSecs = 0;
-    let patientHunterProfile: KillFeedProfile | undefined;
-    killsByHunter.forEach((hKills, hunterId) => {
-      if (hKills.length < 2) return;
-      const s3 = [...hKills].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      const gap = (new Date(s3[s3.length - 1].createdAt).getTime() - new Date(s3[0].createdAt).getTime()) / 1000;
-      if (gap > slowestGapSecs) { slowestGapSecs = gap; patientHunterProfile = profileMap.get(hunterId); }
-    });
-    if (patientHunterProfile) {
-      awards.push({
-        id: 'patient-hunter', icon: 'lucideClock', category: 'skill',
-        emoji: '',
-        titleKey: 'gotcha.awards.patientHunter.title',
-        descriptionKey: 'gotcha.awards.patientHunter.desc',
-        profile: patientHunterProfile,
-        count: Math.round(slowestGapSecs / 3600),
-      });
-    }
-
-    // ── SOCIAL ────────────────────────────────────────────────────────────────
 
     const mostLikedKill = [...kills].sort((a, b) => ((b as any).likeCount ?? 0) - ((a as any).likeCount ?? 0))[0];
     const topLikes = (mostLikedKill as any).likeCount ?? 0;
     if (topLikes > 0) {
       awards.push({
-        id: 'best-disguise', icon: 'lucideThumbsUp', category: 'social',
-        emoji: '',
+        id: 'best-disguise', icon: 'lucideThumbsUp', category: 'social', emoji: '',
         titleKey: 'gotcha.awards.bestDisguise.title',
         descriptionKey: 'gotcha.awards.bestDisguise.desc',
-        profile: mostLikedKill.hunter,
-        count: topLikes,
+        profile: mostLikedKill.hunter, count: topLikes,
       });
     }
-
-    // ── PROP ──────────────────────────────────────────────────────────────────
 
     const propKillCounts = new Map<string, { name: string; count: number }>();
     kills.forEach(k => {
       if (!k.prop) return;
-      const name = isNL ? k.prop.nameNL : k.prop.nameEN;
+      const name = utils.propName(k.prop, lang);
       propKillCounts.set(k.prop.id, { name, count: (propKillCounts.get(k.prop.id)?.count ?? 0) + 1 });
     });
+
     let deadliestPropName = '';
     let deadliestPropCount = 0;
     propKillCounts.forEach(v => {
@@ -220,58 +157,10 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     });
     if (deadliestPropName) {
       awards.push({
-        id: 'deadliest-weapon', icon: 'lucidePackage', category: 'prop',
-        emoji: '',
+        id: 'deadliest-weapon', icon: 'lucidePackage', category: 'prop', emoji: '',
         titleKey: 'gotcha.awards.deadliestWeapon.title',
         descriptionKey: 'gotcha.awards.deadliestWeapon.desc',
-        propName: deadliestPropName,
-        count: deadliestPropCount,
-      });
-    }
-
-    // ── MEME ──────────────────────────────────────────────────────────────────
-
-    // AFK Victims — victims that never made a kill
-    const hunterIds = new Set(kills.map(k => k.hunter.id));
-    const victimIds = new Set(kills.map(k => k.victim.id));
-    const afkVictims: KillFeedProfile[] = [];
-    victimIds.forEach(id => {
-      if (!hunterIds.has(id)) {
-        const profile = profileMap.get(id);
-        if (profile) afkVictims.push(profile);
-      }
-    });
-    if (afkVictims.length > 0) {
-      awards.push({
-        id: 'afk-victim', icon: 'lucideBedDouble', category: 'meme',
-        emoji: '',
-        titleKey: 'gotcha.awards.afkVictim.title',
-        descriptionKey: 'gotcha.awards.afkVictim.desc',
-        profiles: afkVictims,
-        count: afkVictims.length,
-      });
-    }
-
-    // ── GAME ──────────────────────────────────────────────────────────────────
-
-    const killsByDay = new Map<string, number>();
-    kills.forEach(k => {
-      const day = new Date(k.createdAt).toLocaleDateString(isNL ? 'nl-BE' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-      killsByDay.set(day, (killsByDay.get(day) ?? 0) + 1);
-    });
-    let bloodiestDay = '';
-    let bloodiestDayCount = 0;
-    killsByDay.forEach((count, day) => {
-      if (count > bloodiestDayCount) { bloodiestDayCount = count; bloodiestDay = day; }
-    });
-    if (bloodiestDay) {
-      awards.push({
-        id: 'bloodiest-day', icon: 'lucideCalendarDays', category: 'game',
-        emoji: '',
-        titleKey: 'gotcha.awards.bloodiestDay.title',
-        descriptionKey: 'gotcha.awards.bloodiestDay.desc',
-        day: bloodiestDay,
-        count: bloodiestDayCount,
+        propName: deadliestPropName, count: deadliestPropCount,
       });
     }
 
@@ -282,33 +171,11 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     return this.awards().filter(a => a.category === cat);
   }
 
-  // ── Getters ───────────────────────────────────────────────────────────────
-
-  get winnerName() {
-    return `${this.data.winner?.firstName} ${this.data.winner?.lastName}`;
-  }
-
-  get winnerInitials() {
-    return `${this.data.winner?.firstName?.[0]}${this.data.winner?.lastName?.[0]}`;
-  }
+  get winnerName() { return utils.fullName(this.data.winner); }
+  get winnerInitials() { return utils.initials(this.data.winner); }
 
   get prizeDescription() {
-    return this.t.currentLanguage() === 'nl'
-      ? this.data.prizeDescriptionNL
-      : this.data.prizeDescriptionEN;
-  }
-
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  photoSrc(base64: string | null | undefined): string {
-    if (!base64) return '';
-    if (base64.startsWith('data:')) return base64;
-    return `data:image/jpeg;base64,${base64}`;
-  }
-
-  propName(prop: { nameEN: string; nameNL: string } | null | undefined): string {
-    if (!prop) return '';
-    return this.t.currentLanguage() === 'nl' ? prop.nameNL : prop.nameEN;
+    return this.t.currentLanguage() === 'nl' ? this.data.prizeDescriptionNL : this.data.prizeDescriptionEN;
   }
 
   formatDate(d: string) {
@@ -318,15 +185,10 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     );
   }
 
-  fullName(p: KillFeedProfile) { return `${p.firstName} ${p.lastName}`; }
-  initials(p: KillFeedProfile) { return `${p.firstName?.[0]}${p.lastName?.[0]}`; }
-
   openKillDetail(kill: EndScreenKillNode) {
     this.selectedKill.set(kill);
     this.showKillDetail.set(true);
   }
-
-  // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId) && this.data.kills.length > 0) {
@@ -335,8 +197,6 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngOnDestroy() { this.simulation?.stop(); }
-
-  // ── Graph ─────────────────────────────────────────────────────────────────
 
   private async buildGraph() {
     this.d3 = await import('d3') as typeof d3Type;
@@ -349,9 +209,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     this.svg = d3.select(svgEl).attr('height', height);
     const g = this.svg.append('g');
 
-    this.zoom = d3.zoom()
-      .scaleExtent([0.3, 3])
-      .on('zoom', (e: { transform: any }) => g.attr('transform', e.transform));
+    this.zoom = d3.zoom().scaleExtent([0.3, 3]).on('zoom', (e: any) => g.attr('transform', e.transform));
     this.svg.call(this.zoom);
 
     const nodeMap = new Map<string, GraphNode>();
@@ -360,7 +218,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
         if (!nodeMap.has(p.id)) {
           nodeMap.set(p.id, {
             id: p.id,
-            name: this.fullName(p),
+            name: utils.fullName(p),
             pic: p.profilePicture || null,
             kills: 0,
             isWinner: p.id === this.data.winner?.id,
@@ -392,8 +250,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     const linkGroup = g.append('g').selectAll('g').data(links).join('g');
     linkGroup.append('path').attr('stroke', 'transparent').attr('stroke-width', 15).attr('fill', 'none')
       .style('cursor', 'pointer').on('click', (_e: any, d: any) => this.openKillDetail(d.kill));
-    linkGroup.append('path').attr('stroke', '#e5383b').attr('stroke-width', 2)
-      .attr('fill', 'none').attr('stroke-dasharray', '5,5');
+    linkGroup.append('path').attr('stroke', '#e5383b').attr('stroke-width', 2).attr('fill', 'none').attr('stroke-dasharray', '5,5');
 
     const node = g.append('g').selectAll('g').data(nodes).join('g')
       .style('cursor', 'pointer')
@@ -412,7 +269,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     node.filter((d: any) => !d.pic).append('text')
       .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
       .attr('font-size', '10px').attr('font-weight', 'bold').attr('fill', '#374151')
-      .text((d: any) => d.name.split(' ').map((n: any) => n[0]).join(''));
+      .text((d: any) => utils.initials({firstName: d.name.split(' ')[0], lastName: d.name.split(' ')[1] || ''}));
 
     const badge = node.filter((d: any) => d.kills > 0).append('g').attr('transform', 'translate(18, -18)');
     badge.append('circle').attr('r', 10).attr('fill', '#e5383b');
@@ -425,24 +282,12 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
 
     this.simulation.on('tick', () => {
       const arcPath = (d: any) => {
-        const dx = d.target.x - d.source.x;
-        const dy = d.target.y - d.source.y;
-        const dr = Math.sqrt(dx * dx + dy * dy);
+        const dx = d.target.x - d.source.x, dy = d.target.y - d.source.y, dr = Math.sqrt(dx * dx + dy * dy);
         return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
       };
       linkGroup.selectAll('path').attr('d', arcPath);
       node.attr('transform', (d: any) => `translate(${d.x},${d.y})`);
     });
-
-    const winner = nodes.find(n => n.isWinner);
-    if (winner) {
-      setTimeout(() => {
-        const transform = d3.zoomIdentity
-          .translate(width / 2, height / 2).scale(1.3)
-          .translate(-(winner.x || 0), -(winner.y || 0));
-        this.svg.transition().duration(1000).call(this.zoom.transform, transform);
-      }, 500);
-    }
 
     function dragstarted(event: any, d: any) { if (!event.active) d3.select(svgEl).dispatch('restart'); d.fx = d.x; d.fy = d.y; }
     function dragged(event: any, d: any) { d.fx = event.x; d.fy = event.y; }

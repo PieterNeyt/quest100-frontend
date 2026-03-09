@@ -24,13 +24,48 @@ export class GotchaService {
   private readonly url = environment.apiConfig.uri;
   private readonly http = inject(HttpClient);
 
-  // ── Shared state signals ──────────────────────────────────────────────────
+  // Shared state signals
   myStatus    = signal<GotchaParticipant | null>(null);
   currentGame = signal<GotchaGame | null>(null);
   targetInfo  = signal<TargetInfo | null>(null);
   endScreen   = signal<EndScreen | null>(null);
 
-  // ── Game ──────────────────────────────────────────────────────────────────
+  countdown = signal<{h: number, m: number, s: number} | null>(null);
+  private timer: any;
+
+  constructor() {
+    this.startGlobalTimer();
+  }
+
+  private startGlobalTimer() {
+    this.timer = setInterval(() => {
+      const deadline = this.targetInfo()?.killDeadline;
+      const game = this.currentGame();
+
+      const targetDate = (game?.status === 'OPT_IN' && game.startDate)
+        ? game.startDate
+        : deadline;
+
+      if (!targetDate) {
+        this.countdown.set(null);
+        return;
+      }
+
+      const diff = new Date(targetDate).getTime() - Date.now();
+      if (diff <= 0) {
+        this.countdown.set({h:0, m:0, s:0});
+      } else {
+        const totalSecs = Math.floor(diff / 1000);
+        this.countdown.set({
+          h: Math.floor(totalSecs / 3600),
+          m: Math.floor((totalSecs % 3600) / 60),
+          s: totalSecs % 60
+        });
+      }
+    }, 1000);
+  }
+
+  // Game
 
   getCurrentGame(): Observable<GotchaGame | null> {
     return this.http.get<GotchaGame | null>(`${this.url}/api/gotcha/game`).pipe(
@@ -44,10 +79,7 @@ export class GotchaService {
     );
   }
 
-  // Keep old name for backwards compat
-  updateStartDate = this.updateGame.bind(this);
-
-  // ── Participation ─────────────────────────────────────────────────────────
+  // Participation
 
   getMyStatus(): Observable<GotchaParticipant> {
     return this.http.get<GotchaParticipant>(`${this.url}/api/gotcha/me`).pipe(
@@ -69,7 +101,7 @@ export class GotchaService {
     return this.http.delete<void>(`${this.url}/api/gotcha/opt-in`);
   }
 
-  // ── Kills ─────────────────────────────────────────────────────────────────
+  // Kills
 
   submitKill(photoBase64: string): Observable<unknown> {
     return this.http.post(`${this.url}/api/gotcha/kills`, { photoBase64 });
@@ -87,12 +119,8 @@ export class GotchaService {
     return this.http.get<{ count: number }>(`${this.url}/api/gotcha/kills/pending/count`);
   }
 
-  /** @deprecated use getNextPendingKill for the FIFO review UI */
-  getPendingKills(): Observable<KillFeedItem[]> {
-    return this.http.get<KillFeedItem[]>(`${this.url}/api/gotcha/kills/pending`);
-  }
 
-  // ── Feed ──────────────────────────────────────────────────────────────────
+  // Feed
 
   getFeed(limit = 20, offset = 0): Observable<KillFeedItem[]> {
     return this.http.get<KillFeedItem[]>(
@@ -108,7 +136,7 @@ export class GotchaService {
     return this.http.delete<void>(`${this.url}/api/gotcha/kills/${killId}/like`);
   }
 
-  // ── End screen ────────────────────────────────────────────────────────────
+  // End screen
 
   getEndScreen(): Observable<EndScreen> {
     return this.http.get<EndScreen>(`${this.url}/api/gotcha/end-screen`).pipe(
@@ -116,7 +144,7 @@ export class GotchaService {
     );
   }
 
-  // ── Props (admin) ─────────────────────────────────────────────────────────
+  // Props
 
   getAllProps(): Observable<GotchaProp[]> {
     return this.http.get<GotchaProp[]>(`${this.url}/api/gotcha/props`);

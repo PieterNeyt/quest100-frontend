@@ -164,8 +164,8 @@
     "startsIn": "Starts in",
     "days": "Days",
     "hours": "Hours",
-    "minutes": "Minutes",
-    "seconds": "Seconds",
+    "minutes": "Min",
+    "seconds": "Sec",
     "comingSoon": "Coming soon",
     "optedIn": "You're in the game",
     "optOut": "Leave game",
@@ -173,6 +173,7 @@
     "joinGame": "Join game",
     "joiningGame": "Joining...",
     "editStartDate": "Edit start date",
+    "winner": "Winner",
     "page": {
       "back": "Back"
     },
@@ -218,7 +219,8 @@
       "approved": "Kill approved.",
       "denied": "Kill denied.",
       "loadError": "Failed to load pending kills.",
-      "error": "Failed to review this kill."
+      "error": "Failed to review this kill.",
+      "inQueue": "in queue"
     },
     "submitKill": {
       "button": "Submit Kill",
@@ -255,10 +257,13 @@
       "title": "Game Over!",
       "kills": "kills",
       "prize": "Prize",
+      "winner": "Winner",
       "stats": "Tournament Statistics",
       "statParticipants": "Participants",
       "statKills": "Total kills",
+      "statTotalKills": "Total kills",
       "statFastest": "Fastest kill",
+      "statFastestKill": "Fastest kill",
       "statMostKills": "Most kills",
       "statMortality": "Elimination rate",
       "statMostUsedProp": "Most used prop",
@@ -338,7 +343,6 @@
         "desc": "Most kills recorded on a single day."
       }
     },
-    "winner": "Winner",
     "settings": {
       "title": "Game settings",
       "gameSettings": "Game settings",

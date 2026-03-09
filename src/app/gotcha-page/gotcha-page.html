@@ -72,13 +72,13 @@
             <div class="target-profile">
               <div class="target-avatar">
                 @if (info.target.profilePicture) {
-                  <img [src]="info.target.profilePicture" [alt]="targetFullName(info)" />
+                  <img [src]="info.target.profilePicture" [alt]="utils.fullName(info.target)" />
                 } @else {
-                  <span class="target-initials">{{ targetInitials(info) }}</span>
+                  <span class="target-initials">{{ utils.initials(info.target) }}</span>
                 }
               </div>
               <div class="target-info">
-                <span class="target-name">{{ targetFullName(info) }}</span>
+                <span class="target-name">{{ utils.fullName(info.target) }}</span>
                 @if (!isAlive()) {
                   <span class="target-eliminated">{{ t.t('gotcha.target.eliminated') }}</span>
                 }
@@ -97,7 +97,7 @@
             </span>
             <span class="prop-name">
               <ng-icon hlm name="lucidePackage" size="sm" />
-              {{ propName(info.assignedProp) }}
+              {{ utils.propName(info.assignedProp, t.currentLanguage()) }}
             </span>
           </div>
         }
@@ -105,8 +105,8 @@
         <!-- ── Countdown of "waiting for review" ── -->
         <div class="countdown-section"
              [class.countdown--pending]="hasPendingKill()"
-             [class.countdown--urgent]="!hasPendingKill() && countdownUrgent"
-             [class.countdown--critical]="!hasPendingKill() && countdownCritical">
+             [class.countdown--urgent]="countdownUrgent"
+             [class.countdown--critical]="countdownCritical">
 
           <span class="target-label">
             <ng-icon hlm name="lucideTimer" size="xs" />
@@ -114,30 +114,29 @@
           </span>
 
           @if (hasPendingKill()) {
-            <!-- Pending kill ingediend: countdown gepauzeerd, wacht op review -->
             <div class="pending-review-notice">
               <ng-icon hlm name="lucideClock" size="sm" />
               <span>{{ t.t('gotcha.target.waitingForReview') }}</span>
             </div>
           }
           @if (countdown(); as cd) {
-          <div class="countdown-display">
-            <div class="countdown-unit">
-              <span class="countdown-val">{{ padTwo(cd.h) }}</span>
-              <span class="countdown-lbl">{{ t.t('gotcha.hours') }}</span>
+            <div class="countdown-display">
+              <div class="countdown-unit">
+                <span class="countdown-val">{{ padTwo(cd.h) }}</span>
+                <span class="countdown-lbl">{{ t.t('gotcha.hours') }}</span>
+              </div>
+              <span class="countdown-sep">:</span>
+              <div class="countdown-unit">
+                <span class="countdown-val">{{ padTwo(cd.m) }}</span>
+                <span class="countdown-lbl">{{ t.t('gotcha.minutes') }}</span>
+              </div>
+              <span class="countdown-sep">:</span>
+              <div class="countdown-unit">
+                <span class="countdown-val">{{ padTwo(cd.s) }}</span>
+                <span class="countdown-lbl">{{ t.t('gotcha.seconds') }}</span>
+              </div>
             </div>
-            <span class="countdown-sep">:</span>
-            <div class="countdown-unit">
-              <span class="countdown-val">{{ padTwo(cd.m) }}</span>
-              <span class="countdown-lbl">{{ t.t('gotcha.minutes') }}</span>
-            </div>
-            <span class="countdown-sep">:</span>
-            <div class="countdown-unit">
-              <span class="countdown-val">{{ padTwo(cd.s) }}</span>
-              <span class="countdown-lbl">{{ t.t('gotcha.seconds') }}</span>
-            </div>
-          </div>
-        }
+          }
         </div>
 
       </div>

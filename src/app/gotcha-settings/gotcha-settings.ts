@@ -8,6 +8,7 @@ import { GotchaService } from '../services/gotchaService';
 import { GotchaProp } from '../model/gotcha';
 import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
+import { toDatetimeLocal } from '../utils/gotchaUtils';
 
 @Component({
   selector: 'app-gotcha-settings',
@@ -23,12 +24,12 @@ export class GotchaSettingsComponent implements OnInit {
   private readonly router        = inject(Router);
   readonly t = inject(TranslationService);
 
-  // ── Loading states ────────────────────────────────────────────────────────
+  // Loading states
   loadingGame  = signal(true);
   loadingProps = signal(true);
   savingGame   = signal(false);
 
-  // ── Game settings form ────────────────────────────────────────────────────
+  //  Game settings form
   editStartDate        = signal('');
   editKillDeadline     = signal(72);
   editPrizePhotoBase64 = signal('');
@@ -36,7 +37,7 @@ export class GotchaSettingsComponent implements OnInit {
   editPrizeDescEN      = signal('');
   editPrizeDescNL      = signal('');
 
-  // ── Props state ───────────────────────────────────────────────────────────
+  // Props state
   props          = signal<GotchaProp[]>([]);
   savingProp     = signal(false);
   deletingPropId = signal<string | null>(null);
@@ -52,7 +53,7 @@ export class GotchaSettingsComponent implements OnInit {
   editPropEN    = signal('');
   editPropNL    = signal('');
 
-  // ── Lifecycle ─────────────────────────────────────────────────────────────
+  // Lifecycle
 
   ngOnInit() {
     this.loadGame();
@@ -63,14 +64,13 @@ export class GotchaSettingsComponent implements OnInit {
     this.router.navigate(['/gotcha']);
   }
 
-  // ── Game settings ─────────────────────────────────────────────────────────
-
   private loadGame() {
     this.loadingGame.set(true);
     this.gotchaService.getCurrentGame().subscribe({
       next: (game) => {
         const defaultDate = game?.startDate ? new Date(game.startDate) : new Date();
-        this.editStartDate.set(this.toDatetimeLocal(defaultDate));
+        this.editStartDate.set(toDatetimeLocal(defaultDate));
+
         this.editKillDeadline.set(game?.killDeadlineHours ?? 72);
         this.editPrizePhotoBase64.set(game?.prizePhotoBase64 ?? '');
         this.editPrizePhotoPreview.set(
@@ -119,7 +119,7 @@ export class GotchaSettingsComponent implements OnInit {
     });
   }
 
-  // ── Props ─────────────────────────────────────────────────────────────────
+  //  Props
 
   loadProps() {
     this.loadingProps.set(true);
@@ -199,7 +199,6 @@ export class GotchaSettingsComponent implements OnInit {
     });
   }
 
-  // Delete
   deleteProp(id: string) {
     this.deletingPropId.set(id);
     this.gotchaService.deleteProp(id).subscribe({
@@ -213,12 +212,5 @@ export class GotchaSettingsComponent implements OnInit {
         this.toastService.error('errors.generic');
       },
     });
-  }
-
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  private toDatetimeLocal(d: Date): string {
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 }
