@@ -84,7 +84,7 @@ export interface EndScreenStats {
   mostKillsCount: number;
 }
 
-// ── Awards ────────────────────────────────────────────────────────────────────
+//  Awards
 
 export type AwardCategory = 'core' | 'skill' | 'social' | 'prop' | 'game' | 'meme';
 
@@ -101,7 +101,7 @@ export interface GameAward {
   profiles?: KillFeedProfile[];
 }
 
-// ── EndScreen ─────────────────────────────────────────────────────────────────
+//  EndScreen
 
 export interface EndScreen {
   winner?: KillFeedProfile | null;
