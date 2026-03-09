@@ -1,15 +1,13 @@
 <div class="settings-wrap">
 
   <!-- ── Header ── -->
-  <div class="settings-header">
+  <div class="header-title-row">
+
     <button class="btn-back" (click)="goBack()">
       <ng-icon hlm name="lucideArrowLeft" size="sm" />
-      {{ t.t('gotcha.page.back') }}
     </button>
-    <div class="header-title-row">
-      <span class="header-icon">⚙️</span>
-      <h1 class="header-title">{{ t.t('gotcha.settings.title') }}</h1>
-    </div>
+    <h1 class="header-title">{{ t.t('gotcha.settings.title') }}</h1>
+
   </div>
 
   @if (loadingGame()) {
@@ -21,8 +19,12 @@
     <!-- ── Game settings card ── -->
     <section class="settings-card">
       <div class="card-header-row">
-        <span class="card-icon">🎯</span>
-        <h2 class="card-title">{{ t.t('gotcha.settings.gameSettings') }}</h2>
+        <div class="card-header-left">
+          <div class="card-icon-wrap card-icon-wrap--teal">
+            <ng-icon hlm name="lucideTarget" size="sm" class="card-icon" />
+          </div>
+          <h2 class="card-title">{{ t.t('gotcha.settings.gameSettings') }}</h2>
+        </div>
       </div>
 
       <div class="field-group">
@@ -95,7 +97,9 @@
     <section class="settings-card">
       <div class="card-header-row">
         <div class="card-header-left">
-          <span class="card-icon">🎒</span>
+          <div class="card-icon-wrap card-icon-wrap--orange">
+            <ng-icon hlm name="lucidePackage" size="sm" class="card-icon" />
+          </div>
           <h2 class="card-title">{{ t.t('gotcha.settings.props') }}</h2>
           <span class="prop-count-badge">{{ props().length }}</span>
         </div>
@@ -121,7 +125,6 @@
           @for (prop of props(); track prop.id) {
             <div class="prop-row" [class.prop-row--editing]="editingPropId() === prop.id">
               @if (editingPropId() === prop.id) {
-                <!-- Inline edit -->
                 <div class="prop-edit-fields">
                   <div class="prop-edit-field">
                     <span class="lang-tag">EN</span>
@@ -148,7 +151,6 @@
                   </button>
                 </div>
               } @else {
-                <!-- Display -->
                 <div class="prop-names">
                   <span class="prop-name-en">{{ prop.nameEN }}</span>
                   <span class="prop-name-sep">/</span>
@@ -174,7 +176,6 @@
         </div>
       }
 
-      <!-- Add prop inline form -->
       @if (showAddProp()) {
         <div class="add-prop-form">
           <div class="prop-edit-fields">
