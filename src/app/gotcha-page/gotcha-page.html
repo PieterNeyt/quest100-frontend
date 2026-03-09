@@ -7,37 +7,37 @@
       {{ t.t('gotcha.page.back') }}
     </button>
 
+    <!-- Titel + status + actions op één rij -->
     <div class="page-title-row">
-      <span class="page-icon">🎯</span>
       <h1 class="page-title">Gotcha</h1>
       @if (currentGame()?.status) {
         <span class="status-pill" [class]="'status-' + currentGame()!.status.toLowerCase()">
           {{ t.t('gotcha.status.' + currentGame()!.status.toLowerCase()) }}
         </span>
       }
-    </div>
 
-    <div class="page-header-actions">
-      @if (canSubmitKill()) {
-        <button
-          class="btn-submit-kill"
-          [disabled]="hasPendingKill()"
-          (click)="openSubmitModal()">
-          <ng-icon hlm name="lucideSwords" size="sm" />
-          {{ t.t('gotcha.submitKill.button') }}
-        </button>
-      }
-      @if (isFinished()) {
-        <button class="btn-view-results" (click)="goToEndScreen()">
-          <ng-icon hlm name="lucideBarChart2" size="sm" />
-          {{ t.t('gotcha.endScreen.viewResults') }}
-        </button>
-      }
-      @if (currentGame()) {
-        <button class="btn-edit-game" (click)="goToSettings()" [title]="t.t('gotcha.settings.title')">
-          <ng-icon hlm name="lucideSettings2" size="sm" />
-        </button>
-      }
+      <div class="page-header-actions">
+        @if (canSubmitKill()) {
+          <button
+            class="btn-submit-kill"
+            [disabled]="hasPendingKill()"
+            (click)="openSubmitModal()">
+            <ng-icon hlm name="lucideSwords" size="sm" />
+            {{ t.t('gotcha.submitKill.button') }}
+          </button>
+        }
+        @if (isFinished()) {
+          <button class="btn-view-results" (click)="goToEndScreen()">
+            <ng-icon hlm name="lucideBarChart2" size="sm" />
+            {{ t.t('gotcha.endScreen.viewResults') }}
+          </button>
+        }
+        @if (currentGame()) {
+          <button class="btn-icon-action" (click)="goToSettings()" [title]="t.t('gotcha.settings.title')">
+            <ng-icon hlm name="lucideSettings2" size="sm" />
+          </button>
+        }
+      </div>
     </div>
   </div>
 
@@ -45,8 +45,10 @@
   @if (isFinished()) {
     <div class="finished-banner">
       <div class="finished-banner-left">
-        <span class="finished-trophy">🏆</span>
-        <div>
+        <div class="finished-trophy-wrap">
+          <ng-icon hlm name="lucideTrophy" size="md" />
+        </div>
+        <div class="finished-text">
           <span class="finished-title">{{ t.t('gotcha.endScreen.gameOver') }}</span>
           <span class="finished-sub">{{ t.t('gotcha.endScreen.gameOverSub') }}</span>
         </div>
@@ -102,7 +104,6 @@
           </div>
         }
 
-        <!-- ── Countdown of "waiting for review" ── -->
         <div class="countdown-section"
              [class.countdown--pending]="hasPendingKill()"
              [class.countdown--urgent]="countdownUrgent"
@@ -154,10 +155,12 @@
     <div class="submit-modal" (click)="$event.stopPropagation()">
 
       <div class="modal-header">
-        <h2>
-          <ng-icon hlm name="lucideSwords" size="sm" />
-          {{ t.t('gotcha.submitKill.title') }}
-        </h2>
+        <div class="modal-header-title">
+          <div class="modal-title-icon">
+            <ng-icon hlm name="lucideSwords" size="sm" />
+          </div>
+          <h2 class="modal-title">{{ t.t('gotcha.submitKill.title') }}</h2>
+        </div>
         <button class="modal-close" (click)="closeSubmitModal()">
           <ng-icon hlm name="lucideX" size="sm" />
         </button>
