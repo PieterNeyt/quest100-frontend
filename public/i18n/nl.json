@@ -162,6 +162,7 @@
   "gotcha": {
     "bannerDescription": "Doe mee met het Gotcha-spel en schakel je doelwit uit.",
     "startsIn": "Start over",
+    "gameInProgress": "Bezig",
     "days": "Dagen",
     "hours": "Uren",
     "minutes": "Min",

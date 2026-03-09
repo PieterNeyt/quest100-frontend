@@ -298,3 +298,56 @@
     align-self: flex-end;
   }
 }
+/* ── Coming Soon ────────────────────────────── */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.coming-soon ng-icon {
+  font-size: 1.4rem;
+  opacity: 0.6;
+}
+
+/* Variant wanneer spel actief is (terugknop vanuit gotcha page) */
+.coming-soon--active {
+  border-style: solid;
+  border-color: rgba(90, 170, 180, 0.3);
+  color: #5aaab4;
+  background: rgba(90, 170, 180, 0.06);
+}
+
+.coming-soon--active ng-icon {
+  opacity: 1;
+  animation: pulse-teal 2s infinite ease-in-out;
+}
+
+/* Countdown label */
+.countdown-label {
+  display: block;
+  text-align: center;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9ca3af;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.cd-sep {
+  font-size: 1.4rem;
+  font-weight: 900;
+  opacity: 0.4;
+  margin-bottom: 0.5rem;
+}

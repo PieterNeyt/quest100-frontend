@@ -162,6 +162,7 @@
   "gotcha": {
     "bannerDescription": "Join the Gotcha game and eliminate your assigned target.",
     "startsIn": "Starts in",
+    "gameInProgress": "In Progress",
     "days": "Days",
     "hours": "Hours",
     "minutes": "Min",

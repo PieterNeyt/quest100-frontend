@@ -81,7 +81,12 @@
         </div>
 
         <div class="banner-center">
-          @if (hasStartDate() && timeLeft()) {
+          @if (gameStatus() === 'ACTIVE') {
+            <div class="coming-soon coming-soon--active">
+              <ng-icon name="lucideSwords" size="sm"></ng-icon>
+              <span>{{ t.t('gotcha.gameInProgress') }}</span>
+            </div>
+          } @else if (hasStartDate() && timeLeft()) {
             <div class="countdown">
               <span class="countdown-label">{{ t.t('gotcha.startsIn') }}</span>
               <div class="countdown-blocks">
