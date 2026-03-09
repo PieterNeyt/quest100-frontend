@@ -2,12 +2,10 @@
 
   <!-- ── Header ── -->
   <div class="header-title-row">
-
     <button class="btn-back" (click)="goBack()">
       <ng-icon hlm name="lucideArrowLeft" size="sm" />
     </button>
     <h1 class="header-title">{{ t.t('gotcha.settings.title') }}</h1>
-
   </div>
 
   @if (loadingGame()) {
@@ -17,7 +15,7 @@
   } @else {
 
     <!-- ── Game settings card ── -->
-    <section class="settings-card">
+    <section class="settings-card" [class.settings-card--locked]="!isEditable()">
       <div class="card-header-row">
         <div class="card-header-left">
           <div class="card-icon-wrap card-icon-wrap--teal">
@@ -25,11 +23,18 @@
           </div>
           <h2 class="card-title">{{ t.t('gotcha.settings.gameSettings') }}</h2>
         </div>
+        @if (!isEditable()) {
+          <div class="lock-status-badge">
+            <ng-icon hlm name="lucideLock" size="xs"></ng-icon>
+            <span>{{ t.t('gotcha.settings.locked') }}</span>
+          </div>
+        }
       </div>
 
       <div class="field-group">
         <label class="field-label">{{ t.t('gotcha.editModal.startDate') }}</label>
         <input class="field-input" type="datetime-local"
+               [disabled]="!isEditable()"
                [value]="editStartDate()"
                (input)="editStartDate.set($any($event.target).value)" />
       </div>
@@ -37,6 +42,7 @@
       <div class="field-group">
         <label class="field-label">{{ t.t('gotcha.editModal.killDeadline') }}</label>
         <input class="field-input" type="number" min="1" max="336"
+               [disabled]="!isEditable()"
                [value]="editKillDeadline()"
                (input)="editKillDeadline.set(+$any($event.target).value)" />
         <p class="field-hint">{{ t.t('gotcha.editModal.killDeadlineHint') }}</p>
@@ -44,21 +50,24 @@
 
       <div class="field-group">
         <label class="field-label">{{ t.t('gotcha.editModal.prizePhoto') }}</label>
-        <div class="file-upload-area">
+        <div class="file-upload-area" [class.file-upload-area--disabled]="!isEditable()">
           @if (editPrizePhotoPreview()) {
             <div class="prize-preview-wrap">
               <img class="prize-preview-img" [src]="editPrizePhotoPreview()" alt="prize preview" />
-              <button class="btn-remove-photo" type="button" (click)="clearPrizePhoto()">
-                <ng-icon hlm name="lucideX" size="xs" />
-              </button>
+              @if (isEditable()) {
+                <button class="btn-remove-photo" type="button" (click)="clearPrizePhoto()">
+                  <ng-icon hlm name="lucideX" size="xs" />
+                </button>
+              }
             </div>
           } @else {
-            <label class="file-upload-label" for="prizeFileInput">
+            <label class="file-upload-label" [class.clickable]="isEditable()" for="prizeFileInput">
               <ng-icon hlm name="lucideImagePlus" size="lg" />
               <span>{{ t.t('gotcha.editModal.prizePhotoHint') }}</span>
             </label>
           }
           <input id="prizeFileInput" class="file-input-hidden" type="file"
+                 [disabled]="!isEditable()"
                  accept="image/*" (change)="onPrizeFileChange($event)" />
         </div>
       </div>
@@ -69,6 +78,7 @@
             <span class="lang-tag">EN</span>{{ t.t('gotcha.editModal.prizeDescEN') }}
           </label>
           <textarea class="field-input field-textarea"
+                    [disabled]="!isEditable()"
                     [placeholder]="t.t('gotcha.editModal.prizeDescPlaceholder')"
                     [value]="editPrizeDescEN()"
                     (input)="editPrizeDescEN.set($any($event.target).value)"></textarea>
@@ -78,19 +88,22 @@
             <span class="lang-tag lang-tag--nl">NL</span>{{ t.t('gotcha.editModal.prizeDescNL') }}
           </label>
           <textarea class="field-input field-textarea"
+                    [disabled]="!isEditable()"
                     [placeholder]="t.t('gotcha.editModal.prizeDescPlaceholder')"
                     [value]="editPrizeDescNL()"
                     (input)="editPrizeDescNL.set($any($event.target).value)"></textarea>
         </div>
       </div>
 
-      <div class="card-footer">
-        <button class="btn-save" [disabled]="savingGame()" (click)="saveGameSettings()">
-          @if (savingGame()) { <span class="btn-spinner"></span> }
-          <ng-icon hlm name="lucideSave" size="sm" />
-          {{ savingGame() ? t.t('gotcha.editModal.saving') : t.t('gotcha.editModal.save') }}
-        </button>
-      </div>
+      @if (isEditable()) {
+        <div class="card-footer">
+          <button class="btn-save" [disabled]="savingGame()" (click)="saveGameSettings()">
+            @if (savingGame()) { <span class="btn-spinner"></span> }
+            <ng-icon hlm name="lucideSave" size="sm" />
+            {{ savingGame() ? t.t('gotcha.editModal.saving') : t.t('gotcha.editModal.save') }}
+          </button>
+        </div>
+      }
     </section>
 
     <!-- ── Props card ── -->
@@ -103,10 +116,12 @@
           <h2 class="card-title">{{ t.t('gotcha.settings.props') }}</h2>
           <span class="prop-count-badge">{{ props().length }}</span>
         </div>
-        <button class="btn-add-prop" (click)="openAddProp()">
-          <ng-icon hlm name="lucidePlus" size="sm" />
-          {{ t.t('gotcha.settings.addProp') }}
-        </button>
+        @if (isEditable()) {
+          <button class="btn-add-prop" (click)="openAddProp()">
+            <ng-icon hlm name="lucidePlus" size="sm" />
+            {{ t.t('gotcha.settings.addProp') }}
+          </button>
+        }
       </div>
 
       @if (loadingProps()) {
@@ -119,6 +134,9 @@
         <div class="props-empty">
           <ng-icon hlm name="lucidePackageOpen" size="32" />
           <p>{{ t.t('gotcha.settings.noProps') }}</p>
+          @if (isEditable()) {
+            <p class="field-error-hint">{{ t.t('gotcha.settings.propsRequiredToStart') }}</p>
+          }
         </div>
       } @else {
         <div class="props-list">
@@ -156,27 +174,29 @@
                   <span class="prop-name-sep">/</span>
                   <span class="prop-name-nl">{{ prop.nameNL }}</span>
                 </div>
-                <div class="prop-actions">
-                  <button class="btn-prop-edit" (click)="startPropEdit(prop)">
-                    <ng-icon hlm name="lucidePencil" size="xs" />
-                  </button>
-                  <button class="btn-prop-delete"
-                          [disabled]="deletingPropId() === prop.id"
-                          (click)="deleteProp(prop.id)">
-                    @if (deletingPropId() === prop.id) {
-                      <span class="btn-spinner btn-spinner--sm btn-spinner--red"></span>
-                    } @else {
-                      <ng-icon hlm name="lucideTrash2" size="xs" />
-                    }
-                  </button>
-                </div>
+                @if (isEditable()) {
+                  <div class="prop-actions">
+                    <button class="btn-prop-edit" (click)="startPropEdit(prop)">
+                      <ng-icon hlm name="lucidePencil" size="xs" />
+                    </button>
+                    <button class="btn-prop-delete"
+                            [disabled]="deletingPropId() === prop.id"
+                            (click)="deleteProp(prop.id)">
+                      @if (deletingPropId() === prop.id) {
+                        <span class="btn-spinner btn-spinner--sm btn-spinner--red"></span>
+                      } @else {
+                        <ng-icon hlm name="lucideTrash2" size="xs" />
+                      }
+                    </button>
+                  </div>
+                }
               }
             </div>
           }
         </div>
       }
 
-      @if (showAddProp()) {
+      @if (showAddProp() && isEditable()) {
         <div class="add-prop-form">
           <div class="prop-edit-fields">
             <div class="prop-edit-field">

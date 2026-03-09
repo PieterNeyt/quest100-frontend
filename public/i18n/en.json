@@ -347,6 +347,7 @@
     },
     "settings": {
       "title": "Game settings",
+      "propsRequiredToStart": "A minimum of 1 prop is required to start the game!",
       "gameSettings": "Game settings",
       "props": "Props",
       "addProp": "Add prop",
@@ -356,7 +357,8 @@
       "bothLangsRequired": "Both language fields are required.",
       "propAdded": "Prop added!",
       "propDeleted": "Prop removed.",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "locked": "Locked"
     },
     "toasts": {
       "optedIn": "You've joined the game!",

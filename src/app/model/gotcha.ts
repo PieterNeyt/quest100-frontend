@@ -115,6 +115,7 @@ export interface EndScreen {
 
 export interface GotchaProp {
   id: string;
+  gameId: string;
   nameEN: string;
   nameNL: string;
 }

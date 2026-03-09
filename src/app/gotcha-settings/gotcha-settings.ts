@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -23,6 +23,13 @@ export class GotchaSettingsComponent implements OnInit {
   private readonly toastService  = inject(ToastService);
   private readonly router        = inject(Router);
   readonly t = inject(TranslationService);
+
+  currentGame = this.gotchaService.currentGame;
+
+  isEditable = computed(() => {
+    const game = this.currentGame();
+    return game?.status === 'OPT_IN';
+  });
 
   // Loading states
   loadingGame  = signal(true);
@@ -102,6 +109,7 @@ export class GotchaSettingsComponent implements OnInit {
   }
 
   saveGameSettings() {
+    if (!this.isEditable()) return;
     if (!this.editStartDate()) {
       this.toastService.error('gotcha.editModal.startDateRequired');
       return;
@@ -144,6 +152,7 @@ export class GotchaSettingsComponent implements OnInit {
   }
 
   addProp() {
+    if (!this.isEditable()) return;
     const en = this.newPropEN().trim();
     const nl = this.newPropNL().trim();
     if (!en || !nl) {
@@ -200,6 +209,10 @@ export class GotchaSettingsComponent implements OnInit {
   }
 
   deleteProp(id: string) {
+    if (!this.isEditable()) {
+      this.toastService.error('gotcha.settings.locked');
+      return;
+    }
     this.deletingPropId.set(id);
     this.gotchaService.deleteProp(id).subscribe({
       next: () => {

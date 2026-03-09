@@ -348,6 +348,7 @@
     "settings": {
       "title": "Spelinstellingen",
       "gameSettings": "Spelinstellingen",
+      "propsRequiredToStart": "Er is minimaal 1 prop vereist om het spel te kunnen starten!",
       "props": "Voorwerpen",
       "addProp": "Voorwerp toevoegen",
       "noProps": "Geen voorwerpen gevonden.",
@@ -356,7 +357,8 @@
       "bothLangsRequired": "Beide talen zijn verplicht.",
       "propAdded": "Voorwerp toegevoegd!",
       "propDeleted": "Voorwerp verwijderd.",
-      "cancel": "Annuleren"
+      "cancel": "Annuleren",
+      "locked": "Vergrendeld"
     },
     "toasts": {
       "optedIn": "Je doet mee aan het spel!",
