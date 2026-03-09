@@ -6,6 +6,7 @@ import {environment} from '../../../environment/environment';
 import {AwardTransaction, Profile, ProfileAward, ProfileStatistics, SyncProfileResponse} from '../model/profile';
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
+import {Category} from '../model/avatar';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +36,7 @@ export class ProfileService {
       .pipe(
         catchError(error => {
           if (error instanceof InteractionRequiredAuthError) {
-            this.authService.acquireTokenRedirect({ scopes: ["User.Read"] });
+            this.authService.acquireTokenRedirect({scopes: ["User.Read"]});
             return EMPTY;
           }
           return throwError(() => error);
@@ -84,6 +85,7 @@ export class ProfileService {
   getPlayerStats(): Observable<ProfileStatistics> {
     return this.http.get<ProfileStatistics>(`${this.url}/api/profiles/stats`)
   }
+
   giveAward(award: AwardTransaction): Observable<Profile> {
     return this.http.post<Profile>(`${this.url}/api/profiles/award`, award);
   }
@@ -99,9 +101,13 @@ export class ProfileService {
 
       return list.map(pa =>
         pa.profile.id === profile.id
-          ? { ...pa, profile, hasSentAward: true }
+          ? {...pa, profile, hasSentAward: true}
           : pa
       );
     });
+  }
+
+  getShopItems() {
+    return this.http.get<Category[]>(`${this.url}/api/profiles/assets`, {});
   }
 }

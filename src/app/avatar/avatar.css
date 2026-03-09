@@ -1,0 +1,139 @@
+.editor-container {
+  display: flex;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+/* --- PREVIEW PANEL --- */
+.preview-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-canvas {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  background: #f0f4f8;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.avatar-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.points-display {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ffc107;
+  border-radius: 8px;
+}
+
+/* --- SHOP PANEL --- */
+.shop-panel {
+  flex: 2;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  background: white;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tabs button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tabs button.active {
+  background: #3b82f6;
+  color: white;
+}
+
+/* --- ITEM GRID --- */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.item-card {
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.1s;
+}
+
+.item-card:hover {
+  transform: scale(1.05);
+}
+
+.item-card.equipped {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.item-card.locked {
+  opacity: 0.8;
+  background: #f8fafc;
+}
+
+.item-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.item-details {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.item-name {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.buy-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.equipped-badge {
+  font-size: 0.75rem;
+  color: #16a34a;
+  font-weight: bold;
+}

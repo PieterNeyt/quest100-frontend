@@ -7,7 +7,7 @@ import {filter, Subject, takeUntil} from 'rxjs';
 import {ProfileService} from './services/profileService';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
 import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
 import {lucideLogOut, lucideMenu, lucideQrCode, lucideSettings, lucideUser, lucideX, lucideZap} from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
@@ -20,7 +20,7 @@ type MenuState = 'languages' | 'user' | 'mobile' | null;
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, NgOptimizedImage, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
   providers: [
     provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap})
   ],

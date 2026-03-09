@@ -1,0 +1,55 @@
+<div class="editor-container">
+
+  <div class="preview-panel">
+    <div class="avatar-canvas">
+      @for (layer of getEquippedLayers(); track layer.id) {
+        <img
+          [src]="layer.link"
+          [style.z-index]="layer.layer_order"
+          class="avatar-layer"
+          alt="Avatar layer">
+      }
+    </div>
+    <div class="points-display">
+      Balance: <strong>{{ userPoints }} Points</strong>
+    </div>
+  </div>
+
+  <div class="shop-panel">
+
+    <div class="tabs">
+      @for (cat of categories(); track $index) {
+        <button
+          [class.active]="activeCategory?.name === cat.name"
+          (click)="selectCategory(cat)">
+          {{ cat.name }}
+        </button>
+      }
+    </div>
+
+    @if (activeCategory) {
+      <div class="item-grid">
+        @for (item of activeCategory.items; track item.id) {
+          <div
+            class="item-card"
+            [class.equipped]="equippedItems[item.category]?.id === item.id"
+            [class.locked]="!item.isOwned"
+            (click)="toggleItem(item)">
+
+            <img [src]="item.link" class="item-thumb" alt="banaan">
+
+            <div class="item-details">
+              <span class="item-name">{{ item.name }}</span>
+
+              @if (!item.isOwned) {
+                <button class="buy-btn">💎 {{ item.price }}</button>
+              } @else if (equippedItems[item.category]?.id === item.id) {
+                <span class="equipped-badge">Equipped</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
