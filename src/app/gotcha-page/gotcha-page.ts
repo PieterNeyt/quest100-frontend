@@ -5,6 +5,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService } from '../services/gotchaService';
+import { GotchaParticipant } from '../model/gotcha';
 import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
 import { GotchaKillFeedComponent } from '../components/gotcha-kill-feed/gotcha-kill-feed';
@@ -35,8 +36,15 @@ export class GotchaPageComponent implements OnInit {
   myStatus    = this.gotchaService.myStatus;
   currentGame = this.gotchaService.currentGame;
   targetInfo  = this.gotchaService.targetInfo;
-
   countdown   = this.gotchaService.countdown;
+
+  // Leaderboard voor alive count
+  participants = signal<GotchaParticipant[]>([]);
+
+  aliveCount = computed(() =>
+    this.participants().filter(p => p.isAlive).length
+  );
+  totalCount = computed(() => this.participants().length);
 
   isActive      = computed(() => this.currentGame()?.status === 'ACTIVE');
   isFinished    = computed(() => this.currentGame()?.status === 'FINISHED');
@@ -48,8 +56,10 @@ export class GotchaPageComponent implements OnInit {
   canSubmitKill = computed(() =>
     this.isActive() && this.isAlive() && this.hasTarget() && !this.hasPendingKill()
   );
+  canStartNewGame = computed(() => this.currentGame()?.status === 'FINISHED');
 
-  // Urgency status voor de countdown
+
+
   get countdownUrgent(): boolean {
     const cd = this.countdown();
     return !!cd && cd.h === 0 && cd.m < 60 && !this.hasPendingKill();
@@ -65,8 +75,21 @@ export class GotchaPageComponent implements OnInit {
       next: () => {
         if (this.isActive()) {
           this.gotchaService.getTargetInfo().subscribe();
+          this.loadLeaderboard();
         }
       },
+      error: () => {
+        // Not a participant — still load leaderboard if game is active
+        if (this.isActive()) {
+          this.loadLeaderboard();
+        }
+      },
+    });
+  }
+
+  private loadLeaderboard() {
+    this.gotchaService.getLeaderboard().subscribe({
+      next: (data) => this.participants.set(data),
       error: () => {},
     });
   }
@@ -74,10 +97,9 @@ export class GotchaPageComponent implements OnInit {
   goBack()        { this.router.navigate(['/event']); }
   goToEndScreen() { this.router.navigate(['/gotcha/end']); }
   goToSettings()  { this.router.navigate(['/gotcha/settings']); }
-
+  goToHistory()   { this.router.navigate(['/gotcha/history']); }
   padTwo(n: number): string { return n.toString().padStart(2, '0'); }
 
-  //Submit kill modal logica
   openSubmitModal() {
     this.photoBase64.set(null);
     this.photoPreview.set(null);
@@ -89,7 +111,6 @@ export class GotchaPageComponent implements OnInit {
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = () => {
       const dataUri = reader.result as string;
@@ -112,6 +133,7 @@ export class GotchaPageComponent implements OnInit {
         this.closeSubmitModal();
         this.toastService.success('gotcha.submitKill.success');
         this.gotchaService.getMyStatus().subscribe();
+        this.loadLeaderboard();
       },
       error: (err) => {
         this.submitting.set(false);

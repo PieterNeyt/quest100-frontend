@@ -9,6 +9,7 @@ import { GotchaProp } from '../model/gotcha';
 import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
 import { toDatetimeLocal } from '../utils/gotchaUtils';
+import {ProfileService} from '../services/profileService';
 
 @Component({
   selector: 'app-gotcha-settings',
@@ -20,6 +21,7 @@ import { toDatetimeLocal } from '../utils/gotchaUtils';
 })
 export class GotchaSettingsComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
+  private readonly profileService = inject(ProfileService);
   private readonly toastService  = inject(ToastService);
   private readonly router        = inject(Router);
   readonly t = inject(TranslationService);
@@ -27,10 +29,9 @@ export class GotchaSettingsComponent implements OnInit {
   currentGame = this.gotchaService.currentGame;
 
   isEditable = computed(() => {
-    const game = this.currentGame();
-    return game?.status === 'OPT_IN';
+    const status = this.currentGame()?.status;
+    return status == null || status === 'OPT_IN' || status === 'FINISHED';
   });
-
   // Loading states
   loadingGame  = signal(true);
   loadingProps = signal(true);
@@ -75,19 +76,31 @@ export class GotchaSettingsComponent implements OnInit {
     this.loadingGame.set(true);
     this.gotchaService.getCurrentGame().subscribe({
       next: (game) => {
-        const defaultDate = game?.startDate ? new Date(game.startDate) : new Date();
-        this.editStartDate.set(toDatetimeLocal(defaultDate));
-
-        this.editKillDeadline.set(game?.killDeadlineHours ?? 72);
-        this.editPrizePhotoBase64.set(game?.prizePhotoBase64 ?? '');
+        if (!game || game.status === 'FINISHED') {
+          this.editStartDate.set(toDatetimeLocal(new Date()));
+          this.editKillDeadline.set(72);
+          this.editPrizePhotoBase64.set('');
+          this.editPrizePhotoPreview.set('');
+          this.editPrizeDescEN.set('');
+          this.editPrizeDescNL.set('');
+          this.loadingGame.set(false);
+          return;
+        }
+        this.editStartDate.set(toDatetimeLocal(new Date(game.startDate ?? new Date())));
+        this.editKillDeadline.set(game.killDeadlineHours ?? 72);
+        this.editPrizePhotoBase64.set(game.prizePhotoBase64 ?? '');
         this.editPrizePhotoPreview.set(
-          game?.prizePhotoBase64 ? `data:image/jpeg;base64,${game.prizePhotoBase64}` : ''
+          game.prizePhotoBase64 ? `data:image/jpeg;base64,${game.prizePhotoBase64}` : ''
         );
-        this.editPrizeDescEN.set(game?.prizeDescriptionEN ?? '');
-        this.editPrizeDescNL.set(game?.prizeDescriptionNL ?? '');
+        this.editPrizeDescEN.set(game.prizeDescriptionEN ?? '');
+        this.editPrizeDescNL.set(game.prizeDescriptionNL ?? '');
         this.loadingGame.set(false);
       },
-      error: () => this.loadingGame.set(false),
+      error: () => {
+        this.editStartDate.set(toDatetimeLocal(new Date()));
+        this.editKillDeadline.set(72);
+        this.loadingGame.set(false);
+      },
     });
   }
 
@@ -114,15 +127,20 @@ export class GotchaSettingsComponent implements OnInit {
       this.toastService.error('gotcha.editModal.startDateRequired');
       return;
     }
-    this.savingGame.set(true);
-    this.gotchaService.updateGame({
+    const payload = {
       startDate:          new Date(this.editStartDate()).toISOString(),
       killDeadlineHours:  this.editKillDeadline(),
       prizePhotoBase64:   this.editPrizePhotoBase64(),
       prizeDescriptionEN: this.editPrizeDescEN(),
       prizeDescriptionNL: this.editPrizeDescNL(),
-    }).subscribe({
-      next:  () => { this.savingGame.set(false); this.toastService.success('success.saved'); },
+      campus: this.profileService.profile()?.campus,
+    };
+    this.savingGame.set(true);
+    this.gotchaService.createGame(payload).subscribe({
+      next: () => {
+        this.savingGame.set(false);
+        this.toastService.success('success.saved');
+      },
       error: () => { this.savingGame.set(false); this.toastService.error('errors.generic'); },
     });
   }

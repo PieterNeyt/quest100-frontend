@@ -74,6 +74,8 @@ export interface EndScreenKillNode {
   prop?: KillFeedProp | null;
   photoBase64: string;
   createdAt: string;
+  likeCount?: number;
+  targetAssignedAt?: string | null;
 }
 
 export interface EndScreenStats {
@@ -84,7 +86,7 @@ export interface EndScreenStats {
   mostKillsCount: number;
 }
 
-//  Awards
+// Awards
 
 export type AwardCategory = 'core' | 'skill' | 'social' | 'prop' | 'game' | 'meme';
 
@@ -101,9 +103,8 @@ export interface GameAward {
   profiles?: KillFeedProfile[];
 }
 
-//  EndScreen
-
 export interface EndScreen {
+  gameId: string;
   winner?: KillFeedProfile | null;
   winnerKillCount: number;
   prizePhotoBase64?: string;
@@ -128,4 +129,20 @@ export interface CreatePropRequest {
 export interface UpdatePropRequest {
   nameEN: string;
   nameNL: string;
+}
+
+// History
+
+export interface GameSummary {
+  id: string;
+  campus: string;
+  status: 'FINISHED';
+  startDate: string;
+  finishedAt: string;
+  winner?: KillFeedProfile | null;
+  winnerKillCount: number;
+  totalParticipants: number;
+  totalKills: number;
+  prizeDescriptionEN?: string;
+  prizeDescriptionNL?: string;
 }

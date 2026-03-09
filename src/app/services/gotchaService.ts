@@ -5,6 +5,7 @@ import { environment } from '../../../environment/environment';
 import {
   CreatePropRequest,
   EndScreen,
+  GameSummary,
   GotchaGame,
   GotchaProp,
   GotchaParticipant,
@@ -16,7 +17,7 @@ import {
 
 export type {
   GotchaGame, GotchaParticipant, KillFeedItem, TargetInfo,
-  UpdateGameRequest, EndScreen, GotchaProp,
+  UpdateGameRequest, EndScreen, GotchaProp, GameSummary,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -73,10 +74,15 @@ export class GotchaService {
     );
   }
 
-  updateGame(payload: UpdateGameRequest): Observable<GotchaGame> {
-    return this.http.put<GotchaGame>(`${this.url}/api/gotcha/games/startdate`, payload).pipe(
+  createGame(payload: UpdateGameRequest): Observable<GotchaGame> {
+    return this.http.post<GotchaGame>(`${this.url}/api/gotcha/games`, payload).pipe(
       tap((game) => this.currentGame.set(game))
     );
+  }
+  // History
+
+  getGameHistory(): Observable<GameSummary[]> {
+    return this.http.get<GameSummary[]>(`${this.url}/api/gotcha/games/history`);
   }
 
   // Participation
@@ -119,7 +125,6 @@ export class GotchaService {
     return this.http.get<{ count: number }>(`${this.url}/api/gotcha/kills/pending/count`);
   }
 
-
   // Feed
 
   getFeed(limit = 20, offset = 0): Observable<KillFeedItem[]> {
@@ -136,12 +141,22 @@ export class GotchaService {
     return this.http.delete<void>(`${this.url}/api/gotcha/kills/${killId}/like`);
   }
 
+  // Leaderboard
+
+  getLeaderboard(): Observable<GotchaParticipant[]> {
+    return this.http.get<GotchaParticipant[]>(`${this.url}/api/gotcha/leaderboard`);
+  }
+
   // End screen
 
   getEndScreen(): Observable<EndScreen> {
     return this.http.get<EndScreen>(`${this.url}/api/gotcha/end-screen`).pipe(
       tap((data) => this.endScreen.set(data))
     );
+  }
+
+  getEndScreenById(gameId: string): Observable<EndScreen> {
+    return this.http.get<EndScreen>(`${this.url}/api/gotcha/games/${gameId}/end-screen`);
   }
 
   // Props

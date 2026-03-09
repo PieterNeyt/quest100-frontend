@@ -1,13 +1,24 @@
 <div class="end-page-header">
+
+
   <button class="btn-back" (click)="goBack()">
     <ng-icon hlm name="lucideArrowLeft" size="sm"/>
     {{ t.t('gotcha.page.back') }}
   </button>
 
-  <button class="btn-history" (click)="goToHistory()">
-    <ng-icon hlm name="lucideHistory" size="sm"/>
-    {{ t.t('gotcha.page.history') }}
-  </button>
+  @if (isHistoryView()) {
+    <button class="btn-history" (click)="goToHistory()">
+      <ng-icon hlm name="lucideHistory" size="sm"/>
+      {{ t.t('gotcha.history.backToHistory') }}
+    </button>
+  }
+
+  @if (!isHistoryView()) {
+    <button class="btn-history" (click)="goToHistory()">
+      <ng-icon hlm name="lucideHistory" size="sm"/>
+      {{ t.t('gotcha.page.history') }}
+    </button>
+  }
 
   <div class="end-page-title-row">
     <div class="page-icon-wrap">
@@ -15,8 +26,8 @@
     </div>
     <h1 class="page-title">Gotcha</h1>
     <span class="status-pill status-finished">
-        {{ t.t('gotcha.status.finished') }}
-      </span>
+      {{ t.t('gotcha.status.finished') }}
+    </span>
   </div>
 </div>
 
@@ -37,4 +48,3 @@
 } @else if (data()) {
   <app-gotcha-end-screen [data]="data()!"/>
 }
-

@@ -177,7 +177,7 @@
     "winner": "Winnaar",
     "page": {
       "back": "Terug",
-      "history": "Kill Feed"
+      "history": "Geschiedenis"
     },
     "status": {
       "opt_in": "Inschrijving",
@@ -347,9 +347,11 @@
     },
     "settings": {
       "title": "Spelinstellingen",
+      "newGameHint": "Start een nieuw spel!",
       "gameSettings": "Spelinstellingen",
       "propsRequiredToStart": "Er is minimaal 1 prop vereist om het spel te kunnen starten!",
       "props": "Voorwerpen",
+      "newGame": "Nieuw spel",
       "addProp": "Voorwerp toevoegen",
       "noProps": "Geen voorwerpen gevonden.",
       "propNameEN": "Naam (EN)",
@@ -359,6 +361,22 @@
       "propDeleted": "Voorwerp verwijderd.",
       "cancel": "Annuleren",
       "locked": "Vergrendeld"
+    },
+    "history": {
+      "title": "Spelgeschiedenis",
+      "loading": "Geschiedenis laden...",
+      "loadError": "Kon de geschiedenis niet laden.",
+      "empty": "Nog geen afgelopen spellen.",
+      "kills": "kills",
+      "participants": "Spelers",
+      "totalKills": "Totale kills",
+      "started": "Gestart",
+      "viewResults": "Resultaten bekijken",
+      "backToHistory": "Terug naar geschiedenis"
+    },
+    "aliveBanner": {
+      "label": "Spelers nog levend",
+      "alive": "levend"
     },
     "toasts": {
       "optedIn": "Je doet mee aan het spel!",

@@ -7,7 +7,10 @@
       {{ t.t('gotcha.page.back') }}
     </button>
 
-    <!-- Titel + status + actions op één rij -->
+    <button class="btn-icon-action" (click)="goToHistory()" [title]="t.t('gotcha.history.title')">
+      <ng-icon hlm name="lucideHistory" size="sm" />
+    </button>
+
     <div class="page-title-row">
       <h1 class="page-title">Gotcha</h1>
       @if (currentGame()?.status) {
@@ -31,6 +34,10 @@
             <ng-icon hlm name="lucideBarChart2" size="sm" />
             {{ t.t('gotcha.endScreen.viewResults') }}
           </button>
+          <button class="btn-new-game" (click)="goToSettings()">
+            <ng-icon hlm name="lucidePlus" size="sm" />
+            {{ t.t('gotcha.settings.newGame') }}
+          </button>
         }
         @if (currentGame()) {
           <button class="btn-icon-action" (click)="goToSettings()" [title]="t.t('gotcha.settings.title')">
@@ -40,6 +47,35 @@
       </div>
     </div>
   </div>
+
+  <!-- ── ALIVE COUNT BANNER ── -->
+  @if (isActive() && totalCount() > 0) {
+    <div class="alive-banner">
+      <div class="alive-banner-left">
+        <div class="alive-icon-wrap">
+          <ng-icon hlm name="lucideShield" size="sm" />
+        </div>
+        <div class="alive-info">
+          <span class="alive-label">{{ t.t('gotcha.aliveBanner.label') }}</span>
+          <span class="alive-count">
+            <strong>{{ aliveCount() }}</strong>
+            <span class="alive-total">/ {{ totalCount() }}</span>
+          </span>
+        </div>
+      </div>
+      <div class="alive-bar-wrap">
+        <div class="alive-bar">
+          <div class="alive-bar-fill"
+               [style.width.%]="totalCount() > 0 ? (aliveCount() / totalCount()) * 100 : 0">
+          </div>
+        </div>
+        <span class="alive-percent">
+          {{ totalCount() > 0 ? ((aliveCount() / totalCount()) * 100 | number:'1.0-0') : 0 }}%
+          {{ t.t('gotcha.aliveBanner.alive') }}
+        </span>
+      </div>
+    </div>
+  }
 
   <!-- ── TARGET PANEL ── -->
   @if (isActive() && isParticipant()) {

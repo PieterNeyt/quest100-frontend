@@ -177,7 +177,7 @@
     "winner": "Winner",
     "page": {
       "back": "Back",
-      "history": "Kill feed"
+      "history": "History"
     },
     "status": {
       "opt_in": "Sign-up",
@@ -347,9 +347,11 @@
     },
     "settings": {
       "title": "Game settings",
+      "newGameHint": "Create a new game!",
       "propsRequiredToStart": "A minimum of 1 prop is required to start the game!",
       "gameSettings": "Game settings",
       "props": "Props",
+      "newGame": "New game",
       "addProp": "Add prop",
       "noProps": "No props yet. Add some!",
       "propNameEN": "Name (English)",
@@ -359,6 +361,22 @@
       "propDeleted": "Prop removed.",
       "cancel": "Cancel",
       "locked": "Locked"
+    },
+    "history": {
+      "title": "Game History",
+      "loading": "Loading history...",
+      "loadError": "Failed to load history.",
+      "empty": "No finished games yet.",
+      "kills": "kills",
+      "participants": "Players",
+      "totalKills": "Total Kills",
+      "started": "Started",
+      "viewResults": "View results",
+      "backToHistory": "Back to history"
+    },
+    "aliveBanner": {
+      "label": "Players alive",
+      "alive": "alive"
     },
     "toasts": {
       "optedIn": "You've joined the game!",

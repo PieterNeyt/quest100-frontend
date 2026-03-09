@@ -14,6 +14,11 @@
     </div>
   } @else {
 
+    @if (!currentGame()) {
+      <p class="field-hint">
+        {{ t.t('gotcha.settings.newGameHint') }}
+      </p>
+    }
     <!-- ── Game settings card ── -->
     <section class="settings-card" [class.settings-card--locked]="!isEditable()">
       <div class="card-header-row">
@@ -23,7 +28,7 @@
           </div>
           <h2 class="card-title">{{ t.t('gotcha.settings.gameSettings') }}</h2>
         </div>
-        @if (!isEditable()) {
+        @if (currentGame()?.status === 'ACTIVE') {
           <div class="lock-status-badge">
             <ng-icon hlm name="lucideLock" size="xs"></ng-icon>
             <span>{{ t.t('gotcha.settings.locked') }}</span>
