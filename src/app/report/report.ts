@@ -1,9 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {NgIconComponent, provideIcons} from '@ng-icons/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import {HlmIconImports} from '@spartan-ng/helm/icon';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { ToastService } from '../services/toastService';
+import {ModerationService} from '../services/moderation';
 
 export enum ReportType {
   Harassment = 'harassment',
@@ -14,7 +16,7 @@ export enum ReportType {
 }
 
 export interface ReportPayload {
-  eventId: string | number;
+  targetId: string | number;
   type: ReportType;
   message: string;
 }
@@ -28,11 +30,13 @@ export interface ReportPayload {
   styleUrl: './report.css',
 })
 export class ReportComponent implements OnInit {
-  @Input() eventId!: string | number;
+  @Input() targetId!: string | number;
   @Input() eventTitle?: string;
   @Output() closed = new EventEmitter<void>();
 
   private readonly fb = new FormBuilder();
+  private readonly ts = inject(ToastService);
+  private readonly moderationService = inject(ModerationService);
 
   submitting = signal(false);
   submitted = signal(false);
@@ -67,17 +71,24 @@ export class ReportComponent implements OnInit {
     this.submitting.set(true);
 
     const payload: ReportPayload = {
-      eventId: this.eventId,
+      targetId: this.targetId,
       type: this.reportForm.value.type,
       message: this.reportForm.value.message,
     };
 
-    // Simulate async submit
-    setTimeout(() => {
-      console.log('[Report submitted]', payload);
-      this.submitting.set(false);
-      this.submitted.set(true);
-    }, 800);
+    this.moderationService.createReport(payload).subscribe({
+      next: () => {
+        this.submitting.set(false);
+        this.submitted.set(true);
+        this.ts.success('Report submitted successfully');
+        this.close();
+      },
+      error: (err) => {
+        this.submitting.set(false);
+        const message = err?.error?.error ?? 'Something went wrong, please try again';
+        this.ts.error(message);
+      },
+    });
   }
 
   get messageLength(): number {

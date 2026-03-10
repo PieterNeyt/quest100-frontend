@@ -169,7 +169,7 @@
 <!-- Report Modal -->
 @if (reportingEvent()) {
   <app-report
-    [eventId]="reportingEvent()!.id"
+    [targetId]="reportingEvent()!.id"
     [eventTitle]="reportingEvent()!.title"
     (closed)="closeReportModal()"
   />
