@@ -10,6 +10,7 @@
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/event" class="nav-link">Events</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">Students</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/about" class="nav-link">About</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/avatar" class="nav-link">avatar</a></li>
     </ul>
   </div>
 
@@ -48,7 +49,7 @@
           <button class="user-avatar-trigger" (click)="toggleMenu('user', $event)">
             <div class="avatar-ring">
               <hlm-avatar class="user-avatar-circle">
-                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover"/>
+                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt=""/>
                 <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
               </hlm-avatar>
             </div>
@@ -76,9 +77,9 @@
     <div class="sidebar-header">
       @if (loginDisplay() && profile()) {
         <div class="sidebar-user-info">
-          <div class="avatar-ring !w-12 !h-12">
-              <hlm-avatar class="user-avatar-circle  !size-10">
-                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover"/>
+          <div class="avatar-ring w-12! h-12!">
+              <hlm-avatar class="user-avatar-circle  size-10!">
+                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt=""/>
                 <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
               </hlm-avatar>
           </div>

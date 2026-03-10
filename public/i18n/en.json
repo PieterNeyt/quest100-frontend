@@ -158,5 +158,11 @@
     "send": "Send",
     "awardSuccess": "You have successfully given the award {{type}} to {{firstName}} {{lastName}}!",
     "awardError": "Failed to give award. Please try again."
+  },
+  "avatar": {
+    "bought": {
+      "success": "Purchase successful! Item has been added to your inventory.",
+      "error": "Transaction failed. Please check your balance and/or connection and try again."
+    }
   }
 }

@@ -158,5 +158,11 @@
     "KudoTeamwork": "Teamwork",
     "KudoAtmosphere": "Sfeer",
     "KudoEngagement": "Betrokkenheid"
+  },
+  "avatar": {
+    "bought": {
+      "success": "Aankoop geslaagd! Het artikel is toegevoegd aan je inventaris.",
+      "error": "Transactie mislukt. Controleer je saldo en/of verbinding en probeer het opnieuw."
+    }
   }
 }

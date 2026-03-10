@@ -110,4 +110,8 @@ export class ProfileService {
   getShopItems() {
     return this.http.get<Category[]>(`${this.url}/api/profiles/assets`, {});
   }
+
+  buyShopItem(id: string) {
+    return this.http.put(`${this.url}/api/profiles/assets/${id}`, {})
+  }
 }

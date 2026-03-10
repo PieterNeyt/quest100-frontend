@@ -1,6 +1,8 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Asset, Category} from '../model/avatar';
 import {ProfileService} from '../services/profileService';
+import {ToastService} from '../services/toastService';
+import {Profile} from '../model/profile';
 
 @Component({
   selector: 'app-avatar',
@@ -10,8 +12,9 @@ import {ProfileService} from '../services/profileService';
 })
 export class Avatar implements OnInit {
   private service = inject(ProfileService)
+  private toast = inject(ToastService)
+  private profile = inject(ProfileService).profile;
 
-  userPoints = 500;
   categories = signal<Category[]>([]);
   activeCategory: Category | null = null;
 
@@ -49,16 +52,17 @@ export class Avatar implements OnInit {
   }
 
   buyItem(item: Asset) {
-    if (this.userPoints >= item.price) {
-      const confirmBuy = confirm(`Buy ${item.name} for ${item.price} points?`);
-      if (confirmBuy) {
-        this.userPoints -= item.price;
+    this.service.buyShopItem(item.id).subscribe({
+      next: () => {
+        this.profile.set({...this.profile(), kudos: this.profile()!.kudos - item.price} as Profile);
         item.isOwned = true;
-        this.toggleItem(item); // Auto-equip after buying
+        this.toggleItem(item);
+        this.toast.success("avatar.bought.success")
+      },
+      error: _ => {
+        this.toast.error("avatar.bought.error");
       }
-    } else {
-      alert("Not enough points!");
-    }
+    });
   }
 
   getEquippedLayers(): Asset[] {
