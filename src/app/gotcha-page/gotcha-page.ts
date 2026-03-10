@@ -11,7 +11,7 @@ import { ToastService } from '../services/toastService';
 import { GotchaKillFeedComponent } from '../components/gotcha-kill-feed/gotcha-kill-feed';
 import * as utils from '../utils/gotchaUtils';
 import {ProfileService} from '../services/profileService';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-gotcha-page',
   standalone: true,
@@ -25,6 +25,7 @@ export class GotchaPageComponent implements OnInit {
   private readonly toastService  = inject(ToastService);
   private readonly profileService  = inject(ProfileService);
   private readonly router        = inject(Router);
+  private readonly location = inject(Location);
   readonly t = inject(TranslationService);
   readonly utils = utils;
 
@@ -99,7 +100,9 @@ export class GotchaPageComponent implements OnInit {
     });
   }
 
-  goBack()        { this.router.navigate(['/event']); }
+  goBack() {
+    this.location.back();
+  }
   goToEndScreen() { this.router.navigate(['/gotcha/end']); }
   goToSettings()  { this.router.navigate(['/gotcha/settings']); }
   goToHistory()   { this.router.navigate(['/gotcha/history']); }

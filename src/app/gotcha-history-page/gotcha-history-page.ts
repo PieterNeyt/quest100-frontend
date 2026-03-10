@@ -11,7 +11,7 @@ import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService, GameSummary } from '../services/gotchaService';
 import { TranslationService } from '../services/translationService';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-gotcha-history-page',
   standalone: true,
@@ -23,6 +23,7 @@ import { TranslationService } from '../services/translationService';
 export class GotchaHistoryPageComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
   private readonly router        = inject(Router);
+  private readonly location = inject(Location);
   readonly t = inject(TranslationService);
 
   loading = signal(true);
@@ -45,12 +46,7 @@ export class GotchaHistoryPageComponent implements OnInit {
   }
 
   goBack() {
-    const game = this.gotchaService.currentGame();
-    if (game) {
-      this.router.navigate(['/gotcha/end', game.id]);
-    } else {
-      this.router.navigate(['/event']);
-    }
+    this.location.back();
   }
 
   winnerName(game: GameSummary): string {

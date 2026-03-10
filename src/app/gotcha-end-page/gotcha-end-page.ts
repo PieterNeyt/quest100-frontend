@@ -13,7 +13,7 @@ import { GotchaService } from '../services/gotchaService';
 import { TranslationService } from '../services/translationService';
 import { GotchaEndScreenComponent } from '../components/gotcha-end-screen/gotcha-end-screen';
 import { EndScreen } from '../model/gotcha';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-gotcha-end-page',
   standalone: true,
@@ -26,6 +26,7 @@ export class GotchaEndPageComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
   private readonly router        = inject(Router);
   private readonly route         = inject(ActivatedRoute);
+  private readonly location = inject(Location);
   readonly t = inject(TranslationService);
 
   loading = signal(true);
@@ -65,7 +66,7 @@ export class GotchaEndPageComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/event']);
+    this.location.back();
   }
 
   goToHistory() {

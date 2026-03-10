@@ -10,6 +10,7 @@ import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
 import { toDatetimeLocal } from '../utils/gotchaUtils';
 import {ProfileService} from '../services/profileService';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-gotcha-settings',
@@ -24,6 +25,7 @@ export class GotchaSettingsComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
   private readonly toastService  = inject(ToastService);
   private readonly router        = inject(Router);
+  private readonly location = inject(Location);
   readonly t = inject(TranslationService);
 
   currentGame = this.gotchaService.currentGame;
@@ -69,7 +71,7 @@ export class GotchaSettingsComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/gotcha']);
+    this.location.back();
   }
 
   private loadGame() {
