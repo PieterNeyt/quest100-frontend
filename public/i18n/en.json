@@ -252,7 +252,12 @@
       "prizePhotoHint": "Click or drag to upload a photo",
       "prizeDescPlaceholder": "Describe the prize...",
       "saving": "Saving...",
-      "startDateRequired": "Please set a start date."
+      "startDateRequired": "Please set a start date.",
+      "startDatePast": "Start date cannot be in the past.",
+      "killDeadlineRequired": "Please enter a valid kill deadline.",
+      "prizePhotoRequired": "Please upload a prize photo.",
+      "prizeDescENRequired": "Please fill in the English prize description.",
+      "prizeDescNLRequired": "Please fill in the Dutch prize description."
     },
     "endScreen": {
       "loading": "Loading tournament results...",

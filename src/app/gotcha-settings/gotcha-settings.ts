@@ -123,12 +123,40 @@ export class GotchaSettingsComponent implements OnInit {
 
   saveGameSettings() {
     if (!this.isEditable()) return;
+
     if (!this.editStartDate()) {
       this.toastService.error('gotcha.editModal.startDateRequired');
       return;
     }
+
+    const startDate = new Date(this.editStartDate());
+    if (startDate <= new Date()) {
+      this.toastService.error('gotcha.editModal.startDatePast');
+      return;
+    }
+
+    if (!this.editKillDeadline() || this.editKillDeadline() < 1) {
+      this.toastService.error('gotcha.editModal.killDeadlineRequired');
+      return;
+    }
+
+    if (!this.editPrizePhotoBase64()) {
+      this.toastService.error('gotcha.editModal.prizePhotoRequired');
+      return;
+    }
+
+    if (!this.editPrizeDescEN().trim()) {
+      this.toastService.error('gotcha.editModal.prizeDescENRequired');
+      return;
+    }
+
+    if (!this.editPrizeDescNL().trim()) {
+      this.toastService.error('gotcha.editModal.prizeDescNLRequired');
+      return;
+    }
+
     const payload = {
-      startDate:          new Date(this.editStartDate()).toISOString(),
+      startDate:          startDate.toISOString(),
       killDeadlineHours:  this.editKillDeadline(),
       prizePhotoBase64:   this.editPrizePhotoBase64(),
       prizeDescriptionEN: this.editPrizeDescEN(),

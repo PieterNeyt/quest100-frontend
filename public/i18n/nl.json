@@ -252,7 +252,12 @@
       "prizePhotoHint": "Klik of sleep voor een foto",
       "prizeDescPlaceholder": "Beschrijf de prijs...",
       "saving": "Opslaan...",
-      "startDateRequired": "Stel een startdatum in."
+      "startDateRequired": "Stel een startdatum in.",
+      "startDatePast": "De startdatum mag niet in het verleden liggen.",
+      "killDeadlineRequired": "Vul een geldige kill deadline in.",
+      "prizePhotoRequired": "Upload een foto van de prijs.",
+      "prizeDescENRequired": "Vul de Engelse prijsbeschrijving in.",
+      "prizeDescNLRequired": "Vul de Nederlandse prijsbeschrijving in."
     },
     "endScreen": {
       "loading": "Resultaten laden...",
