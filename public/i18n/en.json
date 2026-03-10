@@ -259,6 +259,10 @@
       "prizeDescENRequired": "Please fill in the English prize description.",
       "prizeDescNLRequired": "Please fill in the Dutch prize description."
     },
+    "eliminated": {
+      "killedBy": "Eliminated by",
+      "unknownKiller": "Killer unknown"
+    },
     "endScreen": {
       "loading": "Loading tournament results...",
       "title": "Game Over!",

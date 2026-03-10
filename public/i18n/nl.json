@@ -239,6 +239,10 @@
       "success": "Kill ingediend! Wacht op goedkeuring.",
       "error": "Kill kon niet ingediend worden."
     },
+    "eliminated": {
+      "killedBy": "Uitgeschakeld door",
+      "unknownKiller": "Killer onbekend"
+    },
     "editModal": {
       "title": "Spelinstellingen",
       "startDate": "Startdatum & tijd",

@@ -77,87 +77,117 @@
     </div>
   }
 
-  <!-- ── TARGET PANEL ── -->
+  <!-- ── TARGET PANEL / ELIMINATED PANEL ── -->
   @if (isActive() && isParticipant()) {
-    @if (targetInfo(); as info) {
-      <div class="target-panel">
-
-        <div class="target-section">
-          <span class="target-label">
-            <ng-icon hlm name="lucideCrosshair" size="xs" />
-            {{ t.t('gotcha.target.label') }}
-          </span>
-          @if (info.target) {
-            <div class="target-profile">
-              <div class="target-avatar">
-                @if (info.target.profilePicture) {
-                  <img [src]="info.target.profilePicture" [alt]="utils.fullName(info.target)" />
+    @if (!isAlive()) {
+      <!-- ELIMINATED GRAPHIC -->
+      <div class="eliminated-panel">
+      <div class="eliminated-skull">
+        <ng-icon hlm name="lucideSkull" size="lg" />
+      </div>
+        <div class="eliminated-content">
+          <h2 class="eliminated-title">{{ t.t('gotcha.target.eliminated') }}</h2>
+          @if (killerInfo(); as killer) {
+            <p class="eliminated-by">{{ t.t('gotcha.eliminated.killedBy') }}</p>
+            <div class="eliminated-killer">
+              <div class="killer-avatar">
+                @if (killer.profilePicture) {
+                  <img [src]="killer.profilePicture" [alt]="utils.fullName(killer)" />
                 } @else {
-                  <span class="target-initials">{{ utils.initials(info.target) }}</span>
+                  <span class="killer-initials">{{ utils.initials(killer) }}</span>
                 }
               </div>
-              <div class="target-info">
-                <span class="target-name">{{ utils.fullName(info.target) }}</span>
-                @if (!isAlive()) {
-                  <span class="target-eliminated">{{ t.t('gotcha.target.eliminated') }}</span>
+              <div class="killer-info">
+                <span class="killer-name">{{ utils.fullName(killer) }}</span>
+                @if (killerProp(); as prop) {
+                  <span class="killer-prop">
+                  <ng-icon hlm name="lucidePackage" size="xs" />
+                    {{ utils.propName(prop, t.currentLanguage()) }}
+                </span>
                 }
               </div>
             </div>
           } @else {
-            <span class="target-none">{{ t.t('gotcha.target.none') }}</span>
+            <p class="eliminated-by">{{ t.t('gotcha.eliminated.unknownKiller') }}</p>
           }
         </div>
+        <div class="eliminated-rip">RIP</div>
+      </div>
+    } @else {
+      @if (targetInfo(); as info) {
+        <div class="target-panel">
+          <!-- ... bestaande target panel inhoud onveranderd ... -->
+          <div class="target-section">
+          <span class="target-label">
+            <ng-icon hlm name="lucideCrosshair" size="xs" />
+            {{ t.t('gotcha.target.label') }}
+          </span>
+            @if (info.target) {
+              <div class="target-profile">
+                <div class="target-avatar">
+                  @if (info.target.profilePicture) {
+                    <img [src]="info.target.profilePicture" [alt]="utils.fullName(info.target)" />
+                  } @else {
+                    <span class="target-initials">{{ utils.initials(info.target) }}</span>
+                  }
+                </div>
+                <div class="target-info">
+                  <span class="target-name">{{ utils.fullName(info.target) }}</span>
+                </div>
+              </div>
+            } @else {
+              <span class="target-none">{{ t.t('gotcha.target.none') }}</span>
+            }
+          </div>
 
-        @if (info.assignedProp) {
-          <div class="prop-section">
+          @if (info.assignedProp) {
+            <div class="prop-section">
             <span class="target-label">
               <ng-icon hlm name="lucidePackage" size="xs" />
               {{ t.t('gotcha.target.propLabel') }}
             </span>
-            <span class="prop-name">
+              <span class="prop-name">
               <ng-icon hlm name="lucidePackage" size="sm" />
-              {{ utils.propName(info.assignedProp, t.currentLanguage()) }}
+                {{ utils.propName(info.assignedProp, t.currentLanguage()) }}
             </span>
-          </div>
-        }
+            </div>
+          }
 
-        <div class="countdown-section"
-             [class.countdown--pending]="hasPendingKill()"
-             [class.countdown--urgent]="countdownUrgent"
-             [class.countdown--critical]="countdownCritical">
-
+          <div class="countdown-section"
+               [class.countdown--pending]="hasPendingKill()"
+               [class.countdown--urgent]="countdownUrgent"
+               [class.countdown--critical]="countdownCritical">
           <span class="target-label">
             <ng-icon hlm name="lucideTimer" size="xs" />
             {{ t.t('gotcha.target.timeLeft') }}
           </span>
-
-          @if (hasPendingKill()) {
-            <div class="pending-review-notice">
-              <ng-icon hlm name="lucideClock" size="sm" />
-              <span>{{ t.t('gotcha.target.waitingForReview') }}</span>
-            </div>
-          }
-          @if (countdown(); as cd) {
-            <div class="countdown-display">
-              <div class="countdown-unit">
-                <span class="countdown-val">{{ padTwo(cd.h) }}</span>
-                <span class="countdown-lbl">{{ t.t('gotcha.hours') }}</span>
+            @if (hasPendingKill()) {
+              <div class="pending-review-notice">
+                <ng-icon hlm name="lucideClock" size="sm" />
+                <span>{{ t.t('gotcha.target.waitingForReview') }}</span>
               </div>
-              <span class="countdown-sep">:</span>
-              <div class="countdown-unit">
-                <span class="countdown-val">{{ padTwo(cd.m) }}</span>
-                <span class="countdown-lbl">{{ t.t('gotcha.minutes') }}</span>
+            }
+            @if (countdown(); as cd) {
+              <div class="countdown-display">
+                <div class="countdown-unit">
+                  <span class="countdown-val">{{ padTwo(cd.h) }}</span>
+                  <span class="countdown-lbl">{{ t.t('gotcha.hours') }}</span>
+                </div>
+                <span class="countdown-sep">:</span>
+                <div class="countdown-unit">
+                  <span class="countdown-val">{{ padTwo(cd.m) }}</span>
+                  <span class="countdown-lbl">{{ t.t('gotcha.minutes') }}</span>
+                </div>
+                <span class="countdown-sep">:</span>
+                <div class="countdown-unit">
+                  <span class="countdown-val">{{ padTwo(cd.s) }}</span>
+                  <span class="countdown-lbl">{{ t.t('gotcha.seconds') }}</span>
+                </div>
               </div>
-              <span class="countdown-sep">:</span>
-              <div class="countdown-unit">
-                <span class="countdown-val">{{ padTwo(cd.s) }}</span>
-                <span class="countdown-lbl">{{ t.t('gotcha.seconds') }}</span>
-              </div>
-            </div>
-          }
+            }
+          </div>
         </div>
-
-      </div>
+      }
     }
   }
 

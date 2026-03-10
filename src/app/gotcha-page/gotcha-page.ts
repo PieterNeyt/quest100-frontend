@@ -5,11 +5,12 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaService } from '../services/gotchaService';
-import { GotchaParticipant } from '../model/gotcha';
+import {GotchaParticipant, KillFeedProfile, KillFeedProp} from '../model/gotcha';
 import { TranslationService } from '../services/translationService';
 import { ToastService } from '../services/toastService';
 import { GotchaKillFeedComponent } from '../components/gotcha-kill-feed/gotcha-kill-feed';
 import * as utils from '../utils/gotchaUtils';
+import {ProfileService} from '../services/profileService';
 
 @Component({
   selector: 'app-gotcha-page',
@@ -22,6 +23,7 @@ import * as utils from '../utils/gotchaUtils';
 export class GotchaPageComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
   private readonly toastService  = inject(ToastService);
+  private readonly profileService  = inject(ProfileService);
   private readonly router        = inject(Router);
   readonly t = inject(TranslationService);
   readonly utils = utils;
@@ -52,7 +54,8 @@ export class GotchaPageComponent implements OnInit {
   hasTarget     = computed(() => !!this.myStatus()?.targetId);
   isParticipant = computed(() => !!this.myStatus());
   hasPendingKill = computed(() => !!this.myStatus()?.pendingKillAt);
-
+  killerInfo = signal<KillFeedProfile | null>(null);
+  killerProp = signal<KillFeedProp | null>(null);
   canSubmitKill = computed(() =>
     this.isActive() && this.isAlive() && this.hasTarget() && !this.hasPendingKill()
   );
@@ -76,10 +79,12 @@ export class GotchaPageComponent implements OnInit {
         if (this.isActive()) {
           this.gotchaService.getTargetInfo().subscribe();
           this.loadLeaderboard();
+          if (!this.isAlive()) {
+            this.loadKillerInfo();
+          }
         }
       },
       error: () => {
-        // Not a participant — still load leaderboard if game is active
         if (this.isActive()) {
           this.loadLeaderboard();
         }
@@ -119,7 +124,22 @@ export class GotchaPageComponent implements OnInit {
     };
     reader.readAsDataURL(file);
   }
+  private loadKillerInfo() {
+    const killedBy = this.myStatus()?.killedBy;
+    if (!killedBy) return;
 
+    this.profileService.getProfileById(killedBy).subscribe({
+      next: (profile) => {
+        this.killerInfo.set({
+          id: profile.id,
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          profilePicture: profile.customProfilePicture ?? undefined,
+        });
+      },
+      error: () => {},
+    });
+  }
   submitKill() {
     const b64 = this.photoBase64();
     if (!b64) {
