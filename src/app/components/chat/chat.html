@@ -12,6 +12,17 @@
           }
           <div class="message-text">{{ m.message }}</div>
         </div>
+
+        @if (m.senderId !== currentUser) {
+          <button
+            class="report-close-btn msg-report-btn"
+            (click)="openReportModal(m)"
+            title="Report this message"
+            aria-label="Report this message"
+          >
+            <ng-icon hlm name="lucideFlag" size="xs"/>
+          </button>
+        }
       </div>
     }
   </div>
@@ -28,3 +39,10 @@
     </button>
   </div>
 </div>
+
+@if (reportingMessage()) {
+  <app-report
+    [targetId]="reportingMessage()!.senderId"
+    (closed)="closeReportModal()"
+  />
+}

@@ -244,3 +244,14 @@
 .input-area .send-btn:active:not(:disabled) { transform: translateY(1px); border-bottom-width: 1px; }
 .chat-send-btn:disabled,
 .input-area .send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.message-wrapper .report-close-btn {
+  display: none;
+  margin-top: 0.2rem;
+  width: 22px;
+  height: 22px;
+  padding: 0.25rem;
+}
+.message-wrapper:hover .report-close-btn {
+  display: flex;
+}
