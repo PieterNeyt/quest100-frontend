@@ -36,13 +36,13 @@ export class GotchaPageComponent implements OnInit {
   submitting      = signal(false);
 
   // Game & player state
-  myStatus    = this.gotchaService.myStatus;
+  private myStatus    = this.gotchaService.myStatus;
   currentGame = this.gotchaService.currentGame;
   targetInfo  = this.gotchaService.targetInfo;
   countdown   = this.gotchaService.countdown;
 
   // Leaderboard voor alive count
-  participants = signal<GotchaParticipant[]>([]);
+  private participants = signal<GotchaParticipant[]>([]);
 
   aliveCount = computed(() =>
     this.participants().filter(p => p.isAlive).length
@@ -52,7 +52,7 @@ export class GotchaPageComponent implements OnInit {
   isActive      = computed(() => this.currentGame()?.status === 'ACTIVE');
   isFinished    = computed(() => this.currentGame()?.status === 'FINISHED');
   isAlive       = computed(() => this.myStatus()?.isAlive ?? false);
-  hasTarget     = computed(() => !!this.myStatus()?.targetId);
+  private hasTarget     = computed(() => !!this.myStatus()?.targetId);
   isParticipant = computed(() => !!this.myStatus());
   hasPendingKill = computed(() => !!this.myStatus()?.pendingKillAt);
   killerInfo = signal<KillFeedProfile | null>(null);
@@ -60,9 +60,6 @@ export class GotchaPageComponent implements OnInit {
   canSubmitKill = computed(() =>
     this.isActive() && this.isAlive() && this.hasTarget() && !this.hasPendingKill()
   );
-  canStartNewGame = computed(() => this.currentGame()?.status === 'FINISHED');
-
-
 
   get countdownUrgent(): boolean {
     const cd = this.countdown();

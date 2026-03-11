@@ -42,7 +42,7 @@ export class GotchaSettingsComponent implements OnInit {
   //  Game settings form
   editStartDate        = signal('');
   editKillDeadline     = signal(72);
-  editPrizePhotoBase64 = signal('');
+  private editPrizePhotoBase64 = signal('');
   editPrizePhotoPreview = signal('');
   editPrizeDescEN      = signal('');
   editPrizeDescNL      = signal('');
