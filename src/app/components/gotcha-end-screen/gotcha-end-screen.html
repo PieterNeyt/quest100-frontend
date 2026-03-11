@@ -2,7 +2,6 @@
 
   <!-- ══ WINNER HERO ══ -->
   <div class="end-hero">
-    <!-- Vuurwerk — puur CSS via ::before en ::after + extra div -->
     <div class="firework"></div>
     <div class="firework-2"></div>
 
@@ -21,7 +20,12 @@
       <div class="winner-card">
         <div class="winner-avatar">
           @if (data.winner.profilePicture) {
-            <img [src]="data.winner.profilePicture" [alt]="winnerName" />
+            <img
+              [src]="data.winner.profilePicture"
+              [alt]="winnerName"
+              width="56"
+              height="56"
+            />
           } @else {
             <span class="winner-initials">{{ winnerInitials }}</span>
           }
@@ -47,7 +51,11 @@
         </div>
         <div class="prize-body">
           @if (data.prizePhotoBase64) {
-            <img class="prize-photo" [src]="utils.photoSrc(data.prizePhotoBase64)" alt="prize" />
+            <img
+              class="prize-photo"
+              [src]="utils.photoSrc(data.prizePhotoBase64)"
+              alt="prize"
+            />
           }
           @if (prizeDescription) {
             <p class="prize-desc">{{ prizeDescription }}</p>
@@ -123,13 +131,18 @@
                       <div class="award-profile">
                         <div class="award-avatar">
                           @if (award.profile.profilePicture) {
-                            <img [src]="award.profile.profilePicture" [alt]="utils.fullName(award.profile)" />
+                            <img
+                              [src]="award.profile.profilePicture"
+                              [alt]="utils.fullName(award.profile)"
+                              width="28"
+                              height="28"
+                            />
                           } @else {
                             <span class="award-initials">{{ utils.initials(award.profile) }}</span>
                           }
                         </div>
                         <span class="award-name">{{ utils.fullName(award.profile) }}</span>
-                        @if (award.count !== undefined && award.count > 0) {
+                        @if (award.count != null && award.count > 0) {
                           <span class="award-count">× {{ award.count }}</span>
                         }
                       </div>
@@ -139,7 +152,7 @@
                       <div class="award-prop-value">
                         <ng-icon hlm name="lucidePackage" size="xs" />
                         {{ award.propName }}
-                        @if (award.count !== undefined) {
+                        @if (award.count != null) {
                           <span class="award-count">× {{ award.count }}</span>
                         }
                       </div>
@@ -149,7 +162,7 @@
                       <div class="award-day-value">
                         <ng-icon hlm name="lucideCalendar" size="xs" />
                         {{ award.day }}
-                        @if (award.count !== undefined) {
+                        @if (award.count != null) {
                           <span class="award-count">{{ award.count }} {{ t.t('gotcha.endScreen.kills') }}</span>
                         }
                       </div>
@@ -161,7 +174,12 @@
                           <div class="award-profile-chip">
                             <div class="award-avatar award-avatar--sm">
                               @if (p.profilePicture) {
-                                <img [src]="p.profilePicture" [alt]="utils.fullName(p)" />
+                                <img
+                                  [src]="p.profilePicture"
+                                  [alt]="utils.fullName(p)"
+                                  width="20"
+                                  height="20"
+                                />
                               } @else {
                                 <span class="award-initials award-initials--sm">{{ utils.initials(p) }}</span>
                               }
@@ -251,12 +269,23 @@
         </button>
       </div>
       <div class="kill-detail-body">
-        <img class="kill-detail-photo" [src]="utils.photoSrc(kill.photoBase64)" alt="kill photo" />
+
+
+        <img
+          class="kill-detail-photo"
+          [src]="utils.photoSrc(kill.photoBase64)"
+          alt="kill photo"
+        />
         <div class="kill-detail-info">
           <div class="kill-detail-row">
             <div class="kill-detail-avatar kill-detail-avatar--hunter">
               @if (kill.hunter.profilePicture) {
-                <img [src]="kill.hunter.profilePicture" [alt]="utils.fullName(kill.hunter)" />
+                <img
+                  [src]="kill.hunter.profilePicture"
+                  [alt]="utils.fullName(kill.hunter)"
+                  width="40"
+                  height="40"
+                />
               } @else {
                 {{ utils.initials(kill.hunter) }}
               }
@@ -270,7 +299,12 @@
             </div>
             <div class="kill-detail-avatar kill-detail-avatar--victim">
               @if (kill.victim.profilePicture) {
-                <img [src]="kill.victim.profilePicture" [alt]="utils.fullName(kill.victim)" />
+                <img
+                  [ngSrc]="kill.victim.profilePicture"
+                  [alt]="utils.fullName(kill.victim)"
+                  width="40"
+                  height="40"
+                />
               } @else {
                 {{ utils.initials(kill.victim) }}
               }

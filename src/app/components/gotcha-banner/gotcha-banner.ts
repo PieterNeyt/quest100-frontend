@@ -81,7 +81,6 @@ export class GotchaBannerComponent implements OnInit {
 
   private loadAll() {
     this.loading.set(true);
-    // Haal game op, daarna status. De service vult de signals.
     this.gotchaService.getCurrentGame().subscribe({
       next: () => {
         if (this.isFinished()) {

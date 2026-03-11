@@ -92,15 +92,14 @@ export type AwardCategory = 'core' | 'skill' | 'social' | 'prop' | 'game' | 'mem
 
 export interface GameAward {
   id: string;
-  emoji: string;
+  category: AwardCategory;
   titleKey: string;
   descriptionKey: string;
-  category: AwardCategory;
-  profile?: KillFeedProfile;
-  count?: number;
+  profile?: KillFeedProfile | null;
+  profiles?: KillFeedProfile[];
+  count?: number | null;
   propName?: string;
   day?: string;
-  profiles?: KillFeedProfile[];
 }
 
 export interface EndScreen {
@@ -112,6 +111,7 @@ export interface EndScreen {
   prizeDescriptionNL?: string;
   stats: EndScreenStats;
   kills: EndScreenKillNode[];
+  awards: GameAward[];
 }
 
 export interface GotchaProp {
