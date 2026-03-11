@@ -1,8 +1,7 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {Asset, Category} from '../model/avatar';
 import {ProfileService} from '../services/profileService';
 import {ToastService} from '../services/toastService';
-import {Profile} from '../model/profile';
 
 @Component({
   selector: 'app-avatar',
@@ -13,12 +12,22 @@ import {Profile} from '../model/profile';
 export class Avatar implements OnInit {
   private service = inject(ProfileService)
   private toast = inject(ToastService)
-  private profile = inject(ProfileService).profile;
 
   categories = signal<Category[]>([]);
   activeCategory: Category | null = null;
 
-  equippedItems: Record<string, Asset> = {};
+  equippedItems = computed(() => {
+    const record: Record<string, Asset> = {};
+
+    this.categories().forEach(category => {
+      const equippedAsset = category.items.find((item) => item.equipped);
+
+      if (equippedAsset) {
+        record[category.name] = equippedAsset;
+      }
+    });
+    return record;
+  });
 
   ngOnInit() {
     this.service.getShopItems().subscribe({
@@ -41,20 +50,19 @@ export class Avatar implements OnInit {
       return;
     }
 
-    if (this.equippedItems[item.category]?.id === item.id) {
+    if (this.equippedItems()[item.category]?.id === item.id) {
       if (item.category !== 'Body') {
-        delete this.equippedItems[item.category];
+        delete this.equippedItems()[item.category];
       }
       return;
     }
 
-    this.equippedItems[item.category] = item;
+    this.equippedItems()[item.category] = item;
   }
 
   buyItem(item: Asset) {
     this.service.buyShopItem(item.id).subscribe({
       next: () => {
-        this.profile.set({...this.profile(), kudos: this.profile()!.kudos - item.price} as Profile);
         item.isOwned = true;
         this.toggleItem(item);
         this.toast.success("avatar.bought.success")
@@ -66,6 +74,6 @@ export class Avatar implements OnInit {
   }
 
   getEquippedLayers(): Asset[] {
-    return Object.values(this.equippedItems).sort((a, b) => a.layer_order - b.layer_order);
+    return Object.values(this.equippedItems()).sort((a, b) => a.layer_order - b.layer_order);
   }
 }

@@ -29,7 +29,7 @@
         @for (item of activeCategory.items; track item.id) {
           <div
             class="item-card"
-            [class.equipped]="equippedItems[item.category]?.id === item.id"
+            [class.equipped]="equippedItems()[item.category]?.id === item.id"
             [class.locked]="!item.isOwned"
             (click)="toggleItem(item)">
 
@@ -40,7 +40,7 @@
 
               @if (!item.isOwned) {
                 <button class="buy-btn">💎 {{ item.price }}</button>
-              } @else if (equippedItems[item.category]?.id === item.id) {
+              } @else if (equippedItems()[item.category]?.id === item.id) {
                 <span class="equipped-badge">Equipped</span>
               }
             </div>

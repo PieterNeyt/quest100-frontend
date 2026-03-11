@@ -6,6 +6,7 @@ export interface Asset {
   price: number;
   isOwned: boolean;
   link: string;
+  equipped: boolean;
 }
 
 export interface Category {
