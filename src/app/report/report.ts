@@ -5,18 +5,20 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { ToastService } from '../services/toastService';
-import {ModerationService} from '../services/moderation';
+import { ModerationService } from '../services/moderation';
 
 export enum ReportType {
-  Harassment = 'harassment',
-  Racism = 'racism',
-  Spam = 'spam',
-  HateSpeech = 'hate_speech',
-  Other = 'other',
+  Harassment = 0,
+  Racism = 1,
+  Spam = 2,
+  HateSpeech = 3,
+  Other = 4,
 }
 
 export interface ReportPayload {
   targetId: string | number;
+  contextId?: string;
+  channelType: number;
   type: ReportType;
   message: string;
 }
@@ -31,6 +33,8 @@ export interface ReportPayload {
 })
 export class ReportComponent implements OnInit {
   @Input() targetId!: string | number;
+  @Input() contextId?: string;
+  @Input() channelType!: number;
   @Input() eventTitle?: string;
   @Output() closed = new EventEmitter<void>();
 
@@ -72,6 +76,8 @@ export class ReportComponent implements OnInit {
 
     const payload: ReportPayload = {
       targetId: this.targetId,
+      contextId: this.contextId,
+      channelType: this.channelType,
       type: this.reportForm.value.type,
       message: this.reportForm.value.message,
     };

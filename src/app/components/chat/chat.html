@@ -13,7 +13,6 @@
           <div class="message-text">{{ m.message }}</div>
         </div>
 
-        @if (m.senderId !== currentUser) {
           <button
             class="report-close-btn msg-report-btn"
             (click)="openReportModal(m)"
@@ -22,7 +21,6 @@
           >
             <ng-icon hlm name="lucideFlag" size="xs"/>
           </button>
-        }
       </div>
     }
   </div>
@@ -42,7 +40,9 @@
 
 @if (reportingMessage()) {
   <app-report
-    [targetId]="reportingMessage()!.senderId"
+    [targetId]="reportingMessage()!.id"
+    [contextId]="chatId()"
+    [channelType]="1"
     (closed)="closeReportModal()"
   />
 }

@@ -34,6 +34,7 @@ export class Chat implements OnInit, OnDestroy {
   currentInput = '';
   currentUser = this.profile()?.id || "";
   reportingMessage = signal<ReceiveMessage | null>(null);
+  chatId = signal<string>('');
 
   constructor() {
     effect(() => {
@@ -62,6 +63,7 @@ export class Chat implements OnInit, OnDestroy {
     });
     const eventId = this.route.snapshot.paramMap.get('eventId');
     if (eventId !== null) {
+      this.chatId.set(eventId);
       this.chatService.getAllChatsOfChatRoom(eventId).subscribe({
         next: msg => {
           this.chatLog.update(prev => [...prev, ...msg]);
