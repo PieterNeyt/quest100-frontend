@@ -1,6 +1,5 @@
 <div class="page-wrap">
 
-  <!-- ── Page header ── -->
   <div class="page-header">
     <button class="btn-back" (click)="goBack()">
       <ng-icon hlm name="lucideArrowLeft" size="sm" />
@@ -13,9 +12,9 @@
 
     <div class="page-title-row">
       <h1 class="page-title">Gotcha</h1>
-      @if (currentGame()?.status) {
-        <span class="status-pill" [class]="'status-' + currentGame()!.status.toLowerCase()">
-          {{ t.t('gotcha.status.' + currentGame()!.status.toLowerCase()) }}
+      @if (currentGame()?.status; as status) {
+        <span class="status-pill" [ngClass]="status | statusClass">
+          {{ t.t('gotcha.status.' + status.toLowerCase()) }}
         </span>
       }
 
@@ -48,7 +47,6 @@
     </div>
   </div>
 
-  <!-- ── ALIVE COUNT BANNER ── -->
   @if (isActive() && totalCount() > 0) {
     <div class="alive-banner">
       <div class="alive-banner-left">
@@ -77,14 +75,12 @@
     </div>
   }
 
-  <!-- ── TARGET PANEL / ELIMINATED PANEL ── -->
   @if (isActive() && isParticipant()) {
     @if (!isAlive()) {
-      <!-- ELIMINATED GRAPHIC -->
       <div class="eliminated-panel">
-      <div class="eliminated-skull">
-        <ng-icon hlm name="lucideSkull" size="lg" />
-      </div>
+        <div class="eliminated-skull">
+          <ng-icon hlm name="lucideSkull" size="lg" />
+        </div>
         <div class="eliminated-content">
           <h2 class="eliminated-title">{{ t.t('gotcha.target.eliminated') }}</h2>
           @if (killerInfo(); as killer) {
@@ -92,18 +88,18 @@
             <div class="eliminated-killer">
               <div class="killer-avatar">
                 @if (killer.profilePicture) {
-                  <img [src]="killer.profilePicture" [alt]="utils.fullName(killer)" />
+                  <img [src]="killer.profilePicture | photoSrc" [alt]="killer | fullName" />
                 } @else {
-                  <span class="killer-initials">{{ utils.initials(killer) }}</span>
+                  <span class="killer-initials">{{ killer | initials }}</span>
                 }
               </div>
               <div class="killer-info">
-                <span class="killer-name">{{ utils.fullName(killer) }}</span>
+                <span class="killer-name">{{ killer | fullName }}</span>
                 @if (killerProp(); as prop) {
                   <span class="killer-prop">
-                  <ng-icon hlm name="lucidePackage" size="xs" />
-                    {{ utils.propName(prop, t.currentLanguage()) }}
-                </span>
+                    <ng-icon hlm name="lucidePackage" size="xs" />
+                    {{ prop | propName }}
+                  </span>
                 }
               </div>
             </div>
@@ -116,23 +112,22 @@
     } @else {
       @if (targetInfo(); as info) {
         <div class="target-panel">
-          <!-- ... bestaande target panel inhoud onveranderd ... -->
           <div class="target-section">
-          <span class="target-label">
-            <ng-icon hlm name="lucideCrosshair" size="xs" />
-            {{ t.t('gotcha.target.label') }}
-          </span>
+            <span class="target-label">
+              <ng-icon hlm name="lucideCrosshair" size="xs" />
+              {{ t.t('gotcha.target.label') }}
+            </span>
             @if (info.target) {
               <div class="target-profile">
                 <div class="target-avatar">
                   @if (info.target.profilePicture) {
-                    <img [src]="info.target.profilePicture" [alt]="utils.fullName(info.target)" />
+                    <img [src]="info.target.profilePicture | photoSrc" [alt]="info.target | fullName" />
                   } @else {
-                    <span class="target-initials">{{ utils.initials(info.target) }}</span>
+                    <span class="target-initials">{{ info.target | initials }}</span>
                   }
                 </div>
                 <div class="target-info">
-                  <span class="target-name">{{ utils.fullName(info.target) }}</span>
+                  <span class="target-name">{{ info.target | fullName }}</span>
                 </div>
               </div>
             } @else {
@@ -142,14 +137,14 @@
 
           @if (info.assignedProp) {
             <div class="prop-section">
-            <span class="target-label">
-              <ng-icon hlm name="lucidePackage" size="xs" />
-              {{ t.t('gotcha.target.propLabel') }}
-            </span>
+              <span class="target-label">
+                <ng-icon hlm name="lucidePackage" size="xs" />
+                {{ t.t('gotcha.target.propLabel') }}
+              </span>
               <span class="prop-name">
-              <ng-icon hlm name="lucidePackage" size="sm" />
-                {{ utils.propName(info.assignedProp, t.currentLanguage()) }}
-            </span>
+                <ng-icon hlm name="lucidePackage" size="sm" />
+                {{ info.assignedProp | propName }}
+              </span>
             </div>
           }
 
@@ -157,10 +152,10 @@
                [class.countdown--pending]="hasPendingKill()"
                [class.countdown--urgent]="countdownUrgent"
                [class.countdown--critical]="countdownCritical">
-          <span class="target-label">
-            <ng-icon hlm name="lucideTimer" size="xs" />
-            {{ t.t('gotcha.target.timeLeft') }}
-          </span>
+            <span class="target-label">
+              <ng-icon hlm name="lucideTimer" size="xs" />
+              {{ t.t('gotcha.target.timeLeft') }}
+            </span>
             @if (hasPendingKill()) {
               <div class="pending-review-notice">
                 <ng-icon hlm name="lucideClock" size="sm" />
@@ -191,12 +186,10 @@
     }
   }
 
-  <!-- ── Feed + Review tabs ── -->
   <app-gotcha-kill-feed />
 
 </div>
 
-<!-- ══ SUBMIT KILL MODAL ══ -->
 @if (showSubmitModal()) {
   <div class="modal-overlay" (click)="closeSubmitModal()">
     <div class="submit-modal" (click)="$event.stopPropagation()">
@@ -232,8 +225,8 @@
                  (change)="onFileSelected($event)" />
         </label>
 
-        @if (photoPreview()) {
-          <img class="photo-preview" [src]="photoPreview()!" alt="preview" />
+        @if (photoBase64(); as b64) {
+          <img class="photo-preview" [src]="b64 | photoSrc" alt="preview" />
         }
       </div>
 

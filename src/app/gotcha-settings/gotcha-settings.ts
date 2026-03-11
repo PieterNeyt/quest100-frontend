@@ -1,31 +1,30 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {CommonModule, Location} from '@angular/common';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService } from '../services/gotchaService';
-import { GotchaProp } from '../model/gotcha';
-import { TranslationService } from '../services/translationService';
-import { ToastService } from '../services/toastService';
-import { toDatetimeLocal } from '../utils/gotchaUtils';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {GotchaService} from '../services/gotchaService';
+import {GotchaProp} from '../model/gotcha';
+import {TranslationService} from '../services/translationService';
+import {ToastService} from '../services/toastService';
 import {ProfileService} from '../services/profileService';
-import { Location } from '@angular/common';
+import {DatetimeLocalPipe, PhotoSrcPipe, StatusClassPipe,} from '../utils/gotchaPipes';
 
 @Component({
   selector: 'app-gotcha-settings',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, HlmIconImports],
-  providers: [provideIcons(lucideIcons)],
+  imports: [CommonModule, NgIconComponent, HlmIconImports, PhotoSrcPipe, StatusClassPipe,],
+  providers: [provideIcons(lucideIcons), DatetimeLocalPipe, PhotoSrcPipe],
   templateUrl: './gotcha-settings.html',
   styleUrl: './gotcha-settings.css',
 })
 export class GotchaSettingsComponent implements OnInit {
-  private readonly gotchaService = inject(GotchaService);
+  private readonly gotchaService  = inject(GotchaService);
   private readonly profileService = inject(ProfileService);
-  private readonly toastService  = inject(ToastService);
-  private readonly router        = inject(Router);
-  private readonly location = inject(Location);
+  private readonly toastService   = inject(ToastService);
+  private readonly location       = inject(Location);
+  private readonly datetimePipe   = inject(DatetimeLocalPipe);
+
   readonly t = inject(TranslationService);
 
   currentGame = this.gotchaService.currentGame;
@@ -34,18 +33,18 @@ export class GotchaSettingsComponent implements OnInit {
     const status = this.currentGame()?.status;
     return status == null || status === 'OPT_IN' || status === 'FINISHED';
   });
+
   // Loading states
   loadingGame  = signal(true);
   loadingProps = signal(true);
   savingGame   = signal(false);
 
-  //  Game settings form
-  editStartDate        = signal('');
-  editKillDeadline     = signal(72);
-  private editPrizePhotoBase64 = signal('');
-  editPrizePhotoPreview = signal('');
-  editPrizeDescEN      = signal('');
-  editPrizeDescNL      = signal('');
+  // Game settings form
+  editStartDate         = signal('');
+  editKillDeadline      = signal(72);
+  editPrizePhotoBase64  = signal('');
+  editPrizeDescEN       = signal('');
+  editPrizeDescNL       = signal('');
 
   // Props state
   props          = signal<GotchaProp[]>([]);
@@ -53,17 +52,15 @@ export class GotchaSettingsComponent implements OnInit {
   deletingPropId = signal<string | null>(null);
 
   // Add new prop
-  showAddProp = signal(false);
-  newPropEN   = signal('');
-  newPropNL   = signal('');
+  showAddProp  = signal(false);
+  newPropEN    = signal('');
+  newPropNL    = signal('');
   newPropError = signal('');
 
   // Inline edit existing prop
   editingPropId = signal<string | null>(null);
   editPropEN    = signal('');
   editPropNL    = signal('');
-
-  // Lifecycle
 
   ngOnInit() {
     this.loadGame();
@@ -79,27 +76,24 @@ export class GotchaSettingsComponent implements OnInit {
     this.gotchaService.getCurrentGame().subscribe({
       next: (game) => {
         if (!game || game.status === 'FINISHED') {
-          this.editStartDate.set(toDatetimeLocal(new Date()));
+          this.editStartDate.set(this.datetimePipe.transform(new Date()));
           this.editKillDeadline.set(72);
           this.editPrizePhotoBase64.set('');
-          this.editPrizePhotoPreview.set('');
           this.editPrizeDescEN.set('');
           this.editPrizeDescNL.set('');
           this.loadingGame.set(false);
           return;
         }
-        this.editStartDate.set(toDatetimeLocal(new Date(game.startDate ?? new Date())));
+        const dateToFormat = game.startDate ? new Date(game.startDate) : new Date();
+        this.editStartDate.set(this.datetimePipe.transform(dateToFormat));
         this.editKillDeadline.set(game.killDeadlineHours ?? 72);
         this.editPrizePhotoBase64.set(game.prizePhotoBase64 ?? '');
-        this.editPrizePhotoPreview.set(
-          game.prizePhotoBase64 ? `data:image/jpeg;base64,${game.prizePhotoBase64}` : ''
-        );
         this.editPrizeDescEN.set(game.prizeDescriptionEN ?? '');
         this.editPrizeDescNL.set(game.prizeDescriptionNL ?? '');
         this.loadingGame.set(false);
       },
       error: () => {
-        this.editStartDate.set(toDatetimeLocal(new Date()));
+        this.editStartDate.set(this.datetimePipe.transform(new Date()));
         this.editKillDeadline.set(72);
         this.loadingGame.set(false);
       },
@@ -113,14 +107,12 @@ export class GotchaSettingsComponent implements OnInit {
     reader.onload = (e) => {
       const result = e.target?.result as string;
       this.editPrizePhotoBase64.set(result.split(',')[1]);
-      this.editPrizePhotoPreview.set(result);
     };
     reader.readAsDataURL(file);
   }
 
   clearPrizePhoto() {
     this.editPrizePhotoBase64.set('');
-    this.editPrizePhotoPreview.set('');
   }
 
   saveGameSettings() {
@@ -163,19 +155,22 @@ export class GotchaSettingsComponent implements OnInit {
       prizePhotoBase64:   this.editPrizePhotoBase64(),
       prizeDescriptionEN: this.editPrizeDescEN(),
       prizeDescriptionNL: this.editPrizeDescNL(),
-      campus: this.profileService.profile()?.campus,
+      campus:             this.profileService.profile()?.campus,
     };
     this.savingGame.set(true);
     this.gotchaService.createGame(payload).subscribe({
-      next: () => {
+      next:  () => {
         this.savingGame.set(false);
         this.toastService.success('success.saved');
       },
-      error: () => { this.savingGame.set(false); this.toastService.error('errors.generic'); },
+      error: () => {
+        this.savingGame.set(false);
+        this.toastService.error('errors.generic');
+      },
     });
   }
 
-  //  Props
+  // Props
 
   loadProps() {
     this.loadingProps.set(true);
@@ -185,7 +180,6 @@ export class GotchaSettingsComponent implements OnInit {
     });
   }
 
-  // Add
   openAddProp() {
     this.cancelPropEdit();
     this.newPropEN.set('');
@@ -222,7 +216,6 @@ export class GotchaSettingsComponent implements OnInit {
     });
   }
 
-  // Edit
   startPropEdit(prop: GotchaProp) {
     this.cancelAddProp();
     this.editingPropId.set(prop.id);

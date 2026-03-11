@@ -1,40 +1,17 @@
 <div class="end-wrap">
-
-  <!-- ══ WINNER HERO ══ -->
   <div class="end-hero">
-    <div class="firework"></div>
-    <div class="firework-2"></div>
-
-    <div class="confetti-bg">
-      @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
-        <span class="confetti-piece" [style.--i]="i"></span>
-      }
-    </div>
-
-    <div class="hero-badge">
-      <ng-icon hlm name="lucideTrophy" size="lg" />
-    </div>
-    <h2 class="end-title">{{ t.t('gotcha.endScreen.title') }}</h2>
-
     @if (data.winner) {
       <div class="winner-card">
         <div class="winner-avatar">
           @if (data.winner.profilePicture) {
-            <img
-              [src]="data.winner.profilePicture"
-              [alt]="winnerName"
-              width="56"
-              height="56"
-            />
+            <img [src]="data.winner.profilePicture | photoSrc" [alt]="data.winner | fullName" width="56" height="56" />
           } @else {
-            <span class="winner-initials">{{ winnerInitials }}</span>
+            <span class="winner-initials">{{ data.winner | initials }}</span>
           }
-          <div class="winner-crown-badge">
-            <ng-icon hlm name="lucideCrown" size="xs" />
-          </div>
+          <div class="winner-crown-badge"><ng-icon hlm name="lucideCrown" size="xs" /></div>
         </div>
         <div class="winner-info">
-          <span class="winner-name">{{ winnerName }}</span>
+          <span class="winner-name">{{ data.winner | fullName }}</span>
           <span class="winner-kills">
             <ng-icon hlm name="lucideSwords" size="xs" />
             {{ data.winnerKillCount }} {{ t.t('gotcha.endScreen.kills') }}
@@ -45,152 +22,51 @@
 
     @if (data.prizePhotoBase64 || prizeDescription) {
       <div class="prize-card">
-        <div class="prize-header">
-          <ng-icon hlm name="lucideGift" size="sm" />
-          <span>{{ t.t('gotcha.endScreen.prize') }}</span>
-        </div>
+        <div class="prize-header"><ng-icon hlm name="lucideGift" size="sm" /><span>{{ t.t('gotcha.endScreen.prize') }}</span></div>
         <div class="prize-body">
           @if (data.prizePhotoBase64) {
-            <img
-              class="prize-photo"
-              [src]="utils.photoSrc(data.prizePhotoBase64)"
-              alt="prize"
-            />
+            <img class="prize-photo" [src]="data.prizePhotoBase64 | photoSrc" alt="prize" />
           }
-          @if (prizeDescription) {
-            <p class="prize-desc">{{ prizeDescription }}</p>
-          }
+          @if (prizeDescription) { <p class="prize-desc">{{ prizeDescription }}</p> }
         </div>
       </div>
     }
   </div>
 
-  <!-- ══ STATS ══ -->
   <div class="stats-section">
-    <h3 class="section-title">
-      <ng-icon hlm name="lucideBarChart2" size="sm" />
-      {{ t.t('gotcha.endScreen.stats') }}
-    </h3>
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon--kills">
-          <ng-icon hlm name="lucideSwords" size="sm" />
-        </div>
-        <span class="stat-value">{{ data.stats.totalKills }}</span>
-        <span class="stat-label">{{ t.t('gotcha.endScreen.statTotalKills') }}</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon--players">
-          <ng-icon hlm name="lucideUsers" size="sm" />
-        </div>
-        <span class="stat-value">{{ data.stats.totalParticipants }}</span>
-        <span class="stat-label">{{ t.t('gotcha.endScreen.statParticipants') }}</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon--prop">
-          <ng-icon hlm name="lucidePackage" size="sm" />
-        </div>
+        <div class="stat-icon-wrap stat-icon--prop"><ng-icon hlm name="lucidePackage" size="sm" /></div>
         <span class="stat-value stat-value--sm">{{ mostUsedProp() }}</span>
         <span class="stat-label">{{ t.t('gotcha.endScreen.statMostUsedProp') }}</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon--speed">
-          <ng-icon hlm name="lucideTimer" size="sm" />
-        </div>
-        <span class="stat-value">{{ fastestKillFormatted }}</span>
-        <span class="stat-label">{{ t.t('gotcha.endScreen.statFastestKill') }}</span>
       </div>
     </div>
   </div>
 
-  <!-- ══ AWARDS ══ -->
   @if (awards().length > 0) {
     <div class="awards-section">
-      <h3 class="section-title">
-        <ng-icon hlm name="lucideMedal" size="sm" />
-        {{ t.t('gotcha.awards.title') }}
-      </h3>
-
       @for (cat of awardCategories; track cat.key) {
         @if (awardsByCategory(cat.key).length > 0) {
           <div class="award-category">
-            <div class="award-cat-label">
-              <ng-icon hlm [name]="cat.icon" size="xs" />
-              <span>{{ t.t(cat.labelKey) }}</span>
-            </div>
+            <div class="award-cat-label"><ng-icon hlm [name]="cat.icon" size="xs" /><span>{{ t.t(cat.labelKey) }}</span></div>
             <div class="award-list">
               @for (award of awardsByCategory(cat.key); track award.id) {
                 <div class="award-card">
-                  <div class="award-icon-wrap">
-                    <ng-icon hlm [name]="award.icon" size="sm" />
-                  </div>
+                  <div class="award-icon-wrap"><ng-icon hlm [name]="award.icon" size="sm" /></div>
                   <div class="award-body">
                     <span class="award-title">{{ t.t(award.titleKey) }}</span>
-
                     @if (award.profile) {
                       <div class="award-profile">
                         <div class="award-avatar">
                           @if (award.profile.profilePicture) {
-                            <img
-                              [src]="award.profile.profilePicture"
-                              [alt]="utils.fullName(award.profile)"
-                              width="28"
-                              height="28"
-                            />
+                            <img [src]="award.profile.profilePicture | photoSrc" [alt]="award.profile | fullName" width="28" height="28" />
                           } @else {
-                            <span class="award-initials">{{ utils.initials(award.profile) }}</span>
+                            <span class="award-initials">{{ award.profile | initials }}</span>
                           }
                         </div>
-                        <span class="award-name">{{ utils.fullName(award.profile) }}</span>
-                        @if (award.count != null && award.count > 0) {
-                          <span class="award-count">× {{ award.count }}</span>
-                        }
+                        <span class="award-name">{{ award.profile | fullName }}</span>
                       </div>
                     }
-
-                    @if (award.propName) {
-                      <div class="award-prop-value">
-                        <ng-icon hlm name="lucidePackage" size="xs" />
-                        {{ award.propName }}
-                        @if (award.count != null) {
-                          <span class="award-count">× {{ award.count }}</span>
-                        }
-                      </div>
-                    }
-
-                    @if (award.day) {
-                      <div class="award-day-value">
-                        <ng-icon hlm name="lucideCalendar" size="xs" />
-                        {{ award.day }}
-                        @if (award.count != null) {
-                          <span class="award-count">{{ award.count }} {{ t.t('gotcha.endScreen.kills') }}</span>
-                        }
-                      </div>
-                    }
-
-                    @if (award.profiles && award.profiles.length > 0) {
-                      <div class="award-profiles">
-                        @for (p of award.profiles; track p.id) {
-                          <div class="award-profile-chip">
-                            <div class="award-avatar award-avatar--sm">
-                              @if (p.profilePicture) {
-                                <img
-                                  [src]="p.profilePicture"
-                                  [alt]="utils.fullName(p)"
-                                  width="20"
-                                  height="20"
-                                />
-                              } @else {
-                                <span class="award-initials award-initials--sm">{{ utils.initials(p) }}</span>
-                              }
-                            </div>
-                            <span class="award-chip-name">{{ p.firstName }}</span>
-                          </div>
-                        }
-                      </div>
-                    }
-
-                    <span class="award-desc">{{ t.t(award.descriptionKey) }}</span>
                   </div>
                 </div>
               }
@@ -201,126 +77,39 @@
     </div>
   }
 
-  <!-- ══ KILL GRAPH ══ -->
   @if (data.kills.length > 0) {
     <div class="graph-section">
-      <h3 class="section-title">
-        <ng-icon hlm name="lucideNetwork" size="sm" />
-        {{ t.t('gotcha.endScreen.graph') }}
-      </h3>
-      <p class="graph-hint">{{ t.t('gotcha.endScreen.graphHint') }}</p>
-
-      <div class="graph-wrap">
-        <svg #graphCanvas class="graph-svg"></svg>
-      </div>
-
+      <div class="graph-wrap"><svg #graphCanvas class="graph-svg"></svg></div>
       @if (selectedPersonName()) {
         <div class="personal-kills-box">
-          <div class="pk-header">
-            <div class="pk-header-left">
-              <ng-icon hlm name="lucideSwords" size="xs" />
-              <span>
-                {{ t.t('gotcha.endScreen.killsOf') }}
-                <strong>{{ selectedPersonName() }}</strong>
-              </span>
-            </div>
-            <button class="btn-close-pk" (click)="selectedPersonName.set('')">
-              <ng-icon hlm name="lucideX" size="xs" />
-            </button>
-          </div>
           <div class="pk-list">
-            @if (selectedPersonKills().length === 0) {
-              <p class="no-kills-text">{{ t.t('gotcha.endScreen.noKills') }}</p>
-            } @else {
-              @for (k of selectedPersonKills(); track k.killId) {
-                <div class="pk-item" (click)="openKillDetail(k)">
-                  <div class="pk-item-left">
-                    <ng-icon hlm name="lucideChevronRight" size="xs" />
-                    <span class="pk-victim">{{ utils.fullName(k.victim) }}</span>
-                  </div>
-                  @if (k.prop) {
-                    <span class="pk-prop">
-                      <ng-icon hlm name="lucidePackage" size="xs" />
-                      {{ utils.propName(k.prop, t.currentLanguage()) }}
-                    </span>
-                  }
-                </div>
-              }
+            @for (k of selectedPersonKills(); track k.killId) {
+              <div class="pk-item" (click)="openKillDetail(k)">
+                <span class="pk-victim">{{ k.victim | fullName }}</span>
+                @if (k.prop) { <span class="pk-prop">{{ k.prop | propName }}</span> }
+              </div>
             }
           </div>
         </div>
       }
     </div>
   }
-
 </div>
 
-<!-- ══ KILL DETAIL MODAL ══ -->
 @if (showKillDetail() && selectedKill(); as kill) {
   <div class="modal-overlay" (click)="showKillDetail.set(false)">
     <div class="kill-detail-modal" (click)="$event.stopPropagation()">
-      <div class="kill-detail-header">
-        <h3>
-          <ng-icon hlm name="lucideSwords" size="sm" />
-          {{ t.t('gotcha.endScreen.killDetail') }}
-        </h3>
-        <button class="modal-close" (click)="showKillDetail.set(false)">
-          <ng-icon hlm name="lucideX" size="sm" />
-        </button>
-      </div>
       <div class="kill-detail-body">
-
-
-        <img
-          class="kill-detail-photo"
-          [src]="utils.photoSrc(kill.photoBase64)"
-          alt="kill photo"
-        />
+        <img class="kill-detail-photo" [src]="kill.photoBase64 | photoSrc" alt="kill photo" />
         <div class="kill-detail-info">
           <div class="kill-detail-row">
-            <div class="kill-detail-avatar kill-detail-avatar--hunter">
-              @if (kill.hunter.profilePicture) {
-                <img
-                  [src]="kill.hunter.profilePicture"
-                  [alt]="utils.fullName(kill.hunter)"
-                  width="40"
-                  height="40"
-                />
-              } @else {
-                {{ utils.initials(kill.hunter) }}
-              }
-            </div>
-            <div>
-              <span class="kill-detail-role">{{ t.t('gotcha.endScreen.hunter') }}</span>
-              <span class="kill-detail-name">{{ utils.fullName(kill.hunter) }}</span>
-            </div>
-            <div class="kill-detail-sword">
-              <ng-icon hlm name="lucideSwords" size="sm" />
-            </div>
-            <div class="kill-detail-avatar kill-detail-avatar--victim">
-              @if (kill.victim.profilePicture) {
-                <img
-                  [ngSrc]="kill.victim.profilePicture"
-                  [alt]="utils.fullName(kill.victim)"
-                  width="40"
-                  height="40"
-                />
-              } @else {
-                {{ utils.initials(kill.victim) }}
-              }
-            </div>
-            <div>
-              <span class="kill-detail-role">{{ t.t('gotcha.endScreen.victim') }}</span>
-              <span class="kill-detail-name">{{ utils.fullName(kill.victim) }}</span>
-            </div>
+            <div class="kill-detail-avatar">{{ kill.hunter | initials }}</div>
+            <span class="kill-detail-name">{{ kill.hunter | fullName }}</span>
+            <div class="kill-detail-sword"><ng-icon hlm name="lucideSwords" size="sm" /></div>
+            <span class="kill-detail-name">{{ kill.victim | fullName }}</span>
           </div>
-          @if (kill.prop) {
-            <div class="kill-detail-prop">
-              <ng-icon hlm name="lucidePackage" size="xs" />
-              {{ utils.propName(kill.prop, t.currentLanguage()) }}
-            </div>
-          }
-          <span class="kill-detail-time">{{ formatDate(kill.createdAt) }}</span>
+          @if (kill.prop) { <div class="kill-detail-prop">{{ kill.prop | propName }}</div> }
+          <span class="kill-detail-time">{{ kill.createdAt | formatDate }}</span>
         </div>
       </div>
     </div>

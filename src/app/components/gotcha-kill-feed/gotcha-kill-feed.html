@@ -1,6 +1,5 @@
 <div class="kill-feed-wrap">
 
-  <!-- ── Tabs ── -->
   <div class="tabs">
     <button class="tab" [class.tab--active]="activeTab() === 'feed'" (click)="activeTab.set('feed')">
       <ng-icon hlm name="lucideSkull" size="xs" />
@@ -15,7 +14,6 @@
     </button>
   </div>
 
-  <!-- ── Toolbar ── -->
   <div class="feed-toolbar">
     <button class="btn-refresh"
             (click)="activeTab() === 'feed' ? loadFeed() : loadNextReviewItem()"
@@ -25,11 +23,7 @@
     </button>
   </div>
 
-  <!-- ════════════════════════════════════
-       FEED TAB
-  ════════════════════════════════════ -->
   @if (activeTab() === 'feed') {
-
     @if (loading()) {
       <div class="feed-list">
         @for (_ of [1,2,3]; track $index) {
@@ -57,23 +51,23 @@
     @if (!loading()) {
       <div class="feed-list">
         @for (item of items(); track item.id) {
-          <div class="feed-card" [class]="statusClass(item.status)">
+          <div class="feed-card" [ngClass]="item.status | statusClass">
 
             <div class="card-header">
               <div class="profile-row">
                 <div class="avatar">
                   @if (item.hunter.profilePicture) {
-                    <img [src]="item.hunter.profilePicture" [alt]="fullName(item.hunter)" />
+                    <img [src]="item.hunter.profilePicture | photoSrc" [alt]="item.hunter | fullName" />
                   } @else {
-                    <span class="avatar-initials">{{ initials(item.hunter) }}</span>
+                    <span class="avatar-initials">{{ item.hunter | initials }}</span>
                   }
                 </div>
                 <div class="profile-info">
-                  <span class="profile-name">{{ fullName(item.hunter) }}</span>
+                  <span class="profile-name">{{ item.hunter | fullName }}</span>
                   <span class="post-time">{{ formatTime(item.createdAt) }}</span>
                 </div>
               </div>
-              <span class="status-badge" [class]="statusClass(item.status)">
+              <span class="status-badge" [ngClass]="item.status | statusClass">
                 @if (item.status === 'PENDING') {
                   <ng-icon hlm name="lucideClock" size="xs" />
                   {{ t.t('gotcha.feed.statusPending') }}
@@ -91,30 +85,30 @@
               <span class="kill-text">
                 <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
                 {{ t.t('gotcha.feed.killedCaption') }}
-                <strong>{{ fullName(item.victim) }}</strong>
+                <strong>{{ item.victim | fullName }}</strong>
               </span>
               @if (item.prop) {
                 <span class="prop-badge">
                   <ng-icon hlm name="lucidePackage" size="xs" />
-                  {{ propName(item.prop) }}
+                  {{ item.prop | propName }}
                 </span>
               }
             </div>
 
             <div class="card-photo-wrap">
               <img class="card-photo"
-                   [src]="photoSrc(item.photoBase64)"
+                   [src]="item.photoBase64 | photoSrc"
                    [alt]="t.t('gotcha.feed.photoAlt')"
                    loading="lazy" />
               <div class="victim-overlay">
                 <div class="victim-avatar">
                   @if (item.victim.profilePicture) {
-                    <img [src]="item.victim.profilePicture" [alt]="fullName(item.victim)" />
+                    <img [src]="item.victim.profilePicture | photoSrc" [alt]="item.victim | fullName" />
                   } @else {
-                    <span class="avatar-initials avatar-initials--sm">{{ initials(item.victim) }}</span>
+                    <span class="avatar-initials avatar-initials--sm">{{ item.victim | initials }}</span>
                   }
                 </div>
-                <span class="victim-name">{{ fullName(item.victim) }}</span>
+                <span class="victim-name">{{ item.victim | fullName }}</span>
               </div>
             </div>
 
@@ -131,45 +125,23 @@
                 <span class="like-count">{{ item.likeCount }}</span>
               </button>
             </div>
-
           </div>
         }
 
         @if (hasMore()) {
           <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadMore()">
-            @if (loadingMore()) {
-              <span class="load-spinner"></span>
-              {{ t.t('gotcha.feed.loadingMore') }}
-            } @else {
-              {{ t.t('gotcha.feed.loadMore') }}
-            }
+            {{ loadingMore() ? t.t('gotcha.feed.loadingMore') : t.t('gotcha.feed.loadMore') }}
           </button>
         }
       </div>
     }
   }
 
-  <!-- ════════════════════════════════════
-       REVIEW TAB — gestapelde kaarten
-  ════════════════════════════════════ -->
   @if (activeTab() === 'review') {
-
     @if (reviewLoading()) {
-      <!-- Skeleton stack -->
       <div class="review-stack-scene">
-        <div class="stack-ghost stack-ghost--3"></div>
-        <div class="stack-ghost stack-ghost--2"></div>
         <div class="stack-ghost stack-ghost--1"></div>
-        <div class="feed-card feed-card--skeleton">
-          <div class="sk-header">
-            <div class="sk-avatar"></div>
-            <div class="sk-lines">
-              <div class="sk-line sk-line--short"></div>
-              <div class="sk-line sk-line--tiny"></div>
-            </div>
-          </div>
-          <div class="sk-photo"></div>
-        </div>
+        <div class="feed-card feed-card--skeleton"></div>
       </div>
     }
 
@@ -180,21 +152,10 @@
       </div>
     }
 
-    @if (currentReviewItem() && !reviewLoading()) {
+    @if (currentReviewItem(); as review) {
       <div class="review-stack-scene">
+        @if (pendingCount() > 1) { <div class="stack-ghost stack-ghost--1"></div> }
 
-        <!-- Ghost kaarten: pas zichtbaar als er NAAST de huidige kaart nog meer zijn -->
-        @if (pendingCount() > 3) {
-          <div class="stack-ghost stack-ghost--3"></div>
-        }
-        @if (pendingCount() > 2) {
-          <div class="stack-ghost stack-ghost--2"></div>
-        }
-        @if (pendingCount() > 1) {
-          <div class="stack-ghost stack-ghost--1"></div>
-        }
-
-        <!-- Actieve review kaart -->
         <div class="feed-card review-card status-pending"
              [class.reviewing]="isReviewingKill()"
              [class.swipe-approve]="swipeDirection() === 'approve'"
@@ -203,85 +164,47 @@
           <div class="card-header">
             <div class="profile-row">
               <div class="avatar">
-                @if (currentReviewItem()!.hunter.profilePicture) {
-                  <img [src]="currentReviewItem()!.hunter.profilePicture"
-                       [alt]="fullName(currentReviewItem()!.hunter)" />
+                @if (review.hunter.profilePicture) {
+                  <img [src]="review.hunter.profilePicture | photoSrc" [alt]="review.hunter | fullName" />
                 } @else {
-                  <span class="avatar-initials">{{ initials(currentReviewItem()!.hunter) }}</span>
+                  <span class="avatar-initials">{{ review.hunter | initials }}</span>
                 }
               </div>
               <div class="profile-info">
-                <span class="profile-name">{{ fullName(currentReviewItem()!.hunter) }}</span>
-                <span class="post-time">{{ formatTime(currentReviewItem()!.createdAt) }}</span>
+                <span class="profile-name">{{ review.hunter | fullName }}</span>
+                <span class="post-time">{{ formatTime(review.createdAt) }}</span>
               </div>
             </div>
-            <span class="status-badge status-pending">
-              <ng-icon hlm name="lucideClock" size="xs" />
-              {{ t.t('gotcha.feed.statusPending') }}
-            </span>
           </div>
 
           <div class="kill-caption">
             <span class="kill-text">
-              <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
-              {{ t.t('gotcha.feed.killedCaption') }}
-              <strong>{{ fullName(currentReviewItem()!.victim) }}</strong>
+              <strong>{{ review.victim | fullName }}</strong>
             </span>
-            @if (currentReviewItem()!.prop) {
-              <span class="prop-badge">
-                <ng-icon hlm name="lucidePackage" size="xs" />
-                {{ propName(currentReviewItem()!.prop) }}
-              </span>
+            @if (review.prop) {
+              <span class="prop-badge">{{ review.prop | propName }}</span>
             }
           </div>
 
           <div class="card-photo-wrap">
-            <img class="card-photo"
-                 [src]="photoSrc(currentReviewItem()!.photoBase64)"
-                 [alt]="t.t('gotcha.feed.photoAlt')"
-                 loading="lazy" />
-
-            <!-- Swipe feedback overlays -->
-            <div class="swipe-hint swipe-hint--approve">
-              <ng-icon hlm name="lucideCheck" size="lg" />
-              <span>{{ t.t('gotcha.review.approve') }}</span>
-            </div>
-            <div class="swipe-hint swipe-hint--deny">
-              <ng-icon hlm name="lucideX" size="lg" />
-              <span>{{ t.t('gotcha.review.deny') }}</span>
-            </div>
-
+            <img class="card-photo" [src]="review.photoBase64 | photoSrc" alt="victim"/>
             <div class="victim-overlay">
-              <div class="victim-avatar">
-                @if (currentReviewItem()!.victim.profilePicture) {
-                  <img [src]="currentReviewItem()!.victim.profilePicture"
-                       [alt]="fullName(currentReviewItem()!.victim)" />
-                } @else {
-                  <span class="avatar-initials avatar-initials--sm">
-                    {{ initials(currentReviewItem()!.victim) }}
-                  </span>
-                }
-              </div>
-              <span class="victim-name">{{ fullName(currentReviewItem()!.victim) }}</span>
+              <span class="victim-name">{{ review.victim | fullName }}</span>
             </div>
           </div>
 
           <div class="card-footer review-actions">
             <button class="btn-deny" [disabled]="isReviewingKill()" (click)="reviewKill(false)">
-              @if (isReviewingKill()) { <span class="like-spinner"></span> }
-              @else { <ng-icon hlm name="lucideThumbsDown" size="sm" /> }
+              <ng-icon hlm name="lucideThumbsDown" size="sm" />
               {{ t.t('gotcha.review.deny') }}
             </button>
             <button class="btn-approve" [disabled]="isReviewingKill()" (click)="reviewKill(true)">
-              @if (isReviewingKill()) { <span class="like-spinner"></span> }
-              @else { <ng-icon hlm name="lucideThumbsUp" size="sm" /> }
+              <ng-icon hlm name="lucideThumbsUp" size="sm" />
               {{ t.t('gotcha.review.approve') }}
             </button>
           </div>
-
         </div>
       </div>
     }
   }
-
 </div>

@@ -1,6 +1,5 @@
 <div class="settings-wrap">
 
-  <!-- ── Header ── -->
   <div class="header-title-row">
     <button class="btn-back" (click)="goBack()">
       <ng-icon hlm name="lucideArrowLeft" size="sm" />
@@ -19,7 +18,6 @@
         {{ t.t('gotcha.settings.newGameHint') }}
       </p>
     }
-    <!-- ── Game settings card ── -->
     <section class="settings-card" [class.settings-card--locked]="!isEditable()">
       <div class="card-header-row">
         <div class="card-header-left">
@@ -28,10 +26,13 @@
           </div>
           <h2 class="card-title">{{ t.t('gotcha.settings.gameSettings') }}</h2>
         </div>
-        @if (currentGame()?.status === 'ACTIVE') {
-          <div class="lock-status-badge">
-            <ng-icon hlm name="lucideLock" size="xs"></ng-icon>
-            <span>{{ t.t('gotcha.settings.locked') }}</span>
+
+        @if (currentGame()?.status; as status) {
+          <div class="lock-status-badge" [ngClass]="status | statusClass">
+            @if (status === 'ACTIVE') {
+              <ng-icon hlm name="lucideLock" size="xs"></ng-icon>
+            }
+            <span>{{ t.t('gotcha.status.' + status.toLowerCase()) }}</span>
           </div>
         }
       </div>
@@ -56,9 +57,12 @@
       <div class="field-group">
         <label class="field-label">{{ t.t('gotcha.editModal.prizePhoto') }}</label>
         <div class="file-upload-area" [class.file-upload-area--disabled]="!isEditable()">
-          @if (editPrizePhotoPreview()) {
+
+          @if (editPrizePhotoBase64()) {
             <div class="prize-preview-wrap">
-              <img class="prize-preview-img" [src]="editPrizePhotoPreview()" alt="prize preview" />
+              <img class="prize-preview-img"
+                   [src]="editPrizePhotoBase64() | photoSrc"
+                   alt="prize preview" />
               @if (isEditable()) {
                 <button class="btn-remove-photo" type="button" (click)="clearPrizePhoto()">
                   <ng-icon hlm name="lucideX" size="xs" />
@@ -111,7 +115,6 @@
       }
     </section>
 
-    <!-- ── Props card ── -->
     <section class="settings-card">
       <div class="card-header-row">
         <div class="card-header-left">
@@ -137,7 +140,7 @@
         </div>
       } @else if (props().length === 0) {
         <div class="props-empty">
-          <ng-icon hlm name="lucidePackageOpen" size="32" />
+          <ng-icon hlm name="lucidePackageOpen" size="sm" />
           <p>{{ t.t('gotcha.settings.noProps') }}</p>
           @if (isEditable()) {
             <p class="field-error-hint">{{ t.t('gotcha.settings.propsRequiredToStart') }}</p>

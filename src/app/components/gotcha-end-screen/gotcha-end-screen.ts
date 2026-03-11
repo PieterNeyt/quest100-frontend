@@ -11,14 +11,14 @@ import {
   signal,
   ViewChild
 } from '@angular/core';
-import {CommonModule, isPlatformBrowser, NgOptimizedImage} from '@angular/common';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
 import type * as d3Type from 'd3';
-import {EndScreen, EndScreenKillNode,} from '../../model/gotcha';
+import {EndScreen, EndScreenKillNode} from '../../model/gotcha';
 import {TranslationService} from '../../services/translationService';
-import * as utils from '../../utils/gotchaUtils';
+import {FormatDatePipe, FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe} from '../../utils/gotchaPipes';
 
 interface GraphNode extends d3Type.SimulationNodeDatum {
   id: string;
@@ -45,8 +45,8 @@ const AWARD_ICONS: Record<string, string> = {
 @Component({
   selector: 'app-gotcha-end-screen',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, HlmIconImports, NgOptimizedImage],
-  providers: [provideIcons(lucideIcons)],
+  imports: [CommonModule, NgIconComponent, HlmIconImports, FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, FormatDatePipe],
+  providers: [provideIcons(lucideIcons), FullNamePipe, InitialsPipe, PropNamePipe],
   templateUrl: './gotcha-end-screen.html',
   styleUrl: './gotcha-end-screen.css',
 })
@@ -56,7 +56,9 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
 
   readonly t = inject(TranslationService);
   private readonly platformId = inject(PLATFORM_ID);
-  readonly utils = utils;
+  private readonly fullNamePipe = inject(FullNamePipe);
+  private readonly initialsPipe = inject(InitialsPipe);
+  private readonly propNamePipe = inject(PropNamePipe);
 
   selectedKill        = signal<EndScreenKillNode | null>(null);
   showKillDetail      = signal(false);
@@ -81,7 +83,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     const propCounts: Record<string, number> = {};
     this.data.kills.forEach(k => {
       if (k.prop) {
-        const name = utils.propName(k.prop, this.t.currentLanguage());
+        const name = this.propNamePipe.transform(k.prop);
         propCounts[name] = (propCounts[name] || 0) + 1;
       }
     });
@@ -103,7 +105,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     }
   }
 
-  readonly awardCategories: Array<{ key: string; labelKey: string; icon: string }> = [
+  readonly awardCategories = [
     { key: 'core',   labelKey: 'gotcha.awards.cat.core',   icon: 'lucideShield' },
     { key: 'skill',  labelKey: 'gotcha.awards.cat.skill',  icon: 'lucideTarget' },
     { key: 'social', labelKey: 'gotcha.awards.cat.social', icon: 'lucideHeart' },
@@ -116,18 +118,9 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     return this.awards().filter(a => a.category === cat);
   }
 
-  get winnerName()        { return utils.fullName(this.data.winner); }
-  get winnerInitials()    { return utils.initials(this.data.winner); }
-  get prizeDescription()  { return this.t.currentLanguage() === 'nl' ? this.data.prizeDescriptionNL : this.data.prizeDescriptionEN; }
-
-  formatDate(d: string) {
-    return new Date(d).toLocaleDateString(
-      this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB',
-      { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }
-    );
+  get prizeDescription() {
+    return this.t.currentLanguage() === 'nl' ? this.data.prizeDescriptionNL : this.data.prizeDescriptionEN;
   }
-
-  initials(p: any) { return utils.initials(p); }
 
   openKillDetail(kill: EndScreenKillNode) {
     this.selectedKill.set(kill);
@@ -162,7 +155,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
         if (!nodeMap.has(p.id)) {
           nodeMap.set(p.id, {
             id: p.id,
-            name: utils.fullName(p),
+            name: this.fullNamePipe.transform(p),
             pic: p.profilePicture || null,
             kills: 0,
             isWinner: p.id === this.data.winner?.id,
@@ -212,7 +205,7 @@ export class GotchaEndScreenComponent implements OnInit, AfterViewInit, OnDestro
     node.filter((d: any) => !d.pic).append('text')
       .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
       .attr('font-size', '10px').attr('font-weight', 'bold').attr('fill', '#374151')
-      .text((d: any) => utils.initials({ firstName: d.name.split(' ')[0], lastName: d.name.split(' ')[1] || '' }));
+      .text((d: any) => this.initialsPipe.transform({ firstName: d.name.split(' ')[0], lastName: d.name.split(' ')[1] || '' }));
 
     const badge = node.filter((d: any) => d.kills > 0).append('g').attr('transform', 'translate(18, -18)');
     badge.append('circle').attr('r', 10).attr('fill', '#e5383b');

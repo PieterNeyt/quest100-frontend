@@ -1,21 +1,21 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {CommonModule, Location} from '@angular/common';
+import {Router} from '@angular/router';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService } from '../services/gotchaService';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {GotchaService} from '../services/gotchaService';
 import {GotchaParticipant, KillFeedProfile, KillFeedProp} from '../model/gotcha';
-import { TranslationService } from '../services/translationService';
-import { ToastService } from '../services/toastService';
-import { GotchaKillFeedComponent } from '../components/gotcha-kill-feed/gotcha-kill-feed';
-import * as utils from '../utils/gotchaUtils';
+import {TranslationService} from '../services/translationService';
+import {ToastService} from '../services/toastService';
+import {GotchaKillFeedComponent} from '../components/gotcha-kill-feed/gotcha-kill-feed';
 import {ProfileService} from '../services/profileService';
-import { Location } from '@angular/common';
+import {FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, StatusClassPipe,} from '../utils/gotchaPipes';
+
 @Component({
   selector: 'app-gotcha-page',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, HlmIconImports, GotchaKillFeedComponent],
+  imports: [CommonModule, NgIconComponent, HlmIconImports, GotchaKillFeedComponent, FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, StatusClassPipe,],
   providers: [provideIcons(lucideIcons)],
   templateUrl: './gotcha-page.html',
   styleUrl: './gotcha-page.css',
@@ -23,16 +23,14 @@ import { Location } from '@angular/common';
 export class GotchaPageComponent implements OnInit {
   private readonly gotchaService = inject(GotchaService);
   private readonly toastService  = inject(ToastService);
-  private readonly profileService  = inject(ProfileService);
+  private readonly profileService = inject(ProfileService);
   private readonly router        = inject(Router);
-  private readonly location = inject(Location);
+  private readonly location      = inject(Location);
   readonly t = inject(TranslationService);
-  readonly utils = utils;
 
   // Submit kill modal
   showSubmitModal = signal(false);
   photoBase64     = signal<string | null>(null);
-  photoPreview    = signal<string | null>(null);
   submitting      = signal(false);
 
   // Game & player state
@@ -55,8 +53,10 @@ export class GotchaPageComponent implements OnInit {
   private hasTarget     = computed(() => !!this.myStatus()?.targetId);
   isParticipant = computed(() => !!this.myStatus());
   hasPendingKill = computed(() => !!this.myStatus()?.pendingKillAt);
+
   killerInfo = signal<KillFeedProfile | null>(null);
   killerProp = signal<KillFeedProp | null>(null);
+
   canSubmitKill = computed(() =>
     this.isActive() && this.isAlive() && this.hasTarget() && !this.hasPendingKill()
   );
@@ -103,11 +103,11 @@ export class GotchaPageComponent implements OnInit {
   goToEndScreen() { this.router.navigate(['/gotcha/end']); }
   goToSettings()  { this.router.navigate(['/gotcha/settings']); }
   goToHistory()   { this.router.navigate(['/gotcha/history']); }
+
   padTwo(n: number): string { return n.toString().padStart(2, '0'); }
 
   openSubmitModal() {
     this.photoBase64.set(null);
-    this.photoPreview.set(null);
     this.showSubmitModal.set(true);
   }
 
@@ -119,11 +119,11 @@ export class GotchaPageComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = () => {
       const dataUri = reader.result as string;
-      this.photoPreview.set(dataUri);
       this.photoBase64.set(dataUri.split(',')[1]);
     };
     reader.readAsDataURL(file);
   }
+
   private loadKillerInfo() {
     const killedBy = this.myStatus()?.killedBy;
     if (!killedBy) return;
@@ -140,6 +140,7 @@ export class GotchaPageComponent implements OnInit {
       error: () => {},
     });
   }
+
   submitKill() {
     const b64 = this.photoBase64();
     if (!b64) {
