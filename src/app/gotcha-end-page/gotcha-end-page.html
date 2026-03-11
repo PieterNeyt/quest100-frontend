@@ -6,12 +6,6 @@
     {{ t.t('gotcha.page.back') }}
   </button>
 
-  @if (isHistoryView()) {
-    <button class="btn-history" (click)="goToHistory()">
-      <ng-icon hlm name="lucideHistory" size="sm"/>
-      {{ t.t('gotcha.history.backToHistory') }}
-    </button>
-  }
 
   @if (!isHistoryView()) {
     <button class="btn-history" (click)="goToHistory()">
@@ -38,7 +32,7 @@
   </div>
 } @else if (error()) {
   <div class="end-error">
-    <ng-icon hlm name="lucideAlertCircle" size="48"/>
+    <ng-icon hlm name="lucideAlertCircle" size="base"/>
     <p>{{ t.t('gotcha.endScreen.loadError') }}</p>
     <button class="btn-retry" (click)="load()">
       <ng-icon hlm name="lucideRefreshCw" size="sm"/>

@@ -40,7 +40,7 @@ export class GotchaKillFeedComponent implements OnInit {
   loading     = signal(true);
   loadingMore = signal(false);
   hasMore     = signal(true);
-  likingIds   = signal<Set<string>>(new Set());
+  private likingIds   = signal<Set<string>>(new Set());
   private offset = 0;
   private readonly limit = 10;
   isEmpty = computed(() => !this.loading() && this.items().length === 0);

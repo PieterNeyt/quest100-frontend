@@ -35,10 +35,10 @@ export class GotchaBannerComponent implements OnInit {
   loading = signal(true);
   acting  = signal(false);
 
-  myStatus    = this.gotchaService.myStatus;
-  currentGame = this.gotchaService.currentGame;
-  endScreen   = this.gotchaService.endScreen;
-  serviceCd   = this.gotchaService.countdown;
+  private myStatus    = this.gotchaService.myStatus;
+  private currentGame = this.gotchaService.currentGame;
+  private endScreen   = this.gotchaService.endScreen;
+  private serviceCd   = this.gotchaService.countdown;
 
   isOptedIn    = computed(() => this.myStatus() !== null);
   gameStatus   = computed(() => this.currentGame()?.status ?? null);

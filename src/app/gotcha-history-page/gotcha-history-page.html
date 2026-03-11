@@ -26,7 +26,7 @@
   <!-- ── Error ── -->
   @if (error()) {
     <div class="state-container">
-      <ng-icon hlm name="lucideAlertCircle" size="48" />
+      <ng-icon hlm name="lucideAlertCircle" size="base" />
       <p>{{ t.t('gotcha.history.loadError') }}</p>
       <button class="btn-retry" (click)="load()">
         <ng-icon hlm name="lucideRefreshCw" size="sm" />
@@ -38,7 +38,7 @@
   <!-- ── Empty ── -->
   @if (games().length === 0) {
     <div class="state-container">
-      <ng-icon hlm name="lucideTrophy" size="48" />
+      <ng-icon hlm name="lucideTrophy" size="base" />
       <p>{{ t.t('gotcha.history.empty') }}</p>
     </div>
   }
@@ -69,7 +69,7 @@
                    [alt]="winnerName(game)" />
             } @else {
               <div class="winner-avatar--placeholder">
-                {{ game.winner?.firstName?.charAt(0) ?? '?' }}
+                {{ game.winner?.firstName?.slice(0, 1) ?? '?' }}
               </div>
             }
             <div class="winner-info">
