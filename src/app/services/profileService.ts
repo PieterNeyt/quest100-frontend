@@ -114,4 +114,8 @@ export class ProfileService {
   buyShopItem(id: string) {
     return this.http.put(`${this.url}/api/profiles/assets/${id}`, {})
   }
+
+  equipItem(id: string) {
+    return this.http.put(`${this.url}/api/profiles/avatar/${id}`, {})
+  }
 }

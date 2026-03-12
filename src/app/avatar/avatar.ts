@@ -29,6 +29,11 @@ export class Avatar implements OnInit {
     return record;
   });
 
+  sortedLayers = computed(() => {
+    return Object.values(this.equippedItems())
+      .sort((a, b) => a.layer_order - b.layer_order);
+  });
+
   ngOnInit() {
     this.service.getShopItems().subscribe({
       next: (data) => {
@@ -50,14 +55,27 @@ export class Avatar implements OnInit {
       return;
     }
 
-    if (this.equippedItems()[item.category]?.id === item.id) {
-      if (item.category !== 'Body') {
-        delete this.equippedItems()[item.category];
+    this.service.equipItem(item.id).subscribe({
+      next: () => {
+        this.categories.update(categories => {
+          return categories.map(cat => {
+            if (cat.name === item.category) {
+              cat.items.forEach(i => i.equipped = (i.id === item.id));
+            }
+            return cat;
+          });
+        });
       }
-      return;
-    }
+    })
 
-    this.equippedItems()[item.category] = item;
+    // if (this.equippedItems()[item.category]?.id === item.id) {
+    //   if (item.category !== 'Body') {
+    //     delete this.equippedItems()[item.category];
+    //   }
+    //   return;
+    // }
+    //
+    // this.equippedItems()[item.category] = item;
   }
 
   buyItem(item: Asset) {
@@ -71,9 +89,5 @@ export class Avatar implements OnInit {
         this.toast.error("avatar.bought.error");
       }
     });
-  }
-
-  getEquippedLayers(): Asset[] {
-    return Object.values(this.equippedItems()).sort((a, b) => a.layer_order - b.layer_order);
   }
 }

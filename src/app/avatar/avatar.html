@@ -2,7 +2,7 @@
 
   <div class="preview-panel">
     <div class="avatar-canvas">
-      @for (layer of getEquippedLayers(); track layer.id) {
+      @for (layer of sortedLayers(); track layer.id) {
         <img
           [src]="layer.link"
           [style.z-index]="layer.layer_order"
