@@ -84,7 +84,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideZoneChangeDetection({eventCoalescing: true}),
-    provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    provideHttpClient(withInterceptorsFromDi()),
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory,

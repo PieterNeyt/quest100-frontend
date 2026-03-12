@@ -9,6 +9,10 @@ import {EventDetailComponent} from './event-detail/event-detail';
 import {Qrcode} from './qrcode/qrcode';
 import {EventComponent} from './event/event';
 import {KudoOverview} from './kudo-overview/kudo-overview';
+import {GotchaPageComponent} from './gotcha-page/gotcha-page';
+import {GotchaEndPageComponent} from './gotcha-end-page/gotcha-end-page';
+import {GotchaSettingsComponent} from './gotcha-settings/gotcha-settings';
+import {GotchaHistoryPageComponent} from './gotcha-history-page/gotcha-history-page';
 
 export const routes: Routes = [
   {path: '', component: Home},
@@ -20,4 +24,9 @@ export const routes: Routes = [
   {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
   {path: 'userlist', component: Userlist, canActivate: [MsalGuard]},
   {path: 'kudo-overview', component: KudoOverview, canActivate: [MsalGuard]},
+  { path: 'gotcha', component: GotchaPageComponent, canActivate: [MsalGuard] },
+  { path: 'gotcha/end', component: GotchaEndPageComponent, canActivate: [MsalGuard] },
+  { path: 'gotcha/end/:gameId', component: GotchaEndPageComponent, canActivate: [MsalGuard] },
+  { path: 'gotcha/history', component: GotchaHistoryPageComponent, canActivate: [MsalGuard] },
+  { path: 'gotcha/settings', component: GotchaSettingsComponent, canActivate: [MsalGuard] },
 ];

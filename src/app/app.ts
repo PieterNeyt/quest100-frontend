@@ -20,7 +20,7 @@ type MenuState = 'languages' | 'user' | 'mobile' | null;
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, RouterLink, HlmNavigationMenuImports, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
   providers: [
     provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap})
   ],

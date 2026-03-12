@@ -1,21 +1,30 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {EventService} from '../services/eventService';
-import {TranslationService} from '../services/translationService';
-import {EventCategory, StudentEvent} from '../model/studentEvent';
-import {CATEGORIES, categoryColor, categoryIconSvg} from '../utils/Categoryutils';
-import {EventFormComponent} from '../components/event-form/event-form';
-import {NgIconComponent, provideIcons} from '@ng-icons/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { EventService } from '../services/eventService';
+import { TranslationService } from '../services/translationService';
+import { EventCategory, StudentEvent } from '../model/studentEvent';
+import { CATEGORIES, categoryColor, categoryIconSvg } from '../utils/Categoryutils';
+import { EventFormComponent } from '../components/event-form/event-form';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import {HlmIconImports} from '@spartan-ng/helm/icon';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { GotchaBannerComponent } from '../components/gotcha-banner/gotcha-banner';
 import {ReportComponent} from '../report/report';
 
 @Component({
   selector: 'app-event',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIconImports, ReportComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    EventFormComponent,
+    NgIconComponent,
+    HlmIconImports,
+    GotchaBannerComponent,
+  ],
   providers: [provideIcons(lucideIcons)],
   templateUrl: './event.html',
   styleUrl: './event.css',
@@ -139,4 +148,5 @@ export class EventComponent implements OnInit {
   }
 
   categoryLabel(cat: EventCategory | string): string { return this.t.t(`event.categories.${cat}`); }
+
 }

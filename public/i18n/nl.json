@@ -37,7 +37,7 @@
   "qrCode": {
     "title": "Aanwezigheidsregistratie",
     "subtitle": "Genereer een QR-code voor aanwezigheid",
-    "generateButton": "Genereer QR-code",
+    "generateButton": "QR-code genereren",
     "generating": "QR-code genereren...",
     "scanTitle": "Scan deze QR-code voor aanwezigheid",
     "infoText": "Studenten kunnen deze code scannen om hun aanwezigheid te registreren",
@@ -46,19 +46,19 @@
   },
   "event": {
     "title": "Evenementen",
-    "subtitle": "Ontdek en join events van je medestudenten",
-    "createButton": "Nieuw event",
-    "firstEvent": "Maak het eerste event aan",
-    "noEvents": "Geen events gevonden",
-    "loading": "Events laden...",
+    "subtitle": "Ontdek en doe mee aan evenementen van je medestudenten",
+    "createButton": "Nieuw evenement",
+    "firstEvent": "Maak het eerste evenement aan",
+    "noEvents": "Geen evenementen gevonden",
+    "loading": "Evenementen laden...",
     "retry": "Opnieuw proberen",
-    "searchPlaceholder": "Zoek events...",
+    "searchPlaceholder": "Evenementen zoeken...",
     "allCategories": "Alle categorieën",
-    "sortLabel": "Sorteer:",
+    "sortLabel": "Sorteren:",
     "sortDate": "Datum",
     "sortTitle": "Naam",
     "sortAttendees": "Deelnemers",
-    "going": "gaan",
+    "going": "aanwezig",
     "categories": {
       "SPORTS": "Sport",
       "GAMING": "Gaming",
@@ -67,12 +67,12 @@
       "MUSIC": "Muziek",
       "OUTDOOR": "Buiten",
       "SOCIAL": "Sociaal",
-      "OTHER": "Overige"
+      "OTHER": "Overig"
     },
     "createModal": {
-      "title": "Nieuw event aanmaken",
+      "title": "Nieuw evenement aanmaken",
       "fieldTitle": "Titel",
-      "titlePlaceholder": "Geef je event een naam",
+      "titlePlaceholder": "Geef je evenement een naam",
       "titleRequired": "Titel is verplicht",
       "description": "Beschrijving",
       "descriptionPlaceholder": "Wat staat er op het programma?",
@@ -81,82 +81,319 @@
       "categoryRequired": "Categorie is verplicht",
       "maxAttendees": "Max. deelnemers",
       "maxAttendeesPlaceholder": "Onbeperkt",
-      "date": "Datum & tijdstip",
+      "date": "Datum & tijd",
       "dateRequired": "Datum is verplicht",
       "datePast": "Datum mag niet in het verleden liggen",
       "photo": "Foto URL (optioneel)",
       "photoPlaceholder": "https://...",
       "cancel": "Annuleren",
-      "submit": "Event aanmaken",
-      "submitting": "Aanmaken..."
+      "submit": "Evenement aanmaken",
+      "submitting": "Bezig met aanmaken..."
     },
     "detail": {
-      "back": "Terug naar events",
-      "notFound": "Event niet gevonden",
-      "about": "Over dit event",
+      "back": "Terug naar evenementen",
+      "notFound": "Evenement niet gevonden",
+      "about": "Over dit evenement",
       "attendees": "Deelnemers",
       "noAttendees": "Nog niemand ingeschreven. Wees de eerste!",
       "you": "Jij",
-      "spotsLeft": "plaatsen vrij",
+      "spotsLeft": "plekken over",
       "full": "Vol!",
       "join": "Ik ga!",
       "joining": "Bezig...",
       "going": "Je gaat!",
-      "cancelAttend": "Aanwezigheid annuleren",
-      "cancelling": "Bezig...",
-      "eventFull": "Event is vol",
-      "person": "persoon gaat",
-      "people": "mensen gaan",
+      "cancelAttend": "Annuleer deelname",
+      "cancelling": "Annuleren...",
+      "eventFull": "Evenement is vol",
+      "person": "persoon aanwezig",
+      "people": "personen aanwezig",
       "edit": "Bewerken",
       "delete": "Verwijderen",
       "organizerLeave": "Verlaat evenement",
       "editModal": {
-        "title": "Event bewerken",
-        "save": "Opslaan"
+        "title": "Evenement bewerken",
+        "save": "Wijzigingen opslaan"
       },
       "organizerLeaveModal": {
         "title": "Jij bent de organisator",
-        "description": "Als organisator kan je het evenement niet zomaar verlaten. Draag het over aan iemand anders, of verwijder het evenement.",
-        "transferLabel": "Draag over aan",
+        "description": "Als organisator kun je niet zomaar vertrekken. Draag het eigenaarschap over aan een andere deelnemer, of verwijder het evenement.",
+        "transferLabel": "Overdragen aan",
         "selectAttendee": "Kies een deelnemer...",
-        "transferAndLeave": "Overdragen & verlaten",
+        "transferAndLeave": "Overdragen & vertrekken",
         "or": "of",
         "deleteEvent": "Evenement verwijderen",
-        "stayOrganizer": "Toch blijven als organisator"
+        "stayOrganizer": "Blijf organisator"
       }
     }
   },
   "errors": {
     "generic": "Er is iets misgegaan. Probeer het later opnieuw.",
     "invalidQrCode": "Ongeldige QR-code",
-    "network": "Netwerkfout. Controleer je internetverbinding.",
-    "unauthorized": "Je hebt geen toestemming voor deze actie."
+    "network": "Netwerkfout. Controleer je verbinding.",
+    "unauthorized": "Je bent niet bevoegd om deze actie uit te voeren."
   },
   "success": {
     "generic": "Actie succesvol uitgevoerd",
     "saved": "Wijzigingen succesvol opgeslagen"
   },
-  "userlist": {
-    "colleagues": "Collega's",
-    "awardSubtitle": "Waardeer je teamgenoten met een Kudo award",
-    "kudos": "Kudos",
-    "awardSentToday": "Award vandaag al verstuurd!",
-    "giveAward": "Geef Award",
-    "loadingProfiles": "Laden van profielen...",
-    "awardFor": "Award voor",
-    "awardCategory": "Award Categorie",
-    "personalMessage": "Persoonlijk Bericht",
-    "personalMessagePlaceholder": "Vertel wat deze collega zo goed deed...",
-    "cancel": "Annuleren",
-    "send": "Verzenden",
-    "awardSuccess": "Je hebt succesvol de award {{type}} gegeven aan {{firstName}} {{lastName}}!",
-    "awardError": "Het geven van de award is mislukt. Probeer het opnieuw."
-  },
   "kudoTypes": {
     "KudoKnowledge": "Kennis",
     "KudoAttendance": "Aanwezigheid",
-    "KudoTeamwork": "Teamwork",
+    "KudoTeamwork": "Teamwerk",
     "KudoAtmosphere": "Sfeer",
     "KudoEngagement": "Betrokkenheid"
+  },
+  "userlist": {
+    "colleagues": "Collega's",
+    "awardSubtitle": "Waardeer je teamgenoten met een Kudo-award",
+    "kudos": "Kudos",
+    "awardSentToday": "Award vandaag verstuurd!",
+    "giveAward": "Geef Award",
+    "loadingProfiles": "Profielen laden...",
+    "awardFor": "Award voor",
+    "awardCategory": "Award categorie",
+    "personalMessage": "Persoonlijk bericht",
+    "personalMessagePlaceholder": "Vertel wat deze teamgenoot goed heeft gedaan...",
+    "cancel": "Annuleren",
+    "send": "Versturen",
+    "awardSuccess": "Je hebt de award {{type}} succesvol gegeven aan {{firstName}} {{lastName}}!",
+    "awardError": "Award geven mislukt. Probeer het opnieuw."
+  },
+  "gotcha": {
+    "bannerDescription": "Doe mee met het Gotcha-spel en schakel je doelwit uit.",
+    "startsIn": "Start over",
+    "gameInProgress": "Bezig",
+    "days": "Dagen",
+    "hours": "Uren",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "comingSoon": "Binnenkort",
+    "optedIn": "Je doet mee",
+    "optOut": "Verlaat spel",
+    "optingOut": "Bezig met verlaten...",
+    "joinGame": "Doe mee",
+    "joiningGame": "Bezig...",
+    "editStartDate": "Startdatum aanpassen",
+    "winner": "Winnaar",
+    "page": {
+      "back": "Terug",
+      "history": "Geschiedenis"
+    },
+    "status": {
+      "opt_in": "Inschrijving",
+      "active": "Actief",
+      "finished": "Afgelopen"
+    },
+    "tabs": {
+      "feed": "Kill Feed",
+      "review": "Beoordelen"
+    },
+    "target": {
+      "label": "Jouw doelwit",
+      "propLabel": "Jouw voorwerp",
+      "none": "Nog geen doelwit",
+      "eliminated": "Je bent uitgeschakeld",
+      "timeLeft": "Tijd over",
+      "waitingForReview": "Wacht op beoordeling"
+    },
+    "feed": {
+      "title": "Kill Feed",
+      "empty": "Nog geen kills. De jacht is begonnen!",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden...",
+      "loadError": "Feed kon niet geladen worden.",
+      "likeError": "Like kon niet worden bijgewerkt.",
+      "justNow": "net nu",
+      "minutesAgo": "m geleden",
+      "hoursAgo": "u geleden",
+      "daysAgo": "d geleden",
+      "killedCaption": "heeft uitgeschakeld",
+      "victim": "Slachtoffer",
+      "photoAlt": "Kill foto",
+      "statusPending": "In behandeling",
+      "statusApproved": "Goedgekeurd",
+      "statusDenied": "Afgekeurd"
+    },
+    "review": {
+      "empty": "Niets te beoordelen — alles is nagekeken!",
+      "approve": "Goedkeuren",
+      "deny": "Afkeuren",
+      "approved": "Kill goedgekeurd.",
+      "denied": "Kill afgekeurd.",
+      "loadError": "Openstaande kills konden niet geladen worden.",
+      "error": "Kon deze kill niet beoordelen.",
+      "inQueue": "in de wachtrij"
+    },
+    "submitKill": {
+      "button": "Kill indienen",
+      "title": "Kill indienen",
+      "hint": "Upload een foto waarop je bewijst dat je je doelwit hebt uitgeschakeld met jouw voorwerp.",
+      "photoLabel": "Bewijsfoto",
+      "photoPlaceholder": "Foto uploaden...",
+      "photoSelect": "Foto selecteren",
+      "photoChange": "Foto wijzigen",
+      "cancel": "Annuleren",
+      "confirm": "Indienen",
+      "submitting": "Bezig...",
+      "noPhoto": "Selecteer een foto.",
+      "success": "Kill ingediend! Wacht op goedkeuring.",
+      "error": "Kill kon niet ingediend worden."
+    },
+    "eliminated": {
+      "killedBy": "Uitgeschakeld door",
+      "unknownKiller": "Killer onbekend"
+    },
+    "editModal": {
+      "title": "Spelinstellingen",
+      "startDate": "Startdatum & tijd",
+      "killDeadline": "Kill deadline (uren)",
+      "killDeadlineHint": "Aantal uren dat een speler heeft voordat de keten verdergaat.",
+      "prizePhoto": "Foto van de prijs",
+      "prizeDescEN": "Prijsbeschrijving (Engels)",
+      "prizeDescNL": "Prijsbeschrijving (Nederlands)",
+      "cancel": "Annuleren",
+      "save": "Opslaan",
+      "prizePhotoHint": "Klik of sleep voor een foto",
+      "prizeDescPlaceholder": "Beschrijf de prijs...",
+      "saving": "Opslaan...",
+      "startDateRequired": "Stel een startdatum in.",
+      "startDatePast": "De startdatum mag niet in het verleden liggen.",
+      "killDeadlineRequired": "Vul een geldige kill deadline in.",
+      "prizePhotoRequired": "Upload een foto van de prijs.",
+      "prizeDescENRequired": "Vul de Engelse prijsbeschrijving in.",
+      "prizeDescNLRequired": "Vul de Nederlandse prijsbeschrijving in."
+    },
+    "endScreen": {
+      "loading": "Resultaten laden...",
+      "title": "Game Over!",
+      "kills": "kills",
+      "prize": "Prijs",
+      "winner": "Winnaar",
+      "stats": "Toernooistatistieken",
+      "statParticipants": "Deelnemers",
+      "statKills": "Totaal kills",
+      "statTotalKills": "Totaal kills",
+      "statFastest": "Snelste kill",
+      "statFastestKill": "Snelste kill",
+      "statMostKills": "Meeste kills",
+      "statMortality": "Uitschakelpercentage",
+      "statMostUsedProp": "Meest gebruikt voorwerp",
+      "graph": "Toernooikaart",
+      "graphHint": "Sleep knopen · Scroll om te zoomen · Klik op een pijl voor details",
+      "legendWinner": "Winnaar",
+      "legendKillCount": "Kill teller",
+      "legendClickEdge": "Klik op pijl voor details",
+      "killList": "Kill geschiedenis",
+      "killDetail": "Kill details",
+      "eliminated": "heeft uitgeschakeld",
+      "hunter": "Jager",
+      "victim": "Slachtoffer",
+      "loadError": "Resultaten konden niet worden geladen.",
+      "gameOver": "Game Over!",
+      "gameOverSub": "Het toernooi is afgelopen. Bekijk de winnaar!",
+      "viewResults": "Bekijk resultaten",
+      "killsOf": "Kills van",
+      "noKills": "Nog geen kills."
+    },
+    "awards": {
+      "title": "Awards",
+      "cat": {
+        "core": "Kern Awards",
+        "skill": "Skill Awards",
+        "social": "Sociale Awards",
+        "prop": "Wapen Awards",
+        "meme": "Meme Awards",
+        "game": "Spel Awards"
+      },
+      "lastStanding": {
+        "title": "Laatste Overlever",
+        "desc": "Overleefd tot het bittere einde."
+      },
+      "serialKiller": {
+        "title": "Seriemoordenaar",
+        "desc": "Meeste uitschakelingen in het hele spel."
+      },
+      "firstBlood": {
+        "title": "Eerste Bloed",
+        "desc": "Eerste speler die een kill maakte."
+      },
+      "firstVictim": {
+        "title": "Eerste Slachtoffer",
+        "desc": "Eerste speler die uitgeschakeld werd."
+      },
+      "finalVictim": {
+        "title": "Laatste Slachtoffer",
+        "desc": "Laatste speler uitgeschakeld vóór de winnaar."
+      },
+      "speedDemon": {
+        "title": "Speed Demon",
+        "desc": "Snelste opeenvolgende kills."
+      },
+      "patientHunter": {
+        "title": "Geduldige Jager",
+        "desc": "Langste tijd tussen kills."
+      },
+      "bestDisguise": {
+        "title": "Beste Vermomming",
+        "desc": "Kill met de meeste likes."
+      },
+      "deadliestWeapon": {
+        "title": "Dodelijkste Wapen",
+        "desc": "Meeste kills gemaakt met dit voorwerp."
+      },
+      "unlucky": {
+        "title": "Pechvogel",
+        "desc": "Al weg voordat het echt begon."
+      },
+      "afkVictim": {
+        "title": "AFK Slachtoffer",
+        "desc": "Heeft nooit een enkele kill gemaakt."
+      },
+      "bloodiestDay": {
+        "title": "Bloedigste Dag",
+        "desc": "Meeste kills op één dag."
+      }
+    },
+    "settings": {
+      "title": "Spelinstellingen",
+      "newGameHint": "Start een nieuw spel!",
+      "gameSettings": "Spelinstellingen",
+      "propsRequiredToStart": "Er is minimaal 1 prop vereist om het spel te kunnen starten!",
+      "props": "Voorwerpen",
+      "newGame": "Nieuw spel",
+      "addProp": "Voorwerp toevoegen",
+      "noProps": "Geen voorwerpen gevonden.",
+      "propNameEN": "Naam (EN)",
+      "propNameNL": "Naam (NL)",
+      "bothLangsRequired": "Beide talen zijn verplicht.",
+      "propAdded": "Voorwerp toegevoegd!",
+      "propDeleted": "Voorwerp verwijderd.",
+      "cancel": "Annuleren",
+      "locked": "Vergrendeld"
+    },
+    "history": {
+      "title": "Spelgeschiedenis",
+      "loading": "Geschiedenis laden...",
+      "loadError": "Kon de geschiedenis niet laden.",
+      "empty": "Nog geen afgelopen spellen.",
+      "kills": "kills",
+      "participants": "Spelers",
+      "totalKills": "Totale kills",
+      "started": "Gestart",
+      "viewResults": "Resultaten bekijken",
+      "backToHistory": "Terug naar geschiedenis"
+    },
+    "aliveBanner": {
+      "label": "Spelers nog levend",
+      "alive": "levend"
+    },
+    "toasts": {
+      "optedIn": "Je doet mee aan het spel!",
+      "alreadyOptedIn": "Je doet al mee.",
+      "optInError": "Deelname mislukt.",
+      "optedOut": "Je hebt het spel verlaten.",
+      "optOutGameStarted": "Je kunt nu niet meer uitstappen.",
+      "optOutError": "Verlaten mislukt."
+    }
   }
 }

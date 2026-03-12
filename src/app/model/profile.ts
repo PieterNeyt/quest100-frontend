@@ -6,6 +6,7 @@ export interface Profile {
   kudos: number;
   preferredLanguage?: 'NL' | 'EN';
   customProfilePicture?: string | null;
+  campus: string;
 }
 
 export interface ProfileStatistics {
