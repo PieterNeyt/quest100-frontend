@@ -23,6 +23,7 @@ import {ReportComponent} from '../report/report';
     EventFormComponent,
     NgIconComponent,
     HlmIconImports,
+    ReportComponent,
     GotchaBannerComponent,
   ],
   providers: [provideIcons(lucideIcons)],
