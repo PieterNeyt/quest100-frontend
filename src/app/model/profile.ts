@@ -17,6 +17,15 @@ export interface ProfileStatistics {
   kudoEngagement: number;
 }
 
+export interface KudosEntry {
+  ID: string;
+  ProfileID: string;
+  Amount: number;
+  Reason: string;
+  Type: string;
+  Date: string;
+}
+
 export interface SyncProfileResponse {
   profile: Profile;
   microsoftProfilePicture: string;

@@ -1,0 +1,89 @@
+<div class="home-wrapper">
+  <section class="hero-container">
+    <h1 class="title">Kudo Overview</h1>
+    <div class="content-grid">
+
+      <!-- LEFT: Statistics -->
+      <div class="content-card accordion-item" [class.open]="activeAccordion() === 'stats'">
+        <div class="accordion-header" (click)="toggleAccordion('stats')">
+          <h1 class="content-title">Statistics</h1>
+          <ng-icon name="lucideChevronDown" class="accordion-icon"></ng-icon>
+        </div>
+        <div class="accordion-wrapper">
+          <div class="accordion-content">
+
+            <div class="kudo-summary">
+              <div class="kudo-summary-row">
+                <div class="kudo-summary-block">
+                  <span class="info-label">Total Kudos</span>
+                  <p class="info-value highlight-yellow">{{ profile()?.kudos }}</p>
+                </div>
+                <div class="kudo-summary-block">
+                  <span class="info-label">Type</span>
+                  <p class="info-value">Wizard</p>
+                </div>
+              </div>
+            </div>
+
+            <h4 class="content-mini-title">Statistics</h4>
+            <div class="stats-bars-container">
+              @for (item of statItems(); track item.label) {
+                <div class="stat-bar-group">
+                  <div class="stat-bar-header">
+                    <span class="stat-bar-label">{{ item.label }}</span>
+                    <div class="stat-meta-info">
+                      <span class="stat-percentage-label">{{ item.percentage }}% of total</span>
+                      <span class="stat-points-label">{{ item.value }} PTS</span>
+                    </div>
+                  </div>
+                  <div class="progress-track">
+                    <div class="progress-fill" [style.width.%]="item.percentage"></div>
+                  </div>
+                </div>
+              }
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Timeline -->
+      <div class="content-card accordion-item" [class.open]="activeAccordion() === 'timeline'">
+        <div class="accordion-header" (click)="toggleAccordion('timeline')">
+          <h2 class="content-title">Recent Kudos</h2>
+          <ng-icon name="lucideChevronDown" class="accordion-icon"></ng-icon>
+        </div>
+
+        <div class="accordion-wrapper">
+          <div class="accordion-content">
+            <div class="timeline">
+              @for (entry of kudoEntries(); track entry.ID) {
+                <div class="timeline-item">
+                  <div class="timeline-dot-col">
+                    <div class="timeline-dot">
+                      <ng-icon [name]="getIconForType(entry.Type)" class="timeline-icon"></ng-icon>
+                    </div>
+                    <div class="timeline-line"></div>
+                  </div>
+                  <div class="timeline-body">
+                    <div class="timeline-meta">
+                      <span class="timeline-type">{{ getLabelForType(entry.Type) }}</span>
+                      <span class="timeline-date">{{ entry.Date | date:'d MMM yyyy' }}</span>
+                    </div>
+                    <p class="timeline-title">{{ entry.Reason }}</p>
+                    <span class="timeline-pts">+{{ entry.Amount }} PTS</span>
+                  </div>
+                </div>
+
+                @if (kudoEntries().length === 0) {
+                  <p class="empty-state">No kudos entries yet.</p>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>

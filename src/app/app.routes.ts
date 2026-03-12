@@ -8,6 +8,7 @@ import {roleGuard} from './guards/role-guard';
 import {EventDetailComponent} from './event-detail/event-detail';
 import {Qrcode} from './qrcode/qrcode';
 import {EventComponent} from './event/event';
+import {KudoOverview} from './kudo-overview/kudo-overview';
 
 export const routes: Routes = [
   {path: '', component: Home},
@@ -18,4 +19,5 @@ export const routes: Routes = [
   {path: 'qrcode', component: Qrcode, canActivate: [MsalGuard, roleGuard], data: {role: 'lector'}},
   {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
   {path: 'userlist', component: Userlist, canActivate: [MsalGuard]},
+  {path: 'kudo-overview', component: KudoOverview, canActivate: [MsalGuard]},
 ];
