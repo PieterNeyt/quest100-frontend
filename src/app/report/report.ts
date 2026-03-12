@@ -5,7 +5,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { ToastService } from '../services/toastService';
-import { ModerationService } from '../services/moderation';
+import { ModerationService } from '../services/moderationService';
 
 export enum ReportType {
   Harassment = 0,
