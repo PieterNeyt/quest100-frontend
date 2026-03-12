@@ -80,7 +80,9 @@ export class ProfileService {
     this.http.get<Profile[]>(`${this.url}/api/profiles`)
       .subscribe((profiles) => this.profiles.set(profiles));
   }
-
+  getProfileById(id: string): Observable<Profile> {
+    return this.http.get<Profile>(`${this.url}/api/profiles/${id}`);
+  }
   getPlayerStats(): Observable<ProfileStatistics> {
     return this.http.get<ProfileStatistics>(`${this.url}/api/profiles/stats`)
   }

@@ -1,0 +1,118 @@
+<div class="history-wrap">
+
+  <!-- ── Header ── -->
+  <div>
+    <button class="btn-back" (click)="goBack()">
+      <ng-icon hlm name="lucideArrowLeft" size="sm" />
+      {{ t.t('gotcha.page.back') }}
+    </button>
+  </div>
+  <div class="header-title-row">
+    <div class="header-icon-wrap">
+      <ng-icon hlm name="lucideHistory" size="sm" />
+    </div>
+    <h1 class="header-title">{{ t.t('gotcha.history.title') }}</h1>
+  </div>
+
+  <!-- ── Loading ── -->
+  @if (loading()) {
+    <div class="section-skeleton">
+      <div class="sk-card"></div>
+      <div class="sk-card"></div>
+      <div class="sk-card"></div>
+    </div>
+  }
+
+  <!-- ── Error ── -->
+  @if (error()) {
+    <div class="state-container">
+      <ng-icon hlm name="lucideAlertCircle" size="base" />
+      <p>{{ t.t('gotcha.history.loadError') }}</p>
+      <button class="btn-retry" (click)="load()">
+        <ng-icon hlm name="lucideRefreshCw" size="sm" />
+        {{ t.t('event.retry') }}
+      </button>
+    </div>
+  }
+
+  <!-- ── Empty ── -->
+  @if (!loading() && !error() && games().length === 0) {
+    <div class="state-container">
+      <ng-icon hlm name="lucideTrophy" size="base" />
+      <p>{{ t.t('gotcha.history.empty') }}</p>
+    </div>
+  }
+
+  @if (!loading() && !error() && games().length > 0) {
+    <div class="history-grid">
+      @for (game of games(); track game.id) {
+        <div class="history-card" (click)="viewGame(game)">
+
+          <!-- header -->
+          <div class="card-header-row">
+            <div class="card-header-left">
+              <div class="card-icon-wrap">
+                <ng-icon hlm name="lucideTrophy" size="sm" />
+              </div>
+              <span class="card-title">Gotcha</span>
+              <span class="status-pill status-finished">
+                {{ t.t('gotcha.status.finished') }}
+              </span>
+            </div>
+            <span class="card-date">{{ game.finishedAt | formatDate }}</span>
+          </div>
+
+          <!-- winner -->
+          <div class="winner-section">
+            @if (game.winner?.profilePicture) {
+              <img class="winner-avatar"
+                   [src]="game.winner!.profilePicture | photoSrc"
+                   [alt]="game.winner | fullName" />
+            } @else {
+              <div class="winner-avatar--placeholder">
+                {{ game.winner?.firstName?.slice(0, 1) ?? '?' }}
+              </div>
+            }
+            <div class="winner-info">
+              <span class="winner-label">
+                <ng-icon hlm name="lucideCrown" size="xs" />
+                {{ t.t('gotcha.endScreen.winner') }}
+              </span>
+              <span class="winner-name">{{ game.winner | fullName }}</span>
+              <span class="winner-kills">
+                <ng-icon hlm name="lucideSwords" size="xs" />
+                {{ game.winnerKillCount }}&nbsp;{{ t.t('gotcha.history.kills') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- stats -->
+          <div class="stats-row">
+            <div class="stat-item">
+              <span class="stat-value">{{ game.totalParticipants }}</span>
+              <span class="stat-label">{{ t.t('gotcha.history.participants') }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ game.totalKills }}</span>
+              <span class="stat-label">{{ t.t('gotcha.history.totalKills') }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ game.startDate | formatDate }}</span>
+              <span class="stat-label">{{ t.t('gotcha.history.started') }}</span>
+            </div>
+          </div>
+
+          <!-- footer -->
+          <div class="card-footer">
+            <span class="view-link">
+              {{ t.t('gotcha.history.viewResults') }}
+              <ng-icon hlm name="lucideArrowRight" size="xs" />
+            </span>
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+</div>

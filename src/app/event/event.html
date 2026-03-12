@@ -1,3 +1,7 @@
+<!-- Gotcha Banner (klikbaar → /gotcha) -->
+<app-gotcha-banner />
+
+<!-- ── Events section ─────────────────────────────────────────────────── -->
 <div class="events-header">
   <div class="header-text">
     <h1>{{ t.t('event.title') }}</h1>
@@ -110,7 +114,6 @@
             {{ categoryLabel(event.category) }}
           </div>
         </div>
-
         <div class="card-body">
           <h3 class="card-title">{{ event.title }}</h3>
           <div class="card-meta">
@@ -121,9 +124,7 @@
             <span class="meta-attendees">
               <ng-icon hlm name="lucideUsers" size="xs"/>
               <strong>{{ event.attendees.length }}</strong>
-              @if (event.maxAttendees) {
-                / {{ event.maxAttendees }}
-              }
+              @if (event.maxAttendees) { / {{ event.maxAttendees }} }
               {{ t.t('event.going') }}
             </span>
           </div>

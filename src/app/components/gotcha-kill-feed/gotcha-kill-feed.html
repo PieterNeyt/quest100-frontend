@@ -1,0 +1,210 @@
+<div class="kill-feed-wrap">
+
+  <div class="tabs">
+    <button class="tab" [class.tab--active]="activeTab() === 'feed'" (click)="activeTab.set('feed')">
+      <ng-icon hlm name="lucideSkull" size="xs" />
+      {{ t.t('gotcha.tabs.feed') }}
+    </button>
+    <button class="tab" [class.tab--active]="activeTab() === 'review'" (click)="activeTab.set('review')">
+      <ng-icon hlm name="lucideScale" size="xs" />
+      {{ t.t('gotcha.tabs.review') }}
+      @if (pendingCount() > 0) {
+        <span class="tab-badge tab-badge--dot"></span>
+      }
+    </button>
+  </div>
+
+  <div class="feed-toolbar">
+    <button class="btn-refresh"
+            (click)="activeTab() === 'feed' ? loadFeed() : loadNextReviewItem()"
+            [disabled]="activeTab() === 'feed' ? loading() : reviewLoading()">
+      <ng-icon hlm name="lucideRefreshCw" size="sm"
+               [class.spinning]="activeTab() === 'feed' ? loading() : reviewLoading()" />
+    </button>
+  </div>
+
+  @if (activeTab() === 'feed') {
+    @if (loading()) {
+      <div class="feed-list">
+        @for (_ of [1,2,3]; track $index) {
+          <div class="feed-card feed-card--skeleton">
+            <div class="sk-header">
+              <div class="sk-avatar"></div>
+              <div class="sk-lines">
+                <div class="sk-line sk-line--short"></div>
+                <div class="sk-line sk-line--tiny"></div>
+              </div>
+            </div>
+            <div class="sk-photo"></div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (isEmpty()) {
+      <div class="feed-empty">
+        <ng-icon hlm name="lucideCrosshair" size="base" />
+        <p>{{ t.t('gotcha.feed.empty') }}</p>
+      </div>
+    }
+
+    @if (!loading()) {
+      <div class="feed-list">
+        @for (item of items(); track item.id) {
+          <div class="feed-card" [ngClass]="item.status | statusClass">
+
+            <div class="card-header">
+              <div class="profile-row">
+                <div class="avatar">
+                  @if (item.hunter.profilePicture) {
+                    <img [src]="item.hunter.profilePicture | photoSrc" [alt]="item.hunter | fullName" />
+                  } @else {
+                    <span class="avatar-initials">{{ item.hunter | initials }}</span>
+                  }
+                </div>
+                <div class="profile-info">
+                  <span class="profile-name">{{ item.hunter | fullName }}</span>
+                  <span class="post-time">{{ formatTime(item.createdAt) }}</span>
+                </div>
+              </div>
+              <span class="status-badge" [ngClass]="item.status | statusClass">
+                @if (item.status === 'PENDING') {
+                  <ng-icon hlm name="lucideClock" size="xs" />
+                  {{ t.t('gotcha.feed.statusPending') }}
+                } @else if (item.status === 'APPROVED') {
+                  <ng-icon hlm name="lucideCheckCircle" size="xs" />
+                  {{ t.t('gotcha.feed.statusApproved') }}
+                } @else {
+                  <ng-icon hlm name="lucideXCircle" size="xs" />
+                  {{ t.t('gotcha.feed.statusDenied') }}
+                }
+              </span>
+            </div>
+
+            <div class="kill-caption">
+              <span class="kill-text">
+                <ng-icon hlm name="lucideSwords" size="xs" class="kill-icon" />
+                {{ t.t('gotcha.feed.killedCaption') }}
+                <strong>{{ item.victim | fullName }}</strong>
+              </span>
+              @if (item.prop) {
+                <span class="prop-badge">
+                  <ng-icon hlm name="lucidePackage" size="xs" />
+                  {{ item.prop | propName }}
+                </span>
+              }
+            </div>
+
+            <div class="card-photo-wrap">
+              <img class="card-photo"
+                   [src]="item.photoBase64 | photoSrc"
+                   [alt]="t.t('gotcha.feed.photoAlt')"
+                   loading="lazy" />
+              <div class="victim-overlay">
+                <div class="victim-avatar">
+                  @if (item.victim.profilePicture) {
+                    <img [src]="item.victim.profilePicture | photoSrc" [alt]="item.victim | fullName" />
+                  } @else {
+                    <span class="avatar-initials avatar-initials--sm">{{ item.victim | initials }}</span>
+                  }
+                </div>
+                <span class="victim-name">{{ item.victim | fullName }}</span>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <button class="like-btn"
+                      [class.liked]="item.likedByMe"
+                      [disabled]="isLiking(item.id)"
+                      (click)="toggleLike(item)">
+                @if (isLiking(item.id)) {
+                  <span class="like-spinner"></span>
+                } @else {
+                  <ng-icon hlm name="lucideHeart" size="sm" [class.heart-filled]="item.likedByMe" />
+                }
+                <span class="like-count">{{ item.likeCount }}</span>
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (hasMore()) {
+          <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadMore()">
+            {{ loadingMore() ? t.t('gotcha.feed.loadingMore') : t.t('gotcha.feed.loadMore') }}
+          </button>
+        }
+      </div>
+    }
+  }
+
+  @if (activeTab() === 'review') {
+    @if (reviewLoading()) {
+      <div class="review-stack-scene">
+        <div class="stack-ghost stack-ghost--1"></div>
+        <div class="feed-card feed-card--skeleton"></div>
+      </div>
+    }
+
+    @if (reviewDone()) {
+      <div class="feed-empty">
+        <ng-icon hlm name="lucideCheckCircle" size="base" />
+        <p>{{ t.t('gotcha.review.empty') }}</p>
+      </div>
+    }
+
+    @if (currentReviewItem(); as review) {
+      <div class="review-stack-scene">
+        @if (pendingCount() > 1) { <div class="stack-ghost stack-ghost--1"></div> }
+
+        <div class="feed-card review-card status-pending"
+             [class.reviewing]="isReviewingKill()"
+             [class.swipe-approve]="swipeDirection() === 'approve'"
+             [class.swipe-deny]="swipeDirection() === 'deny'">
+
+          <div class="card-header">
+            <div class="profile-row">
+              <div class="avatar">
+                @if (review.hunter.profilePicture) {
+                  <img [src]="review.hunter.profilePicture | photoSrc" [alt]="review.hunter | fullName" />
+                } @else {
+                  <span class="avatar-initials">{{ review.hunter | initials }}</span>
+                }
+              </div>
+              <div class="profile-info">
+                <span class="profile-name">{{ review.hunter | fullName }}</span>
+                <span class="post-time">{{ formatTime(review.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kill-caption">
+            <span class="kill-text">
+              <strong>{{ review.victim | fullName }}</strong>
+            </span>
+            @if (review.prop) {
+              <span class="prop-badge">{{ review.prop | propName }}</span>
+            }
+          </div>
+
+          <div class="card-photo-wrap">
+            <img class="card-photo" [src]="review.photoBase64 | photoSrc" alt="victim"/>
+            <div class="victim-overlay">
+              <span class="victim-name">{{ review.victim | fullName }}</span>
+            </div>
+          </div>
+
+          <div class="card-footer review-actions">
+            <button class="btn-deny" [disabled]="isReviewingKill()" (click)="reviewKill(false)">
+              <ng-icon hlm name="lucideThumbsDown" size="sm" />
+              {{ t.t('gotcha.review.deny') }}
+            </button>
+            <button class="btn-approve" [disabled]="isReviewingKill()" (click)="reviewKill(true)">
+              <ng-icon hlm name="lucideThumbsUp" size="sm" />
+              {{ t.t('gotcha.review.approve') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

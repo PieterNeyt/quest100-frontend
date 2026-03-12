@@ -30,7 +30,9 @@
   --background: oklch(0.90 0.012 90);
   --background-hex: #e1dcc3;
   --card: oklch(0.95 0.005 90);
-
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 
   /* Brand */
