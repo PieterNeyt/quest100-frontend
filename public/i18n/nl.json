@@ -395,5 +395,68 @@
       "optOutGameStarted": "Je kunt nu niet meer uitstappen.",
       "optOutError": "Verlaten mislukt."
     }
+  },
+
+  "about": {
+    "hero": {
+      "badge": "Jouw eerste 100 dagen",
+      "line1": "Welkom bij",
+      "line2": "Quest 100",
+      "sub": "Alles wat je nodig hebt om vlot te starten: de vijf belangrijkste platformen op één plek.",
+      "scroll": "Scroll om te ontdekken"
+    },
+    "apps": {
+      "openApp": "Open applicatie",
+      "intranet": {
+        "short": "Intranet",
+        "name": "KdG Intranet",
+        "tagline": "Jouw centrale startpunt",
+        "desc": "Het intranet is de digitale hub van KdG. Hier vind je nieuws, aankondigingen en directe links naar alle andere platformen. Het is de plek die je dagelijks opent.",
+        "f1": "Actueel nieuws en aankondigingen van de school",
+        "f2": "Directe links naar Canvas, TimeEdit en eStudentService",
+        "f3": "Documenten en mededelingen vanuit de opleiding"
+      },
+      "canvas": {
+        "short": "Canvas",
+        "name": "Canvas",
+        "tagline": "Jouw online leerplatform",
+        "desc": "Canvas is het hart van je opleiding. Alle cursusinhoud, opdrachten, deadlines en feedback van je lectoren vind je hier terug. Controleer Canvas dagelijks.",
+        "f1": "Cursusmateriaal en slides per vak",
+        "f2": "Opdrachten indienen en feedback ontvangen",
+        "f3": "Agenda met deadlines en toetsmomenten"
+      },
+      "timeedit": {
+        "short": "TimeEdit",
+        "name": "TimeEdit",
+        "tagline": "Lesrooster & lokaalreservaties",
+        "desc": "TimeEdit toont je persoonlijk lesrooster en laat je vrije lokalen reserveren. Handig voor groepswerk, zelfstudiesessies of een rustige werkplek tussen de lessen door.",
+        "f1": "Persoonlijk lesrooster raadplegen en exporteren",
+        "f2": "Vrije lokalen zoeken en reserveren",
+        "f3": "Roosterwijzigingen en annuleringen opvolgen"
+      },
+      "estudentservice": {
+        "short": "eStudentService",
+        "name": "eStudentService",
+        "tagline": "Punten, contracten & documenten",
+        "desc": "eStudentService is jouw persoonlijk studentendossier bij KdG. Hier beheer je je inschrijving, volg je je resultaten op en vraag je officiële documenten aan.",
+        "f1": "Punten en studieresultaten per opleidingsonderdeel",
+        "f2": "Opleidingscontract en inschrijvingsbevestiging raadplegen",
+        "f3": "Attesten aanvragen: openbaar vervoer, studentenstatuut, ...",
+        "f4": "Volledig overzicht van je studietraject en ECTS-credits"
+      },
+      "ects": {
+        "short": "ECTS Fiches",
+        "name": "ECTS Fiches",
+        "tagline": "Alles over je opleidingsonderdelen",
+        "desc": "De ECTS-fiches beschrijven elk opleidingsonderdeel in detail: wat je leert, hoe je beoordeeld wordt en hoeveel studiepunten het vak waard is. Onmisbaar voor je studieplanning.",
+        "f1": "Leerdoelen en inhoud per vak opzoeken",
+        "f2": "Beoordelingsvormen en examenregeling bekijken",
+        "f3": "Studiepunten (ECTS) per opleidingsonderdeel raadplegen"
+      }
+    },
+    "tip": {
+      "label": "Pro tip",
+      "body": "Sla het intranet op als startpagina van je browser. Van daaruit heb je altijd snel toegang tot Canvas, TimeEdit en eStudentService — zonder ooit nog een link te moeten onthouden."
+    }
   }
 }

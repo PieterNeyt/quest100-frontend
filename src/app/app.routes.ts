@@ -12,6 +12,7 @@ import {GotchaPageComponent} from './gotcha-page/gotcha-page';
 import {GotchaEndPageComponent} from './gotcha-end-page/gotcha-end-page';
 import {GotchaSettingsComponent} from './gotcha-settings/gotcha-settings';
 import {GotchaHistoryPageComponent} from './gotcha-history-page/gotcha-history-page';
+import {AboutComponent} from './about/about';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -26,4 +27,5 @@ export const routes: Routes = [
   { path: 'gotcha/end/:gameId', component: GotchaEndPageComponent, canActivate: [MsalGuard] },
   { path: 'gotcha/history', component: GotchaHistoryPageComponent, canActivate: [MsalGuard] },
   { path: 'gotcha/settings', component: GotchaSettingsComponent, canActivate: [MsalGuard] },
+  { path: 'about', component: AboutComponent, canActivate: [MsalGuard] },
 ];
