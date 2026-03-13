@@ -4,6 +4,7 @@ import {ProfileService} from '../services/profileService';
 import {ToastService} from '../services/toastService';
 import {NgIcon} from '@ng-icons/core';
 import {NgOptimizedImage} from '@angular/common';
+import {TranslationService} from '../services/translationService';
 
 @Component({
   selector: 'app-avatar',
@@ -17,6 +18,8 @@ import {NgOptimizedImage} from '@angular/common';
 export class Avatar implements OnInit {
   private service = inject(ProfileService)
   private toast = inject(ToastService)
+  private readonly profile = inject(ProfileService).profile;
+  readonly t = inject(TranslationService)
 
   categories = signal<Category[]>([]);
   activeCategory: Category | null = null;
@@ -87,5 +90,12 @@ export class Avatar implements OnInit {
         this.toast.error("avatar.bought.error");
       }
     });
+  }
+
+  canBuy(item: Asset) {
+    if (this.profile()) {
+      return item.price > this.profile()!.kudos;
+    }
+    return false;
   }
 }

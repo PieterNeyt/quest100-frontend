@@ -1,26 +1,30 @@
 <div class="editor-container">
-
   <div class="preview-panel">
-    <div class="avatar-canvas">
-      @for (layer of sortedLayers(); track layer.id) {
-        <img
-          [ngSrc]="layer.link"
-          class="avatar-layer"
-          [alt]="layer.name" fill priority>
-      }
+    <div class="canvas-wrapper">
+      <div class="avatar-canvas">
+        @for (layer of sortedLayers(); track layer.id) {
+          <img
+            [ngSrc]="layer.link"
+            class="avatar-layer"
+            [alt]="layer.name" fill priority>
+        }
+      </div>
     </div>
   </div>
 
   <div class="shop-panel">
-
-    <div class="tabs">
-      @for (cat of categories(); track $index) {
-        <button
-          [class.active]="activeCategory?.name === cat.name"
-          (click)="selectCategory(cat)">
-          {{ cat.name }}
-        </button>
-      }
+    <div class="tabs-container">
+      <div class="tabs">
+        @for (cat of categories(); track $index) {
+          <button
+            class="tab-btn"
+            [class.active]="activeCategory?.name === cat.name"
+            (click)="selectCategory(cat)"
+          >
+            {{t.t(`avatar.${cat.name}`)}}
+          </button>
+        }
+      </div>
     </div>
 
     @if (activeCategory) {
@@ -32,15 +36,21 @@
             [class.locked]="!item.isOwned"
             (click)="toggleItem(item)">
 
-            <img [ngSrc]="item.thumbnail" class="item-thumb" [alt]="item.name" width="80" height="80">
+            <div class="thumb-wrapper">
+              <img [ngSrc]="item.thumbnail" class="item-thumb" [alt]="item.name" width="80" height="80">
+            </div>
 
             <div class="item-details">
               <span class="item-name">{{ item.name }}</span>
 
               @if (!item.isOwned) {
-                <button class="buy-btn"><ng-icon name="lucideZap"/> {{ item.price }}</button>
+                <button class="buy-btn">
+                  <ng-icon name="lucideZap" class="size-3"></ng-icon> {{ item.price }}
+                </button>
               } @else if (equippedItems()[item.category]?.id === item.id) {
                 <span class="equipped-badge">Equipped</span>
+              } @else {
+                <span class="owned-badge">Owned</span>
               }
             </div>
           </div>
