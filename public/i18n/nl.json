@@ -396,7 +396,6 @@
       "optOutError": "Verlaten mislukt."
     }
   },
-
   "about": {
     "hero": {
       "badge": "Jouw eerste 100 dagen",
@@ -458,12 +457,6 @@
       "label": "Pro tip",
       "body": "Sla het intranet op als startpagina van je browser. Van daaruit heb je altijd snel toegang tot Canvas, TimeEdit en eStudentService — zonder ooit nog een link te moeten onthouden."
     }
-  "kudoTypes": {
-    "KudoKnowledge": "Kennis",
-    "KudoAttendance": "Aanwezigheid",
-    "KudoTeamwork": "Teamwork",
-    "KudoAtmosphere": "Sfeer",
-    "KudoEngagement": "Betrokkenheid"
   },
   "avatar": {
     "Body": "Lichaam",
