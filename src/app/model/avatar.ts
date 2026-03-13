@@ -2,11 +2,11 @@ export interface Asset {
   id: string;
   name: string;
   category: string;
-  layer_order: number;
   price: number;
   isOwned: boolean;
   link: string;
   equipped: boolean;
+  thumbnail: string;
 }
 
 export interface Category {

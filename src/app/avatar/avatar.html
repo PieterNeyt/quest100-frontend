@@ -4,10 +4,9 @@
     <div class="avatar-canvas">
       @for (layer of sortedLayers(); track layer.id) {
         <img
-          [src]="layer.link"
-          [style.z-index]="layer.layer_order"
+          [ngSrc]="layer.link"
           class="avatar-layer"
-          alt="Avatar layer">
+          [alt]="layer.name" fill priority>
       }
     </div>
   </div>
@@ -33,13 +32,13 @@
             [class.locked]="!item.isOwned"
             (click)="toggleItem(item)">
 
-            <img [src]="item.link" class="item-thumb" alt="banaan">
+            <img [ngSrc]="item.thumbnail" class="item-thumb" [alt]="item.name" width="80" height="80">
 
             <div class="item-details">
               <span class="item-name">{{ item.name }}</span>
 
               @if (!item.isOwned) {
-                <button class="buy-btn">💎 {{ item.price }}</button>
+                <button class="buy-btn"><ng-icon name="lucideZap"/> {{ item.price }}</button>
               } @else if (equippedItems()[item.category]?.id === item.id) {
                 <span class="equipped-badge">Equipped</span>
               }

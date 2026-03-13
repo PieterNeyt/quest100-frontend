@@ -2,10 +2,15 @@ import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {Asset, Category} from '../model/avatar';
 import {ProfileService} from '../services/profileService';
 import {ToastService} from '../services/toastService';
+import {NgIcon} from '@ng-icons/core';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-avatar',
-  imports: [],
+  imports: [
+    NgIcon,
+    NgOptimizedImage
+  ],
   templateUrl: './avatar.html',
   styleUrl: './avatar.css',
 })
@@ -30,8 +35,7 @@ export class Avatar implements OnInit {
   });
 
   sortedLayers = computed(() => {
-    return Object.values(this.equippedItems())
-      .sort((a, b) => a.layer_order - b.layer_order);
+    return Object.values(this.equippedItems());
   });
 
   ngOnInit() {
@@ -56,26 +60,20 @@ export class Avatar implements OnInit {
     }
 
     this.service.equipItem(item.id).subscribe({
-      next: () => {
-        this.categories.update(categories => {
-          return categories.map(cat => {
-            if (cat.name === item.category) {
-              cat.items.forEach(i => i.equipped = (i.id === item.id));
-            }
-            return cat;
-          });
-        });
+      next: (assets) => {
+        const equippedIds = new Set(assets.map(a => a.id));
+
+        this.categories.update(categories =>
+          categories.map(cat => ({
+            ...cat,
+            items: cat.items.map(item => ({
+              ...item,
+              equipped: equippedIds.has(item.id)
+            }))
+          }))
+        );
       }
     })
-
-    // if (this.equippedItems()[item.category]?.id === item.id) {
-    //   if (item.category !== 'Body') {
-    //     delete this.equippedItems()[item.category];
-    //   }
-    //   return;
-    // }
-    //
-    // this.equippedItems()[item.category] = item;
   }
 
   buyItem(item: Asset) {

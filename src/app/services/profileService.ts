@@ -6,7 +6,7 @@ import {environment} from '../../../environment/environment';
 import {AwardTransaction, Profile, ProfileAward, ProfileStatistics, SyncProfileResponse} from '../model/profile';
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
-import {Category} from '../model/avatar';
+import {Asset, Category} from '../model/avatar';
 
 @Injectable({
   providedIn: 'root',
@@ -116,6 +116,6 @@ export class ProfileService {
   }
 
   equipItem(id: string) {
-    return this.http.put(`${this.url}/api/profiles/avatar/${id}`, {})
+    return this.http.put<Asset[]>(`${this.url}/api/profiles/avatar/${id}`, {})
   }
 }
