@@ -1,0 +1,84 @@
+<div class="about-wrap">
+
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <ng-icon hlm name="lucideRocket" size="sm" />
+        {{ t.t('about.hero.badge') }}
+      </div>
+      <h1 class="hero-title">
+        {{ t.t('about.hero.line1') }}
+        <span class="hero-accent">{{ t.t('about.hero.line2') }}</span>
+      </h1>
+      <p class="hero-sub">{{ t.t('about.hero.sub') }}</p>
+
+      <div class="hero-scroll-hint">
+        <ng-icon hlm name="lucideChevronDown" size="sm" />
+        <span>{{ t.t('about.hero.scroll') }}</span>
+      </div>
+    </div>
+
+    <div class="hero-counters">
+      @for (app of apps; track app.key; let i = $index) {
+        <button
+          class="hero-counter"
+          (click)="scrollToSection(app.key)"
+          [style.animation-delay]="(400 + i * 120) + 'ms'"
+          [style.--c]="app.accentHex">
+          <span class="hero-counter-num">0{{ i + 1 }}</span>
+          <span class="hero-counter-label">{{ t.t('about.apps.' + app.key + '.short') }}</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  @for (app of apps; track app.key; let i = $index) {
+    <section
+      [id]="'section-' + app.key"
+      class="app-section reveal"
+      [class.app-section--flip]="i % 2 === 1"
+      [style.--ac]="app.accentHex"
+      [style.--ac-soft]="app.accentSoft">
+
+      <div class="app-section-inner">
+
+        <div class="app-img-col">
+          <div class="app-img-frame">
+            <div class="app-img-number">0{{ i + 1 }}</div>
+            <div class="app-img-bg"></div>
+            <img
+              class="app-logo-img"
+              [src]="app.logoUrl"
+              [alt]="t.t('about.apps.' + app.key + '.name')"
+              loading="lazy" />
+          </div>
+        </div>
+
+        <div class="app-text-col">
+          <div class="app-text-tag">
+            <ng-icon hlm [name]="app.icon" size="xs" />
+            {{ t.t('about.apps.' + app.key + '.short') }}
+          </div>
+          <h2 class="app-text-title">{{ t.t('about.apps.' + app.key + '.name') }}</h2>
+          <p class="app-text-tagline">{{ t.t('about.apps.' + app.key + '.tagline') }}</p>
+          <p class="app-text-desc">{{ t.t('about.apps.' + app.key + '.desc') }}</p>
+
+          <ul class="app-features">
+            @for (feat of app.features; track feat) {
+              <li class="app-feature-item">
+                <span class="app-feature-dot"></span>
+                {{ t.t(feat) }}
+              </li>
+            }
+          </ul>
+
+          <a class="app-cta" [href]="app.url" target="_blank" rel="noopener">
+            {{ t.t('about.apps.openApp') }}
+            <ng-icon hlm name="lucideArrowRight" size="sm" />
+          </a>
+        </div>
+
+      </div>
+    </section>
+  }
+</div>

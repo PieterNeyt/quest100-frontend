@@ -1,0 +1,459 @@
+:host {
+  display: block;
+  margin-top: 3.5rem;
+}
+
+.gotcha-banner {
+  background: #1a2332;
+  border: 2px solid #2d3748;
+  border-radius: 24px;
+  padding: 2.25rem 2.5rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+  box-shadow: 0 15px 50px -12px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+
+.banner-bg-animation {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  pointer-events: none;
+  background-size: 60px 60px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="1.5" fill="%235aaab4" /><circle cx="4" cy="4" r="0.8" fill="%23ff873c" /></svg>');
+  animation: chameleon-move 8s linear infinite;
+}
+
+@keyframes chameleon-move {
+  0%   { background-position: 0 0; filter: hue-rotate(0deg); }
+  100% { background-position: 60px 60px; filter: hue-rotate(360deg); }
+}
+
+.gotcha-banner:hover {
+  transform: translateY(-5px);
+  border-color: #5aaab4;
+}
+
+/* ── Layout ────────────────────────────── */
+.banner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  z-index: 5;
+  position: relative;
+}
+
+.banner-left { flex: 1.2; }
+.banner-center { flex: 2; display: flex; justify-content: center; }
+.banner-right { flex: 1.2; display: flex; justify-content: flex-end; }
+
+.title-stack { display: flex; flex-direction: column; gap: 0.2rem; }
+.gotcha-title { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; line-height: 1; }
+.banner-desc { font-size: 0.9rem; color: #9ca3af; margin-top: 0.6rem; line-height: 1.4; max-width: 280px; }
+.title-icon { font-size: 1.8rem; color: #5aaab4; margin-right: 0.75rem; }
+
+/* ── Countdown ──────────────────────────── */
+.countdown-blocks { display: flex; align-items: center; gap: 0.5rem; }
+.cd-block {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 0.8rem;
+  border-radius: 12px;
+  min-width: 52px;
+  text-align: center;
+}
+.cd-value { font-size: 1.4rem; font-weight: 900; display: block; line-height: 1; }
+.cd-unit { font-size: 0.55rem; text-transform: uppercase; opacity: 0.6; font-weight: 700; }
+
+/* ── Buttons & Actions ───────────────────── */
+.action-group {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.status-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.btn-primary {
+  background: #5aaab4;
+  color: white;
+  padding: 0.85rem 1.5rem;
+  border-radius: 14px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px -6px rgba(90, 170, 180, 0.5);
+}
+
+.btn-primary:hover { transform: scale(1.05); filter: brightness(1.1); }
+
+/* Opt-out Knop: Subtiel, rood bij hover */
+.btn-optout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-optout:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+/* Settings Knop */
+.btn-settings {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+  padding: 0.6rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-settings:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: #5aaab4;
+}
+
+.opted-in-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #06D6A0;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+/* ── Winner Card ────────────────────────── */
+.winner-card-premium {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.75rem;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.winner-avatar-ring { padding: 3px; background: linear-gradient(45deg, #ff873c, #FFD23F); border-radius: 14px; }
+.winner-avatar { width: 48px; height: 48px; border-radius: 11px; background: #1a2332; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+/* ── Spinner ────────────────────────────── */
+.spinner-sm {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Icons & Fixes */
+.pulse-icon { animation: pulse-teal 2s infinite ease-in-out; }
+@keyframes pulse-teal { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } }
+
+/* ══ MOBILE RESPONSIVE — voeg toe onderaan je bestaande CSS ══ */
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+  .gotcha-banner {
+    padding: 1.5rem 1.25rem;
+    border-radius: 18px;
+  }
+
+  .banner-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  /* Left: title + desc naast elkaar */
+  .banner-left {
+    flex: unset;
+  }
+
+  /* Center: countdown horizontaal gecentreerd */
+  .banner-center {
+    flex: unset;
+    justify-content: center;
+  }
+
+  /* Right: acties links uitlijnen (of centreren) */
+  .banner-right {
+    flex: unset;
+    justify-content: flex-start;
+  }
+
+  .action-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-primary {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .status-stack {
+    align-items: flex-start;
+  }
+}
+
+/* Small mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .gotcha-banner {
+    padding: 1.25rem 1rem;
+    border-radius: 14px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Titel iets kleiner */
+  .gotcha-title {
+    font-size: 1.4rem;
+  }
+
+  .title-icon {
+    font-size: 1.4rem;
+  }
+
+  .banner-desc {
+    font-size: 0.8rem;
+    max-width: 100%;
+  }
+
+  /* Countdown blokken compacter */
+  .countdown-blocks {
+    gap: 0.3rem;
+  }
+
+  .cd-block {
+    min-width: 42px;
+    padding: 0.5rem 0.6rem;
+    border-radius: 10px;
+  }
+
+  .cd-value {
+    font-size: 1.1rem;
+  }
+
+  .cd-unit {
+    font-size: 0.5rem;
+  }
+
+  /* Winner card smaller */
+  .winner-card-premium {
+    padding: 0.75rem 1rem;
+  }
+
+  .winner-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Knoppen full-width op heel klein scherm */
+  .action-group {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 0.85rem 1rem;
+  }
+
+  .status-stack {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Settings knop rechts houden */
+  .btn-settings {
+    align-self: flex-end;
+  }
+}
+/* ── Coming Soon ────────────────────────────── */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.coming-soon ng-icon {
+  font-size: 1.4rem;
+  opacity: 0.6;
+}
+
+/* Variant wanneer spel actief is (terugknop vanuit gotcha page) */
+.coming-soon--active {
+  border-style: solid;
+  border-color: rgba(90, 170, 180, 0.3);
+  color: #5aaab4;
+  background: rgba(90, 170, 180, 0.06);
+}
+
+.coming-soon--active ng-icon {
+  opacity: 1;
+  animation: pulse-teal 2s infinite ease-in-out;
+}
+
+/* Countdown label */
+.countdown-label {
+  display: block;
+  text-align: center;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9ca3af;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.cd-sep {
+  font-size: 1.4rem;
+  font-weight: 900;
+  opacity: 0.4;
+  margin-bottom: 0.5rem;
+}
+/* ── Winner Layout Fix ───────────────────────── */
+
+.winner-card-premium {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 1rem 1.75rem;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 200px;
+}
+
+/* Winner label */
+.winner-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 800;
+  color: #facc15;
+  opacity: 0.9;
+}
+
+/* Avatar + text row */
+.winner-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* Avatar */
+.winner-avatar-ring {
+  padding: 3px;
+  background: linear-gradient(45deg, #ff873c, #FFD23F);
+  border-radius: 14px;
+}
+
+.winner-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  background: #1a2332;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.winner-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text column */
+.winner-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+/* Name */
+.winner-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: white;
+}
+
+/* Stats */
+.winner-stats {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.banner-actions-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.btn-new-game {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-new-game:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}

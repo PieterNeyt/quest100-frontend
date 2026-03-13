@@ -159,6 +159,305 @@
     "awardSuccess": "You have successfully given the award {{type}} to {{firstName}} {{lastName}}!",
     "awardError": "Failed to give award. Please try again."
   },
+  "gotcha": {
+    "bannerDescription": "Join the Gotcha game and eliminate your assigned target.",
+    "startsIn": "Starts in",
+    "gameInProgress": "In Progress",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "comingSoon": "Coming soon",
+    "optedIn": "You're in the game",
+    "optOut": "Leave game",
+    "optingOut": "Leaving...",
+    "joinGame": "Join game",
+    "joiningGame": "Joining...",
+    "editStartDate": "Edit start date",
+    "winner": "Winner",
+    "page": {
+      "back": "Back",
+      "history": "History"
+    },
+    "status": {
+      "opt_in": "Sign-up",
+      "active": "Active",
+      "finished": "Finished"
+    },
+    "tabs": {
+      "feed": "Kill Feed",
+      "review": "Review"
+    },
+    "target": {
+      "label": "Your target",
+      "propLabel": "Your prop",
+      "none": "No target assigned yet",
+      "eliminated": "You are eliminated",
+      "timeLeft": "Time to kill",
+      "waitingForReview": "Waiting for review"
+    },
+    "feed": {
+      "title": "Kill Feed",
+      "empty": "No kills yet. The hunt is on!",
+      "loadMore": "Load more",
+      "loadingMore": "Loading...",
+      "loadError": "Failed to load the kill feed.",
+      "likeError": "Failed to update like.",
+      "justNow": "just now",
+      "minutesAgo": "m ago",
+      "hoursAgo": "h ago",
+      "daysAgo": "d ago",
+      "killedCaption": "eliminated",
+      "victim": "Victim",
+      "photoAlt": "Kill photo",
+      "statusPending": "Pending",
+      "statusApproved": "Approved",
+      "statusDenied": "Denied"
+    },
+    "review": {
+      "empty": "Nothing to review — all clear!",
+      "approve": "Approve",
+      "deny": "Deny",
+      "approved": "Kill approved.",
+      "denied": "Kill denied.",
+      "loadError": "Failed to load pending kills.",
+      "error": "Failed to review this kill.",
+      "inQueue": "in queue"
+    },
+    "submitKill": {
+      "button": "Submit Kill",
+      "title": "Submit Kill",
+      "hint": "Upload a photo proving you eliminated your target while using your assigned prop.",
+      "photoLabel": "Evidence Photo",
+      "photoPlaceholder": "Upload photo...",
+      "photoSelect": "Select photo",
+      "photoChange": "Change photo",
+      "cancel": "Cancel",
+      "confirm": "Submit",
+      "submitting": "Submitting...",
+      "noPhoto": "Please provide a photo.",
+      "success": "Kill submitted! Awaiting review.",
+      "error": "Failed to submit kill."
+    },
+    "editModal": {
+      "title": "Edit game settings",
+      "startDate": "Start date & time",
+      "killDeadline": "Kill deadline (hours)",
+      "killDeadlineHint": "How many hours a player has to eliminate their target before the chain moves on.",
+      "prizePhoto": "Prize photo",
+      "prizeDescEN": "Prize description (English)",
+      "prizeDescNL": "Prize description (Dutch)",
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "prizePhotoHint": "Click or drag to upload a photo",
+      "prizeDescPlaceholder": "Describe the prize...",
+      "saving": "Saving...",
+      "startDateRequired": "Please set a start date.",
+      "startDatePast": "Start date cannot be in the past.",
+      "killDeadlineRequired": "Please enter a valid kill deadline.",
+      "prizePhotoRequired": "Please upload a prize photo.",
+      "prizeDescENRequired": "Please fill in the English prize description.",
+      "prizeDescNLRequired": "Please fill in the Dutch prize description."
+    },
+    "eliminated": {
+      "killedBy": "Eliminated by",
+      "unknownKiller": "Killer unknown"
+    },
+    "endScreen": {
+      "loading": "Loading tournament results...",
+      "title": "Game Over!",
+      "kills": "kills",
+      "prize": "Prize",
+      "winner": "Winner",
+      "stats": "Tournament Statistics",
+      "statParticipants": "Participants",
+      "statKills": "Total kills",
+      "statTotalKills": "Total kills",
+      "statFastest": "Fastest kill",
+      "statFastestKill": "Fastest kill",
+      "statMostKills": "Most kills",
+      "statMortality": "Elimination rate",
+      "statMostUsedProp": "Most used prop",
+      "graph": "Tournament Map",
+      "graphHint": "Drag nodes · Scroll to zoom · Click an arrow for kill details",
+      "legendWinner": "Winner",
+      "legendKillCount": "Kill count",
+      "legendClickEdge": "Click arrow for kill details",
+      "killList": "Kill history",
+      "killDetail": "Kill details",
+      "eliminated": "eliminated",
+      "hunter": "Hunter",
+      "victim": "Victim",
+      "loadError": "Failed to load results.",
+      "gameOver": "Game Over!",
+      "gameOverSub": "The tournament has ended. See who won!",
+      "viewResults": "View results",
+      "killsOf": "Kills by",
+      "noKills": "No kills yet."
+    },
+    "awards": {
+      "title": "Awards",
+      "cat": {
+        "core": "Core Awards",
+        "skill": "Skill Awards",
+        "social": "Social Awards",
+        "prop": "Weapon Awards",
+        "meme": "Meme Awards",
+        "game": "Game Awards"
+      },
+      "lastStanding": {
+        "title": "Last One Standing",
+        "desc": "Survived all the way to the end."
+      },
+      "serialKiller": {
+        "title": "Serial Killer",
+        "desc": "Most eliminations in the entire game."
+      },
+      "firstBlood": {
+        "title": "First Blood",
+        "desc": "First player to make a kill."
+      },
+      "firstVictim": {
+        "title": "First Victim",
+        "desc": "First player to be eliminated."
+      },
+      "finalVictim": {
+        "title": "Final Victim",
+        "desc": "Last player eliminated before the winner."
+      },
+      "speedDemon": {
+        "title": "Speed Demon",
+        "desc": "Fastest back-to-back kills."
+      },
+      "patientHunter": {
+        "title": "Patient Hunter",
+        "desc": "Took the longest time between kills."
+      },
+      "bestDisguise": {
+        "title": "Best Disguise",
+        "desc": "Kill with the most likes from fellow players."
+      },
+      "deadliestWeapon": {
+        "title": "Deadliest Weapon",
+        "desc": "Most kills scored with this prop."
+      },
+      "unlucky": {
+        "title": "Unlucky",
+        "desc": "Gone before the fun even started."
+      },
+      "afkVictim": {
+        "title": "AFK Victim",
+        "desc": "Never made a single kill."
+      },
+      "bloodiestDay": {
+        "title": "Bloodiest Day",
+        "desc": "Most kills recorded on a single day."
+      }
+    },
+    "settings": {
+      "title": "Game settings",
+      "newGameHint": "Create a new game!",
+      "propsRequiredToStart": "A minimum of 1 prop is required to start the game!",
+      "gameSettings": "Game settings",
+      "props": "Props",
+      "newGame": "New game",
+      "addProp": "Add prop",
+      "noProps": "No props yet. Add some!",
+      "propNameEN": "Name (English)",
+      "propNameNL": "Name (Dutch)",
+      "bothLangsRequired": "Both language fields are required.",
+      "propAdded": "Prop added!",
+      "propDeleted": "Prop removed.",
+      "cancel": "Cancel",
+      "locked": "Locked"
+    },
+    "history": {
+      "title": "Game History",
+      "loading": "Loading history...",
+      "loadError": "Failed to load history.",
+      "empty": "No finished games yet.",
+      "kills": "kills",
+      "participants": "Players",
+      "totalKills": "Total Kills",
+      "started": "Started",
+      "viewResults": "View results",
+      "backToHistory": "Back to history"
+    },
+    "aliveBanner": {
+      "label": "Players alive",
+      "alive": "alive"
+    },
+    "toasts": {
+      "optedIn": "You've joined the game!",
+      "alreadyOptedIn": "You're already in the game.",
+      "optInError": "Failed to join the game.",
+      "optedOut": "You've left the game.",
+      "optOutGameStarted": "You can't leave after the game has started.",
+      "optOutError": "Failed to leave the game."
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "Your first 100 days",
+      "line1": "Welcome to",
+      "line2": "Quest 100",
+      "sub": "Everything you need to get started: the five most important platforms in one place.",
+      "scroll": "Scroll to discover"
+    },
+    "apps": {
+      "openApp": "Open app",
+      "intranet": {
+        "short": "Intranet",
+        "name": "KdG Intranet",
+        "tagline": "Your central starting point",
+        "desc": "The intranet is KdG's digital hub. Find news, announcements and direct links to all other platforms here. It's the place you open every day.",
+        "f1": "Current news and announcements from the school",
+        "f2": "Direct links to Canvas, TimeEdit and eStudentService",
+        "f3": "Documents and messages from the programme"
+      },
+      "canvas": {
+        "short": "Canvas",
+        "name": "Canvas",
+        "tagline": "Your online learning platform",
+        "desc": "Canvas is the heart of your programme. All course content, assignments, deadlines and lecturer feedback are here. Check Canvas daily.",
+        "f1": "Course material and slides per subject",
+        "f2": "Submit assignments and receive feedback",
+        "f3": "Calendar with deadlines and exam moments"
+      },
+      "timeedit": {
+        "short": "TimeEdit",
+        "name": "TimeEdit",
+        "tagline": "Timetable & room bookings",
+        "desc": "TimeEdit shows your personal class schedule and lets you reserve available rooms. Perfect for group work, self-study sessions or a quiet workspace between classes.",
+        "f1": "View and export your personal timetable",
+        "f2": "Find and book available rooms",
+        "f3": "Track schedule changes and cancellations"
+      },
+      "estudentservice": {
+        "short": "eStudentService",
+        "name": "eStudentService",
+        "tagline": "Grades, contracts & documents",
+        "desc": "eStudentService is your personal student file at KdG. Manage your enrolment, track your results and request official documents here.",
+        "f1": "Grades and study results per course unit",
+        "f2": "View enrolment contract and registration confirmation",
+        "f3": "Request certificates: public transport, student status, ...",
+        "f4": "Full overview of your study programme and ECTS credits"
+      },
+      "ects": {
+        "short": "ECTS Sheets",
+        "name": "ECTS Sheets",
+        "tagline": "Everything about your course units",
+        "desc": "ECTS sheets describe each course unit in detail: what you learn, how you are assessed, and how many study points the course is worth. Essential for your study planning.",
+        "f1": "Look up learning objectives and content per subject",
+        "f2": "View assessment methods and exam regulations",
+        "f3": "Check study points (ECTS) per course unit"
+      }
+    },
+    "tip": {
+      "label": "Pro tip",
+      "body": "Set the intranet as your browser's homepage. From there you always have quick access to Canvas, TimeEdit and eStudentService — without ever having to remember a link."
+    }
+  },
   "avatar": {
     "Body": "Body",
     "Eyes": "Eyes",
