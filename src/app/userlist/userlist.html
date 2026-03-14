@@ -13,12 +13,12 @@
       <input
         class="search-input"
         type="text"
-        placeholder="Search students..."
+        [placeholder]="translate.t('userlist.searchPlaceholder')"
       />
     </div>
 
     <select class="class-select">
-      <option value="">All Classes</option>
+      <option value="">{{ translate.t('userlist.allClasses') }}</option>
       <option value="101">101</option>
       <option value="102">102</option>
       <option value="201">201</option>
@@ -30,7 +30,7 @@
 
   <!-- Results count -->
   <p class="results-count">
-    Showing <span>{{ filteredProfileAwards().length }}</span> students
+    {{ translate.t('userlist.showing') }} <span>{{ filteredProfileAwards().length }}</span> {{ translate.t('userlist.students') }}
   </p>
 
   <!-- User Grid -->
@@ -106,7 +106,7 @@
           <label>{{ translate.t('userlist.personalMessage') }}</label>
           <textarea
             [(ngModel)]="message"
-            placeholder="{{ translate.t('userlist.personalMessagePlaceholder') }}"
+            [placeholder]="translate.t('userlist.personalMessagePlaceholder')"
             rows="4">
           </textarea>
         </div>

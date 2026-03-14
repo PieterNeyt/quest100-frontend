@@ -93,11 +93,11 @@ export class Home implements OnInit {
     }
 
     const statsArray = [
-      {label: 'Knowledge', value: s.KudoKnowledge || 0},
-      {label: 'Attendance', value: s.KudoAttendance || 0},
-      {label: 'Teamwork', value: s.KudoTeamwork || 0},
-      {label: 'Atmosphere', value: s.KudoAtmosphere || 0},
-      {label: 'Engagement', value: s.KudoEngagement || 0}
+      {key: 'KudoKnowledge', value: s.KudoKnowledge || 0},
+      {key: 'KudoAttendance', value: s.KudoAttendance || 0},
+      {key: 'KudoTeamwork', value: s.KudoTeamwork || 0},
+      {key: 'KudoAtmosphere', value: s.KudoAtmosphere || 0},
+      {key: 'KudoEngagement', value: s.KudoEngagement || 0},
     ];
 
     const totalKudos = statsArray.reduce((acc, curr) => acc + curr.value, 0);

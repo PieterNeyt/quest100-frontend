@@ -8,9 +8,6 @@
     "event": "Evenementen",
     "settings": "Instellingen"
   },
-  "home": {
-    "title": "Welkom terug"
-  },
   "attendance": {
     "registering": "Aanwezigheid registreren...",
     "pleaseWait": "Even geduld",
@@ -157,7 +154,11 @@
     "cancel": "Annuleren",
     "send": "Versturen",
     "awardSuccess": "Je hebt de award {{type}} succesvol gegeven aan {{firstName}} {{lastName}}!",
-    "awardError": "Award geven mislukt. Probeer het opnieuw."
+    "awardError": "Award geven mislukt. Probeer het opnieuw.",
+    "searchPlaceholder": "Studenten zoeken...",
+    "allClasses": "Alle klassen",
+    "showing": "Toont",
+    "students": "studenten"
   },
   "gotcha": {
     "bannerDescription": "Doe mee met het Gotcha-spel en schakel je doelwit uit.",
@@ -396,7 +397,6 @@
       "optOutError": "Verlaten mislukt."
     }
   },
-
   "about": {
     "hero": {
       "badge": "Jouw eerste 100 dagen",
@@ -458,5 +458,16 @@
       "label": "Pro tip",
       "body": "Sla het intranet op als startpagina van je browser. Van daaruit heb je altijd snel toegang tot Canvas, TimeEdit en eStudentService — zonder ooit nog een link te moeten onthouden."
     }
+  },
+  "home": {
+    "title": "Welkom terug",
+    "subtitle": "Hier vind je de belangrijkste links en je persoonlijke statistieken.",
+    "myProfile": "Mijn Profiel",
+    "games": "Spellen",
+    "gamesPlaceholder": "Hier komen je spellen...",
+    "statistics": "Statistieken",
+    "archetype": "Archetype",
+    "name": "Naam",
+    "percentOfTotal": "% van totaal"
   }
 }

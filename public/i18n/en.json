@@ -9,7 +9,15 @@
     "settings": "Settings"
   },
   "home": {
-    "title": "Welcome back"
+    "title": "Welcome back",
+    "subtitle": "Here you'll find the most important links and your personal statistics.",
+    "myProfile": "My Profile",
+    "games": "Games",
+    "gamesPlaceholder": "Your games will appear here...",
+    "statistics": "Statistics",
+    "archetype": "Archetype",
+    "name": "Name",
+    "percentOfTotal": "% of total"
   },
   "attendance": {
     "registering": "Registering attendance...",
@@ -157,7 +165,11 @@
     "cancel": "Cancel",
     "send": "Send",
     "awardSuccess": "You have successfully given the award {{type}} to {{firstName}} {{lastName}}!",
-    "awardError": "Failed to give award. Please try again."
+    "awardError": "Failed to give award. Please try again.",
+    "searchPlaceholder": "Search students...",
+    "allClasses": "All classes",
+    "showing": "Showing",
+    "students": "students"
   },
   "gotcha": {
     "bannerDescription": "Join the Gotcha game and eliminate your assigned target.",
