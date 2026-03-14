@@ -20,13 +20,11 @@ export class Qrcode {
   qrCodeImage = signal<string | null>(null);
   isLoading = signal(false);
 
-  private readonly TEMP_CLASS_ID = '00000000-0000-0000-0000-000000000001';
-
   generateQRCode(): void {
     this.isLoading.set(true);
     this.qrCodeImage.set(null);
 
-    this.qrCodeService.generateQRCode(this.TEMP_CLASS_ID).subscribe({
+    this.qrCodeService.generateQRCode().subscribe({
       next: (response) => {
         this.qrCodeImage.set(response.qrCode);
         this.isLoading.set(false);
