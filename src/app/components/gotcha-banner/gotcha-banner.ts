@@ -1,20 +1,43 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
-import {provideIcons} from '@ng-icons/core';
-import * as lucideIcons from '@ng-icons/lucide';
-import {GotchaService} from '../../services/gotchaService';
-import {TranslationService} from '../../services/translationService';
-import {ToastService} from '../../services/toastService';
-import {FullNamePipe, InitialsPipe, PhotoSrcPipe} from '../../utils/gotchaPipes';
-import {HlmIcon, HlmIconImports} from '@spartan-ng/helm/icon';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {
+  lucideTrophy,
+  lucideArrowRight,
+  lucideTarget,
+  lucideSwords,
+  lucideClock,
+  lucideShieldCheck,
+  lucideZap,
+  lucideSettings2,
+  lucideChevronRight, // Toegevoegd om de error te fixen
+  lucidePlus          // Vaak gebruikt in "New Game" knoppen
+} from '@ng-icons/lucide';
+import { GotchaService } from '../../services/gotchaService';
+import { TranslationService } from '../../services/translationService';
+import { ToastService } from '../../services/toastService';
+import { FullNamePipe, InitialsPipe, PhotoSrcPipe } from '../../utils/gotchaPipes';
 
 @Component({
   selector: 'app-gotcha-banner',
   standalone: true,
-  imports: [CommonModule, FormsModule, FullNamePipe, InitialsPipe, PhotoSrcPipe, HlmIcon, HlmIconImports],
-  providers: [provideIcons(lucideIcons)],
+  imports: [CommonModule, FormsModule, FullNamePipe, InitialsPipe, PhotoSrcPipe, NgIconComponent,],
+  providers: [
+    provideIcons({
+      lucideTrophy,
+      lucideArrowRight,
+      lucideTarget,
+      lucideSwords,
+      lucideClock,
+      lucideShieldCheck,
+      lucideZap,
+      lucideSettings2,
+      lucideChevronRight,
+      lucidePlus
+    })
+  ],
   templateUrl: './gotcha-banner.html',
   styleUrl: './gotcha-banner.css',
 })

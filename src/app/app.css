@@ -164,13 +164,13 @@
 
 /* --- Kudos Badge Desktop (klikbaar) --- */
 .kudos-badge {
-  @apply flex items-center gap-2 px-4 h-9 rounded-lg flex-shrink-0;
+  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg flex-shrink-0 no-underline;
   background: rgba(90, 170, 180, 0.1);
   border: 1px solid rgba(90, 170, 180, 0.2);
 }
 
 .kudos-badge-clickable {
-  @apply flex items-center gap-2 px-4 h-9 rounded-lg flex-shrink-0 no-underline transition-all duration-200 cursor-pointer;
+  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg flex-shrink-0 no-underline transition-all duration-200 cursor-pointer;
   background: rgba(90, 170, 180, 0.1);
   border: 1px solid rgba(90, 170, 180, 0.2);
 }
