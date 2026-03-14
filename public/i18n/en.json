@@ -395,5 +395,67 @@
       "optOutGameStarted": "You can't leave after the game has started.",
       "optOutError": "Failed to leave the game."
     }
+  },
+  "about": {
+    "hero": {
+      "badge": "Your first 100 days",
+      "line1": "Welcome to",
+      "line2": "Quest 100",
+      "sub": "Everything you need to get started: the five most important platforms in one place.",
+      "scroll": "Scroll to discover"
+    },
+    "apps": {
+      "openApp": "Open app",
+      "intranet": {
+        "short": "Intranet",
+        "name": "KdG Intranet",
+        "tagline": "Your central starting point",
+        "desc": "The intranet is KdG's digital hub. Find news, announcements and direct links to all other platforms here. It's the place you open every day.",
+        "f1": "Current news and announcements from the school",
+        "f2": "Direct links to Canvas, TimeEdit and eStudentService",
+        "f3": "Documents and messages from the programme"
+      },
+      "canvas": {
+        "short": "Canvas",
+        "name": "Canvas",
+        "tagline": "Your online learning platform",
+        "desc": "Canvas is the heart of your programme. All course content, assignments, deadlines and lecturer feedback are here. Check Canvas daily.",
+        "f1": "Course material and slides per subject",
+        "f2": "Submit assignments and receive feedback",
+        "f3": "Calendar with deadlines and exam moments"
+      },
+      "timeedit": {
+        "short": "TimeEdit",
+        "name": "TimeEdit",
+        "tagline": "Timetable & room bookings",
+        "desc": "TimeEdit shows your personal class schedule and lets you reserve available rooms. Perfect for group work, self-study sessions or a quiet workspace between classes.",
+        "f1": "View and export your personal timetable",
+        "f2": "Find and book available rooms",
+        "f3": "Track schedule changes and cancellations"
+      },
+      "estudentservice": {
+        "short": "eStudentService",
+        "name": "eStudentService",
+        "tagline": "Grades, contracts & documents",
+        "desc": "eStudentService is your personal student file at KdG. Manage your enrolment, track your results and request official documents here.",
+        "f1": "Grades and study results per course unit",
+        "f2": "View enrolment contract and registration confirmation",
+        "f3": "Request certificates: public transport, student status, ...",
+        "f4": "Full overview of your study programme and ECTS credits"
+      },
+      "ects": {
+        "short": "ECTS Sheets",
+        "name": "ECTS Sheets",
+        "tagline": "Everything about your course units",
+        "desc": "ECTS sheets describe each course unit in detail: what you learn, how you are assessed, and how many study points the course is worth. Essential for your study planning.",
+        "f1": "Look up learning objectives and content per subject",
+        "f2": "View assessment methods and exam regulations",
+        "f3": "Check study points (ECTS) per course unit"
+      }
+    },
+    "tip": {
+      "label": "Pro tip",
+      "body": "Set the intranet as your browser's homepage. From there you always have quick access to Canvas, TimeEdit and eStudentService — without ever having to remember a link."
+    }
   }
 }
