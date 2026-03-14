@@ -12,8 +12,8 @@ import {
   lucideZap
 } from '@ng-icons/lucide';
 import {TranslationService} from '../services/translationService';
-import {tap} from 'rxjs';
 import {ToastService} from '../services/toastService';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -28,11 +28,29 @@ import {ToastService} from '../services/toastService';
 })
 export class Home implements OnInit {
   private readonly profileService = inject(ProfileService);
+  private readonly router = inject(Router);
   translationService = inject(TranslationService);
   profile = this.profileService.profile;
-  ts = inject(ToastService)
+  ts = inject(ToastService);
 
-  // We initialiseren de signal als null
+  actionButtons = [
+    {
+      label: 'CANVAS',
+      key: 'canvas',
+      logoUrl: 'https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_1/v1706635559/oxnardsdorg/a3jmgjuc95vnrlbehc4j/canvas-logo-1024x1020.png'
+    },
+    {
+      label: 'E-STUDENT SERVICE',
+      key: 'estudentservice',
+      logoUrl: 'https://a.storyblok.com/f/226028/2000x2500/021b91e4b7/placeholder-kdg-mobile.webp'
+    },
+    {
+      label: 'TIME EDIT',
+      key: 'timeedit',
+      logoUrl: 'https://cdn.prod.website-files.com/64e6e4222dd4319151d1537d/652641e10a74cd0d04dd1da5_TE%20Logo%20Symbol.png'
+    },
+  ];
+
   playerStats = signal<any | null>(null);
   activeAccordion = signal<string | null>('profile');
 
@@ -41,11 +59,20 @@ export class Home implements OnInit {
     this.activeAccordion.set(this.activeAccordion() === section ? null : section);
   }
 
-  // De computed signal reageert pas zodra playerStats een waarde krijgt
+  navigateToAbout(appKey: string) {
+    this.router.navigate(['/about']).then(() => {
+      setTimeout(() => {
+        const element = document.getElementById('section-' + appKey);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    });
+  }
+
   statItems = computed(() => {
     const s = this.playerStats();
 
-    // Harde check: als er geen data is, of de data is nog niet compleet (check op KudoKnowledge), return lege array
     if (!s || s.KudoKnowledge === undefined) {
       return [];
     }

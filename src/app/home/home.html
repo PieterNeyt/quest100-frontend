@@ -12,9 +12,12 @@
       </div>
 
       <div class="action-grid">
-        <div class="action-group" *ngFor="let btn of ['CANVAS', 'E-STUDENT SERVICE', 'TIME EDIT']">
-          <button class="main-action-btn">{{ btn }}</button>
-          <button class="info-pill-btn">
+        <div class="action-group" *ngFor="let btn of actionButtons">
+          <button class="main-action-btn" (click)="navigateToAbout(btn.key)">
+            <img [src]="btn.logoUrl" [alt]="btn.label" class="action-btn-logo" />
+            {{ btn.label }}
+          </button>
+          <button class="info-pill-btn" (click)="navigateToAbout(btn.key)">
             <ng-icon name="lucideInfo" class="size-6"></ng-icon>
           </button>
         </div>
