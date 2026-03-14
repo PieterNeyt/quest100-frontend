@@ -14,6 +14,7 @@ import {
 import {TranslationService} from '../services/translationService';
 import {ToastService} from '../services/toastService';
 import {Router} from '@angular/router';
+import {ArchetypeId} from '../model/profile';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +33,20 @@ export class Home implements OnInit {
   translationService = inject(TranslationService);
   profile = this.profileService.profile;
   ts = inject(ToastService);
+
+  readonly archetypeNames: Record<ArchetypeId, string> = {
+    [ArchetypeId.Wizard]: 'Wizard',
+    [ArchetypeId.TeamCatalyst]: 'Team Catalyst',
+    [ArchetypeId.AtmosphereMaker]: 'Atmosphere Maker',
+    [ArchetypeId.CampusExplorer]: 'Campus Explorer',
+    [ArchetypeId.AcademicGuardian]: 'Academic Guardian',
+  };
+
+  archetypeName = computed(() => {
+    const id = this.profile()?.archetypeId;
+    if (id === undefined) return '';
+    return this.archetypeNames[id as ArchetypeId] ?? 'Unknown';
+  });
 
   actionButtons = [
     {
@@ -64,7 +79,7 @@ export class Home implements OnInit {
       setTimeout(() => {
         const element = document.getElementById('section-' + appKey);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          element.scrollIntoView({behavior: 'smooth', block: 'start'});
         }
       }, 100);
     });
@@ -78,11 +93,11 @@ export class Home implements OnInit {
     }
 
     const statsArray = [
-      { label: 'Knowledge', value: s.KudoKnowledge || 0 },
-      { label: 'Attendance', value: s.KudoAttendance || 0 },
-      { label: 'Teamwork', value: s.KudoTeamwork || 0 },
-      { label: 'Atmosphere', value: s.KudoAtmosphere || 0 },
-      { label: 'Engagement', value: s.KudoEngagement || 0 }
+      {label: 'Knowledge', value: s.KudoKnowledge || 0},
+      {label: 'Attendance', value: s.KudoAttendance || 0},
+      {label: 'Teamwork', value: s.KudoTeamwork || 0},
+      {label: 'Atmosphere', value: s.KudoAtmosphere || 0},
+      {label: 'Engagement', value: s.KudoEngagement || 0}
     ];
 
     const totalKudos = statsArray.reduce((acc, curr) => acc + curr.value, 0);

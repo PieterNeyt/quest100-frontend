@@ -7,7 +7,7 @@ import {
   lucideUsers, lucideHeart, lucideBookOpen, lucideAward
 } from '@ng-icons/lucide';
 import { ToastService } from '../services/toastService';
-import { KudosEntry } from '../model/profile';
+import {ArchetypeId, KudosEntry} from '../model/profile';
 
 @Component({
   selector: 'app-kudo-overview',
@@ -24,6 +24,19 @@ export class KudoOverview implements OnInit {
   private readonly profileService = inject(ProfileService);
   ts = inject(ToastService);
   profile = this.profileService.profile;
+  readonly archetypeNames: Record<ArchetypeId, string> = {
+    [ArchetypeId.Wizard]: 'Wizard',
+    [ArchetypeId.TeamCatalyst]: 'Team Catalyst',
+    [ArchetypeId.AtmosphereMaker]: 'Atmosphere Maker',
+    [ArchetypeId.CampusExplorer]: 'Campus Explorer',
+    [ArchetypeId.AcademicGuardian]: 'Academic Guardian',
+  };
+
+  archetypeName = computed(() => {
+    const id = this.profile()?.archetypeId;
+    if (id === undefined) return '';
+    return this.archetypeNames[id as ArchetypeId] ?? 'Unknown';
+  });
 
   activeAccordion = signal<string | null>('stats');
   playerStats = signal<any | null>(null);
