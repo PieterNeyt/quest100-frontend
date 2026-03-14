@@ -1,0 +1,113 @@
+<button class="back-btn" (click)="goBack()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+  Back to reports
+</button>
+
+@if (loading()) {
+  <div class="state-center">
+    <div class="spinner"></div>
+  </div>
+}
+
+@if (error()) {
+  <div class="state-center">
+    <p class="error-text">{{ error() }}</p>
+    <button class="back-btn" (click)="goBack()">Go back</button>
+  </div>
+}
+
+@if (!loading() && !error() && event()) {
+  <div class="detail-content">
+
+    <div class="top-section">
+
+      <!-- Photo -->
+      <div class="top-photo">
+        @if (event()!.photo) {
+          <img class="top-img" [src]="event()!.photo!" [alt]="event()!.title"/>
+        } @else {
+          <div class="top-placeholder"
+               [style.background]="'linear-gradient(135deg, ' + categoryColor(event()!.category) + '22, ' + categoryColor(event()!.category) + '55)'">
+            <span class="top-placeholder-icon"
+                  [style.color]="categoryColor(event()!.category)"
+                  [innerHTML]="categoryIconSvg(event()!.category, 64)">
+            </span>
+          </div>
+        }
+        <span class="category-chip" [style.background]="categoryColor(event()!.category)">
+          <span [innerHTML]="categoryIconSvg(event()!.category, 12)"></span>
+          {{ categoryLabel(event()!.category) }}
+        </span>
+      </div>
+
+      <!-- Info -->
+      <div class="top-info">
+        <h1 class="event-title">{{ event()!.title }}</h1>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Event ID</span>
+            <span class="info-value mono">{{ event()!.id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Event Date</span>
+            <span class="info-value">{{ formatDate(event()!.eventDate) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Attendees</span>
+            <span class="info-value">
+              {{ event()!.attendees.length }}
+              @if (event()!.maxAttendees) {
+                <span class="muted"> / {{ event()!.maxAttendees }} max</span>
+              }
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Created At</span>
+            <span class="info-value">{{ formatDate(event()!.createdAt) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Updated At</span>
+            <span class="info-value">{{ formatDate(event()!.updatedAt) }}</span>
+          </div>
+        </div>
+
+        @if (event()!.description) {
+          <div class="description-block">
+            <h3>Description</h3>
+            <p>{{ event()!.description }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Attendees -->
+    @if (event()!.attendees.length > 0) {
+      <div class="attendees-section">
+        <h3 class="section-title">Attendees ({{ event()!.attendees.length }})</h3>
+        <div class="attendees-grid">
+          @for (attendee of event()!.attendees; track attendee.profileId) {
+            <div class="attendee-card">
+              <div class="attendee-avatar">
+                @if (attendee.customProfilePicture) {
+                  <img [src]="attendee.customProfilePicture" [alt]="attendee.profileId"/>
+                } @else {
+                  {{ (attendee.firstName?.[0] ?? '') + (attendee.lastName?.[0] ?? '') || attendee.profileId.slice(0,2).toUpperCase() }}
+                }
+              </div>
+              <div class="attendee-info">
+                <span class="attendee-name">
+                  {{ attendee.firstName && attendee.lastName ? attendee.firstName + ' ' + attendee.lastName : attendee.profileId.slice(0,8) }}
+                </span>
+                <span class="attendee-id mono">{{ attendee.profileId }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+  </div>
+}
