@@ -6,155 +6,180 @@
       <h1>Moderation Reports</h1>
       <p>Review and resolve flagged content from users</p>
     </div>
-    <div class="header-stats">
-      <div class="stat-pill open">
-        <span class="stat-dot"></span>
-        {{ openCount() }} open
-      </div>
-      <div class="stat-pill resolved">
-        <span class="stat-dot"></span>
-        {{ resolvedCount() }} resolved
-      </div>
-    </div>
-  </div>
 
-  <!-- Filter Bar -->
-  <div class="filter-bar">
-    <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-      </svg>
-      <input
-        class="search-input"
-        type="text"
-        placeholder="Search by message or target ID…"
-        [value]="searchQuery()"
-        (input)="searchQuery.set($any($event.target).value)"
-      />
-    </div>
-
-    <div class="select-wrap">
-      <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M4 6h16M8 12h8M11 18h2"/>
-      </svg>
-      <select
-        class="category-select"
-        [value]="filterReportType()"
-        (change)="filterReportType.set($any($event.target).value === 'all' ? 'all' : +$any($event.target).value)"
-      >
-        @for (opt of reportTypeOptions; track opt.value) {
-          <option [value]="opt.value">{{ opt.label }}</option>
-        }
-      </select>
-      <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
-    </div>
-
-    <div class="select-wrap">
-      <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
-      <select
-        class="category-select"
-        [value]="filterChannelType()"
-        (change)="filterChannelType.set($any($event.target).value === 'all' ? 'all' : +$any($event.target).value)"
-      >
-        @for (opt of channelTypeOptions; track opt.value) {
-          <option [value]="opt.value">{{ opt.label }}</option>
-        }
-      </select>
-      <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
-    </div>
-
-    <div class="sort-buttons">
-      <span class="sort-label">Status</span>
-      <button class="sort-btn" [class.active]="filterStatus() === 'all'" (click)="filterStatus.set('all')">All</button>
-      <button class="sort-btn" [class.active]="filterStatus() === 'open'" (click)="filterStatus.set('open')">Open</button>
-      <button class="sort-btn" [class.active]="filterStatus() === 'resolved'" (click)="filterStatus.set('resolved')">Resolved</button>
-    </div>
-  </div>
-
-  <!-- Loading -->
-  @if (loading()) {
-    <div class="state-container">
-      <div class="spinner"></div>
-      <span>Loading reports…</span>
-    </div>
-  } @else if (error()) {
-    <div class="state-container">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="#ef4444"/>
-      </svg>
-      <span class="error-text">{{ error() }}</span>
-      <button class="btn-retry" (click)="loadReports()">Try again</button>
-    </div>
-  } @else if (filteredReports().length === 0) {
-    <div class="state-container">
-      <div class="state-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
-        </svg>
-      </div>
-      <span>No reports found</span>
-    </div>
-  } @else {
-    <div class="reports-grid">
-      @for (report of filteredReports(); track report.id) {
-        <div class="report-row" [class.resolved]="report.resolved">
-
-          <!-- Left: type badge + channel -->
-          <div class="report-left">
-            <span class="type-badge" [style.background]="reportTypeBadgeColor(report.reportType)">
-              {{ reportTypeLabel(report.reportType) }}
-            </span>
-            <span class="channel-tag">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                @if (report.channelType === 0) {
-                  <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-                } @else if (report.channelType === 1) {
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                } @else {
-                  <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 8 0v2"/>
-                }
-              </svg>
-              {{ channelTypeLabel(report.channelType) }}
-            </span>
-          </div>
-
-          <!-- Middle: message -->
-          <div class="report-middle">
-            <p class="report-message">{{ report.message || '(no message provided)' }}</p>
-          </div>
-
-          <!-- Right: status + resolve button -->
-          <div class="report-right">
-            @if (report.resolved) {
-              <span class="status-badge resolved-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                Resolved
-              </span>
-            } @else {
-              <button
-                class="btn-resolve"
-                (click)="resolveAndNavigate(report, $event)"
-                title="Resolve report"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                Resolve
-              </button>
+    <div class="header-right">
+      <!-- Filters -->
+      <div class="header-filters">
+        <div class="select-wrap">
+          <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M4 6h16M8 12h8M11 18h2"/>
+          </svg>
+          <select
+            class="category-select"
+            [value]="filterReportType()"
+            (change)="filterReportType.set($any($event.target).value === 'all' ? 'all' : +$any($event.target).value)"
+          >
+            @for (opt of reportTypeOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
             }
-          </div>
-
+          </select>
+          <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
         </div>
-      }
+
+        <div class="select-wrap">
+          <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <select
+            class="category-select"
+            [value]="filterChannelType()"
+            (change)="filterChannelType.set($any($event.target).value === 'all' ? 'all' : +$any($event.target).value)"
+          >
+            @for (opt of channelTypeOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+          <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+      </div>
     </div>
-  }
+  </div>
+
+  <!-- Two-column layout -->
+  <div class="columns-wrap">
+
+    <!-- OPEN column -->
+    <div class="column">
+      <div class="column-header open-header">
+        <div class="column-title">
+          <span class="col-dot open-dot"></span>
+          Open
+        </div>
+        <span class="col-count open-count">{{ openFilteredReports().length }}</span>
+      </div>
+
+      <div class="column-body">
+        @if (loading()) {
+          <div class="state-container">
+            <div class="spinner"></div>
+            <span>Loading…</span>
+          </div>
+        } @else if (error()) {
+          <div class="state-container">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="#ef4444"/>
+            </svg>
+            <span class="error-text">{{ error() }}</span>
+            <button class="btn-retry" (click)="loadReports()">Try again</button>
+          </div>
+        } @else if (openFilteredReports().length === 0) {
+          <div class="state-container">
+            <div class="state-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <span>All clear!</span>
+          </div>
+        } @else {
+          @for (report of openFilteredReports(); track report.id) {
+            <div class="report-card">
+              <div class="card-top">
+                <span class="type-badge" [style.background]="reportTypeBadgeColor(report.reportType)">
+                  {{ reportTypeLabel(report.reportType) }}
+                </span>
+                <span class="channel-tag">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    @if (report.channelType === 0) {
+                      <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                    } @else if (report.channelType === 1) {
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    } @else {
+                      <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 8 0v2"/>
+                    }
+                  </svg>
+                  {{ channelTypeLabel(report.channelType) }}
+                </span>
+                <button
+                  class="btn-resolve"
+                  (click)="resolveAndNavigate(report, $event)"
+                  title="Resolve report"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Resolve
+                </button>
+              </div>
+              <p class="report-message">{{ report.message || '(no message provided)' }}</p>
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <!-- CLOSED column -->
+    <div class="column">
+      <div class="column-header closed-header">
+        <div class="column-title">
+          <span class="col-dot closed-dot"></span>
+          Closed
+        </div>
+        <span class="col-count closed-count">{{ closedFilteredReports().length }}</span>
+      </div>
+
+      <div class="column-body">
+        @if (loading()) {
+          <div class="state-container">
+            <div class="spinner"></div>
+            <span>Loading…</span>
+          </div>
+        } @else if (closedFilteredReports().length === 0) {
+          <div class="state-container">
+            <div class="state-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+              </svg>
+            </div>
+            <span>No resolved reports</span>
+          </div>
+        } @else {
+          @for (report of closedFilteredReports(); track report.id) {
+            <div class="report-card resolved-card">
+              <div class="card-top">
+                <span class="type-badge" [style.background]="reportTypeBadgeColor(report.reportType)">
+                  {{ reportTypeLabel(report.reportType) }}
+                </span>
+                <span class="channel-tag">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    @if (report.channelType === 0) {
+                      <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                    } @else if (report.channelType === 1) {
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    } @else {
+                      <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 8 0v2"/>
+                    }
+                  </svg>
+                  {{ channelTypeLabel(report.channelType) }}
+                </span>
+                <span class="status-badge resolved-badge">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Resolved
+                </span>
+              </div>
+              <p class="report-message">{{ report.message || '(no message provided)' }}</p>
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+  </div>
 
 </div>

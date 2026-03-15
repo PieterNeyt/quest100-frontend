@@ -39,7 +39,7 @@ export class ModerationService {
 
   resolveReport(reportId: string): Observable<{ status: string }> {
     return this.http.patch<{ status: string }>(
-      `${this.url}/api/moderation/reports/${reportId}/resolve`,
+      `${this.url}/api/moderation/report/${reportId}/resolve`,
       {}
     );
   }
