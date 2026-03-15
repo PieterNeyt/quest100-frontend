@@ -9,7 +9,16 @@ import {HlmIconImports} from '@spartan-ng/helm/icon';
 import {HlmAvatarImports} from '@spartan-ng/helm/avatar';
 import {CommonModule} from '@angular/common';
 import {provideIcons} from '@ng-icons/core';
-import {lucideLogOut, lucideMenu, lucideQrCode, lucideSettings, lucideUser, lucideX, lucideZap} from '@ng-icons/lucide';
+import {
+  lucideChevronRight,
+  lucideLogOut,
+  lucideMenu,
+  lucideQrCode,
+  lucideSettings,
+  lucideUser,
+  lucideX,
+  lucideZap
+} from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
 import {Language, TranslationService} from './services/translationService';
 import {NgxSonnerToaster} from 'ngx-sonner';
@@ -22,7 +31,7 @@ type MenuState = 'languages' | 'user' | 'mobile' | null;
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, HlmNavigationMenuImports, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
   providers: [
-    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap})
+    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap,lucideChevronRight})
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

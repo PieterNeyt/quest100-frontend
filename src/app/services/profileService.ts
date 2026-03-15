@@ -3,7 +3,14 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, EMPTY, Observable, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
-import {AwardTransaction, Profile, ProfileAward, ProfileStatistics, SyncProfileResponse} from '../model/profile';
+import {
+  AwardTransaction,
+  KudosEntry,
+  Profile,
+  ProfileAward,
+  ProfileStatistics,
+  SyncProfileResponse
+} from '../model/profile';
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
 
@@ -105,5 +112,8 @@ export class ProfileService {
           : pa
       );
     });
+  }
+  getLastKudosEntries(): Observable<KudosEntry[]> {
+    return this.http.get<KudosEntry[]>(`${this.url}/api/profiles/kudos/recent`);
   }
 }

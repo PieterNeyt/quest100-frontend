@@ -16,10 +16,11 @@
   <div class="flex items-center gap-2">
     <div class="nav-section-right">
       @if (loginDisplay() && profile()) {
-        <div class="kudos-badge">
+        <a routerLink="/kudo-overview" class="kudos-badge kudos-badge-clickable">
           <ng-icon name="lucideZap" class="kudos-icon"></ng-icon>
           <span class="kudos-amount">{{ profile()?.kudos }} Kudos</span>
-        </div>
+          <ng-icon name="lucideChevronRight" class="kudos-chevron"></ng-icon>
+        </a>
       }
 
       <div class="dropdown-wrapper">
@@ -76,18 +77,21 @@
     <div class="sidebar-header">
       @if (loginDisplay() && profile()) {
         <div class="sidebar-user-info">
-          <div class="avatar-ring !w-12 !h-12">
-              <hlm-avatar class="user-avatar-circle  !size-10">
-                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover"/>
-                <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
-              </hlm-avatar>
+          <div class="avatar-ring w-12! h-12!">
+            <hlm-avatar class="user-avatar-circle size-md!">
+              <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt="Profile picture"/>
+              <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
+            </hlm-avatar>
           </div>
           <div class="flex flex-col">
             <span class="font-bold text-lg leading-tight">{{ profile()?.firstName }}</span>
-            <div class="flex items-center gap-1 text-[#5aaab4] text-sm font-bold">
+            <a class="kudos-badge-mobile"
+               routerLink="/kudo-overview"
+               (click)="activeMenu.set(null)">
               <ng-icon name="lucideZap" class="size-4"></ng-icon>
               <span>{{ profile()?.kudos }} Kudos</span>
-            </div>
+              <ng-icon name="lucideChevronRight" class="size-3"></ng-icon>
+            </a>
           </div>
         </div>
       } @else {

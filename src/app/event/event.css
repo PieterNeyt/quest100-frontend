@@ -177,6 +177,7 @@
 @media (max-width: 640px)  { .events-grid { grid-template-columns: 1fr; } }
 
 .event-card {
+  position: relative;
   background: color-mix(in oklch, var(--card) 70%, transparent);
   border: 1.5px solid var(--border);
   border-bottom: 4px solid var(--border);
@@ -193,6 +194,61 @@
   box-shadow: 0 8px 24px rgba(90, 170, 180, 0.15);
 }
 .event-card:active { transform: translateY(0); }
+
+/* ---- Report Flag Button ---- */
+.card-report-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  color: oklch(0.55 0.02 264);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.15s, transform 0.15s, color 0.15s;
+  padding: 0;
+}
+
+/* The ng-icon inside — switch to filled red flag on hover via SVG fill trick */
+.card-report-btn ng-icon,
+.card-report-btn hlm-icon {
+  transition: color 0.15s;
+  /* outline style: stroke coloured, fill transparent */
+  fill: transparent;
+  stroke: currentColor;
+}
+
+.event-card:hover .card-report-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.card-report-btn:hover {
+  color: #ef4444;
+  transform: scale(1.15) !important;
+}
+
+/* Fill the flag interior red on hover */
+.card-report-btn:hover ng-icon,
+.card-report-btn:hover hlm-icon {
+  fill: #ef4444;
+  stroke: #ef4444;
+  color: #ef4444;
+}
+
+.card-report-btn:active {
+  transform: scale(0.95) !important;
+}
+
+/* ---- Card Image ---- */
 .card-image-wrap { position: relative; aspect-ratio: 16/9; overflow: hidden; }
 .card-image {
   width: 100%;
@@ -314,4 +370,6 @@
   .filter-bar { padding: 0.75rem 1rem; }
   .sort-buttons { width: 100%; }
   .events-header { flex-direction: column; align-items: flex-start; }
+  /* Always show flag on mobile since hover isn't available */
+  .card-report-btn { opacity: 1; transform: scale(1); color: oklch(0.45 0.02 264); }
 }
