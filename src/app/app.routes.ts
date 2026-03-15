@@ -8,6 +8,7 @@ import {roleGuard} from './guards/role-guard';
 import {EventDetailComponent} from './event-detail/event-detail';
 import {Qrcode} from './qrcode/qrcode';
 import {EventComponent} from './event/event';
+import {Avatar} from './avatar/avatar';
 import {KudoOverview} from './kudo-overview/kudo-overview';
 import {GotchaPageComponent} from './gotcha-page/gotcha-page';
 import {GotchaEndPageComponent} from './gotcha-end-page/gotcha-end-page';
@@ -22,8 +23,8 @@ export const routes: Routes = [
   {path: 'event', component: EventComponent, canActivate: [MsalGuard]},
   {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
   {path: 'qrcode', component: Qrcode, canActivate: [MsalGuard, roleGuard], data: {role: 'lector'}},
-  {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
   {path: 'userlist', component: Userlist, canActivate: [MsalGuard]},
+  {path: 'avatar', component: Avatar, canActivate: [MsalGuard]},
   {path: 'kudo-overview', component: KudoOverview, canActivate: [MsalGuard]},
   { path: 'gotcha', component: GotchaPageComponent, canActivate: [MsalGuard] },
   { path: 'gotcha/end', component: GotchaEndPageComponent, canActivate: [MsalGuard] },

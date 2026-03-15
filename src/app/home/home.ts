@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, effect, inject, signal} from '@angular/core';
 import {NgIcon, provideIcons} from "@ng-icons/core";
 import {CommonModule} from '@angular/common';
 import {ProfileService} from '../services/profileService';
@@ -27,7 +27,7 @@ import {ArchetypeId} from '../model/profile';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home implements OnInit {
+export class Home {
   private readonly profileService = inject(ProfileService);
   private readonly router = inject(Router);
   translationService = inject(TranslationService);
@@ -69,6 +69,20 @@ export class Home implements OnInit {
   playerStats = signal<any | null>(null);
   activeAccordion = signal<string | null>('profile');
 
+  constructor() {
+    effect(() => {
+      if (this.profile()) {
+        this.profileService.getPlayerStats()
+          .subscribe({
+            next: (stats) => {
+              this.playerStats.set(stats);
+            },
+            error: (err) =>this.ts.error("Failed to load player stats: " + err.message)
+          });
+      }
+    });
+  }
+
   toggleAccordion(section: string) {
     if (window.innerWidth > 768) return;
     this.activeAccordion.set(this.activeAccordion() === section ? null : section);
@@ -107,14 +121,4 @@ export class Home implements OnInit {
       percentage: totalKudos > 0 ? Math.round((stat.value / totalKudos) * 100) : 0
     }));
   });
-
-  ngOnInit(): void {
-    this.profileService.getPlayerStats()
-      .subscribe({
-        next: (stats) => {
-          this.playerStats.set(stats);
-        },
-        error: (err) => this.ts.error("Failed to load player stats: " + err.message)
-      });
-  }
 }

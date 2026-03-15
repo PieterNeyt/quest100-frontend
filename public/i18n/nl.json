@@ -505,5 +505,28 @@
       "hateSpeech": "Haatspraak",
       "other": "Andere"
     }
+  },
+  "avatar": {
+    "Body": "Lichaam",
+    "Eyes": "Ogen",
+    "Shirts": "Shirts",
+    "Hair": "Kapsel",
+    "Facial_Hair": "Gezichtshaar",
+    "Glasses": "Brillen",
+    "Hats_and_Hair_Accessories": "Hoofddeksels",
+    "Extras": "Extra's",
+    "setAsProfilePicture": "Zet als profielfoto",
+    "status": {
+      "equipped": "Uitgerust",
+      "owned": "In bezit"
+    },
+    "bought": {
+      "success": "Aankoop geslaagd! Het artikel is toegevoegd aan je inventaris.",
+      "error": "Transactie mislukt. Controleer je saldo en/of verbinding en probeer het opnieuw."
+    },
+    "setAsProfilePictureMessage": {
+      "success": "Profielfoto succesvol bijgewerkt.",
+      "error": "Instellen van profielfoto mislukt. Probeer het opnieuw."
+    }
   }
 }

@@ -33,7 +33,7 @@ export class AboutComponent implements AfterViewInit {
       accentHex: '#0078d4',
       accentSoft: 'rgba(0,120,212,0.08)',
       logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Microsoft_Office_SharePoint_%282025%E2%80%93present%29.svg/250px-Microsoft_Office_SharePoint_%282025%E2%80%93present%29.svg.png',
-      url: 'https://studentkdg.sharepoint.com/_layouts/15/sharepoint.aspx',
+      url: 'https://studentkdg.sharepoint.com/sites/intranet',
       features: [
         'about.apps.intranet.f1',
         'about.apps.intranet.f2',
