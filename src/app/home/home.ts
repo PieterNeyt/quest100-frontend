@@ -1,14 +1,20 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { NgIcon, provideIcons } from "@ng-icons/core";
-import { CommonModule } from '@angular/common';
-import { ProfileService } from '../services/profileService';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {NgIcon, provideIcons} from "@ng-icons/core";
+import {CommonModule} from '@angular/common';
+import {ProfileService} from '../services/profileService';
 import {
-  lucideInfo, lucideQrCode, lucideStar, lucideTarget,
-  lucideUsers, lucideZap, lucideChevronDown
+  lucideChevronDown,
+  lucideInfo,
+  lucideQrCode,
+  lucideStar,
+  lucideTarget,
+  lucideUsers,
+  lucideZap
 } from '@ng-icons/lucide';
-import { TranslationService } from '../services/translationService';
-import { ProfileStatistics } from '../model/profile';
-import { tap } from 'rxjs';
+import {TranslationService} from '../services/translationService';
+import {ToastService} from '../services/toastService';
+import {Router} from '@angular/router';
+import {ArchetypeId} from '../model/profile';
 
 @Component({
   selector: 'app-home',
@@ -23,10 +29,43 @@ import { tap } from 'rxjs';
 })
 export class Home implements OnInit {
   private readonly profileService = inject(ProfileService);
+  private readonly router = inject(Router);
   translationService = inject(TranslationService);
   profile = this.profileService.profile;
+  ts = inject(ToastService);
 
-  // We initialiseren de signal als null
+  readonly archetypeNames = computed<Record<ArchetypeId, string>>(() => ({
+    [ArchetypeId.Wizard]:           this.translationService.t('home.archetypes.wizard'),
+    [ArchetypeId.TeamCatalyst]:     this.translationService.t('home.archetypes.teamCatalyst'),
+    [ArchetypeId.AtmosphereMaker]:  this.translationService.t('home.archetypes.atmosphereMaker'),
+    [ArchetypeId.CampusExplorer]:   this.translationService.t('home.archetypes.campusExplorer'),
+    [ArchetypeId.AcademicGuardian]: this.translationService.t('home.archetypes.academicGuardian'),
+  }));
+
+  archetypeName = computed(() => {
+    const id = this.profile()?.archetypeId;
+    if (id === undefined) return '';
+    return this.archetypeNames()[id as ArchetypeId] ?? 'Unknown';
+  });
+
+  actionButtons = [
+    {
+      label: 'CANVAS',
+      key: 'canvas',
+      logoUrl: 'https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_1/v1706635559/oxnardsdorg/a3jmgjuc95vnrlbehc4j/canvas-logo-1024x1020.png'
+    },
+    {
+      label: 'E-STUDENT SERVICE',
+      key: 'estudentservice',
+      logoUrl: 'https://a.storyblok.com/f/226028/2000x2500/021b91e4b7/placeholder-kdg-mobile.webp'
+    },
+    {
+      label: 'TIME EDIT',
+      key: 'timeedit',
+      logoUrl: 'https://cdn.prod.website-files.com/64e6e4222dd4319151d1537d/652641e10a74cd0d04dd1da5_TE%20Logo%20Symbol.png'
+    },
+  ];
+
   playerStats = signal<any | null>(null);
   activeAccordion = signal<string | null>('profile');
 
@@ -35,47 +74,47 @@ export class Home implements OnInit {
     this.activeAccordion.set(this.activeAccordion() === section ? null : section);
   }
 
-  // De computed signal reageert pas zodra playerStats een waarde krijgt
+  navigateToAbout(appKey: string) {
+    this.router.navigate(['/about']).then(() => {
+      setTimeout(() => {
+        const element = document.getElementById('section-' + appKey);
+        if (element) {
+          element.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+      }, 100);
+    });
+  }
+
   statItems = computed(() => {
     const s = this.playerStats();
 
-    // Harde check: als er geen data is, of de data is nog niet compleet (check op KudoKnowledge), return lege array
     if (!s || s.KudoKnowledge === undefined) {
       return [];
     }
 
-    // Gebruik de hoofdletters zoals ze uit je API komen (gebaseerd op je log)
     const statsArray = [
-      { label: 'Knowledge', value: s.KudoKnowledge || 0 },
-      { label: 'Attendance', value: s.KudoAttendance || 0 },
-      { label: 'Teamwork', value: s.KudoTeamwork || 0 },
-      { label: 'Atmosphere', value: s.KudoAtmosphere || 0 },
-      { label: 'Engagement', value: s.KudoEngagement || 0 }
+      {key: 'KudoKnowledge', value: s.KudoKnowledge || 0},
+      {key: 'KudoAttendance', value: s.KudoAttendance || 0},
+      {key: 'KudoTeamwork', value: s.KudoTeamwork || 0},
+      {key: 'KudoAtmosphere', value: s.KudoAtmosphere || 0},
+      {key: 'KudoEngagement', value: s.KudoEngagement || 0},
     ];
 
     const totalKudos = statsArray.reduce((acc, curr) => acc + curr.value, 0);
 
-    const calculatedStats = statsArray.map(stat => ({
+    return statsArray.map(stat => ({
       ...stat,
-      // De bar wordt opgevuld op basis van het aandeel in het totaal
       percentage: totalKudos > 0 ? Math.round((stat.value / totalKudos) * 100) : 0
     }));
-
-    console.log('✅ Stats succesvol ingeladen en berekend:', calculatedStats);
-    return calculatedStats;
   });
 
   ngOnInit(): void {
     this.profileService.getPlayerStats()
-      .pipe(
-        tap(stats => console.log('🚀 API Response:', stats))
-      )
       .subscribe({
         next: (stats) => {
-          // Zodra we de set doen, wordt de 'statItems' computed automatisch wakker
           this.playerStats.set(stats);
         },
-        error: (err) => console.error('❌ Error:', err)
+        error: (err) => this.ts.error("Failed to load player stats: " + err.message)
       });
   }
 }

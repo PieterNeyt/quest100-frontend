@@ -1,3 +1,12 @@
+export interface ProfileStatistics {
+  profileId: string;
+  kudoKnowledge: number;
+  kudoAttendance: number;
+  kudoTeamwork: number;
+  kudoAtmosphere: number;
+  kudoEngagement: number;
+}
+
 export interface Profile {
   id: string;
   firstName: string;
@@ -7,15 +16,24 @@ export interface Profile {
   preferredLanguage?: 'NL' | 'EN';
   customProfilePicture?: string | null;
   campus: string;
+  archetypeId: number;
 }
 
-export interface ProfileStatistics {
-  profileId: string;
-  kudoKnowledge: number;
-  kudoAttendance: number;
-  kudoTeamwork: number;
-  kudoAtmosphere: number;
-  kudoEngagement: number;
+export enum ArchetypeId {
+  Wizard = 0,
+  TeamCatalyst = 1,
+  AtmosphereMaker = 2,
+  CampusExplorer = 3,
+  AcademicGuardian = 4,
+}
+
+export interface KudosEntry {
+  ID: string;
+  ProfileID: string;
+  Amount: number;
+  Reason: string;
+  Type: string;
+  Date: string;
 }
 
 export interface SyncProfileResponse {

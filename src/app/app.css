@@ -162,17 +162,49 @@
   @apply flex items-center justify-center w-full h-full text-base font-black text-white uppercase leading-none;
 }
 
-/* Kudos Badge Desktop */
+/* --- Kudos Badge Desktop (klikbaar) --- */
 .kudos-badge {
-  @apply flex items-center gap-2 px-4 h-9 rounded-lg flex-shrink-0;
+  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg flex-shrink-0 no-underline;
   background: rgba(90, 170, 180, 0.1);
   border: 1px solid rgba(90, 170, 180, 0.2);
 }
+
+.kudos-badge-clickable {
+  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg flex-shrink-0 no-underline transition-all duration-200 cursor-pointer;
+  background: rgba(90, 170, 180, 0.1);
+  border: 1px solid rgba(90, 170, 180, 0.2);
+}
+.kudos-badge-clickable:hover {
+  background: rgba(90, 170, 180, 0.2);
+  border-color: rgba(90, 170, 180, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(90, 170, 180, 0.2);
+}
+.kudos-badge-clickable:active {
+  transform: translateY(0);
+}
+
 .kudos-amount {
   @apply text-sm font-bold uppercase whitespace-nowrap tracking-wide;
   color: #5aaab4;
 }
 
+.kudos-chevron {
+  @apply size-3.5;
+  color: #5aaab4;
+  opacity: 0.7;
+}
+
+/* --- Kudos Badge Mobile --- */
+.kudos-badge-mobile {
+  @apply flex items-center gap-1 text-sm font-bold cursor-pointer no-underline transition-all duration-200;
+  color: #5aaab4;
+}
+.kudos-badge-mobile:hover {
+  opacity: 0.8;
+}
+
+/* --- Login Button --- */
 .login-btn-highlight {
   background: #5aaab4 !important;
   color: #ffffff !important;

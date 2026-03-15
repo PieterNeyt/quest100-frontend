@@ -9,7 +9,22 @@
     "settings": "Settings"
   },
   "home": {
-    "title": "Welcome back"
+    "title": "Welcome back",
+    "subtitle": "Here you'll find the most important links and your personal statistics.",
+    "myProfile": "My Profile",
+    "games": "Games",
+    "gamesPlaceholder": "Your games will appear here...",
+    "statistics": "Statistics",
+    "archetype": "Archetype",
+    "name": "Name",
+    "percentOfTotal": "% of total",
+    "archetypes": {
+      "wizard":           "Wizard",
+      "teamCatalyst":     "Team Catalyst",
+      "atmosphereMaker":  "Atmosphere Maker",
+      "campusExplorer":   "Campus Explorer",
+      "academicGuardian": "Academic Guardian"
+    }
   },
   "attendance": {
     "registering": "Registering attendance...",
@@ -157,7 +172,11 @@
     "cancel": "Cancel",
     "send": "Send",
     "awardSuccess": "You have successfully given the award {{type}} to {{firstName}} {{lastName}}!",
-    "awardError": "Failed to give award. Please try again."
+    "awardError": "Failed to give award. Please try again.",
+    "searchPlaceholder": "Search students...",
+    "allClasses": "All classes",
+    "showing": "Showing",
+    "students": "students"
   },
   "gotcha": {
     "bannerDescription": "Join the Gotcha game and eliminate your assigned target.",
@@ -456,6 +475,35 @@
     "tip": {
       "label": "Pro tip",
       "body": "Set the intranet as your browser's homepage. From there you always have quick access to Canvas, TimeEdit and eStudentService — without ever having to remember a link."
+    }
+  },
+  "kudoOverview": {
+    "title": "Kudo Overview",
+    "statistics": "Statistics",
+    "totalKudos": "Total Kudos",
+    "type": "Type",
+    "recentKudos": "Recent Kudos",
+    "noEntries": "No kudos entries yet."
+  },
+  "report": {
+    "title": "Report Event",
+    "subtitle": "Reason for reporting",
+    "reasonRequired": "Please select a reason.",
+    "description": "Description",
+    "descriptionRequired": "Please provide a description (min. 10 characters).",
+    "descriptionPlaceholder": "Describe the issue in detail (minimum 10 characters)…",
+    "cancel": "Cancel",
+    "submit": "Submit Report",
+    "submitting": "Submitting…",
+    "submitted": "Report Submitted",
+    "submittedMessage": "Thank you. Our team will review this report shortly.",
+    "close": "Close",
+    "types": {
+      "harassment": "Harassment",
+      "racism": "Racism",
+      "spam": "Spam",
+      "hateSpeech": "Hate Speech",
+      "other": "Other"
     }
   }
 }
