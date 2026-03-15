@@ -2,17 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environment/environment';
-import { ReportPayload } from '../report/report';
+import { ReportPayload } from '../components/report/report';
+import {ReportResponse} from '../model/moderation';
 
-export interface ReportResponse {
-  id: string;
-  targetId: string;
-  contextId?: string;
-  channelType: number;
-  reportType: number;
-  message: string;
-  createdAt: string;
-}
 
 @Injectable({
   providedIn: 'root',

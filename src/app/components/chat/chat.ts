@@ -9,7 +9,7 @@ import { ChatService } from '../../services/chatService';
 import { ReceiveMessage, SendMessage } from '../../model/chat';
 import { NgIcon } from '@ng-icons/core';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
-import {ReportComponent} from '../../report/report';
+import {ReportComponent} from '../report/report';
 
 @Component({
   selector: 'app-chat',

@@ -12,8 +12,8 @@ import {
   lucideShieldCheck,
   lucideZap,
   lucideSettings2,
-  lucideChevronRight, // Toegevoegd om de error te fixen
-  lucidePlus          // Vaak gebruikt in "New Game" knoppen
+  lucideChevronRight,
+  lucidePlus
 } from '@ng-icons/lucide';
 import { GotchaService } from '../../services/gotchaService';
 import { TranslationService } from '../../services/translationService';

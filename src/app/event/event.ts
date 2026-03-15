@@ -11,7 +11,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaBannerComponent } from '../components/gotcha-banner/gotcha-banner';
-import {ReportComponent} from '../report/report';
+import {ReportComponent} from '../components/report/report';
 
 @Component({
   selector: 'app-event',

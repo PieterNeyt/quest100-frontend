@@ -5,17 +5,17 @@
     <div class="report-header">
       <div class="report-header-left">
         <div class="report-icon-wrap">
-          <ng-icon hlm name="lucideFlag" size="20"/>
+          <ng-icon hlm name="lucideFlag" size="sm"/>
         </div>
         <div>
-          <h2 class="report-title">Report Event</h2>
+          <h2 class="report-title">{{ t.t('report.title') }}</h2>
           @if (eventTitle) {
             <p class="report-subtitle">"{{ eventTitle }}"</p>
           }
         </div>
       </div>
       <button class="report-close-btn" (click)="close()">
-        <ng-icon hlm name="lucideX" size="18"/>
+        <ng-icon hlm name="lucideX" size="sm"/>
       </button>
     </div>
 
@@ -23,11 +23,11 @@
     @if (submitted()) {
       <div class="report-success">
         <div class="success-icon">
-          <ng-icon hlm name="lucideCheckCircle" size="40"/>
+          <ng-icon hlm name="lucideCheckCircle" size="xl"/>
         </div>
-        <h3>Report Submitted</h3>
-        <p>Thank you. Our team will review this report shortly.</p>
-        <button class="report-btn-primary" (click)="close()">Close</button>
+        <h3>{{ t.t('report.submitted') }}</h3>
+        <p>{{ t.t('report.submittedMessage') }}</p>
+        <button class="report-btn-primary" (click)="close()">{{ t.t('report.close') }}</button>
       </div>
     }
 
@@ -37,9 +37,11 @@
 
         <!-- Type selection -->
         <div class="report-field">
-          <label class="report-label">Reason for reporting <span class="required">*</span></label>
+          <label class="report-label">
+            {{ t.t('report.subtitle') }} <span class="required">*</span>
+          </label>
           <div class="report-type-grid">
-            @for (rt of reportTypes; track rt.value) {
+            @for (rt of reportTypes(); track rt.value) {
               <label
                 class="report-type-card"
                 [class.selected]="reportForm.get('type')?.value === rt.value"
@@ -50,20 +52,20 @@
                   [value]="rt.value"
                   class="report-type-radio"
                 />
-                <ng-icon hlm [name]="rt.icon" size="18"/>
+                <ng-icon hlm [name]="rt.icon" size="sm"/>
                 <span>{{ rt.label }}</span>
               </label>
             }
           </div>
           @if (isInvalid('type')) {
-            <p class="report-error">Please select a reason.</p>
+            <p class="report-error">{{ t.t('report.reasonRequired') }}</p>
           }
         </div>
 
         <!-- Message -->
         <div class="report-field">
           <label class="report-label" for="report-message">
-            Description <span class="required">*</span>
+            {{ t.t('report.description') }} <span class="required">*</span>
           </label>
           <textarea
             id="report-message"
@@ -71,12 +73,12 @@
             [class.invalid]="isInvalid('message')"
             formControlName="message"
             rows="4"
-            placeholder="Describe the issue in detail (minimum 10 characters)…"
+            [placeholder]="t.t('report.descriptionPlaceholder')"
             maxlength="500"
           ></textarea>
           <div class="report-textarea-footer">
             @if (isInvalid('message')) {
-              <p class="report-error">Please provide a description (min. 10 characters).</p>
+              <p class="report-error">{{ t.t('report.descriptionRequired') }}</p>
             } @else {
               <span></span>
             }
@@ -89,19 +91,15 @@
         <!-- Actions -->
         <div class="report-actions">
           <button type="button" class="report-btn-secondary" (click)="close()">
-            Cancel
+            {{ t.t('report.cancel') }}
           </button>
-          <button
-            type="submit"
-            class="report-btn-submit"
-            [disabled]="submitting()"
-          >
+          <button type="submit" class="report-btn-submit" [disabled]="submitting()">
             @if (submitting()) {
               <span class="btn-spinner"></span>
-              Submitting…
+              {{ t.t('report.submitting') }}
             } @else {
-              <ng-icon hlm name="lucideFlag" size="14"/>
-              Submit Report
+              <ng-icon hlm name="lucideFlag" size="xs"/>
+              {{ t.t('report.submit') }}
             }
           </button>
         </div>

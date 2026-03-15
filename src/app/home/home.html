@@ -12,15 +12,17 @@
       </div>
 
       <div class="action-grid">
-        <div class="action-group" *ngFor="let btn of actionButtons">
-          <button class="main-action-btn" (click)="navigateToAbout(btn.key)">
-            <img [src]="btn.logoUrl" [alt]="btn.label" class="action-btn-logo" />
-            {{ btn.label }}
-          </button>
-          <button class="info-pill-btn" (click)="navigateToAbout(btn.key)">
-            <ng-icon name="lucideInfo" class="size-6"></ng-icon>
-          </button>
-        </div>
+        @for (btn of actionButtons; track btn.key) {
+          <div class="action-group">
+            <button class="main-action-btn" (click)="navigateToAbout(btn.key)">
+              <img [src]="btn.logoUrl" [alt]="btn.label" class="action-btn-logo" />
+              {{ btn.label }}
+            </button>
+            <button class="info-pill-btn" (click)="navigateToAbout(btn.key)">
+              <ng-icon name="lucideInfo" class="size-6"></ng-icon>
+            </button>
+          </div>
+        }
       </div>
     </div>
 
