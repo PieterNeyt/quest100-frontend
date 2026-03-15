@@ -1,0 +1,144 @@
+<button class="back-btn" (click)="goBack()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+  Back to reports
+</button>
+
+@if (loading()) {
+  <div class="state-center">
+    <div class="spinner"></div>
+  </div>
+}
+
+@if (error()) {
+  <div class="state-center">
+    <p class="error-text">{{ error() }}</p>
+    <button class="back-btn" (click)="goBack()">Go back</button>
+  </div>
+}
+
+@if (!loading() && !error()) {
+
+  <!-- Report reason banner -->
+  @if (report()) {
+    <div class="report-reason-banner" [class.is-resolved]="report()!.resolved">
+      <div class="report-reason-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <circle cx="12" cy="17" r="1" fill="currentColor"/>
+        </svg>
+        <div class="report-reason-text">
+          <span class="report-reason-label">Reported message</span>
+          <span class="report-reason-message">{{ report()!.message || 'No reason provided' }}</span>
+        </div>
+      </div>
+      @if (!report()!.resolved) {
+        <button class="btn-resolve" (click)="showResolveModal.set(true)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Resolve report
+        </button>
+      } @else {
+        <span class="resolved-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Resolved
+        </span>
+      }
+    </div>
+  }
+
+  <!-- Chat window -->
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span>Chat</span>
+      <span class="chat-id mono">{{ chatId }}</span>
+    </div>
+
+    <div class="chat-body" #chatBody>
+      @for (msg of messages(); track msg.id) {
+        <div
+          class="message-row"
+          [class.highlighted]="msg.id === messageId"
+          [id]="'msg-' + msg.id"
+        >
+          <!-- Avatar -->
+          <div class="msg-avatar">
+            @if (msg.sender?.customProfilePicture) {
+              <img [src]="msg.sender.customProfilePicture" [alt]="msg.sender.firstName"/>
+            } @else {
+              {{ initials(msg.sender) }}
+            }
+          </div>
+
+          <!-- Bubble -->
+          <div class="msg-content">
+            <div class="msg-meta">
+              <span class="msg-name">{{ msg.sender?.firstName }} {{ msg.sender?.lastName }}</span>
+              @if (msg.id === messageId) {
+                <span class="flagged-chip">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  </svg>
+                  Flagged
+                </span>
+              }
+            </div>
+            <div class="msg-bubble" [class.flagged-bubble]="msg.id === messageId">
+              {{ msg.message }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Resolve Modal -->
+@if (showResolveModal()) {
+  <div class="modal-overlay" (click)="showResolveModal.set(false)">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-header-inner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <circle cx="12" cy="17" r="1" fill="#d97706"/>
+          </svg>
+          <h2>Resolve this report?</h2>
+        </div>
+        <button class="modal-close" (click)="showResolveModal.set(false)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to mark this report as resolved? This action cannot be undone.</p>
+        @if (report()?.message) {
+          <div class="modal-reason">
+            <span class="modal-reason-label">Report reason</span>
+            <span class="modal-reason-text">{{ report()!.message }}</span>
+          </div>
+        }
+        <div class="modal-actions">
+          <button class="btn-modal-resolve" [disabled]="resolving()" (click)="resolve()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ resolving() ? 'Resolving…' : 'Yes, resolve' }}
+          </button>
+          <button class="btn-modal-cancel" (click)="showResolveModal.set(false)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
