@@ -74,7 +74,23 @@
                       <span class="timeline-date">{{ entry.Date | date:'d MMM yyyy' }}</span>
                     </div>
                     <p class="timeline-title">{{ entry.Reason }}</p>
-                    <span class="timeline-pts">+{{ entry.Amount }} PTS</span>
+                    <div class="timeline-bottom-row">
+                      <span class="timeline-pts">+{{ entry.Amount }} PTS</span>
+                      @if (entry.SenderID && senderNames()[entry.SenderID]) {
+                        <span class="timeline-sender">
+                          <ng-icon name="lucideAward" class="sender-icon"></ng-icon>
+                          {{ senderNames()[entry.SenderID] }}
+                        </span>
+                        <button
+                          class="timeline-report-btn"
+                          (click)="openReportModal(entry, $event)"
+                          title="Report this award"
+                          aria-label="Report this award"
+                        >
+                          <ng-icon name="lucideFlag" class="report-flag-icon"></ng-icon>
+                        </button>
+                      }
+                    </div>
                   </div>
                 </div>
               }
@@ -86,3 +102,12 @@
     </div>
   </section>
 </div>
+
+<!-- Report Modal -->
+@if (reportingEntry()) {
+  <app-report
+    [targetId]="reportingEntry()!.ID"
+    [channelType]="2"
+    (closed)="closeReportModal()"
+  />
+}

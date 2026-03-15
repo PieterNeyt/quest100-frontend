@@ -4,19 +4,20 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ProfileService } from '../services/profileService';
 import {
   lucideChevronDown, lucideStar, lucideZap,
-  lucideUsers, lucideHeart, lucideBookOpen, lucideAward
+  lucideUsers, lucideHeart, lucideBookOpen, lucideAward, lucideFlag
 } from '@ng-icons/lucide';
 import { ToastService } from '../services/toastService';
 import { TranslationService } from '../services/translationService';
 import { ArchetypeId, KudosEntry } from '../model/profile';
+import { ReportComponent } from '../components/report/report';
 
 @Component({
   selector: 'app-kudo-overview',
   standalone: true,
-  imports: [NgIcon, CommonModule, DatePipe],
+  imports: [NgIcon, CommonModule, DatePipe, ReportComponent],
   providers: [provideIcons({
     lucideChevronDown, lucideStar, lucideZap,
-    lucideUsers, lucideHeart, lucideBookOpen, lucideAward
+    lucideUsers, lucideHeart, lucideBookOpen, lucideAward, lucideFlag
   })],
   templateUrl: './kudo-overview.html',
   styleUrl: './kudo-overview.css',
@@ -44,6 +45,10 @@ export class KudoOverview implements OnInit {
   activeAccordion = signal<string | null>('stats');
   playerStats = signal<any | null>(null);
   kudoEntries = signal<KudosEntry[]>([]);
+  senderNames = signal<Record<string, string>>({});
+
+  // Report state
+  reportingEntry = signal<KudosEntry | null>(null);
 
   statItems = computed(() => {
     const s = this.playerStats();
@@ -86,6 +91,15 @@ export class KudoOverview implements OnInit {
     this.activeAccordion.set(this.activeAccordion() === section ? null : section);
   }
 
+  openReportModal(entry: KudosEntry, $event: MouseEvent) {
+    $event.stopPropagation();
+    this.reportingEntry.set(entry);
+  }
+
+  closeReportModal() {
+    this.reportingEntry.set(null);
+  }
+
   ngOnInit(): void {
     this.profileService.getPlayerStats().subscribe({
       next: (stats) => this.playerStats.set(stats),
@@ -93,7 +107,27 @@ export class KudoOverview implements OnInit {
     });
 
     this.profileService.getLastKudosEntries().subscribe({
-      next: (entries) => this.kudoEntries.set(entries),
+      next: (entries) => {
+        this.kudoEntries.set(entries);
+
+        const senderIds = [...new Set(
+          entries
+            .filter(e => e.SenderID !== null)
+            .map(e => e.SenderID as string)
+        )];
+
+        senderIds.forEach(id => {
+          this.profileService.getProfileById(id).subscribe({
+            next: (profile) => {
+              this.senderNames.update(names => ({
+                ...names,
+                [id]: `${profile.firstName} ${profile.lastName}`
+              }));
+            },
+            error: () => {}
+          });
+        });
+      },
       error: (err) => this.ts.error("Failed to load kudos: " + err.message)
     });
   }

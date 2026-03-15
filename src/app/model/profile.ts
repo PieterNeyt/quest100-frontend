@@ -34,6 +34,7 @@ export interface KudosEntry {
   Reason: string;
   Type: string;
   Date: string;
+  SenderID:string | null;
 }
 
 export interface SyncProfileResponse {
