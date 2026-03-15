@@ -58,12 +58,24 @@
   border-radius: 12px;
   margin-bottom: 1.75rem;
   flex-wrap: wrap;
+  transition: background 0.2s, border-color 0.2s;
 }
+.report-reason-banner .report-reason-left svg { stroke: #ef4444; transition: stroke 0.2s; }
+.report-reason-banner .report-reason-label { color: #ef4444; transition: color 0.2s; }
+
+/* Green state when resolved */
+.report-reason-banner.is-resolved {
+  background: rgba(90, 170, 180, 0.06);
+  border-color: rgba(90, 170, 180, 0.3);
+  border-left-color: #5aaab4;
+}
+.report-reason-banner.is-resolved .report-reason-left svg { stroke: #5aaab4; }
+.report-reason-banner.is-resolved .report-reason-label { color: #5aaab4; }
+
 .report-reason-left {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  color: #ef4444;
   flex: 1;
   min-width: 0;
 }
@@ -79,7 +91,6 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: #ef4444;
 }
 .report-reason-message {
   font-size: 0.93rem;
@@ -257,7 +268,7 @@
   padding-bottom: 3rem;
 }
 
-/* ── Shared section header (attendees + description both use this) ── */
+/* ── Section headers ── */
 .attendees-section,
 .description-section {
   display: flex;

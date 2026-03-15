@@ -8,7 +8,6 @@
     </div>
 
     <div class="header-right">
-      <!-- Filters -->
       <div class="header-filters">
         <div class="select-wrap">
           <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -149,7 +148,7 @@
           </div>
         } @else {
           @for (report of closedFilteredReports(); track report.id) {
-            <div class="report-card resolved-card">
+            <div class="report-card resolved-card" (click)="resolveAndNavigate(report, $event)">
               <div class="card-top">
                 <span class="type-badge" [style.background]="reportTypeBadgeColor(report.reportType)">
                   {{ reportTypeLabel(report.reportType) }}
