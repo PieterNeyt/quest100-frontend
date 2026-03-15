@@ -11,6 +11,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { GotchaBannerComponent } from '../components/gotcha-banner/gotcha-banner';
+import {ReportComponent} from '../components/report/report';
 
 @Component({
   selector: 'app-event',
@@ -22,6 +23,7 @@ import { GotchaBannerComponent } from '../components/gotcha-banner/gotcha-banner
     EventFormComponent,
     NgIconComponent,
     HlmIconImports,
+    ReportComponent,
     GotchaBannerComponent,
   ],
   providers: [provideIcons(lucideIcons)],
@@ -45,6 +47,9 @@ export class EventComponent implements OnInit {
 
   showCreateModal = signal(false);
   creating = signal(false);
+
+  // Report modal state
+  reportingEvent = signal<StudentEvent | null>(null);
 
   readonly categoryColor = categoryColor;
   readonly categoryIconSvg = categoryIconSvg;
@@ -105,6 +110,13 @@ export class EventComponent implements OnInit {
   openCreateModal() { this.createForm.reset(); this.showCreateModal.set(true); }
   closeCreateModal() { this.showCreateModal.set(false); }
 
+  openReportModal(event: StudentEvent, $event: MouseEvent) {
+    $event.stopPropagation();
+    this.reportingEvent.set(event);
+  }
+
+  closeReportModal() { this.reportingEvent.set(null); }
+
   submitCreate() {
     if (this.createForm.invalid) return;
     this.creating.set(true);
@@ -137,4 +149,5 @@ export class EventComponent implements OnInit {
   }
 
   categoryLabel(cat: EventCategory | string): string { return this.t.t(`event.categories.${cat}`); }
+
 }

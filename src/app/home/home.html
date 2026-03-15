@@ -4,27 +4,32 @@
     <div class="top-section">
       <div class="welcome-header">
         <h1 class="welcome-title">
-          Welcome back {{ profile()?.firstName }}, to <span class="logo-text-yellow">Quest 100</span>
+          {{ translationService.t('home.title') }} {{ profile()?.firstName }}, to <span class="logo-text-yellow">Quest 100</span>
         </h1>
         <p class="welcome-subtitle">
-          Under here you can find links to some of the most important website you will need while studying here at the KdG.
+          {{ translationService.t('home.subtitle') }}
         </p>
       </div>
 
       <div class="action-grid">
-        <div class="action-group" *ngFor="let btn of ['CANVAS', 'E-STUDENT SERVICE', 'TIME EDIT']">
-          <button class="main-action-btn">{{ btn }}</button>
-          <button class="info-pill-btn">
-            <ng-icon name="lucideInfo" class="size-6"></ng-icon>
-          </button>
-        </div>
+        @for (btn of actionButtons; track btn.key) {
+          <div class="action-group">
+            <button class="main-action-btn" (click)="navigateToAbout(btn.key)">
+              <img [src]="btn.logoUrl" [alt]="btn.label" class="action-btn-logo" />
+              {{ btn.label }}
+            </button>
+            <button class="info-pill-btn" (click)="navigateToAbout(btn.key)">
+              <ng-icon name="lucideInfo" class="size-6"></ng-icon>
+            </button>
+          </div>
+        }
       </div>
     </div>
 
     <div class="content-grid">
       <div class="content-card accordion-item" [class.open]="activeAccordion() === 'profile'">
         <div class="accordion-header" (click)="toggleAccordion('profile')">
-          <h1 class="content-title">My Profile</h1>
+          <h1 class="content-title">{{ translationService.t('home.myProfile') }}</h1>
           <ng-icon name="lucideChevronDown" class="accordion-icon"></ng-icon>
         </div>
 
@@ -36,24 +41,24 @@
               </div>
               <div class="stats-info">
                 <div class="info-block">
-                  <span class="info-label">Name</span>
+                  <span class="info-label">{{ translationService.t('home.name') }}</span>
                   <p class="info-value">{{ profile()?.firstName }} {{ profile()?.lastName }}</p>
                 </div>
                 <div class="info-block">
-                  <span class="info-label">ArcheType</span>
-                  <p class="info-value highlight-yellow">Knowledge Wizard</p>
+                  <span class="info-label">{{ translationService.t('home.archetype') }}</span>
+                  <p class="info-value highlight-yellow">{{ archetypeName() }}</p>
                 </div>
               </div>
             </div>
 
-            <h4 class="content-mini-title">Statistics</h4>
+            <h4 class="content-mini-title">{{ translationService.t('home.statistics') }}</h4>
             <div class="stats-bars-container">
-              @for (item of statItems(); track item.label) {
+              @for (item of statItems(); track item.key) {
                 <div class="stat-bar-group">
                   <div class="stat-bar-header">
-                    <span class="stat-bar-label">{{ item.label }}</span>
+                    <span class="stat-bar-label">{{ translationService.t('kudoTypes.' + item.key) }}</span>
                     <div class="stat-meta-info">
-                      <span class="stat-percentage-label">{{ item.percentage }}% of total</span>
+                      <span class="stat-percentage-label">{{ item.percentage }}{{ translationService.t('home.percentOfTotal') }}</span>
                       <span class="stat-points-label">{{ item.value }} PTS</span>
                     </div>
                   </div>
@@ -69,14 +74,14 @@
 
       <div class="content-card accordion-item" [class.open]="activeAccordion() === 'games'">
         <div class="accordion-header" (click)="toggleAccordion('games')">
-          <h2 class="content-title">Games</h2>
+          <h2 class="content-title">{{ translationService.t('home.games') }}</h2>
           <ng-icon name="lucideChevronDown" class="accordion-icon"></ng-icon>
         </div>
 
         <div class="accordion-wrapper">
           <div class="accordion-content">
             <div class="content-placeholder">
-              <p>Hier komen je games...</p>
+              <p>{{ translationService.t('home.gamesPlaceholder') }}</p>
             </div>
           </div>
         </div>

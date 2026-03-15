@@ -89,3 +89,10 @@
 @keyframes slideIn { from { width: 0%; } }
 
 .content-placeholder { @apply min-h-[250px] flex items-center justify-center rounded-2xl border-2 border-dashed border-white/10 opacity-40; }
+
+.action-btn-logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  object-fit: contain;
+}

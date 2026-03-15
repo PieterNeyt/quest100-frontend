@@ -12,11 +12,12 @@ import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import {HlmIcon} from '@spartan-ng/helm/icon';
 import {Chat} from '../components/chat/chat';
+import {ReportComponent} from '../components/report/report';
 
 @Component({
   selector: 'app-event-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIcon, Chat],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EventFormComponent, NgIconComponent, HlmIcon, Chat, ReportComponent],
   providers: [provideIcons(lucideIcons)],
   templateUrl: './event-detail.html',
   styleUrl: './event-detail.css',
@@ -41,6 +42,9 @@ export class EventDetailComponent implements OnInit {
 
   showOrganizerCancelModal = signal(false);
   transferToProfileId = signal<string>('');
+
+  // Report modal
+  showReportModal = signal(false);
 
   readonly categoryColor = categoryColor;
   readonly categoryIconSvg = categoryIconSvg;
@@ -192,6 +196,9 @@ export class EventDetailComponent implements OnInit {
       error: () => this.saving.set(false)
     });
   }
+
+  openReportModal() { this.showReportModal.set(true); }
+  closeReportModal() { this.showReportModal.set(false); }
 
   getAttendeeDisplayName(attendee: EventAttendee): string {
     if (attendee.firstName && attendee.lastName) {
