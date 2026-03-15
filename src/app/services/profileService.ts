@@ -30,7 +30,9 @@ export class ProfileService {
   get hasCustomPicture(): boolean {
     return this.profile()?.customProfilePicture != null;
   }
-
+  proxyAssetUrl(originalUrl: string): string {
+    return `${this.url}/api/proxy/asset?url=${encodeURIComponent(originalUrl)}`;
+  }
   syncUser() {
     this.authService.acquireTokenSilent({scopes: ["User.Read"]})
       .pipe(

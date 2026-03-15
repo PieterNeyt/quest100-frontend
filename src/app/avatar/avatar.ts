@@ -91,11 +91,39 @@ export class Avatar implements OnInit {
       }
     });
   }
+  async setAsProfilePicture() {
+    const layers = this.sortedLayers();
+    if (layers.length === 0) return;
 
-  canBuy(item: Asset) {
-    if (this.profile()) {
-      return item.price > this.profile()!.kudos;
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d')!;
+
+    try {
+      for (const layer of layers) {
+        await new Promise<void>((resolve, reject) => {
+          const img = new Image();
+          const proxiedUrl = this.service.proxyAssetUrl(layer.link);
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve();
+          };
+          img.onerror = (err) => {
+            console.error('img failed:', proxiedUrl, err);
+            reject(err);
+          };
+          img.src = proxiedUrl;
+        });
+      }
+
+      const base64 = canvas.toDataURL('image/png');
+      this.service.updateProfilePicture(base64);
+      this.toast.success('avatar.setAsProfilePictureMessage.success');
+    } catch (err) {
+      console.error('setAsProfilePicture failed:', err);
+      this.toast.error('avatar.setAsProfilePictureMessage.error');
     }
-    return false;
   }
 }

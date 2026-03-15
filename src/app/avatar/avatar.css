@@ -1,6 +1,7 @@
 @reference "../../styles.css";
+
 .editor-container {
-  @apply flex flex-col lg:flex-row gap-6 w-full max-w-[1200px] mx-auto h-[calc(100vh-140px)] min-h-[600px] pt-6 md:pt-12;;
+  @apply flex flex-col lg:flex-row gap-6 w-full max-w-[1200px] mx-auto h-[calc(100vh-140px)] min-h-[600px] pt-6 md:pt-12;
 }
 
 .preview-panel {
@@ -44,15 +45,24 @@
 
 .tabs {
   @apply flex gap-2 overflow-x-auto pb-2;
-  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tabs::-webkit-scrollbar {
-  display: none;
+  height: 6px;
+}
+
+.tabs::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.tabs::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .tab-btn {
-  @apply px-2.5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-200 outline-none;
+  @apply px-2.5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-200 outline-none shrink-0;
   background: transparent;
   color: var(--muted-foreground);
   border: 2px solid transparent;
@@ -136,4 +146,20 @@
   @apply text-[10px] font-bold uppercase tracking-wider px-2 py-1.5 rounded-md;
   color: var(--muted-foreground);
   background: var(--muted);
+}
+
+.set-pfp-btn {
+  @apply flex items-center gap-2 mt-6 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 shadow-sm;
+  background: var(--primary);
+  color: var(--color-white);
+}
+
+.set-pfp-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -6px var(--primary);
+}
+
+.set-pfp-btn:active {
+  transform: translateY(0);
 }

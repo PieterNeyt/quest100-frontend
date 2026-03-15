@@ -10,6 +10,11 @@
         }
       </div>
     </div>
+
+    <button class="set-pfp-btn" (click)="setAsProfilePicture()">
+      <ng-icon name="lucideCamera"></ng-icon>
+      {{ t.t('avatar.setAsProfilePicture') }}
+    </button>
   </div>
 
   <div class="shop-panel">
@@ -48,9 +53,9 @@
                   <ng-icon name="lucideZap" class="size-3"></ng-icon> {{ item.price }}
                 </button>
               } @else if (equippedItems()[item.category]?.id === item.id) {
-                <span class="equipped-badge">Equipped</span>
+                <span class="equipped-badge">{{ t.t('avatar.status.equipped') }}</span>
               } @else {
-                <span class="owned-badge">Owned</span>
+                <span class="owned-badge">{{ t.t('avatar.status.owned') }}</span>
               }
             </div>
           </div>
