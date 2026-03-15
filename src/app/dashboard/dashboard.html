@@ -83,10 +83,7 @@
       <div class="spinner"></div>
       <span>Loading reports…</span>
     </div>
-  }
-
-  <!-- Error -->
-  @else if (error()) {
+  } @else if (error()) {
     <div class="state-container">
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="#ef4444"/>
@@ -94,10 +91,7 @@
       <span class="error-text">{{ error() }}</span>
       <button class="btn-retry" (click)="loadReports()">Try again</button>
     </div>
-  }
-
-  <!-- Empty -->
-  @else if (filteredReports().length === 0) {
+  } @else if (filteredReports().length === 0) {
     <div class="state-container">
       <div class="state-icon">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -106,10 +100,7 @@
       </div>
       <span>No reports found</span>
     </div>
-  }
-
-  <!-- Reports Grid -->
-  @else {
+  } @else {
     <div class="reports-grid">
       @for (report of filteredReports(); track report.id) {
         <div class="report-row" [class.resolved]="report.resolved">

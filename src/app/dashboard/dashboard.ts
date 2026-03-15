@@ -63,11 +63,11 @@ export class Dashboard implements OnInit {
     event.stopPropagation();
 
     if (report.reportType === 0) {
-      this.router.navigate(['/report', report.targetId, 'event']);
+      this.router.navigate(['/report', report.id, 'event',report.targetId]);
     } else if (report.reportType === 1) {
-      this.router.navigate(['/report', report.targetId, 'message',report.contextId]);
+      this.router.navigate(['/report', report.id, 'message',report.contextId]);
     } else if (report.reportType === 2) {
-      this.router.navigate(['/report', report.targetId, 'award']);
+      this.router.navigate(['/report', report.id, 'award']);
     }
   }
 
