@@ -91,38 +91,41 @@ export class Avatar implements OnInit {
       }
     });
   }
+
   async setAsProfilePicture() {
     const layers = this.sortedLayers();
     if (layers.length === 0) return;
-
     const canvas = document.createElement('canvas');
     canvas.width = 400;
     canvas.height = 400;
     const ctx = canvas.getContext('2d')!;
 
     try {
+      const token = await this.service.getAccessToken();
       for (const layer of layers) {
+        const response = await fetch(this.service.proxyAssetUrl(layer.link), {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error(`Failed to fetch ${layer.name}`);
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
         await new Promise<void>((resolve, reject) => {
           const img = new Image();
-          const proxiedUrl = this.service.proxyAssetUrl(layer.link);
-          img.crossOrigin = 'anonymous';
           img.onload = () => {
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(objectUrl);
             resolve();
           };
-          img.onerror = (err) => {
-            console.error('img failed:', proxiedUrl, err);
-            reject(err);
-          };
-          img.src = proxiedUrl;
+          img.onerror = reject;
+          img.src = objectUrl;
         });
       }
 
       const base64 = canvas.toDataURL('image/png');
       this.service.updateProfilePicture(base64);
       this.toast.success('avatar.setAsProfilePictureMessage.success');
-    } catch (err) {
-      console.error('setAsProfilePicture failed:', err);
+    } catch {
       this.toast.error('avatar.setAsProfilePictureMessage.error');
     }
   }

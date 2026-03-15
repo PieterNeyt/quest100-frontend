@@ -1,6 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, EMPTY, Observable, switchMap, throwError} from 'rxjs';
+import {catchError, EMPTY, firstValueFrom, map, Observable, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {AwardTransaction, Profile, ProfileAward, ProfileStatistics, SyncProfileResponse} from '../model/profile';
@@ -22,6 +22,24 @@ export class ProfileService {
   profilesAwards = signal<ProfileAward[] | null>(null);
   microsoftProfilePicture = signal('');
 
+  getAccessToken(): Promise<string> {
+    return firstValueFrom(
+      this.authService.acquireTokenSilent({
+        scopes: environment.apiConfig.scopes
+      }).pipe(
+        map(result => result.accessToken),
+        catchError(error => {
+          if (error instanceof InteractionRequiredAuthError) {
+            this.authService.acquireTokenRedirect({
+              scopes: environment.apiConfig.scopes
+            });
+            return EMPTY;
+          }
+          return throwError(() => error);
+        })
+      )
+    );
+  }
 
   get activeProfilePicture(): string {
     return this.profile()?.customProfilePicture || this.microsoftProfilePicture();
@@ -31,7 +49,7 @@ export class ProfileService {
     return this.profile()?.customProfilePicture != null;
   }
   proxyAssetUrl(originalUrl: string): string {
-    return `${this.url}/api/proxy/asset?url=${encodeURIComponent(originalUrl)}`;
+    return `${this.url}/api/profiles/proxy/asset?url=${encodeURIComponent(originalUrl)}`;
   }
   syncUser() {
     this.authService.acquireTokenSilent({scopes: ["User.Read"]})
