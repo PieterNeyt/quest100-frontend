@@ -1,6 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, EMPTY, Observable, switchMap, throwError} from 'rxjs';
+import {catchError, EMPTY, firstValueFrom, map, Observable, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../../environment/environment';
 import {
@@ -13,6 +13,7 @@ import {
 } from '../model/profile';
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
+import {Asset, Category} from '../model/avatar';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,24 @@ export class ProfileService {
   profilesAwards = signal<ProfileAward[] | null>(null);
   microsoftProfilePicture = signal('');
 
+  getAccessToken(): Promise<string> {
+    return firstValueFrom(
+      this.authService.acquireTokenSilent({
+        scopes: environment.apiConfig.scopes
+      }).pipe(
+        map(result => result.accessToken),
+        catchError(error => {
+          if (error instanceof InteractionRequiredAuthError) {
+            this.authService.acquireTokenRedirect({
+              scopes: environment.apiConfig.scopes
+            });
+            return EMPTY;
+          }
+          return throwError(() => error);
+        })
+      )
+    );
+  }
 
   get activeProfilePicture(): string {
     return this.profile()?.customProfilePicture || this.microsoftProfilePicture();
@@ -36,13 +55,15 @@ export class ProfileService {
   get hasCustomPicture(): boolean {
     return this.profile()?.customProfilePicture != null;
   }
-
+  proxyAssetUrl(originalUrl: string): string {
+    return `${this.url}/api/profiles/proxy/asset?url=${encodeURIComponent(originalUrl)}`;
+  }
   syncUser() {
     this.authService.acquireTokenSilent({scopes: ["User.Read"]})
       .pipe(
         catchError(error => {
           if (error instanceof InteractionRequiredAuthError) {
-            this.authService.acquireTokenRedirect({ scopes: ["User.Read"] });
+            this.authService.acquireTokenRedirect({scopes: ["User.Read"]});
             return EMPTY;
           }
           return throwError(() => error);
@@ -93,6 +114,7 @@ export class ProfileService {
   getPlayerStats(): Observable<ProfileStatistics> {
     return this.http.get<ProfileStatistics>(`${this.url}/api/profiles/stats`)
   }
+
   giveAward(award: AwardTransaction): Observable<Profile> {
     return this.http.post<Profile>(`${this.url}/api/profiles/award`, award);
   }
@@ -108,10 +130,22 @@ export class ProfileService {
 
       return list.map(pa =>
         pa.profile.id === profile.id
-          ? { ...pa, profile, hasSentAward: true }
+          ? {...pa, profile, hasSentAward: true}
           : pa
       );
     });
+  }
+
+  getShopItems() {
+    return this.http.get<Category[]>(`${this.url}/api/profiles/assets`, {});
+  }
+
+  buyShopItem(id: string) {
+    return this.http.put(`${this.url}/api/profiles/assets/${id}`, {})
+  }
+
+  equipItem(id: string) {
+    return this.http.put<Asset[]>(`${this.url}/api/profiles/avatar/${id}`, {})
   }
   getLastKudosEntries(): Observable<KudosEntry[]> {
     return this.http.get<KudosEntry[]>(`${this.url}/api/profiles/kudos/recent`);

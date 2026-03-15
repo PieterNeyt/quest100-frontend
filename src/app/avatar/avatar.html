@@ -1,0 +1,66 @@
+<div class="editor-container">
+  <div class="preview-panel">
+    <div class="canvas-wrapper">
+      <div class="avatar-canvas">
+        @for (layer of sortedLayers(); track layer.id) {
+          <img
+            [ngSrc]="layer.link"
+            class="avatar-layer"
+            [alt]="layer.name" fill priority>
+        }
+      </div>
+    </div>
+
+    <button class="set-pfp-btn" (click)="setAsProfilePicture()">
+      <ng-icon name="lucideCamera"></ng-icon>
+      {{ t.t('avatar.setAsProfilePicture') }}
+    </button>
+  </div>
+
+  <div class="shop-panel">
+    <div class="tabs-container">
+      <div class="tabs">
+        @for (cat of categories(); track $index) {
+          <button
+            class="tab-btn"
+            [class.active]="activeCategory?.name === cat.name"
+            (click)="selectCategory(cat)"
+          >
+            {{t.t(`avatar.${cat.name}`)}}
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (activeCategory) {
+      <div class="item-grid">
+        @for (item of activeCategory.items; track item.id) {
+          <div
+            class="item-card"
+            [class.equipped]="equippedItems()[item.category]?.id === item.id"
+            [class.locked]="!item.isOwned"
+            (click)="toggleItem(item)">
+
+            <div class="thumb-wrapper">
+              <img [ngSrc]="item.thumbnail" class="item-thumb" [alt]="item.name" width="80" height="80">
+            </div>
+
+            <div class="item-details">
+              <span class="item-name">{{ item.name }}</span>
+
+              @if (!item.isOwned) {
+                <button class="buy-btn">
+                  <ng-icon name="lucideZap" class="size-3"></ng-icon> {{ item.price }}
+                </button>
+              } @else if (equippedItems()[item.category]?.id === item.id) {
+                <span class="equipped-badge">{{ t.t('avatar.status.equipped') }}</span>
+              } @else {
+                <span class="owned-badge">{{ t.t('avatar.status.owned') }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

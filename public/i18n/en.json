@@ -505,5 +505,28 @@
       "hateSpeech": "Hate Speech",
       "other": "Other"
     }
+  },
+  "avatar": {
+    "Body": "Body",
+    "Eyes": "Eyes",
+    "Shirts": "Tops",
+    "Hair": "Hair",
+    "Facial_Hair": "Facial hair",
+    "Glasses": "Glasses",
+    "Hats_and_Hair_Accessories": "Headwear",
+    "Extras": "Extras",
+    "setAsProfilePicture": "Set as profile picture",
+    "status": {
+      "equipped": "Equipped",
+      "owned": "Owned"
+    },
+    "bought": {
+      "success": "Purchase successful! Item has been added to your inventory.",
+      "error": "Transaction failed. Please check your balance and/or connection and try again."
+    },
+    "setAsProfilePictureMessage": {
+      "success": "Profile picture updated successfully.",
+      "error": "Failed to set profile picture. Please try again."
+    }
   }
 }

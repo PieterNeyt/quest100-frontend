@@ -50,8 +50,7 @@ export class TranslationService {
     await this.loadTranslations(lang);
 
     if (!this.auth.isLoggedIn()) return;
-
-    this.http.put(`${this.url}/api/profiles/language`, {language: this.currentLanguage})
+    this.http.put(`${this.url}/api/profiles/language`, {language: this.currentLanguage().toUpperCase()})
       .pipe(take(1))
       .subscribe({
         error: err => console.error('Failed to update language preference:', err)
