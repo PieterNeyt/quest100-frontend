@@ -6,6 +6,7 @@ import {Report} from '../model/report';
 import {StudentEvent} from '../model/studentEvent';
 import { ReportPayload } from '../components/report/report';
 import {ReportResponse} from '../model/moderation';
+import {KudosEntry} from '../model/profile';
 
 
 @Injectable({
@@ -38,6 +39,10 @@ export class ModerationService {
 
   getReportedEventById(eventId: string): Observable<StudentEvent> {
     return this.http.get<StudentEvent>(`${this.url}/api/events/${eventId}/reported`);
+  }
+
+  getKudoEntryById(id: string): Observable<KudosEntry> {
+    return this.http.get<KudosEntry>(`${this.url}/api/profiles/kudos/${id}`);
   }
 
 }

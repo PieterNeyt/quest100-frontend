@@ -1,0 +1,191 @@
+<button class="back-btn" (click)="goBack()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+  Back to reports
+</button>
+
+@if (loading()) {
+  <div class="state-center">
+    <div class="spinner"></div>
+  </div>
+}
+
+@if (error()) {
+  <div class="state-center">
+    <p class="error-text">{{ error() }}</p>
+    <button class="back-btn" (click)="goBack()">Go back</button>
+  </div>
+}
+
+@if (!loading() && !error() && kudoEntry()) {
+
+  <!-- Report reason banner -->
+  @if (report()) {
+    <div class="report-reason-banner" [class.is-resolved]="report()!.resolved">
+      <div class="report-reason-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <circle cx="12" cy="17" r="1" fill="currentColor"/>
+        </svg>
+        <div class="report-reason-text">
+          <span class="report-reason-label">Reported award</span>
+          <span class="report-reason-message">{{ report()!.message || 'No reason provided' }}</span>
+        </div>
+      </div>
+      @if (!report()!.resolved) {
+        <button class="btn-resolve" (click)="showResolveModal.set(true)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Resolve report
+        </button>
+      } @else {
+        <span class="resolved-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Resolved
+        </span>
+      }
+    </div>
+  }
+
+  <!-- Kudo Entry Card -->
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 8 0v2"/>
+      </svg>
+      <span>Award Entry</span>
+      <span class="chat-id mono">{{ kudoEntry()!.ID }}</span>
+    </div>
+
+    <div class="award-body">
+
+      <!-- Type + Points -->
+      <div class="award-top-row">
+        <span
+          class="type-badge"
+          [style.background]="kudoTypeColor(kudoEntry()!.Type)"
+        >
+          {{ kudoTypeLabel(kudoEntry()!.Type) }}
+        </span>
+        <span class="award-pts">+{{ kudoEntry()!.Amount }} PTS</span>
+        <span class="award-date">{{ kudoEntry()!.Date | date:'d MMM yyyy' }}</span>
+      </div>
+
+      <!-- Reason -->
+      <div class="award-reason-block">
+        <span class="award-reason-label">Reason</span>
+        <p class="award-reason-text">{{ kudoEntry()!.Reason }}</p>
+      </div>
+
+      <!-- Sender → Receiver -->
+      <div class="award-profiles-row">
+
+        <!-- Sender -->
+        <div class="award-profile-block">
+          <span class="award-profile-role">Sender</span>
+          @if (sender()) {
+            <div class="award-profile-card">
+              <div class="msg-avatar">
+                @if (sender()!.customProfilePicture) {
+                  <img [src]="sender()!.customProfilePicture" [alt]="sender()!.firstName"/>
+                } @else {
+                  {{ initials(sender()) }}
+                }
+              </div>
+              <div class="award-profile-info">
+                <span class="award-profile-name">{{ sender()!.firstName }} {{ sender()!.lastName }}</span>
+                <span class="award-profile-email">{{ sender()!.email }}</span>
+              </div>
+            </div>
+          } @else {
+            <div class="award-profile-card muted">
+              <div class="msg-avatar muted-avatar">?</div>
+              <span class="award-profile-name muted-text">System / Unknown</span>
+            </div>
+          }
+        </div>
+
+        <!-- Arrow -->
+        <div class="award-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </div>
+
+        <!-- Receiver -->
+        <div class="award-profile-block">
+          <span class="award-profile-role">Receiver</span>
+          @if (receiver()) {
+            <div class="award-profile-card">
+              <div class="msg-avatar">
+                @if (receiver()!.customProfilePicture) {
+                  <img [src]="receiver()!.customProfilePicture" [alt]="receiver()!.firstName"/>
+                } @else {
+                  {{ initials(receiver()) }}
+                }
+              </div>
+              <div class="award-profile-info">
+                <span class="award-profile-name">{{ receiver()!.firstName }} {{ receiver()!.lastName }}</span>
+                <span class="award-profile-email">{{ receiver()!.email }}</span>
+              </div>
+            </div>
+          } @else {
+            <div class="award-profile-card muted">
+              <div class="msg-avatar muted-avatar">?</div>
+              <span class="award-profile-name muted-text">Unknown</span>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Resolve Modal -->
+@if (showResolveModal()) {
+  <div class="modal-overlay" (click)="showResolveModal.set(false)">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-header-inner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <circle cx="12" cy="17" r="1" fill="#d97706"/>
+          </svg>
+          <h2>Resolve this report?</h2>
+        </div>
+        <button class="modal-close" (click)="showResolveModal.set(false)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to mark this report as resolved? This action cannot be undone.</p>
+        @if (report()?.message) {
+          <div class="modal-reason">
+            <span class="modal-reason-label">Report reason</span>
+            <span class="modal-reason-text">{{ report()!.message }}</span>
+          </div>
+        }
+        <div class="modal-actions">
+          <button class="btn-modal-resolve" [disabled]="resolving()" (click)="resolve()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ resolving() ? 'Resolving…' : 'Yes, resolve' }}
+          </button>
+          <button class="btn-modal-cancel" (click)="showResolveModal.set(false)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
