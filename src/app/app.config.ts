@@ -27,7 +27,7 @@ import {
   MsalService,
 } from '@azure/msal-angular';
 import {environment} from '../../environment/environment';
-import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {TranslationService} from './services/translationService';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
@@ -75,7 +75,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     authRequest: {
       scopes: [...environment.apiConfig.scopes],
     },
-    loginFailedRoute: '/login-failed',
+    loginFailedRoute: '/',
   };
 }
 

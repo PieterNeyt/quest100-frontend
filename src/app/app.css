@@ -54,11 +54,11 @@
 
 /* --- Sidebar & Overlay --- */
 .mobile-backdrop {
-  @apply fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm lg:hidden;
+  @apply fixed inset-0 z-55 bg-black/60 backdrop-blur-sm lg:hidden;
 }
 
 .mobile-sidebar {
-  @apply fixed top-0 right-0 z-[60] h-full w-[300px] lg:hidden flex flex-col p-6 shadow-2xl;
+  @apply fixed top-0 right-0 z-60 h-full w-[300px] lg:hidden flex flex-col p-6 shadow-2xl;
   background: color-mix(in oklch, var(--card) 98%, black);
   border-left: 1px solid var(--border);
   animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -117,7 +117,7 @@
 }
 
 /* --- Dropdowns & Avatars --- */
-.dropdown-wrapper { @apply relative flex-shrink-0 flex items-center h-full; }
+.dropdown-wrapper { @apply relative shrink-0 flex items-center h-full; }
 
 .nav-pill-button {
   @apply flex items-center gap-2 px-3 h-10 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer outline-none border-none bg-transparent whitespace-nowrap;
@@ -145,10 +145,10 @@
 
 /* Avatar Styling */
 .user-avatar-trigger {
-  @apply cursor-pointer outline-none border-none bg-transparent p-0 transition-transform active:scale-95 flex items-center justify-center flex-shrink-0;
+  @apply cursor-pointer outline-none border-none bg-transparent p-0 transition-transform active:scale-95 flex items-center justify-center shrink-0;
 }
 .avatar-ring {
-  @apply p-0.5 rounded-full border-2 transition-all duration-200 flex items-center justify-center flex-shrink-0;
+  @apply p-0.5 rounded-full border-2 transition-all duration-200 flex items-center justify-center shrink-0;
   border-color: rgba(90, 170, 180, 0.3);
   width: 42px;
   height: 42px;
@@ -164,7 +164,7 @@
 
 /* --- Kudos Badge Desktop (klikbaar) --- */
 .kudos-badge {
-  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg flex-shrink-0 no-underline;
+  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg shrink-0 no-underline;
   background: rgba(90, 170, 180, 0.1);
   border: 1px solid rgba(90, 170, 180, 0.2);
 }
