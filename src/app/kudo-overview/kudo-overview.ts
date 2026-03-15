@@ -7,7 +7,8 @@ import {
   lucideUsers, lucideHeart, lucideBookOpen, lucideAward
 } from '@ng-icons/lucide';
 import { ToastService } from '../services/toastService';
-import {ArchetypeId, KudosEntry} from '../model/profile';
+import { TranslationService } from '../services/translationService';
+import { ArchetypeId, KudosEntry } from '../model/profile';
 
 @Component({
   selector: 'app-kudo-overview',
@@ -22,20 +23,22 @@ import {ArchetypeId, KudosEntry} from '../model/profile';
 })
 export class KudoOverview implements OnInit {
   private readonly profileService = inject(ProfileService);
+  readonly t = inject(TranslationService);
   ts = inject(ToastService);
   profile = this.profileService.profile;
-  readonly archetypeNames: Record<ArchetypeId, string> = {
-    [ArchetypeId.Wizard]: 'Wizard',
-    [ArchetypeId.TeamCatalyst]: 'Team Catalyst',
-    [ArchetypeId.AtmosphereMaker]: 'Atmosphere Maker',
-    [ArchetypeId.CampusExplorer]: 'Campus Explorer',
-    [ArchetypeId.AcademicGuardian]: 'Academic Guardian',
-  };
+
+  readonly archetypeNames = computed<Record<ArchetypeId, string>>(() => ({
+    [ArchetypeId.Wizard]:           this.t.t('home.archetypes.wizard'),
+    [ArchetypeId.TeamCatalyst]:     this.t.t('home.archetypes.teamCatalyst'),
+    [ArchetypeId.AtmosphereMaker]:  this.t.t('home.archetypes.atmosphereMaker'),
+    [ArchetypeId.CampusExplorer]:   this.t.t('home.archetypes.campusExplorer'),
+    [ArchetypeId.AcademicGuardian]: this.t.t('home.archetypes.academicGuardian'),
+  }));
 
   archetypeName = computed(() => {
     const id = this.profile()?.archetypeId;
     if (id === undefined) return '';
-    return this.archetypeNames[id as ArchetypeId] ?? 'Unknown';
+    return this.archetypeNames()[id as ArchetypeId] ?? 'Unknown';
   });
 
   activeAccordion = signal<string | null>('stats');
@@ -44,23 +47,21 @@ export class KudoOverview implements OnInit {
 
   statItems = computed(() => {
     const s = this.playerStats();
-
-    if (!s || s.KudoKnowledge === undefined) {
-      return [];
-    }
+    if (!s || s.KudoKnowledge === undefined) return [];
 
     const statsArray = [
-      { label: 'Knowledge', value: s.KudoKnowledge || 0 },
-      { label: 'Attendance', value: s.KudoAttendance || 0 },
-      { label: 'Teamwork', value: s.KudoTeamwork || 0 },
-      { label: 'Atmosphere', value: s.KudoAtmosphere || 0 },
-      { label: 'Engagement', value: s.KudoEngagement || 0 }
+      { key: 'KudoKnowledge',  value: s.KudoKnowledge  || 0 },
+      { key: 'KudoAttendance', value: s.KudoAttendance || 0 },
+      { key: 'KudoTeamwork',   value: s.KudoTeamwork   || 0 },
+      { key: 'KudoAtmosphere', value: s.KudoAtmosphere || 0 },
+      { key: 'KudoEngagement', value: s.KudoEngagement || 0 },
     ];
 
     const totalKudos = statsArray.reduce((acc, curr) => acc + curr.value, 0);
 
     return statsArray.map(stat => ({
       ...stat,
+      label: this.t.t('kudoTypes.' + stat.key),
       percentage: totalKudos > 0 ? Math.round((stat.value / totalKudos) * 100) : 0
     }));
   });
@@ -77,14 +78,7 @@ export class KudoOverview implements OnInit {
   }
 
   getLabelForType(type: string): string {
-    const map: Record<string, string> = {
-      KudoKnowledge:  'Knowledge',
-      KudoAttendance: 'Attendance',
-      KudoTeamwork:   'Teamwork',
-      KudoAtmosphere: 'Atmosphere',
-      KudoEngagement: 'Engagement',
-    };
-    return map[type] ?? type;
+    return this.t.t('kudoTypes.' + type);
   }
 
   toggleAccordion(section: string) {
@@ -93,20 +87,14 @@ export class KudoOverview implements OnInit {
   }
 
   ngOnInit(): void {
-    this.profileService.getPlayerStats()
-      .subscribe({
-        next: (stats) => this.playerStats.set(stats),
-        error: (err) => this.ts.error("Failed to load player stats: " + err.message)
-      });
+    this.profileService.getPlayerStats().subscribe({
+      next: (stats) => this.playerStats.set(stats),
+      error: (err) => this.ts.error("Failed to load player stats: " + err.message)
+    });
 
-    this.profileService.getLastKudosEntries()
-      .subscribe({
-        next: (entries) => {
-          this.kudoEntries.set(entries)
-          console.log(this.kudoEntries);
-          console.log(entries);
-        },
-        error: (err) => this.ts.error("Failed to load kudos: " + err.message)
-      });
+    this.profileService.getLastKudosEntries().subscribe({
+      next: (entries) => this.kudoEntries.set(entries),
+      error: (err) => this.ts.error("Failed to load kudos: " + err.message)
+    });
   }
 }

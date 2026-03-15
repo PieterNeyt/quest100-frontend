@@ -468,6 +468,42 @@
     "statistics": "Statistieken",
     "archetype": "Archetype",
     "name": "Naam",
-    "percentOfTotal": "% van totaal"
+    "percentOfTotal": "% van totaal",
+    "archetypes": {
+      "wizard":           "Tovenaar",
+      "teamCatalyst":     "Teamkatalysator",
+      "atmosphereMaker":  "Sfeermaker",
+      "campusExplorer":   "Campusverkenner",
+      "academicGuardian": "Academisch Bewaker"
+    }
+  },
+  "kudoOverview": {
+    "title": "Kudo Overzicht",
+    "statistics": "Statistieken",
+    "totalKudos": "Totaal Kudos",
+    "type": "Type",
+    "recentKudos": "Recente Kudos",
+    "noEntries": "Nog geen kudos."
+  },
+  "report": {
+    "title": "Evenement melden",
+    "subtitle": "Reden voor melding",
+    "reasonRequired": "Selecteer een reden.",
+    "description": "Beschrijving",
+    "descriptionRequired": "Geef een beschrijving (min. 10 tekens).",
+    "descriptionPlaceholder": "Beschrijf het probleem in detail (minimaal 10 tekens)…",
+    "cancel": "Annuleren",
+    "submit": "Melding indienen",
+    "submitting": "Bezig met indienen…",
+    "submitted": "Melding ingediend",
+    "submittedMessage": "Bedankt. Ons team zal deze melding binnenkort bekijken.",
+    "close": "Sluiten",
+    "types": {
+      "harassment": "Intimidatie",
+      "racism": "Racisme",
+      "spam": "Spam",
+      "hateSpeech": "Haatspraak",
+      "other": "Andere"
+    }
   }
 }

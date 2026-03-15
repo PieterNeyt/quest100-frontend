@@ -1,18 +1,19 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { ToastService } from '../services/toastService';
-import { ModerationService } from '../services/moderationService';
+import { ToastService } from '../../services/toastService';
+import { ModerationService } from '../../services/moderationService';
+import { TranslationService } from '../../services/translationService';
 
 export enum ReportType {
   Harassment = 0,
-  Racism = 1,
-  Spam = 2,
+  Racism     = 1,
+  Spam       = 2,
   HateSpeech = 3,
-  Other = 4,
+  Other      = 4,
 }
 
 export interface ReportPayload {
@@ -41,30 +42,29 @@ export class ReportComponent implements OnInit {
   private readonly fb = new FormBuilder();
   private readonly ts = inject(ToastService);
   private readonly moderationService = inject(ModerationService);
+  readonly t = inject(TranslationService);
 
   submitting = signal(false);
-  submitted = signal(false);
+  submitted  = signal(false);
 
   reportForm!: FormGroup;
 
-  readonly reportTypes: { value: ReportType; label: string; icon: string }[] = [
-    { value: ReportType.Harassment, label: 'Harassment',  icon: 'lucideShieldAlert' },
-    { value: ReportType.Racism,     label: 'Racism',      icon: 'lucideAlertOctagon' },
-    { value: ReportType.Spam,       label: 'Spam',        icon: 'lucideMail' },
-    { value: ReportType.HateSpeech, label: 'Hate Speech', icon: 'lucideMessageSquareWarning' },
-    { value: ReportType.Other,      label: 'Other',       icon: 'lucideFlag' },
-  ];
+  readonly reportTypes = computed<{ value: ReportType; label: string; icon: string }[]>(() => [
+    { value: ReportType.Harassment, label: this.t.t('report.types.harassment'), icon: 'lucideShieldAlert'          },
+    { value: ReportType.Racism,     label: this.t.t('report.types.racism'),     icon: 'lucideAlertOctagon'         },
+    { value: ReportType.Spam,       label: this.t.t('report.types.spam'),       icon: 'lucideMail'                 },
+    { value: ReportType.HateSpeech, label: this.t.t('report.types.hateSpeech'), icon: 'lucideMessageSquareWarning' },
+    { value: ReportType.Other,      label: this.t.t('report.types.other'),      icon: 'lucideFlag'                 },
+  ]);
 
   ngOnInit() {
     this.reportForm = this.fb.group({
-      type: [null, Validators.required],
+      type:    [null, Validators.required],
       message: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
     });
   }
 
-  close() {
-    this.closed.emit();
-  }
+  close() { this.closed.emit(); }
 
   submit() {
     if (this.reportForm.invalid) {
@@ -75,23 +75,23 @@ export class ReportComponent implements OnInit {
     this.submitting.set(true);
 
     const payload: ReportPayload = {
-      targetId: this.targetId,
-      contextId: this.contextId,
+      targetId:    this.targetId,
+      contextId:   this.contextId,
       channelType: this.channelType,
-      type: this.reportForm.value.type,
-      message: this.reportForm.value.message,
+      type:        this.reportForm.value.type,
+      message:     this.reportForm.value.message,
     };
 
     this.moderationService.createReport(payload).subscribe({
       next: () => {
         this.submitting.set(false);
         this.submitted.set(true);
-        this.ts.success('Report submitted successfully');
+        this.ts.success(this.t.t('report.submitted'));
         this.close();
       },
       error: (err) => {
         this.submitting.set(false);
-        const message = err?.error?.error ?? 'Something went wrong, please try again';
+        const message = err?.error?.error ?? this.t.t('errors.generic');
         this.ts.error(message);
       },
     });

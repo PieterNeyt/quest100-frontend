@@ -5,16 +5,9 @@ import { environment } from '../../../environment/environment';
 import { ReportPayload } from '../report/report';
 import {Report} from '../model/report';
 import {StudentEvent} from '../model/studentEvent';
+import { ReportPayload } from '../components/report/report';
+import {ReportResponse} from '../model/moderation';
 
-export interface ReportResponse {
-  id: string;
-  targetId: string;
-  contextId?: string;
-  channelType: number;
-  reportType: number;
-  message: string;
-  createdAt: string;
-}
 
 @Injectable({
   providedIn: 'root',

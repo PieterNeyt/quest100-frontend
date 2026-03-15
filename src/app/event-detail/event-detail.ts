@@ -12,7 +12,7 @@ import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import {HlmIcon} from '@spartan-ng/helm/icon';
 import {Chat} from '../components/chat/chat';
-import {ReportComponent} from '../report/report';
+import {ReportComponent} from '../components/report/report';
 
 @Component({
   selector: 'app-event-detail',

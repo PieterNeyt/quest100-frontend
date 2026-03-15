@@ -34,18 +34,18 @@ export class Home implements OnInit {
   profile = this.profileService.profile;
   ts = inject(ToastService);
 
-  readonly archetypeNames: Record<ArchetypeId, string> = {
-    [ArchetypeId.Wizard]: 'Wizard',
-    [ArchetypeId.TeamCatalyst]: 'Team Catalyst',
-    [ArchetypeId.AtmosphereMaker]: 'Atmosphere Maker',
-    [ArchetypeId.CampusExplorer]: 'Campus Explorer',
-    [ArchetypeId.AcademicGuardian]: 'Academic Guardian',
-  };
+  readonly archetypeNames = computed<Record<ArchetypeId, string>>(() => ({
+    [ArchetypeId.Wizard]:           this.translationService.t('home.archetypes.wizard'),
+    [ArchetypeId.TeamCatalyst]:     this.translationService.t('home.archetypes.teamCatalyst'),
+    [ArchetypeId.AtmosphereMaker]:  this.translationService.t('home.archetypes.atmosphereMaker'),
+    [ArchetypeId.CampusExplorer]:   this.translationService.t('home.archetypes.campusExplorer'),
+    [ArchetypeId.AcademicGuardian]: this.translationService.t('home.archetypes.academicGuardian'),
+  }));
 
   archetypeName = computed(() => {
     const id = this.profile()?.archetypeId;
     if (id === undefined) return '';
-    return this.archetypeNames[id as ArchetypeId] ?? 'Unknown';
+    return this.archetypeNames()[id as ArchetypeId] ?? 'Unknown';
   });
 
   actionButtons = [
