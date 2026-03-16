@@ -1,7 +1,7 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {firstValueFrom, take} from 'rxjs';
-import {environment} from '../../../environment/environment';
+import {environment} from '../../environments/environment';
 import {AuthService} from './authService';
 import {KudoType} from '../model/profile';
 
@@ -22,7 +22,6 @@ export interface LanguageOption {
 })
 export class TranslationService {
   private http = inject(HttpClient);
-  private url = environment.apiConfig.uri;
   private assetsUrl = environment.apiConfig.assetsUri;
   private translations = signal<Translations>({});
   private auth = inject(AuthService);
@@ -40,7 +39,7 @@ export class TranslationService {
       ) as Translations;
       this.translations.set(translations);
     } catch (error) {
-      console.error(`Error loading translations for ${lang}:`, error);
+      console.error(error);
       this.translations.set({});
     }
   }
@@ -50,10 +49,10 @@ export class TranslationService {
     await this.loadTranslations(lang);
 
     if (!this.auth.isLoggedIn()) return;
-    this.http.put(`${this.url}/api/profiles/language`, {language: this.currentLanguage().toUpperCase()})
+    this.http.put(`/api/profiles/language`, {language: this.currentLanguage().toUpperCase()})
       .pipe(take(1))
       .subscribe({
-        error: err => console.error('Failed to update language preference:', err)
+        error: err => console.error(err)
       });
   }
 

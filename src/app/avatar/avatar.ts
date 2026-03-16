@@ -2,9 +2,10 @@ import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {Asset, Category} from '../model/avatar';
 import {ProfileService} from '../services/profileService';
 import {ToastService} from '../services/toastService';
-import {NgIcon} from '@ng-icons/core';
+import {NgIcon, provideIcons} from '@ng-icons/core';
 import {NgOptimizedImage} from '@angular/common';
 import {TranslationService} from '../services/translationService';
+import {lucideCamera} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-avatar',
@@ -12,13 +13,13 @@ import {TranslationService} from '../services/translationService';
     NgIcon,
     NgOptimizedImage
   ],
+  providers: [provideIcons({lucideCamera})],
   templateUrl: './avatar.html',
   styleUrl: './avatar.css',
 })
 export class Avatar implements OnInit {
   private service = inject(ProfileService)
   private toast = inject(ToastService)
-  private readonly profile = inject(ProfileService).profile;
   readonly t = inject(TranslationService)
 
   categories = signal<Category[]>([]);
@@ -87,7 +88,7 @@ export class Avatar implements OnInit {
         this.toast.success("avatar.bought.success")
       },
       error: _ => {
-        this.toast.error("avatar.bought.error");
+        this.toast.error();
       }
     });
   }
@@ -126,7 +127,7 @@ export class Avatar implements OnInit {
       this.service.updateProfilePicture(base64);
       this.toast.success('avatar.setAsProfilePictureMessage.success');
     } catch {
-      this.toast.error('avatar.setAsProfilePictureMessage.error');
+      this.toast.error();
     }
   }
 }

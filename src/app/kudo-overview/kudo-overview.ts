@@ -1,14 +1,19 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { NgIcon, provideIcons } from "@ng-icons/core";
-import { CommonModule, DatePipe } from '@angular/common';
-import { ProfileService } from '../services/profileService';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {NgIcon, provideIcons} from "@ng-icons/core";
+import {CommonModule, DatePipe} from '@angular/common';
+import {ProfileService} from '../services/profileService';
 import {
-  lucideChevronDown, lucideStar, lucideZap,
-  lucideUsers, lucideHeart, lucideBookOpen, lucideAward
+  lucideAward,
+  lucideBookOpen,
+  lucideChevronDown,
+  lucideHeart,
+  lucideStar,
+  lucideUsers,
+  lucideZap
 } from '@ng-icons/lucide';
-import { ToastService } from '../services/toastService';
-import { TranslationService } from '../services/translationService';
-import { ArchetypeId, KudosEntry } from '../model/profile';
+import {ToastService} from '../services/toastService';
+import {TranslationService} from '../services/translationService';
+import {ArchetypeId, KudosEntry} from '../model/profile';
 
 @Component({
   selector: 'app-kudo-overview',

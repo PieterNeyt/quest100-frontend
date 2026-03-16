@@ -1,8 +1,7 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environment/environment';
-import { ReportPayload } from '../components/report/report';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {ReportPayload} from '../components/report/report';
 import {ReportResponse} from '../model/moderation';
 
 
@@ -11,10 +10,9 @@ import {ReportResponse} from '../model/moderation';
 })
 export class ModerationService {
   private readonly http = inject(HttpClient);
-  private readonly url = environment.apiConfig.uri;
 
   createReport(payload: ReportPayload): Observable<ReportResponse> {
-    return this.http.post<ReportResponse>(`${this.url}/api/moderation/report`, {
+    return this.http.post<ReportResponse>(`/api/moderation/report`, {
       targetId: payload.targetId,
       contextId: payload.contextId ?? null,
       channelType: payload.channelType,

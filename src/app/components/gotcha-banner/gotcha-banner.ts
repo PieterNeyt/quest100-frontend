@@ -1,24 +1,24 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {
-  lucideTrophy,
   lucideArrowRight,
-  lucideTarget,
-  lucideSwords,
-  lucideClock,
-  lucideShieldCheck,
-  lucideZap,
-  lucideSettings2,
   lucideChevronRight,
-  lucidePlus
+  lucideClock,
+  lucidePlus,
+  lucideSettings2,
+  lucideShieldCheck,
+  lucideSwords,
+  lucideTarget,
+  lucideTrophy,
+  lucideZap
 } from '@ng-icons/lucide';
-import { GotchaService } from '../../services/gotchaService';
-import { TranslationService } from '../../services/translationService';
-import { ToastService } from '../../services/toastService';
-import { FullNamePipe, InitialsPipe, PhotoSrcPipe } from '../../utils/gotchaPipes';
+import {GotchaService} from '../../services/gotchaService';
+import {TranslationService} from '../../services/translationService';
+import {ToastService} from '../../services/toastService';
+import {FullNamePipe, InitialsPipe, PhotoSrcPipe} from '../../utils/gotchaPipes';
 
 @Component({
   selector: 'app-gotcha-banner',
@@ -114,9 +114,9 @@ export class GotchaBannerComponent implements OnInit {
         this.acting.set(false);
         this.toastService.success('gotcha.toasts.optedOut');
       },
-      error: (err) => {
+      error: () => {
         this.acting.set(false);
-        this.toastService.error('gotcha.toasts.optOutError');
+        this.toastService.error();
       },
     });
   }

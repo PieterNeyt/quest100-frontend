@@ -1,18 +1,12 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService, KillFeedItem } from '../../services/gotchaService';
-import { TranslationService } from '../../services/translationService';
-import { ToastService } from '../../services/toastService';
-import {
-  FullNamePipe,
-  InitialsPipe,
-  PhotoSrcPipe,
-  PropNamePipe,
-  StatusClassPipe
-} from '../../utils/gotchaPipes';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {GotchaService, KillFeedItem} from '../../services/gotchaService';
+import {TranslationService} from '../../services/translationService';
+import {ToastService} from '../../services/toastService';
+import {FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, StatusClassPipe} from '../../utils/gotchaPipes';
 
 @Component({
   selector: 'app-gotcha-kill-feed',
@@ -65,7 +59,7 @@ export class GotchaKillFeedComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.toastService.error('gotcha.feed.loadError');
+        this.toastService.error();
       },
     });
   }
@@ -82,7 +76,7 @@ export class GotchaKillFeedComponent implements OnInit {
       },
       error: () => {
         this.loadingMore.set(false);
-        this.toastService.error('gotcha.feed.loadError');
+        this.toastService.error();
       },
     });
   }
@@ -110,7 +104,7 @@ export class GotchaKillFeedComponent implements OnInit {
             : i)
         );
         this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-        this.toastService.error('gotcha.feed.likeError');
+        this.toastService.error();
       },
     });
   }
@@ -159,7 +153,7 @@ export class GotchaKillFeedComponent implements OnInit {
         error: () => {
           this.isReviewingKill.set(false);
           this.swipeDirection.set(null);
-          this.toastService.error('gotcha.review.error');
+          this.toastService.error();
         },
       });
     }, 350);

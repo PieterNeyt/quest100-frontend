@@ -1,19 +1,14 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, inject, OnInit, signal,} from '@angular/core';
+import {CommonModule, Location} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService } from '../services/gotchaService';
-import { TranslationService } from '../services/translationService';
-import { GotchaEndScreenComponent } from '../components/gotcha-end-screen/gotcha-end-screen';
-import { EndScreen } from '../model/gotcha';
-import { Location } from '@angular/common';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {GotchaService} from '../services/gotchaService';
+import {TranslationService} from '../services/translationService';
+import {GotchaEndScreenComponent} from '../components/gotcha-end-screen/gotcha-end-screen';
+import {EndScreen} from '../model/gotcha';
+
 @Component({
   selector: 'app-gotcha-end-page',
   standalone: true,

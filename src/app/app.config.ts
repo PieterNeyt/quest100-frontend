@@ -26,7 +26,7 @@ import {
   MsalInterceptorConfiguration,
   MsalService,
 } from '@azure/msal-angular';
-import {environment} from '../../environment/environment';
+import {environment} from '../environments/environment';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {TranslationService} from './services/translationService';
 

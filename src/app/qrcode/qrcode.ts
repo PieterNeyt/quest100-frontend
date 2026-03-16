@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { QrCodeService } from '../services/qrcodeService';
-import { TranslationService } from '../services/translationService';
-import { ToastService } from '../services/toastService';
+import {Component, inject, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {QrCodeService} from '../services/qrcodeService';
+import {TranslationService} from '../services/translationService';
+import {ToastService} from '../services/toastService';
 
 @Component({
   selector: 'app-qrcode',
@@ -31,8 +31,8 @@ export class Qrcode {
         this.toastService.success('qrCode.success');
       },
       error: (error) => {
-        console.error('Error generating QR code:', error);
-        this.toastService.error('qrCode.error');
+        console.error(error);
+        this.toastService.error();
         this.isLoading.set(false);
       }
     });

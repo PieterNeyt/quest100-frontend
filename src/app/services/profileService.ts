@@ -2,7 +2,7 @@ import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, EMPTY, firstValueFrom, map, Observable, switchMap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
-import {environment} from '../../../environment/environment';
+import {environment} from '../../environments/environment';
 import {
   AwardTransaction,
   KudosEntry,
@@ -19,7 +19,6 @@ import {Asset, Category} from '../model/avatar';
   providedIn: 'root',
 })
 export class ProfileService {
-  private readonly url = environment.apiConfig.uri;
   private readonly http = inject(HttpClient);
   private readonly authService = inject(MsalService);
   private readonly translationService = inject(TranslationService);
@@ -56,7 +55,7 @@ export class ProfileService {
     return this.profile()?.customProfilePicture != null;
   }
   proxyAssetUrl(originalUrl: string): string {
-    return `${this.url}/api/profiles/proxy/asset?url=${encodeURIComponent(originalUrl)}`;
+    return `/api/profiles/proxy/asset?url=${encodeURIComponent(originalUrl)}`;
   }
   syncUser() {
     this.authService.acquireTokenSilent({scopes: ["User.Read"]})
@@ -70,7 +69,7 @@ export class ProfileService {
         }),
         switchMap(response => {
           const graphToken = response.accessToken;
-          return this.http.get<SyncProfileResponse>(this.url + "/api/profiles/sync", {
+          return this.http.get<SyncProfileResponse>("/api/profiles/sync", {
             headers: {'X-Graph-Token': graphToken}
           });
         })
@@ -95,32 +94,32 @@ export class ProfileService {
   }
 
   updateProfilePicture(base64Img: string): void {
-    this.http.put<Profile>(`${this.url}/api/profiles/picture`, {profilePicture: base64Img})
+    this.http.put<Profile>(`/api/profiles/picture`, {profilePicture: base64Img})
       .subscribe((updated) => this.profile.set(updated));
   }
 
   deleteProfilePicture(): void {
-    this.http.delete<Profile>(`${this.url}/api/profiles/picture`)
+    this.http.delete<Profile>(`/api/profiles/picture`)
       .subscribe((updated) => this.profile.set(updated));
   }
 
   getAllProfiles(): void {
-    this.http.get<Profile[]>(`${this.url}/api/profiles`)
+    this.http.get<Profile[]>(`/api/profiles`)
       .subscribe((profiles) => this.profiles.set(profiles));
   }
   getProfileById(id: string): Observable<Profile> {
-    return this.http.get<Profile>(`${this.url}/api/profiles/${id}`);
+    return this.http.get<Profile>(`/api/profiles/${id}`);
   }
   getPlayerStats(): Observable<ProfileStatistics> {
-    return this.http.get<ProfileStatistics>(`${this.url}/api/profiles/stats`)
+    return this.http.get<ProfileStatistics>(`/api/profiles/stats`)
   }
 
   giveAward(award: AwardTransaction): Observable<Profile> {
-    return this.http.post<Profile>(`${this.url}/api/profiles/award`, award);
+    return this.http.post<Profile>(`/api/profiles/award`, award);
   }
 
   getAllProfilesAwards() {
-    this.http.get<ProfileAward[]>(`${this.url}/api/profiles/award`)
+    this.http.get<ProfileAward[]>(`/api/profiles/award`)
       .subscribe((profileAwards) => this.profilesAwards.set(profileAwards));
   }
 
@@ -137,17 +136,17 @@ export class ProfileService {
   }
 
   getShopItems() {
-    return this.http.get<Category[]>(`${this.url}/api/profiles/assets`, {});
+    return this.http.get<Category[]>(`/api/profiles/assets`, {});
   }
 
   buyShopItem(id: string) {
-    return this.http.put(`${this.url}/api/profiles/assets/${id}`, {})
+    return this.http.put(`/api/profiles/assets/${id}`, {})
   }
 
   equipItem(id: string) {
-    return this.http.put<Asset[]>(`${this.url}/api/profiles/avatar/${id}`, {})
+    return this.http.put<Asset[]>(`/api/profiles/avatar/${id}`, {})
   }
   getLastKudosEntries(): Observable<KudosEntry[]> {
-    return this.http.get<KudosEntry[]>(`${this.url}/api/profiles/kudos/recent`);
+    return this.http.get<KudosEntry[]>(`/api/profiles/kudos/recent`);
   }
 }

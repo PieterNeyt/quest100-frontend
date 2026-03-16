@@ -119,33 +119,33 @@ export class GotchaSettingsComponent implements OnInit {
     if (!this.isEditable()) return;
 
     if (!this.editStartDate()) {
-      this.toastService.error('gotcha.editModal.startDateRequired');
+      this.toastService.error();
       return;
     }
 
     const startDate = new Date(this.editStartDate());
     if (startDate <= new Date()) {
-      this.toastService.error('gotcha.editModal.startDatePast');
+      this.toastService.error();
       return;
     }
 
     if (!this.editKillDeadline() || this.editKillDeadline() < 1) {
-      this.toastService.error('gotcha.editModal.killDeadlineRequired');
+      this.toastService.error();
       return;
     }
 
     if (!this.editPrizePhotoBase64()) {
-      this.toastService.error('gotcha.editModal.prizePhotoRequired');
+      this.toastService.error();
       return;
     }
 
     if (!this.editPrizeDescEN().trim()) {
-      this.toastService.error('gotcha.editModal.prizeDescENRequired');
+      this.toastService.error();
       return;
     }
 
     if (!this.editPrizeDescNL().trim()) {
-      this.toastService.error('gotcha.editModal.prizeDescNLRequired');
+      this.toastService.error();
       return;
     }
 
@@ -165,7 +165,7 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.savingGame.set(false);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }
@@ -211,7 +211,7 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.savingProp.set(false);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }
@@ -231,7 +231,7 @@ export class GotchaSettingsComponent implements OnInit {
     const en = this.editPropEN().trim();
     const nl = this.editPropNL().trim();
     if (!en || !nl) {
-      this.toastService.error('gotcha.settings.bothLangsRequired');
+      this.toastService.error();
       return;
     }
     this.savingProp.set(true);
@@ -244,14 +244,14 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.savingProp.set(false);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }
 
   deleteProp(id: string) {
     if (!this.isEditable()) {
-      this.toastService.error('gotcha.settings.locked');
+      this.toastService.error();
       return;
     }
     this.deletingPropId.set(id);
@@ -263,7 +263,7 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.deletingPropId.set(null);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }

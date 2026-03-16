@@ -19,7 +19,7 @@ import {
   lucideX,
   lucideZap
 } from '@ng-icons/lucide';
-import {environment} from '../../environment/environment';
+import {environment} from '../environments/environment';
 import {Language, TranslationService} from './services/translationService';
 import {NgxSonnerToaster} from 'ngx-sonner';
 import {jwtDecode} from 'jwt-decode';
@@ -86,7 +86,7 @@ export class App implements OnInit, OnDestroy {
         if (error?.name === 'InteractionRequiredAuthError') {
           return;
         }
-        console.error('Unexpected redirect error:', error);
+        console.error(error);
       },
     });
 

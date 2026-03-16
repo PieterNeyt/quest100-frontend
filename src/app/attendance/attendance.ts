@@ -38,7 +38,7 @@ export class AttendanceComponent {
     const classId = this.route.snapshot.paramMap.get('classId');
 
     if (!classId) {
-      this.toastService.error('errors.invalidQrCode');
+      this.toastService.error();
       this.isLoading.set(false);
       return;
     }
@@ -56,8 +56,8 @@ export class AttendanceComponent {
         }
       },
       error: (err) => {
-        console.error('Error registering attendance:', err);
-        this.toastService.error('errors.generic');
+        console.error(err);
+        this.toastService.error();
         this.isLoading.set(false);
       }
     });

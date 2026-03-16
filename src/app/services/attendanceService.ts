@@ -1,14 +1,12 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { environment } from '../../../environment/environment';
-import { AttendanceResponse } from '../model/qrcode';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {map, Observable} from 'rxjs';
+import {AttendanceResponse} from '../model/qrcode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttendanceService {
-  private url = environment.apiConfig.uri;
   private http = inject(HttpClient);
 
   registerAttendance(classId: string): Observable<{
@@ -17,7 +15,7 @@ export class AttendanceService {
     totalKudos: number;
   }> {
     return this.http.post<AttendanceResponse>(
-      `${this.url}/api/profiles/attendance/${classId}`, {}
+      `/api/profiles/attendance/${classId}`, {}
     ).pipe(
       map(res => ({
         alreadyRegistered: res.alreadyRegistered,
