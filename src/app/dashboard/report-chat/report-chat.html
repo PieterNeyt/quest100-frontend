@@ -71,7 +71,7 @@
         >
           <!-- Avatar -->
           <div class="msg-avatar">
-            @if (msg.sender?.customProfilePicture) {
+            @if (msg.sender.customProfilePicture) {
               <img [src]="msg.sender.customProfilePicture" [alt]="msg.sender.firstName"/>
             } @else {
               {{ initials(msg.sender) }}
@@ -81,7 +81,7 @@
           <!-- Bubble -->
           <div class="msg-content">
             <div class="msg-meta">
-              <span class="msg-name">{{ msg.sender?.firstName }} {{ msg.sender?.lastName }}</span>
+              <span class="msg-name">{{ msg.sender.firstName }} {{ msg.sender.lastName }}</span>
               @if (msg.id === messageId) {
                 <span class="flagged-chip">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
