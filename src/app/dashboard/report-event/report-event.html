@@ -1,0 +1,235 @@
+<button class="back-btn" (click)="goBack()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+  Back to reports
+</button>
+
+@if (loading()) {
+  <div class="state-center">
+    <div class="spinner"></div>
+  </div>
+}
+
+@if (error()) {
+  <div class="state-center">
+    <p class="error-text">{{ error() }}</p>
+    <button class="back-btn" (click)="goBack()">Go back</button>
+  </div>
+}
+
+@if (!loading() && !error() && event()) {
+  <div class="detail-content">
+
+    <!-- Report reason banner -->
+    @if (report()) {
+      <div class="report-reason-banner" [class.is-resolved]="report()!.resolved">
+        <div class="report-reason-left">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <circle cx="12" cy="17" r="1" fill="currentColor"/>
+          </svg>
+          <div class="report-reason-text">
+            <span class="report-reason-label">Reported for</span>
+            <span class="report-reason-message">{{ report()!.message || 'No reason provided' }}</span>
+          </div>
+        </div>
+        @if (!report()!.resolved) {
+          <button class="btn-resolve" (click)="showResolveModal.set(true)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Resolve report
+          </button>
+        } @else {
+          <span class="resolved-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Resolved
+          </span>
+        }
+      </div>
+    }
+
+    <div class="top-section">
+
+      <!-- Photo -->
+      <div class="top-photo">
+        @if (event()!.photo) {
+          <img class="top-img" [src]="event()!.photo!" [alt]="event()!.title"/>
+        } @else {
+          <div class="top-placeholder"
+               [style.background]="'linear-gradient(135deg, ' + categoryColor(event()!.category) + '22, ' + categoryColor(event()!.category) + '55)'">
+            <span class="top-placeholder-icon"
+                  [style.color]="categoryColor(event()!.category)"
+                  [innerHTML]="categoryIconSvg(event()!.category, 64)">
+            </span>
+          </div>
+        }
+        <span class="category-chip" [style.background]="categoryColor(event()!.category)">
+          <span [innerHTML]="categoryIconSvg(event()!.category, 12)"></span>
+          {{ categoryLabel(event()!.category) }}
+        </span>
+      </div>
+
+      <!-- Info -->
+      <div class="top-info">
+        <div class="info-grid">
+
+          <!-- Title + Event ID -->
+          <div class="info-item-row">
+            <div class="info-half">
+              <span class="info-label">Title</span>
+              <span class="info-value">{{ event()!.title }}</span>
+            </div>
+            <div class="info-divider"></div>
+            <div class="info-half">
+              <span class="info-label">Event ID</span>
+              <span class="info-value mono">{{ event()!.id }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Organizer</span>
+            <span class="info-value">
+              @if (organizer()) {
+                <span class="organizer-name">{{ organizer()!.firstName }} {{ organizer()!.lastName }}</span>
+                <span class="mono muted"> — {{ event()!.organizerId }}</span>
+              } @else {
+                <span class="mono">{{ event()!.organizerId }}</span>
+              }
+            </span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Event Date</span>
+            <span class="info-value">{{ formatDate(event()!.eventDate) }}</span>
+          </div>
+
+          <!-- Attendees + Visibility -->
+          <div class="info-item-row">
+            <div class="info-half">
+              <span class="info-label">Attendees</span>
+              <span class="info-value">
+                {{ event()!.attendees.length }}
+                @if (event()!.maxAttendees) {
+                  <span class="muted"> / {{ event()!.maxAttendees }}</span>
+                }
+              </span>
+            </div>
+            <div class="info-divider"></div>
+            <div class="info-half">
+              <span class="info-label">Visibility</span>
+              <span class="info-value">
+                <span class="visibility-badge" [class]="event()!.visibility">
+                  {{ event()!.visibility }}
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Created + Updated -->
+          <div class="info-item-row">
+            <div class="info-half">
+              <span class="info-label">Created</span>
+              <span class="info-value">{{ formatDate(event()!.createdAt) }}</span>
+            </div>
+            <div class="info-divider"></div>
+            <div class="info-half">
+              <span class="info-label">Updated</span>
+              <span class="info-value">{{ formatDate(event()!.updatedAt) }}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: attendees + description -->
+    <div class="bottom-section">
+
+      @if (event()!.attendees.length > 0) {
+        <div class="attendees-section">
+          <div class="section-header">
+            <h3 class="section-title">Attendees</h3>
+            <span class="section-count">{{ event()!.attendees.length }}</span>
+          </div>
+          <div class="attendees-grid">
+            @for (attendee of event()!.attendees; track attendee.profileId) {
+              <div class="attendee-card">
+                <div class="attendee-avatar">
+                  @if (getProfileAvatar(attendee.profileId)) {
+                    <img [src]="getProfileAvatar(attendee.profileId)" [alt]="attendee.profileId"/>
+                  } @else {
+                    {{ getProfileInitials(attendee.profileId) }}
+                  }
+                </div>
+                <div class="attendee-info">
+                  <span class="attendee-name">{{ getProfileName(attendee.profileId) }}</span>
+                  <span class="attendee-id mono">{{ attendee.profileId }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (event()!.description) {
+        <div class="description-section">
+          <div class="section-header">
+            <h3 class="section-title">Description</h3>
+          </div>
+          <div class="description-block">
+            <p>{{ event()!.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Resolve Modal -->
+@if (showResolveModal()) {
+  <div class="modal-overlay" (click)="showResolveModal.set(false)">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-header-inner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <circle cx="12" cy="17" r="1" fill="#d97706"/>
+          </svg>
+          <h2>Resolve this report?</h2>
+        </div>
+        <button class="modal-close" (click)="showResolveModal.set(false)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to mark this report as resolved? This action cannot be undone.</p>
+        @if (report()?.message) {
+          <div class="modal-reason">
+            <span class="modal-reason-label">Report reason</span>
+            <span class="modal-reason-text">{{ report()!.message }}</span>
+          </div>
+        }
+        <div class="modal-actions">
+          <button class="btn-modal-resolve" [disabled]="resolving()" (click)="resolve()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ resolving() ? 'Resolving…' : 'Yes, resolve' }}
+          </button>
+          <button class="btn-modal-cancel" (click)="showResolveModal.set(false)">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

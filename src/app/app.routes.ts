@@ -15,6 +15,10 @@ import {GotchaEndPageComponent} from './gotcha-end-page/gotcha-end-page';
 import {GotchaSettingsComponent} from './gotcha-settings/gotcha-settings';
 import {GotchaHistoryPageComponent} from './gotcha-history-page/gotcha-history-page';
 import {AboutComponent} from './about/about';
+import {Dashboard} from './dashboard/dashboard';
+import {reportEvent} from './dashboard/report-event/report-event';
+import {reportChat} from './dashboard/report-chat/report-chat';
+import {ReportAward} from './dashboard/report-award/report-award';
 
 export const routes: Routes = [
   {path: '', component: Home},
@@ -32,4 +36,8 @@ export const routes: Routes = [
   { path: 'gotcha/history', component: GotchaHistoryPageComponent, canActivate: [MsalGuard] },
   { path: 'gotcha/settings', component: GotchaSettingsComponent, canActivate: [MsalGuard] },
   { path: 'about', component: AboutComponent, canActivate: [MsalGuard] },
+  { path: 'reports/dashboard', component: Dashboard, canActivate: [MsalGuard] },
+  { path: 'report/:reportId/event/:eventId', component: reportEvent, canActivate: [MsalGuard] },
+  { path: 'report/:reportId/message/:messageId/chat/:chatId', component: reportChat, canActivate: [MsalGuard] },
+  { path: 'report/:reportId/award/:targetId', component: ReportAward,canActivate: [MsalGuard] },
 ];

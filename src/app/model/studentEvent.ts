@@ -9,7 +9,7 @@ export interface StudentEvent {
   maxAttendees?: number | null;
   createdAt: string;
   updatedAt: string;
-
+  visibility: string;
   attendees: EventAttendee[];
 }
 
