@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { Avatar } from './avatar';
+import {Avatar} from './avatar';
 
 describe('Avatar', () => {
   let component: Avatar;

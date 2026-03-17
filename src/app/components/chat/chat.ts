@@ -1,14 +1,14 @@
-import { Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormsModule } from "@angular/forms";
-import { WebsocketService } from '../../services/websocketService';
-import { ProfileService } from '../../services/profileService';
-import { Subscription } from 'rxjs';
-import { NgClass } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { ChatService } from '../../services/chatService';
-import { ReceiveMessage, SendMessage } from '../../model/chat';
-import { NgIcon } from '@ng-icons/core';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
+import {Component, effect, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {FormsModule} from "@angular/forms";
+import {WebsocketService} from '../../services/websocketService';
+import {ProfileService} from '../../services/profileService';
+import {Subscription} from 'rxjs';
+import {NgClass} from '@angular/common';
+import {ActivatedRoute} from '@angular/router';
+import {ChatService} from '../../services/chatService';
+import {ReceiveMessage, SendMessage} from '../../model/chat';
+import {NgIcon} from '@ng-icons/core';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
 import {ReportComponent} from '../report/report';
 
 @Component({

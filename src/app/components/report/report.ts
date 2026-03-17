@@ -1,12 +1,12 @@
-import { Component, computed, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, EventEmitter, inject, Input, OnInit, Output, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { ToastService } from '../../services/toastService';
-import { ModerationService } from '../../services/moderationService';
-import { TranslationService } from '../../services/translationService';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {ToastService} from '../../services/toastService';
+import {ModerationService} from '../../services/moderationService';
+import {TranslationService} from '../../services/translationService';
 
 export enum ReportType {
   Harassment = 0,

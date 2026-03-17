@@ -1,18 +1,12 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService, KillFeedItem } from '../../services/gotchaService';
-import { TranslationService } from '../../services/translationService';
-import { ToastService } from '../../services/toastService';
-import {
-  FullNamePipe,
-  InitialsPipe,
-  PhotoSrcPipe,
-  PropNamePipe,
-  StatusClassPipe
-} from '../../utils/gotchaPipes';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {GotchaService, KillFeedItem} from '../../services/gotchaService';
+import {TranslationService} from '../../services/translationService';
+import {ToastService} from '../../services/toastService';
+import {FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, StatusClassPipe} from '../../utils/gotchaPipes';
 
 @Component({
   selector: 'app-gotcha-kill-feed',

@@ -8,7 +8,8 @@ export const environment = {
   },
   apiConfig: {
     scopes: ['api://202acdbd-a466-4526-9ab9-895e4371eabe/access_as_user'],
-    uri: 'http://localhost:8080',
+    uri: 'http://localhost:4200/api',
     assetsUri: 'http://localhost:4200/i18n'
   },
+  wsUrl: "ws://localhost:8080/"
 };

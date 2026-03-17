@@ -39,7 +39,10 @@
     "scanTitle": "Scan deze QR-code voor aanwezigheid",
     "infoText": "Studenten kunnen deze code scannen om hun aanwezigheid te registreren",
     "success": "QR-code succesvol gegenereerd",
-    "error": "QR-code genereren mislukt"
+    "error": {
+      "generic": "QR-code genereren mislukt",
+      "noLesson": "Er is geen les gepland"
+    }
   },
   "event": {
     "title": "Evenementen",

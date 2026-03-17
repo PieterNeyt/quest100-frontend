@@ -1,6 +1,6 @@
-import { Pipe, PipeTransform, inject } from '@angular/core';
-import { KillFeedProp } from '../model/gotcha';
-import { TranslationService } from '../services/translationService';
+import {inject, Pipe, PipeTransform} from '@angular/core';
+import {KillFeedProp} from '../model/gotcha';
+import {TranslationService} from '../services/translationService';
 
 @Pipe({ name: 'fullName', standalone: true })
 export class FullNamePipe implements PipeTransform {

@@ -5,6 +5,7 @@ import {AttendanceService} from '../services/attendanceService';
 import {TranslationService} from '../services/translationService';
 import {ToastService} from '../services/toastService';
 import {ProfileService} from '../services/profileService';
+import {Profile} from '../model/profile';
 
 @Component({
   selector: 'app-attendance',
@@ -17,16 +18,19 @@ export class AttendanceComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private attendanceService = inject(AttendanceService);
   private toastService = inject(ToastService);
-  private profileService = inject(ProfileService)
   public t = inject(TranslationService);
+  profile = inject(ProfileService).profile;
 
   isLoading = signal(true);
   isSuccess = signal(false);
   alreadyRegistered = signal(false);
   kudosEarned = signal(0);
-  totalKudos = signal(0);
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+    this.attend()
+  }
+
+  async attend(): Promise<void> {
     const classId = this.route.snapshot.paramMap.get('classId');
 
     if (!classId) {
@@ -35,35 +39,26 @@ export class AttendanceComponent implements OnInit {
       return;
     }
 
-    await this.waitForProfile();
-
     this.attendanceService.registerAttendance(classId).subscribe({
       next: (res) => {
         this.isSuccess.set(true);
         this.isLoading.set(false);
-        this.totalKudos.set(res.totalKudos);
         this.kudosEarned.set(res.kudosEarned);
         this.alreadyRegistered.set(res.alreadyRegistered);
+        this.profile.update(currentProf => {
+          if (!currentProf) return currentProf;
+          return {...this.profile(), kudos: res.totalKudos} as Profile;
+        })
 
         if (!res.alreadyRegistered) {
           this.toastService.success('attendance.successMessage');
         }
       },
       error: (err) => {
-        console.error('Error registering attendance:', err);
-        this.toastService.error('errors.generic');
+        console.error(err);
+        this.toastService.error();
         this.isLoading.set(false);
       }
-    });
-  }
-  private waitForProfile(): Promise<void> {
-    return new Promise((resolve) => {
-      const interval = setInterval(() => {
-        if (this.profileService.profile() !== null) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 50);
     });
   }
 }

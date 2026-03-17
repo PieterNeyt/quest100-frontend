@@ -2,6 +2,7 @@ import {inject, Injectable, signal} from '@angular/core';
 import {Subject} from 'rxjs';
 import {ProfileService} from './profileService';
 import {SendMessage} from '../model/chat';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class WebsocketService {
       return;
     }
     if (this.socket && this.socket.readyState !== WebSocket.CLOSED) return;
-    this.socket = new WebSocket(`ws://localhost:8080/ws?token=${currentProfile.id}`);
+    this.socket = new WebSocket(`${environment.wsUrl}ws?token=${currentProfile.id}`);
 
     this.socket.onopen = () => {
       console.log('Connection opened');
