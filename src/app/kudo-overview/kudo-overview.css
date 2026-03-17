@@ -58,9 +58,7 @@
 }
 
 .kudo-summary-row { @apply flex gap-8 flex-wrap; }
-
 .kudo-summary-block { @apply flex flex-col; }
-
 .info-label { @apply block text-xs uppercase font-black opacity-50 mb-1; }
 .info-value { @apply text-2xl md:text-3xl font-black; color: oklch(0.554 0.046 257.417); }
 .highlight-yellow { color: #5aaab4; }
@@ -91,9 +89,7 @@
 
 /* --- Timeline --- */
 .timeline { @apply flex flex-col; }
-
 .timeline-item { @apply flex gap-4 pb-2; }
-
 .timeline-dot-col { @apply flex flex-col items-center; }
 
 .timeline-dot {
@@ -112,9 +108,7 @@
 }
 
 .timeline-item:last-child .timeline-line { display: none; }
-
 .timeline-body { @apply flex flex-col pb-6; }
-
 .timeline-meta { @apply flex items-center gap-3 mb-1; }
 
 .timeline-type {
@@ -125,10 +119,48 @@
 }
 
 .timeline-date { @apply text-xs opacity-40 font-bold; color: oklch(0.554 0.046 257.417); }
-
 .timeline-title { @apply font-bold text-sm mb-1; color: oklch(0.554 0.046 257.417); }
+.timeline-pts { @apply text-xs font-black; color: #5aaab4; }
 
-.timeline-pts {
-  @apply text-xs font-black;
-  color: #5aaab4;
+/* --- Timeline Bottom Row --- */
+.timeline-bottom-row { @apply flex items-center gap-3; }
+
+/* --- Timeline Sender --- */
+.timeline-sender {
+  @apply flex items-center gap-1 text-xs font-bold opacity-60;
+  color: oklch(0.554 0.046 257.417);
+}
+
+.sender-icon { @apply size-3; }
+
+/* --- Timeline Report Button --- */
+.timeline-report-btn {
+  @apply flex items-center justify-center ml-auto;
+  width: 22px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.15s, transform 0.15s, color 0.15s;
+  color: oklch(0.55 0.02 264);
+  padding: 0;
+}
+
+.timeline-item:hover .timeline-report-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.timeline-report-btn:hover {
+  color: #ef4444;
+  transform: scale(1.15) !important;
+}
+
+.report-flag-icon { @apply size-3; }
+
+@media (max-width: 768px) {
+  .timeline-report-btn { opacity: 1; transform: scale(1); }
 }
