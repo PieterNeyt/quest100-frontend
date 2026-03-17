@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection
 } from '@angular/core';
-import {provideRouter} from '@angular/router';
+import {provideRouter, withEnabledBlockingInitialNavigation} from '@angular/router';
 
 import {routes} from './app.routes';
 import {
@@ -26,7 +26,7 @@ import {
   MsalInterceptorConfiguration,
   MsalService,
 } from '@azure/msal-angular';
-import {environment} from '../../environment/environment';
+import {environment} from '../environments/environment';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {TranslationService} from './services/translationService';
 
@@ -82,7 +82,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(withInterceptorsFromDi()),
     {

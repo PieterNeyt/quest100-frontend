@@ -55,7 +55,7 @@
           <button class="user-avatar-trigger" (click)="toggleMenu('user', $event)">
             <div class="avatar-ring">
               <hlm-avatar class="user-avatar-circle">
-                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt=""/>
+                <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt="Profile picture"/>
                 <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
               </hlm-avatar>
             </div>
@@ -63,6 +63,7 @@
           @if (activeMenu() === 'user') {
             <div class="custom-dropdown-menu">
               <button class="dropdown-item-pill" routerLink="/profile" (click)="activeMenu.set(null)">Profile</button>
+              <button class="dropdown-item-pill" routerLink="/qrcode" (click)="activeMenu.set(null)">QrCode</button>
               <button class="dropdown-item-pill" (click)="logout()">Log out</button>
             </div>
           }

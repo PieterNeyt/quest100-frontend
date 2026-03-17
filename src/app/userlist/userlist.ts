@@ -5,12 +5,14 @@ import {AwardTransaction, KudoType, Profile} from '../model/profile';
 import {FormsModule} from '@angular/forms';
 import {ToastService} from '../services/toastService';
 import {TranslationService} from '../services/translationService';
-import {NgIcon} from '@ng-icons/core';
+import {NgIcon, provideIcons} from '@ng-icons/core';
+import {lucideSearch} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-userlist',
   standalone: true,
   imports: [CommonModule, FormsModule, NgIcon],
+  providers: [provideIcons({lucideSearch})],
   templateUrl: './userlist.html',
   styleUrl: './userlist.css',
 })
@@ -69,9 +71,7 @@ export class Userlist implements OnInit {
         this.closeModal();
       },
       error: () => {
-        this.toastService.error(
-          this.translate.t('userlist.awardError')
-        );
+        this.toastService.error('userlist.awardError');
       }
     });
   }

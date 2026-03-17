@@ -1,21 +1,17 @@
-import { Component, inject, signal, computed, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, inject, input, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { GotchaService, KillFeedItem } from '../../services/gotchaService';
-import { TranslationService } from '../../services/translationService';
-import { ToastService } from '../../services/toastService';
-import {
-  FullNamePipe,
-  InitialsPipe,
-  PhotoSrcPipe,
-  PropNamePipe,
-  StatusClassPipe
-} from '../../utils/gotchaPipes';
-import { GotchaGame } from '../../model/gotcha';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+
+import {GotchaService, KillFeedItem} from '../../services/gotchaService';
+import {TranslationService} from '../../services/translationService';
+import {ToastService} from '../../services/toastService';
 import {TourService} from '../../services/tourService';
 import {GotchaStateService} from '../../services/GotchaStateService';
+
+import {FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, StatusClassPipe} from '../../utils/gotchaPipes';
+import {GotchaGame} from '../../model/gotcha';
 
 @Component({
   selector: 'app-gotcha-kill-feed',
@@ -36,7 +32,7 @@ import {GotchaStateService} from '../../services/GotchaStateService';
 })
 export class GotchaKillFeedComponent {
   private readonly gotchaService = inject(GotchaService);
-  private readonly toastService  = inject(ToastService);
+  private readonly toastService = inject(ToastService);
   readonly t = inject(TranslationService);
 
   currentGame = input<GotchaGame | null>(null);
@@ -49,17 +45,17 @@ export class GotchaKillFeedComponent {
   });
 
   // Track which tabs have been lazily loaded (so we don't double-fetch)
-  private feedLoaded   = false;
+  private feedLoaded = false;
   private reviewLoaded = false;
 
   // Prize lightbox
   prizeEnlarged = signal(false);
 
   // ── Feed state ──
-  items       = signal<KillFeedItem[]>([]);
-  loading     = signal(false);
+  items = signal<KillFeedItem[]>([]);
+  loading = signal(false);
   loadingMore = signal(false);
-  hasMore     = signal(true);
+  hasMore = signal(true);
   private likingIds = signal<Set<string>>(new Set());
   private offset = 0;
   private readonly limit = 10;
@@ -67,11 +63,11 @@ export class GotchaKillFeedComponent {
 
   // ── Review state ──
   currentReviewItem = signal<KillFeedItem | null>(null);
-  pendingCount      = signal(0);
-  reviewLoading     = signal(false);
-  isReviewingKill   = signal(false);
-  reviewDone        = computed(() => !this.reviewLoading() && this.currentReviewItem() === null);
-  swipeDirection    = signal<'approve' | 'deny' | null>(null);
+  pendingCount = signal(0);
+  reviewLoading = signal(false);
+  isReviewingKill = signal(false);
+  reviewDone = computed(() => !this.reviewLoading() && this.currentReviewItem() === null);
+  swipeDirection = signal<'approve' | 'deny' | null>(null);
 
   // ── Tab switching with lazy load ──
   switchTab(tab: 'rules' | 'feed' | 'review') {
@@ -139,7 +135,7 @@ export class GotchaKillFeedComponent {
 
     this.items.update((list) =>
       list.map((i) => i.id === item.id
-        ? { ...i, likedByMe: !wasLiked, likeCount: wasLiked ? i.likeCount - 1 : i.likeCount + 1 }
+        ? {...i, likedByMe: !wasLiked, likeCount: wasLiked ? i.likeCount - 1 : i.likeCount + 1}
         : i)
     );
 
@@ -149,21 +145,31 @@ export class GotchaKillFeedComponent {
 
     req$.subscribe({
       next: () => {
-        this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
+        this.likingIds.update((s) => {
+          const n = new Set(s);
+          n.delete(item.id);
+          return n;
+        });
       },
       error: () => {
         this.items.update((list) =>
           list.map((i) => i.id === item.id
-            ? { ...i, likedByMe: wasLiked, likeCount: wasLiked ? i.likeCount + 1 : i.likeCount - 1 }
+            ? {...i, likedByMe: wasLiked, likeCount: wasLiked ? i.likeCount + 1 : i.likeCount - 1}
             : i)
         );
-        this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
+        this.likingIds.update((s) => {
+          const n = new Set(s);
+          n.delete(item.id);
+          return n;
+        });
         this.toastService.error('gotcha.feed.likeError');
       },
     });
   }
 
-  isLiking(id: string): boolean { return this.likingIds().has(id); }
+  isLiking(id: string): boolean {
+    return this.likingIds().has(id);
+  }
 
   // ── Review ──
   loadNextReviewItem() {
@@ -172,7 +178,7 @@ export class GotchaKillFeedComponent {
     this.swipeDirection.set(null);
 
     this.gotchaService.getPendingKillCount().subscribe({
-      next: ({ count }) => this.pendingCount.set(count),
+      next: ({count}) => this.pendingCount.set(count),
     });
 
     this.gotchaService.getNextPendingKill().subscribe({
@@ -206,7 +212,7 @@ export class GotchaKillFeedComponent {
           this.toastService.success(approve ? 'gotcha.review.approved' : 'gotcha.review.denied');
           const newStatus = approve ? 'APPROVED' : 'DENIED';
           this.items.update((list) =>
-            list.map((i) => i.id === item.id ? { ...i, status: newStatus } : i)
+            list.map((i) => i.id === item.id ? {...i, status: newStatus} : i)
           );
           this.loadNextReviewItem();
         },
@@ -239,17 +245,17 @@ export class GotchaKillFeedComponent {
 
   // ── Time formatting ──
   formatTime(dateStr: string): string {
-    const locale   = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
-    const date     = new Date(dateStr);
-    const diffMs   = Date.now() - date.getTime();
-    const diffMin  = Math.floor(diffMs / 60000);
+    const locale = this.t.currentLanguage() === 'nl' ? 'nl-BE' : 'en-GB';
+    const date = new Date(dateStr);
+    const diffMs = Date.now() - date.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
     const diffHour = Math.floor(diffMin / 60);
-    const diffDay  = Math.floor(diffHour / 24);
+    const diffDay = Math.floor(diffHour / 24);
 
-    if (diffMin < 1)   return this.t.t('gotcha.feed.justNow');
-    if (diffMin < 60)  return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
+    if (diffMin < 1) return this.t.t('gotcha.feed.justNow');
+    if (diffMin < 60) return `${diffMin}${this.t.t('gotcha.feed.minutesAgo')}`;
     if (diffHour < 24) return `${diffHour}${this.t.t('gotcha.feed.hoursAgo')}`;
-    if (diffDay < 7)   return `${diffDay}${this.t.t('gotcha.feed.daysAgo')}`;
-    return date.toLocaleDateString(locale, { day: '2-digit', month: 'short' });
+    if (diffDay < 7) return `${diffDay}${this.t.t('gotcha.feed.daysAgo')}`;
+    return date.toLocaleDateString(locale, {day: '2-digit', month: 'short'});
   }
 }

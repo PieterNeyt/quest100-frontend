@@ -4,7 +4,6 @@ import {Home} from './home/home';
 import {AttendanceComponent} from './attendance/attendance';
 import {MsalGuard} from '@azure/msal-angular';
 import {Userlist} from './userlist/userlist';
-import {roleGuard} from './guards/role-guard';
 import {EventDetailComponent} from './event-detail/event-detail';
 import {Qrcode} from './qrcode/qrcode';
 import {EventComponent} from './event/event';
@@ -26,18 +25,18 @@ export const routes: Routes = [
   {path: 'event/:eventId', component: EventDetailComponent, canActivate: [MsalGuard]},
   {path: 'event', component: EventComponent, canActivate: [MsalGuard]},
   {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
-  {path: 'qrcode', component: Qrcode, canActivate: [MsalGuard, roleGuard], data: {role: 'lector'}},
+  {path: 'qrcode', component: Qrcode, canActivate: [MsalGuard]},
   {path: 'userlist', component: Userlist, canActivate: [MsalGuard]},
   {path: 'avatar', component: Avatar, canActivate: [MsalGuard]},
   {path: 'kudo-overview', component: KudoOverview, canActivate: [MsalGuard]},
-  { path: 'gotcha', component: GotchaPageComponent, canActivate: [MsalGuard] },
-  { path: 'gotcha/end', component: GotchaEndPageComponent, canActivate: [MsalGuard] },
-  { path: 'gotcha/end/:gameId', component: GotchaEndPageComponent, canActivate: [MsalGuard] },
-  { path: 'gotcha/history', component: GotchaHistoryPageComponent, canActivate: [MsalGuard] },
-  { path: 'gotcha/settings', component: GotchaSettingsComponent, canActivate: [MsalGuard] },
-  { path: 'about', component: AboutComponent, canActivate: [MsalGuard] },
-  { path: 'reports/dashboard', component: Dashboard, canActivate: [MsalGuard] },
-  { path: 'report/:reportId/event/:eventId', component: reportEvent, canActivate: [MsalGuard] },
-  { path: 'report/:reportId/message/:messageId/chat/:chatId', component: reportChat, canActivate: [MsalGuard] },
-  { path: 'report/:reportId/award/:targetId', component: ReportAward,canActivate: [MsalGuard] },
+  {path: 'gotcha', component: GotchaPageComponent, canActivate: [MsalGuard]},
+  {path: 'gotcha/end', component: GotchaEndPageComponent, canActivate: [MsalGuard]},
+  {path: 'gotcha/end/:gameId', component: GotchaEndPageComponent, canActivate: [MsalGuard]},
+  {path: 'gotcha/history', component: GotchaHistoryPageComponent, canActivate: [MsalGuard]},
+  {path: 'gotcha/settings', component: GotchaSettingsComponent, canActivate: [MsalGuard]},
+  {path: 'about', component: AboutComponent, canActivate: [MsalGuard]},
+  {path: 'reports/dashboard', component: Dashboard, canActivate: [MsalGuard]},
+  {path: 'report/:reportId/event/:eventId', component: reportEvent, canActivate: [MsalGuard]},
+  {path: 'report/:reportId/message/:messageId/chat/:chatId', component: reportChat, canActivate: [MsalGuard]},
+  {path: 'report/:reportId/award/:targetId', component: ReportAward, canActivate: [MsalGuard]},
 ];

@@ -145,7 +145,7 @@ export class GotchaSettingsComponent implements OnInit {
     }
 
     if (!this.editPrizeDescNL().trim()) {
-      this.toastService.error('gotcha.editModal.prizeDescNLRequired');
+      this.toastService.error('gotcha.editModal.prizeDescENRequired');
       return;
     }
 
@@ -165,7 +165,7 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.savingGame.set(false);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }
@@ -211,7 +211,7 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.savingProp.set(false);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }
@@ -244,14 +244,14 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.savingProp.set(false);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }
 
   deleteProp(id: string) {
     if (!this.isEditable()) {
-      this.toastService.error('gotcha.settings.locked');
+      this.toastService.error('gotcha.settings.bothLangsRequired');
       return;
     }
     this.deletingPropId.set(id);
@@ -263,7 +263,7 @@ export class GotchaSettingsComponent implements OnInit {
       },
       error: () => {
         this.deletingPropId.set(null);
-        this.toastService.error('errors.generic');
+        this.toastService.error();
       },
     });
   }

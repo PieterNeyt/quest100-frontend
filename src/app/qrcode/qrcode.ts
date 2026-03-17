@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { QrCodeService } from '../services/qrcodeService';
-import { TranslationService } from '../services/translationService';
-import { ToastService } from '../services/toastService';
+import {Component, inject, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {QrCodeService} from '../services/qrcodeService';
+import {TranslationService} from '../services/translationService';
+import {ToastService} from '../services/toastService';
 
 @Component({
   selector: 'app-qrcode',
@@ -20,21 +20,22 @@ export class Qrcode {
   qrCodeImage = signal<string | null>(null);
   isLoading = signal(false);
 
-  private readonly TEMP_CLASS_ID = '00000000-0000-0000-0000-000000000001';
-
   generateQRCode(): void {
     this.isLoading.set(true);
     this.qrCodeImage.set(null);
 
-    this.qrCodeService.generateQRCode(this.TEMP_CLASS_ID).subscribe({
+    this.qrCodeService.generateQRCode().subscribe({
       next: (response) => {
         this.qrCodeImage.set(response.qrCode);
         this.isLoading.set(false);
         this.toastService.success('qrCode.success');
       },
       error: (error) => {
-        console.error('Error generating QR code:', error);
-        this.toastService.error('qrCode.error');
+        if (error.status === 404) {
+          this.toastService.error("qrCode.error.noLesson");
+        } else {
+          this.toastService.error("qrCode.error.generic");
+        }
         this.isLoading.set(false);
       }
     });

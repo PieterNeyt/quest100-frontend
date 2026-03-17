@@ -1,15 +1,15 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { NgIcon, provideIcons } from "@ng-icons/core";
-import { CommonModule, DatePipe } from '@angular/common';
-import { ProfileService } from '../services/profileService';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {NgIcon, provideIcons} from "@ng-icons/core";
+import {CommonModule, DatePipe} from '@angular/common';
+import {ProfileService} from '../services/profileService';
 import {
   lucideChevronDown, lucideStar, lucideZap,
   lucideUsers, lucideHeart, lucideBookOpen, lucideAward, lucideFlag
 } from '@ng-icons/lucide';
-import { ToastService } from '../services/toastService';
-import { TranslationService } from '../services/translationService';
-import { ArchetypeId, KudosEntry } from '../model/profile';
-import { ReportComponent } from '../components/report/report';
+import {ToastService} from '../services/toastService';
+import {TranslationService} from '../services/translationService';
+import {ArchetypeId, KudosEntry} from '../model/profile';
+import {ReportComponent} from '../components/report/report';
 
 @Component({
   selector: 'app-kudo-overview',
@@ -29,10 +29,10 @@ export class KudoOverview implements OnInit {
   profile = this.profileService.profile;
 
   readonly archetypeNames = computed<Record<ArchetypeId, string>>(() => ({
-    [ArchetypeId.Wizard]:           this.t.t('home.archetypes.wizard'),
-    [ArchetypeId.TeamCatalyst]:     this.t.t('home.archetypes.teamCatalyst'),
-    [ArchetypeId.AtmosphereMaker]:  this.t.t('home.archetypes.atmosphereMaker'),
-    [ArchetypeId.CampusExplorer]:   this.t.t('home.archetypes.campusExplorer'),
+    [ArchetypeId.Wizard]: this.t.t('home.archetypes.wizard'),
+    [ArchetypeId.TeamCatalyst]: this.t.t('home.archetypes.teamCatalyst'),
+    [ArchetypeId.AtmosphereMaker]: this.t.t('home.archetypes.atmosphereMaker'),
+    [ArchetypeId.CampusExplorer]: this.t.t('home.archetypes.campusExplorer'),
     [ArchetypeId.AcademicGuardian]: this.t.t('home.archetypes.academicGuardian'),
   }));
 
@@ -55,11 +55,11 @@ export class KudoOverview implements OnInit {
     if (!s || s.KudoKnowledge === undefined) return [];
 
     const statsArray = [
-      { key: 'KudoKnowledge',  value: s.KudoKnowledge  || 0 },
-      { key: 'KudoAttendance', value: s.KudoAttendance || 0 },
-      { key: 'KudoTeamwork',   value: s.KudoTeamwork   || 0 },
-      { key: 'KudoAtmosphere', value: s.KudoAtmosphere || 0 },
-      { key: 'KudoEngagement', value: s.KudoEngagement || 0 },
+      {key: 'KudoKnowledge', value: s.KudoKnowledge || 0},
+      {key: 'KudoAttendance', value: s.KudoAttendance || 0},
+      {key: 'KudoTeamwork', value: s.KudoTeamwork || 0},
+      {key: 'KudoAtmosphere', value: s.KudoAtmosphere || 0},
+      {key: 'KudoEngagement', value: s.KudoEngagement || 0},
     ];
 
     const totalKudos = statsArray.reduce((acc, curr) => acc + curr.value, 0);
@@ -73,9 +73,9 @@ export class KudoOverview implements OnInit {
 
   getIconForType(type: string): string {
     const map: Record<string, string> = {
-      KudoKnowledge:  'lucideBookOpen',
+      KudoKnowledge: 'lucideBookOpen',
       KudoAttendance: 'lucideStar',
-      KudoTeamwork:   'lucideUsers',
+      KudoTeamwork: 'lucideUsers',
       KudoAtmosphere: 'lucideHeart',
       KudoEngagement: 'lucideZap',
     };

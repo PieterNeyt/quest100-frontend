@@ -1,14 +1,13 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environment/environment';
+import {inject, Injectable, signal} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, tap} from 'rxjs';
 import {
   CreatePropRequest,
   EndScreen,
   GameSummary,
   GotchaGame,
-  GotchaProp,
   GotchaParticipant,
+  GotchaProp,
   KillFeedItem,
   TargetInfo,
   UpdateGameRequest,
@@ -22,7 +21,6 @@ export type {
 
 @Injectable({ providedIn: 'root' })
 export class GotchaService {
-  private readonly url = environment.apiConfig.uri;
   private readonly http = inject(HttpClient);
 
   // Shared state signals
@@ -69,111 +67,111 @@ export class GotchaService {
   // Game
 
   getCurrentGame(): Observable<GotchaGame | null> {
-    return this.http.get<GotchaGame | null>(`${this.url}/api/gotcha/game`).pipe(
+    return this.http.get<GotchaGame | null>(`/api/gotcha/game`).pipe(
       tap((game) => this.currentGame.set(game))
     );
   }
 
   createGame(payload: UpdateGameRequest): Observable<GotchaGame> {
-    return this.http.post<GotchaGame>(`${this.url}/api/gotcha/games`, payload).pipe(
+    return this.http.post<GotchaGame>(`/api/gotcha/games`, payload).pipe(
       tap((game) => this.currentGame.set(game))
     );
   }
   // History
 
   getGameHistory(): Observable<GameSummary[]> {
-    return this.http.get<GameSummary[]>(`${this.url}/api/gotcha/games/history`);
+    return this.http.get<GameSummary[]>(`/api/gotcha/games/history`);
   }
 
   // Participation
 
   getMyStatus(): Observable<GotchaParticipant> {
-    return this.http.get<GotchaParticipant>(`${this.url}/api/gotcha/me`).pipe(
+    return this.http.get<GotchaParticipant>(`/api/gotcha/me`).pipe(
       tap((status) => this.myStatus.set(status))
     );
   }
 
   getTargetInfo(): Observable<TargetInfo> {
-    return this.http.get<TargetInfo>(`${this.url}/api/gotcha/me/target`).pipe(
+    return this.http.get<TargetInfo>(`/api/gotcha/me/target`).pipe(
       tap((info) => this.targetInfo.set(info))
     );
   }
 
   optIn(): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.url}/api/gotcha/opt-in`, {});
+    return this.http.post<{ message: string }>(`/api/gotcha/opt-in`, {});
   }
 
   optOut(): Observable<void> {
-    return this.http.delete<void>(`${this.url}/api/gotcha/opt-in`);
+    return this.http.delete<void>(`/api/gotcha/opt-in`);
   }
 
   // Kills
 
   submitKill(photoBase64: string): Observable<unknown> {
-    return this.http.post(`${this.url}/api/gotcha/kills`, { photoBase64 });
+    return this.http.post(`/api/gotcha/kills`, { photoBase64 });
   }
 
   reviewKill(killId: string, approve: boolean): Observable<void> {
-    return this.http.put<void>(`${this.url}/api/gotcha/kills/${killId}/review`, { approve });
+    return this.http.put<void>(`/api/gotcha/kills/${killId}/review`, { approve });
   }
 
   getNextPendingKill(): Observable<KillFeedItem | null> {
-    return this.http.get<KillFeedItem | null>(`${this.url}/api/gotcha/kills/pending/next`);
+    return this.http.get<KillFeedItem | null>(`/api/gotcha/kills/pending/next`);
   }
 
   getPendingKillCount(): Observable<{ count: number }> {
-    return this.http.get<{ count: number }>(`${this.url}/api/gotcha/kills/pending/count`);
+    return this.http.get<{ count: number }>(`/api/gotcha/kills/pending/count`);
   }
 
   // Feed
 
   getFeed(limit = 20, offset = 0): Observable<KillFeedItem[]> {
     return this.http.get<KillFeedItem[]>(
-      `${this.url}/api/gotcha/feed?limit=${limit}&offset=${offset}`
+      `/api/gotcha/feed?limit=${limit}&offset=${offset}`
     );
   }
 
   likeKill(killId: string): Observable<void> {
-    return this.http.post<void>(`${this.url}/api/gotcha/kills/${killId}/like`, {});
+    return this.http.post<void>(`/api/gotcha/kills/${killId}/like`, {});
   }
 
   unlikeKill(killId: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/api/gotcha/kills/${killId}/like`);
+    return this.http.delete<void>(`/api/gotcha/kills/${killId}/like`);
   }
 
   // Leaderboard
 
   getLeaderboard(): Observable<GotchaParticipant[]> {
-    return this.http.get<GotchaParticipant[]>(`${this.url}/api/gotcha/leaderboard`);
+    return this.http.get<GotchaParticipant[]>(`/api/gotcha/leaderboard`);
   }
 
   // End screen
 
   getEndScreen(): Observable<EndScreen> {
-    return this.http.get<EndScreen>(`${this.url}/api/gotcha/end-screen`).pipe(
+    return this.http.get<EndScreen>(`/api/gotcha/end-screen`).pipe(
       tap((data) => this.endScreen.set(data))
     );
   }
 
   getEndScreenById(gameId: string): Observable<EndScreen> {
-    return this.http.get<EndScreen>(`${this.url}/api/gotcha/games/${gameId}/end-screen`);
+    return this.http.get<EndScreen>(`/api/gotcha/games/${gameId}/end-screen`);
   }
 
   // Props
 
   getAllProps(): Observable<GotchaProp[]> {
-    return this.http.get<GotchaProp[]>(`${this.url}/api/gotcha/props`);
+    return this.http.get<GotchaProp[]>(`/api/gotcha/props`);
   }
 
   createProp(payload: CreatePropRequest): Observable<GotchaProp> {
-    return this.http.post<GotchaProp>(`${this.url}/api/gotcha/props`, payload);
+    return this.http.post<GotchaProp>(`/api/gotcha/props`, payload);
   }
 
   updateProp(id: string, payload: UpdatePropRequest): Observable<GotchaProp> {
-    return this.http.put<GotchaProp>(`${this.url}/api/gotcha/props/${id}`, payload);
+    return this.http.put<GotchaProp>(`/api/gotcha/props/${id}`, payload);
   }
 
   deleteProp(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/api/gotcha/props/${id}`);
+    return this.http.delete<void>(`/api/gotcha/props/${id}`);
   }
 }

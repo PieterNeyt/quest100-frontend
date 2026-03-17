@@ -1,4 +1,4 @@
-import { EventCategory } from '../model/studentEvent';
+import {EventCategory} from '../model/studentEvent';
 
 export interface CategoryMeta {
   color: string;

@@ -23,7 +23,7 @@
           <span class="kudos-amount">+{{ kudosEarned() }}</span>
         </div>
         <div class="total-kudos">
-          <span>{{ t.t('attendance.totalKudos') }} {{ totalKudos() }}</span>
+          <span>{{ t.t('attendance.totalKudos') }} {{ profile()?.kudos }}</span>
         </div>
         <a routerLink="/profile" class="btn-profile">{{ t.t('attendance.viewProfile') }}</a>
       </div>
@@ -46,7 +46,7 @@
           </p>
         </div>
         <div class="total-kudos">
-          <span>{{ t.t('attendance.totalKudos') }} {{ totalKudos() }}</span>
+          <span>{{ t.t('attendance.totalKudos') }} {{ profile()?.kudos }}</span>
         </div>
         <a routerLink="/profile" class="btn-profile">{{ t.t('attendance.viewProfile') }}</a>
       </div>
