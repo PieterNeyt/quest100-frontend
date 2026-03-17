@@ -59,7 +59,7 @@ export class GotchaKillFeedComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.toastService.error();
+        this.toastService.error('gotcha.feed.loadError');
       },
     });
   }
@@ -76,7 +76,7 @@ export class GotchaKillFeedComponent implements OnInit {
       },
       error: () => {
         this.loadingMore.set(false);
-        this.toastService.error();
+        this.toastService.error('gotcha.feed.loadError');
       },
     });
   }
@@ -104,7 +104,7 @@ export class GotchaKillFeedComponent implements OnInit {
             : i)
         );
         this.likingIds.update((s) => { const n = new Set(s); n.delete(item.id); return n; });
-        this.toastService.error();
+        this.toastService.error('gotcha.feed.likeError');
       },
     });
   }
@@ -153,7 +153,7 @@ export class GotchaKillFeedComponent implements OnInit {
         error: () => {
           this.isReviewingKill.set(false);
           this.swipeDirection.set(null);
-          this.toastService.error();
+          this.toastService.error('gotcha.review.error');
         },
       });
     }, 350);

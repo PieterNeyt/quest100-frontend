@@ -116,7 +116,7 @@ export class GotchaBannerComponent implements OnInit {
       },
       error: () => {
         this.acting.set(false);
-        this.toastService.error();
+        this.toastService.error('gotcha.toasts.optOutError');
       },
     });
   }

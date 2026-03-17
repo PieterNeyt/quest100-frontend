@@ -34,7 +34,7 @@ export class AttendanceComponent implements OnInit {
     const classId = this.route.snapshot.paramMap.get('classId');
 
     if (!classId) {
-      this.toastService.error();
+      this.toastService.error('errors.invalidQrCode');
       this.isLoading.set(false);
       return;
     }

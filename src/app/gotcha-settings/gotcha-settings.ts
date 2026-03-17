@@ -119,33 +119,33 @@ export class GotchaSettingsComponent implements OnInit {
     if (!this.isEditable()) return;
 
     if (!this.editStartDate()) {
-      this.toastService.error();
+      this.toastService.error('gotcha.editModal.startDateRequired');
       return;
     }
 
     const startDate = new Date(this.editStartDate());
     if (startDate <= new Date()) {
-      this.toastService.error();
+      this.toastService.error('gotcha.editModal.startDatePast');
       return;
     }
 
     if (!this.editKillDeadline() || this.editKillDeadline() < 1) {
-      this.toastService.error();
+      this.toastService.error('gotcha.editModal.killDeadlineRequired');
       return;
     }
 
     if (!this.editPrizePhotoBase64()) {
-      this.toastService.error();
+      this.toastService.error('gotcha.editModal.prizePhotoRequired');
       return;
     }
 
     if (!this.editPrizeDescEN().trim()) {
-      this.toastService.error();
+      this.toastService.error('gotcha.editModal.prizeDescENRequired');
       return;
     }
 
     if (!this.editPrizeDescNL().trim()) {
-      this.toastService.error();
+      this.toastService.error('gotcha.editModal.prizeDescENRequired');
       return;
     }
 
@@ -231,7 +231,7 @@ export class GotchaSettingsComponent implements OnInit {
     const en = this.editPropEN().trim();
     const nl = this.editPropNL().trim();
     if (!en || !nl) {
-      this.toastService.error();
+      this.toastService.error('gotcha.settings.bothLangsRequired');
       return;
     }
     this.savingProp.set(true);
@@ -251,7 +251,7 @@ export class GotchaSettingsComponent implements OnInit {
 
   deleteProp(id: string) {
     if (!this.isEditable()) {
-      this.toastService.error();
+      this.toastService.error('gotcha.settings.bothLangsRequired');
       return;
     }
     this.deletingPropId.set(id);

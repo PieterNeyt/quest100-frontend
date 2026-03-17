@@ -144,7 +144,7 @@ export class GotchaPageComponent implements OnInit {
   submitKill() {
     const b64 = this.photoBase64();
     if (!b64) {
-      this.toastService.error();
+      this.toastService.error('gotcha.submitKill.noPhoto');
       return;
     }
     this.submitting.set(true);

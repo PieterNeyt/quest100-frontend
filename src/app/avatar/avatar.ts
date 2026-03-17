@@ -88,7 +88,7 @@ export class Avatar implements OnInit {
         this.toast.success("avatar.bought.success")
       },
       error: _ => {
-        this.toast.error();
+        this.toast.error("avatar.bought.error");
       }
     });
   }
@@ -127,7 +127,7 @@ export class Avatar implements OnInit {
       this.service.updateProfilePicture(base64);
       this.toast.success('avatar.setAsProfilePictureMessage.success');
     } catch {
-      this.toast.error();
+      this.toast.error('avatar.setAsProfilePictureMessage.error');
     }
   }
 }

@@ -71,9 +71,7 @@ export class Userlist implements OnInit {
         this.closeModal();
       },
       error: () => {
-        this.toastService.error(
-
-        );
+        this.toastService.error('userlist.awardError');
       }
     });
   }
