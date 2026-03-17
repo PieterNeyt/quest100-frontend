@@ -160,7 +160,9 @@ export class App implements OnInit, OnDestroy {
     const urlTree = this.router.parseUrl(this.router.url);
     const path = urlTree.root.children['primary']?.segments.map(s => s.path).join('/') || '';
 
-    if (path === 'event') {
+    if (path.startsWith('event/')) {
+      this.tourService.startEventDetailTour();
+    } else if (path === 'event') {
       this.tourService.startEventTour();
     } else if (path === 'reports/dashboard') {
       this.tourService.startModerationTour();
@@ -186,6 +188,10 @@ export class App implements OnInit, OnDestroy {
       } else {
         this.tourService.startGotchaRulesTour();
       }
+    } else if (path === 'profile') {
+      this.tourService.startProfileTour();
+    } else if (path === 'kudo-overview') {
+      this.tourService.startKudoOverviewTour();
     }
   }
 

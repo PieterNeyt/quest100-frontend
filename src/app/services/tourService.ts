@@ -632,4 +632,193 @@ export class TourService {
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+  startProfileTour() {
+    this.initDriver();
+    const steps: DriveStep[] = [
+      {
+        element: '.profile-picture-wrapper',
+        popover: {
+          title: `${this.getIcon('user')} ${this.t.t('tour.profile.picture')}`,
+          description: this.t.t('tour.profile.pictureDesc'),
+          side: 'bottom'
+        }
+      },
+      {
+        element: '.profile-actions',
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.profile.actions')}`,
+          description: this.t.t('tour.profile.actionsDesc'),
+          side: 'bottom'
+        }
+      },
+      {
+        element: '.profile-info',
+        popover: {
+          title: `${this.getIcon('sliders')} ${this.t.t('tour.profile.info')}`,
+          description: this.t.t('tour.profile.infoDesc'),
+          side: 'top'
+        }
+      }
+    ];
+
+    this.driverObj?.setSteps(steps);
+    this.driverObj?.drive();
+  }
+  startKudoOverviewTour() {
+    this.initDriver();
+    const hasEntries = !!document.querySelector('.timeline-item');
+
+    const steps: DriveStep[] = [
+      {
+        element: '.content-card:first-of-type',
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.kudoOverview.stats')}`,
+          description: this.t.t('tour.kudoOverview.statsDesc'),
+          side: 'right'
+        }
+      },
+      {
+        element: '.kudo-summary',
+        popover: {
+          title: `${this.getIcon('sliders')} ${this.t.t('tour.kudoOverview.summary')}`,
+          description: this.t.t('tour.kudoOverview.summaryDesc'),
+          side: 'bottom'
+        }
+      },
+      {
+        element: '.stats-bars-container',
+        popover: {
+          title: `${this.getIcon('target')} ${this.t.t('tour.kudoOverview.bars')}`,
+          description: this.t.t('tour.kudoOverview.barsDesc'),
+          side: 'top'
+        }
+      },
+      {
+        element: '.content-card:last-of-type',
+        popover: {
+          title: `${this.getIcon('layout')} ${this.t.t('tour.kudoOverview.timeline')}`,
+          description: this.t.t('tour.kudoOverview.timelineDesc'),
+          side: 'left'
+        }
+      }
+    ];
+
+    if (hasEntries) {
+      steps.push({
+        element: '.timeline-item',
+        popover: {
+          title: `${this.getIcon('check')} ${this.t.t('tour.kudoOverview.entry')}`,
+          description: this.t.t('tour.kudoOverview.entryDesc'),
+          side: 'top'
+        }
+      });
+
+      const reportBtn = document.querySelector('.timeline-report-btn');
+      if (reportBtn) {
+        steps.push({
+          element: '.timeline-report-btn',
+          popover: {
+            title: `${this.getIcon('flag')} ${this.t.t('tour.kudoOverview.report')}`,
+            description: this.t.t('tour.kudoOverview.reportDesc'),
+            side: 'left'
+          }
+        });
+      } else {
+        steps.push({
+          popover: {
+            title: `${this.getIcon('flag')} ${this.t.t('tour.kudoOverview.report')}`,
+            description: this.t.t('tour.kudoOverview.reportDescNoBtn')
+          }
+        });
+      }
+    } else {
+      steps.push({
+        popover: {
+          title: `${this.getIcon('check')} ${this.t.t('tour.kudoOverview.empty')}`,
+          description: this.t.t('tour.kudoOverview.emptyDesc')
+        }
+      });
+    }
+
+    this.driverObj?.setSteps(steps);
+    this.driverObj?.drive();
+  }
+  startEventDetailTour() {
+    this.initDriver();
+    const steps: DriveStep[] = [];
+
+    steps.push({
+      element: '.top-photo',
+      popover: {
+        title: `${this.getIcon('layout')} ${this.t.t('tour.eventDetail.photo')}`,
+        description: this.t.t('tour.eventDetail.photoDesc'),
+        side: 'right'
+      }
+    });
+
+    steps.push({
+      element: '.top-info',
+      popover: {
+        title: `${this.getIcon('flag')} ${this.t.t('tour.eventDetail.info')}`,
+        description: this.t.t('tour.eventDetail.infoDesc'),
+        side: 'left'
+      }
+    });
+
+    steps.push({
+      element: '.btn-report-flag',
+      popover: {
+        title: `${this.getIcon('alert')} ${this.t.t('tour.eventDetail.report')}`,
+        description: this.t.t('tour.eventDetail.reportDesc'),
+        side: 'bottom'
+      }
+    });
+
+    const actionArea = document.querySelector('.action-area');
+    if (actionArea) {
+      steps.push({
+        element: '.action-area',
+        popover: {
+          title: `${this.getIcon('check')} ${this.t.t('tour.eventDetail.action')}`,
+          description: this.t.t('tour.eventDetail.actionDesc'),
+          side: 'top'
+        }
+      });
+    }
+
+    const chat = document.querySelector('.bottom-chat');
+    if (chat) {
+      steps.push({
+        element: '.bottom-chat',
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.eventDetail.chat')}`,
+          description: this.t.t('tour.eventDetail.chatDesc'),
+          side: 'right'
+        }
+      });
+    } else {
+      steps.push({
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.eventDetail.chatLocked')}`,
+          description: this.t.t('tour.eventDetail.chatLockedDesc')
+        }
+      });
+    }
+
+
+    const attendees = document.querySelector('.attendees-panel');
+    if (attendees) {
+      steps.push({
+        element: '.attendees-panel',
+        popover: {
+          title: `${this.getIcon('user')} ${this.t.t('tour.eventDetail.attendees')}`,
+          description: this.t.t('tour.eventDetail.attendeesDesc'),
+          side: 'left'
+        }
+      });
+    }
+
+    this.driverObj?.setSteps(steps);
+    this.driverObj?.drive();
+  }
 }

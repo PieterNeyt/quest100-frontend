@@ -646,6 +646,47 @@
       "closed": "Missie Voltooid",
       "closedDesc": "Hier vind je de geschiedenis van opgeloste zaken. Een echt archief voor een top-moderator!"
     },
+    "profile": {
+      "picture": "Jouw Profielfoto",
+      "pictureDesc": "Zo zien andere studenten jou op het platform — in de kill feed, bij awards en op de ranglijsten.",
+      "actions": "Foto Bijwerken",
+      "actionsDesc": "Upload een nieuwe foto of verwijder je huidige. Je avatar kan ook als profielfoto ingesteld worden via de avatarpagina.",
+      "info": "Jouw Gegevens",
+      "infoDesc": "Je naam, Kudos-saldo en student-ID. Kudos verdien je door aanwezig te zijn bij lessen en awards te ontvangen van teamgenoten."
+    },
+    "eventDetail": {
+      "photo": "Event Beeldmateriaal",
+      "photoDesc": "De omslagafbeelding en categorie van dit event. Categorieën helpen je snel het type activiteit te vinden dat je zoekt.",
+      "info": "Eventdetails",
+      "infoDesc": "Titel, datum en beschrijving van het event. Alles wat je nodig hebt om te beslissen of je wil deelnemen.",
+      "report": "Event Melden",
+      "reportDesc": "Schendt dit event de communityrichtlijnen — ongepaste inhoud, misleidende info of iets anders — gebruik dit vlaggetje om een moderator te waarschuwen.",
+      "action": "Deelnemen of Verlaten",
+      "actionDesc": "Gebruik deze knop om je aanwezigheid te registreren. Je kunt later annuleren als je plannen veranderen.",
+      "chat": "Event Chat",
+      "chatDesc": "Praat rechtstreeks met andere deelnemers. Stel vragen, spreek af of word samen enthousiast!",
+      "chatLocked": "Event Chat",
+      "chatLockedDesc": "Zodra je deelneemt aan dit event, opent er een chat waar je met alle andere aanwezigen kunt praten.",
+      "attendees": "Wie Komt Er",
+      "attendeesDesc": "Een lijst van iedereen die aanwezig is. Het sterretje markeert de organisator. Je ziet ook hoeveel plekken er nog over zijn als er een maximum is."
+    },
+    "kudoOverview": {
+      "stats": "Jouw Kudo Statistieken",
+      "reportDescNoBtn": "Awards van teamgenoten kun je melden als ze ongepast aanvoelen. Het vlaggetje verschijnt op elke award-vermelding in je tijdlijn.",
+      "statsDesc": "Een overzicht van alle Kudos die je hebt verdiend. Klik op de header om dit paneel uit of in te klappen.",
+      "summary": "Totaal & Archetype",
+      "summaryDesc": "Je totale Kudos-saldo en je huidige archetype — bepaald door welke categorie het hoogst scoort.",
+      "bars": "Verdeling per Categorie",
+      "barsDesc": "Bekijk hoe je Kudos verdeeld zijn over Kennis, Aanwezigheid, Teamwerk, Sfeer en Betrokkenheid.",
+      "timeline": "Recente Kudos",
+      "timelineDesc": "Een chronologisch overzicht van elke Kudo die je ontvangen hebt. Klik op de header om dit paneel uit te klappen.",
+      "entry": "Kudo Vermelding",
+      "entryDesc": "Elke vermelding toont het type, de datum, de reden en hoeveel punten het waard was. Awards van teamgenoten tonen ook de afzender.",
+      "report": "Award Melden",
+      "reportDesc": "Heb je een award ontvangen die ongepast aanvoelt of in bad faith verstuurd werd? Gebruik dit vlaggetje om het te melden bij een moderator.",
+      "empty": "Nog Geen Kudos",
+      "emptyDesc": "Je hebt nog geen Kudos ontvangen. Kom opdagen bij lessen en werk samen met teamgenoten om punten te verdienen!"
+    },
     "gotchaHistory": {
       "header": "Spelgeschiedenis",
       "headerDesc": "Een overzicht van alle afgelopen Gotcha-toernooien. Bekijk wie er in vorige spellen bovenuit kwam.",

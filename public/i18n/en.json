@@ -19,10 +19,10 @@
     "name": "Name",
     "percentOfTotal": "% of total",
     "archetypes": {
-      "wizard":           "Wizard",
-      "teamCatalyst":     "Team Catalyst",
-      "atmosphereMaker":  "Atmosphere Maker",
-      "campusExplorer":   "Campus Explorer",
+      "wizard": "Wizard",
+      "teamCatalyst": "Team Catalyst",
+      "atmosphereMaker": "Atmosphere Maker",
+      "campusExplorer": "Campus Explorer",
       "academicGuardian": "Academic Guardian"
     }
   },
@@ -589,7 +589,11 @@
     }
   },
   "tour": {
-    "btns": { "next": "Next step", "prev": "Go back", "done": "Done!" },
+    "btns": {
+      "next": "Next step",
+      "prev": "Go back",
+      "done": "Done!"
+    },
     "event": {
       "title": "Events Overview",
       "desc": "This is where all the action happens. Browse through upcoming activities and see who else is joining.",
@@ -674,6 +678,47 @@
       "awardsDesc": "Special achievements handed out to standout players — from fastest kill to most unlucky victim.",
       "graph": "Tournament Map",
       "graphDesc": "Every elimination visualised. Click a node to see someone's kills, or click an arrow for kill details."
+    },
+    "profile": {
+      "picture": "Your Profile Picture",
+      "pictureDesc": "This is how other students see you across the platform — in the kill feed, awards, and leaderboards.",
+      "actions": "Update Your Photo",
+      "actionsDesc": "Upload a new photo or remove your current one. Your avatar can also be set as your profile picture from the avatar page.",
+      "info": "Your Details",
+      "infoDesc": "Your name, Kudos balance and student ID. Kudos are earned by attending classes and receiving awards from teammates."
+    },
+    "kudoOverview": {
+      "stats": "Your Kudo Statistics",
+      "reportDescNoBtn": "Awards sent by teammates can be reported if they feel inappropriate. The flag icon appears on any award entry in your timeline.",
+      "statsDesc": "An overview of all the Kudos you've earned. Click the header to expand or collapse this panel.",
+      "summary": "Total & Archetype",
+      "summaryDesc": "Your total Kudos balance and your current archetype — determined by which category you score highest in.",
+      "bars": "Breakdown by Category",
+      "barsDesc": "See exactly how your Kudos are distributed across Knowledge, Attendance, Teamwork, Atmosphere and Engagement.",
+      "timeline": "Recent Kudos",
+      "timelineDesc": "A chronological feed of every Kudo you've received. Click the header to expand this panel.",
+      "entry": "Kudo Entry",
+      "entryDesc": "Each entry shows the type, date, reason and how many points it was worth. Awards from teammates also show who sent it.",
+      "report": "Report an Award",
+      "reportDesc": "If you received an award that feels inappropriate or was sent in bad faith, use this flag to report it to a moderator.",
+      "empty": "No Kudos Yet",
+      "emptyDesc": "You haven't received any Kudos yet. Attend classes and collaborate with teammates to start earning points!"
+    },
+    "eventDetail": {
+      "photo": "Event Visuals",
+      "photoDesc": "The cover image and category of this event. Categories help you quickly find the type of activity you're looking for.",
+      "info": "Event Details",
+      "infoDesc": "Title, date and description of the event. Everything you need to decide if you want to join.",
+      "report": "Report This Event",
+      "reportDesc": "If this event violates community guidelines — inappropriate content, misleading info, or anything else — use this flag to notify a moderator.",
+      "action": "Join or Leave",
+      "actionDesc": "Use this button to register your attendance. You can cancel later if your plans change.",
+      "chat": "Event Chat",
+      "chatDesc": "Talk directly with other attendees. Ask questions, coordinate meetups, or just get hyped together!",
+      "chatLocked": "Event Chat",
+      "chatLockedDesc": "Once you join this event, a chat opens up where you can talk with all other attendees.",
+      "attendees": "Who's Coming",
+      "attendeesDesc": "A list of everyone attending. The star icon marks the organizer. You can see how many spots are left if there's a maximum."
     },
     "gotchaHistory": {
       "header": "Game History",
