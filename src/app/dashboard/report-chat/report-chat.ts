@@ -5,6 +5,7 @@ import { ChatService } from '../../services/chatService';
 import { ModerationService } from '../../services/moderationService';
 import { ReceiveMessage } from '../../model/chat';
 import { Report } from '../../model/report';
+import {TranslationService} from '../../services/translationService';
 
 @Component({
   selector: 'app-report-chat',
@@ -18,6 +19,7 @@ export class reportChat implements OnInit, AfterViewInit {
   private readonly router = inject(Router);
   private readonly chatService = inject(ChatService);
   private readonly moderationService = inject(ModerationService);
+  readonly t = inject(TranslationService);
 
   @ViewChild('chatBody') chatBodyRef!: ElementRef<HTMLDivElement>;
 

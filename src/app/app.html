@@ -6,17 +6,21 @@
 
     <ul hlmNavigationMenuList class="nav-links-left">
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/" class="nav-link">Home</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/games" class="nav-link">Games</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/event" class="nav-link">Events</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">Students</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/about" class="nav-link">About</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/avatar" class="nav-link">avatar</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/avatar" class="nav-link">Avatar</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/reports/dashboard" class="nav-link">Reports</a></li>
     </ul>
   </div>
 
   <div class="flex items-center gap-2">
     <div class="nav-section-right">
+      <button class="nav-pill-button border-yellow-500/30 bg-yellow-500/10 hover:bg-yellow-500/20 transition-all"
+              (click)="startContextualTour()" title="Tour">
+        <ng-icon name="lucideHelpCircle" class="text-yellow-600 size-5"></ng-icon>
+      </button>
+
       @if (loginDisplay() && profile()) {
         <a routerLink="/kudo-overview" class="kudos-badge kudos-badge-clickable">
           <ng-icon name="lucideZap" class="kudos-icon"></ng-icon>
@@ -87,9 +91,7 @@
           </div>
           <div class="flex flex-col">
             <span class="font-bold text-lg leading-tight">{{ profile()?.firstName }}</span>
-            <a class="kudos-badge-mobile"
-               routerLink="/kudo-overview"
-               (click)="activeMenu.set(null)">
+            <a class="kudos-badge-mobile" routerLink="/kudo-overview" (click)="activeMenu.set(null)">
               <ng-icon name="lucideZap" class="size-4"></ng-icon>
               <span>{{ profile()?.kudos }} Kudos</span>
               <ng-icon name="lucideChevronRight" class="size-3"></ng-icon>
@@ -105,10 +107,14 @@
     </div>
 
     <nav class="sidebar-nav">
+      <button (click)="startContextualTour(); activeMenu.set(null)" class="sidebar-link flex items-center gap-2">
+        <ng-icon name="lucideHelpCircle" class="text-yellow-500"></ng-icon> Tour deze pagina
+      </button>
+
       <a routerLink="/" class="sidebar-link" (click)="activeMenu.set(null)">Home</a>
-      <a routerLink="/games" class="sidebar-link" (click)="activeMenu.set(null)">Games</a>
       <a routerLink="/event" class="sidebar-link" (click)="activeMenu.set(null)">Events</a>
       <a routerLink="/userlist" class="sidebar-link" (click)="activeMenu.set(null)">Students</a>
+      <a routerLink="/avatar" class="sidebar-link" (click)="activeMenu.set(null)">Avatar</a>
       <a routerLink="/about" class="sidebar-link" (click)="activeMenu.set(null)">About</a>
       <a routerLink="/report/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
 

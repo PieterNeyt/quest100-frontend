@@ -1,10 +1,9 @@
 <div class="dashboard-wrap">
 
-  <!-- Header -->
   <div class="events-header">
     <div class="header-text">
-      <h1>Moderation Reports</h1>
-      <p>Review and resolve flagged content from users</p>
+      <h1>{{ t.t('mod.title') }}</h1>
+      <p>{{ t.t('mod.subtitle') }}</p>
     </div>
 
     <div class="header-right">
@@ -48,15 +47,13 @@
     </div>
   </div>
 
-  <!-- Two-column layout -->
   <div class="columns-wrap">
 
-    <!-- OPEN column -->
     <div class="column">
       <div class="column-header open-header">
         <div class="column-title">
           <span class="col-dot open-dot"></span>
-          Open
+          {{ t.t('mod.status.open') }}
         </div>
         <span class="col-count open-count">{{ openFilteredReports().length }}</span>
       </div>
@@ -65,15 +62,15 @@
         @if (loading()) {
           <div class="state-container">
             <div class="spinner"></div>
-            <span>Loading…</span>
+            <span>{{ t.t('mod.status.loading') }}</span>
           </div>
         } @else if (error()) {
           <div class="state-container">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="#ef4444"/>
             </svg>
-            <span class="error-text">{{ error() }}</span>
-            <button class="btn-retry" (click)="loadReports()">Try again</button>
+            <span class="error-text">{{ t.t('mod.status.error') }}</span>
+            <button class="btn-retry" (click)="loadReports()">{{ t.t('mod.actions.retry') }}</button>
           </div>
         } @else if (openFilteredReports().length === 0) {
           <div class="state-container">
@@ -82,7 +79,7 @@
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </div>
-            <span>All clear!</span>
+            <span>{{ t.t('mod.status.allClear') }}</span>
           </div>
         } @else {
           @for (report of openFilteredReports(); track report.id) {
@@ -106,12 +103,12 @@
                 <button
                   class="btn-resolve"
                   (click)="resolveAndNavigate(report, $event)"
-                  title="Resolve report"
+                  [title]="t.t('mod.actions.resolve')"
                 >
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
-                  Resolve
+                  {{ t.t('mod.actions.resolve') }}
                 </button>
               </div>
               <p class="report-message">{{ report.message || '(no message provided)' }}</p>
@@ -121,12 +118,11 @@
       </div>
     </div>
 
-    <!-- CLOSED column -->
     <div class="column">
       <div class="column-header closed-header">
         <div class="column-title">
           <span class="col-dot closed-dot"></span>
-          Closed
+          {{ t.t('mod.status.closed') }}
         </div>
         <span class="col-count closed-count">{{ closedFilteredReports().length }}</span>
       </div>
@@ -135,7 +131,7 @@
         @if (loading()) {
           <div class="state-container">
             <div class="spinner"></div>
-            <span>Loading…</span>
+            <span>{{ t.t('mod.status.loading') }}</span>
           </div>
         } @else if (closedFilteredReports().length === 0) {
           <div class="state-container">
@@ -144,7 +140,7 @@
                 <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
               </svg>
             </div>
-            <span>No resolved reports</span>
+            <span>{{ t.t('mod.status.noResolved') }}</span>
           </div>
         } @else {
           @for (report of closedFilteredReports(); track report.id) {
@@ -169,7 +165,7 @@
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
-                  Resolved
+                  {{ t.t('mod.status.resolved') }}
                 </span>
               </div>
               <p class="report-message">{{ report.message || '(no message provided)' }}</p>
@@ -178,7 +174,5 @@
         }
       </div>
     </div>
-
   </div>
-
 </div>

@@ -470,10 +470,10 @@
     "name": "Naam",
     "percentOfTotal": "% van totaal",
     "archetypes": {
-      "wizard":           "Tovenaar",
-      "teamCatalyst":     "Teamkatalysator",
-      "atmosphereMaker":  "Sfeermaker",
-      "campusExplorer":   "Campusverkenner",
+      "wizard": "Tovenaar",
+      "teamCatalyst": "Teamkatalysator",
+      "atmosphereMaker": "Sfeermaker",
+      "campusExplorer": "Campusverkenner",
       "academicGuardian": "Academisch Bewaker"
     }
   },
@@ -504,6 +504,38 @@
       "spam": "Spam",
       "hateSpeech": "Haatspraak",
       "other": "Andere"
+    },
+    "back": "Terug naar meldingen",
+    "award": {
+      "label": "Gerapporteerde award",
+      "resolve": "Melding afhandelen",
+      "resolved": "Afgehandeld",
+      "entry": "Award Gegevens",
+      "reason": "Reden",
+      "sender": "Zender",
+      "receiver": "Ontvanger"
+    },
+    "modal": {
+      "title": "Melding afhandelen?",
+      "desc": "Weet je zeker dat je deze melding als afgehandeld wilt markeren? Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Ja, handel af",
+      "cancel": "Annuleren"
+    },
+    "message": {
+      "label": "Gerapporteerd bericht",
+      "flagged": "Gemarkeerd",
+      "chat": "Chat"
+    },
+    "event": {
+      "reportedFor": "Gerapporteerd voor",
+      "title": "Titel",
+      "organizer": "Organisator",
+      "date": "Datum Event",
+      "attendees": "Deelnemers",
+      "visibility": "Zichtbaarheid",
+      "created": "Aangemaakt",
+      "updated": "Bijgewerkt",
+      "description": "Beschrijving"
     }
   },
   "avatar": {
@@ -527,6 +559,96 @@
     "setAsProfilePictureMessage": {
       "success": "Profielfoto succesvol bijgewerkt.",
       "error": "Instellen van profielfoto mislukt. Probeer het opnieuw."
+    }
+  },
+  "tour": {
+    "btns": {
+      "next": "Volgende stap",
+      "prev": "Ga terug",
+      "done": "Klaar!"
+    },
+    "event": {
+      "title": "Events Overzicht",
+      "desc": "Dit is het hart van Quest100. Bekijk alle geplande activiteiten en ontdek wie er nog meer aanwezig zijn.",
+      "create": "Activiteit Organiseren",
+      "createDesc": "Heb je zelf een leuk idee? Gebruik deze knop om je eigen event aan te maken en studenten uit te nodigen.",
+      "filter": "Slimme Filters",
+      "filterDesc": "Op zoek naar iets specifieks? Filter op categorie of zoek op naam om snel je volgende event te vinden.",
+      "report": "Veiligheid & Moderatie",
+      "reportDesc": "Zie je iets dat niet klopt? Gebruik het vlaggetje op een kaart om onze beheerders direct te waarschuwen.",
+      "noEventReport": "Veiligheid & Moderatie",
+      "noEventReportDesc": "Er zijn nog geen events! Zodra ze er zijn, kun je het vlaggetje gebruiken om ongepaste inhoud te melden."
+    },
+    "gotcha": {
+      "title": "Klaar voor Gotcha?",
+      "desc": "Tijd voor het ultieme spel op de campus. Deze banner brengt je naar je dashboard waar je je doelwit kunt zien en je scores kunt bijhouden. Klik nu op de banner om mee te doen!"
+    },
+    "mod": {
+      "header": "Moderatie Centrum",
+      "headerDesc": "Welkom in de controlekamer. Hier zorg jij voor een veilige en gezellige community.",
+      "filters": "Selectief kijken",
+      "filtersDesc": "Filter op type rapport of kanaal om precies te vinden wat aandacht nodig heeft.",
+      "open": "Actieve Rapporten",
+      "openDesc": "Deze zaken hebben je aandacht nodig. Klik op 'Oplossen' om de details te zien.",
+      "noOpen": "Schone Lei",
+      "noOpenDesc": "Er zijn momenteel geen meldingen. Lekker bezig! Precies hoe we het dashboard graag zien.",
+      "closed": "Missie Voltooid",
+      "closedDesc": "Hier vind je de geschiedenis van opgeloste zaken. Een echt archief voor een top-moderator!"
+    },
+    "avatar": {
+      "kudos": "Je Kudos Saldo",
+      "kudosDesc": "Dit zijn je verdiende punten! In de shop geef je ze niet uit; je moet er alleen genoeg hebben om items te ontgrendelen. Je behoudt dus altijd je punten!",
+      "preview": "Avatar Voorbeeld",
+      "previewDesc": "Bekijk je wijzigingen direct. Ben je tevreden? Klik op de knop om je profielfoto overal bij te werken.",
+      "shop": "Items Ontgrendelen",
+      "shopDesc": "Blader door de categorieën. Als je genoeg Kudos hebt, kun je nieuwe items ontgrendelen en direct aantrekken."
+    },
+    "about": {
+      "hero": "Het Ecosysteem",
+      "heroDesc": "Welkom bij het overzicht van alle essentiële KdG-tools. Alles wat je nodig hebt voor je studie op één plek.",
+      "counters": "Snelle Navigatie",
+      "countersDesc": "Gebruik deze sneltoetsen om direct naar de details van een specifieke applicatie te springen.",
+      "apps": "Tool Details",
+      "appsDesc": "Elke sectie legt uit waar de tool voor dient, wat de belangrijkste functies zijn en bevat een directe link."
+    },
+    "reportDetail": {
+      "banner": "Context van de melding",
+      "bannerDesc": "Hier zie je precies waarom deze award is gerapporteerd en wat de reden van de melder was.",
+      "content": "Award Details",
+      "contentDesc": "Controleer het aantal punten, de reden van de zender en wie de betrokken studenten zijn.",
+      "action": "Actie ondernemen",
+      "actionDesc": "Zodra je een beslissing hebt genomen, gebruik je deze knop om de melding als afgehandeld te markeren."
+    },
+    "reportMessage": {
+      "chat": "Chat Context",
+      "chatDesc": "Bekijk de gespreksgeschiedenis om de context van het gerapporteerde bericht te begrijpen.",
+      "flagged": "Gemarkeerd bericht",
+      "flaggedDesc": "Het specifieke bericht dat is gerapporteerd, is geaccentueerd en gemarkeerd met een vlag."
+    },
+    "reportEvent": {
+      "photo": "Event Beeldmateriaal",
+      "photoDesc": "Controleer de geüploade afbeelding en categorie om te zien of deze voldoen aan de richtlijnen.",
+      "details": "Evenement Details",
+      "detailsDesc": "Bekijk de titel, organisator en de zichtbaarheidsinstellingen van dit evenement.",
+      "attendees": "Deelnemerslijst",
+      "attendeesDesc": "Hier kun je zien wie zich allemaal heeft ingeschreven voor dit evenement."
+    }
+  },
+  "mod": {
+    "title": "Moderatie Rapporten",
+    "subtitle": "Beoordeel en los gerapporteerde inhoud van gebruikers op",
+    "status": {
+      "open": "Open",
+      "closed": "Gesloten",
+      "resolved": "Opgelost",
+      "loading": "Laden...",
+      "allClear": "Geen openstaande reports!",
+      "noResolved": "Geen opgeloste rapporten",
+      "error": "Laden van rapporten mislukt."
+    },
+    "actions": {
+      "resolve": "Oplossen",
+      "retry": "Opnieuw proberen"
     }
   }
 }

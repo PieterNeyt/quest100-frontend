@@ -1,5 +1,5 @@
 import {Component, HostListener, inject, OnDestroy, OnInit, signal} from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {HlmNavigationMenuImports} from '@spartan-ng/helm/navigation-menu';
 import {MSAL_GUARD_CONFIG, MsalBroadcastService, MsalService} from '@azure/msal-angular';
 import {EventMessage, EventType, InteractionStatus, RedirectRequest} from '@azure/msal-browser';
@@ -17,21 +17,24 @@ import {
   lucideSettings,
   lucideUser,
   lucideX,
-  lucideZap
+  lucideZap,
+  lucideHelpCircle
 } from '@ng-icons/lucide';
 import {environment} from '../../environment/environment';
 import {Language, TranslationService} from './services/translationService';
 import {NgxSonnerToaster} from 'ngx-sonner';
 import {jwtDecode} from 'jwt-decode';
 import {RoleService} from './services/roleService';
+import {TourService} from './services/tourService';
 
 type MenuState = 'languages' | 'user' | 'mobile' | null;
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
   providers: [
-    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap,lucideChevronRight})
+    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap, lucideChevronRight, lucideHelpCircle})
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -43,6 +46,9 @@ export class App implements OnInit, OnDestroy {
   showUserDropdown = signal(false);
   isMobileMenuOpen = signal(false);
   activeMenu = signal<MenuState>(null);
+
+  private readonly tourService = inject(TourService);
+  private readonly router = inject(Router);
 
   private readonly _destroying$ = new Subject<void>();
   private msalGuardConfig = inject(MSAL_GUARD_CONFIG);
@@ -59,11 +65,7 @@ export class App implements OnInit, OnDestroy {
 
   private checkAndSetActiveAccount() {
     let activeAccount = this.authService.instance.getActiveAccount();
-
-    if (
-      !activeAccount &&
-      this.authService.instance.getAllAccounts().length > 0
-    ) {
+    if (!activeAccount && this.authService.instance.getAllAccounts().length > 0) {
       let accounts = this.authService.instance.getAllAccounts();
       this.authService.instance.setActiveAccount(accounts[0]);
     }
@@ -73,7 +75,6 @@ export class App implements OnInit, OnDestroy {
     const alreadyTried = sessionStorage.getItem('autoLoginAttempted');
     if (alreadyTried) return;
     sessionStorage.setItem('autoLoginAttempted', 'true');
-
     this.authService.loginRedirect({
       scopes: environment.apiConfig.scopes,
       prompt: 'none'
@@ -83,22 +84,14 @@ export class App implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authService.handleRedirectObservable().subscribe({
       error: (error: any) => {
-        if (error?.name === 'InteractionRequiredAuthError') {
-          return;
-        }
+        if (error?.name === 'InteractionRequiredAuthError') return;
         console.error('Unexpected redirect error:', error);
       },
     });
 
     this.isIframe.set(window !== window.parent && !window.opener);
     this.msalBroadcastService.msalSubject$
-      .pipe(
-        filter(
-          (msg: EventMessage) =>
-            msg.eventType === EventType.LOGIN_SUCCESS ||
-            msg.eventType === EventType.ACTIVE_ACCOUNT_CHANGED
-        )
-      )
+      .pipe(filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS || msg.eventType === EventType.ACTIVE_ACCOUNT_CHANGED))
       .subscribe(() => {
         if (this.authService.instance.getAllAccounts().length === 0) {
           window.location.pathname = '/';
@@ -109,30 +102,18 @@ export class App implements OnInit, OnDestroy {
       });
 
     this.msalBroadcastService.inProgress$
-      .pipe(
-        filter(
-          (status: InteractionStatus) => status === InteractionStatus.None
-        ),
-        takeUntil(this._destroying$)
-      )
+      .pipe(filter((status: InteractionStatus) => status === InteractionStatus.None), takeUntil(this._destroying$))
       .subscribe(async () => {
         const accounts = this.authService.instance.getAllAccounts();
-
         if (accounts.length === 0) {
           this.tryAutoLogin();
         } else {
           this.setLoginDisplay();
           this.checkAndSetActiveAccount();
           this.profileService.syncUser();
-
           const account = this.authService.instance.getActiveAccount();
           if (!account) return;
-
-          const tokenResponse = await this.authService.instance.acquireTokenSilent({
-            account,
-            scopes: environment.apiConfig.scopes,
-          });
-
+          const tokenResponse = await this.authService.instance.acquireTokenSilent({ account, scopes: environment.apiConfig.scopes });
           const decoded: any = jwtDecode(tokenResponse.accessToken);
           this.roleService.roles.set(decoded.roles || []);
         }
@@ -141,18 +122,13 @@ export class App implements OnInit, OnDestroy {
 
   login() {
     if (this.msalGuardConfig.authRequest) {
-      this.authService.loginRedirect({
-        ...this.msalGuardConfig.authRequest,
-      } as RedirectRequest);
+      this.authService.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
     } else {
       this.authService.loginRedirect();
     }
   }
 
-
-  logout() {
-    this.authService.logoutRedirect();
-  }
+  logout() { this.authService.logoutRedirect(); }
 
   async changeLanguage(lang: Language): Promise<void> {
     await this.translationService.setLanguage(lang);
@@ -164,10 +140,35 @@ export class App implements OnInit, OnDestroy {
     this.activeMenu.update(current => current === menu ? null : menu);
   }
 
-  @HostListener('document:click')
-  closeAll(): void {
-    this.activeMenu.set(null);
+
+  startContextualTour(): void {
+    const urlTree = this.router.parseUrl(this.router.url);
+    const path = urlTree.root.children['primary']?.segments.map(s => s.path).join('/') || '';
+
+    if (path === 'event') {
+      this.tourService.startEventTour();
+    } else if (path === 'reports/dashboard') {
+      this.tourService.startModerationTour();
+    } else if (path === 'avatar') {
+      this.tourService.startAvatarTour();
+    } else if (path === 'about') {
+      this.tourService.startAboutTour();
+    }
+    else if (path.startsWith('report/')) {
+      if (path.includes('/award/')) {
+        this.tourService.startReportAwardTour();
+      }
+      else if (path.includes('/event/')) {
+        this.tourService.startReportEventTour();
+      }
+      else if (path.includes('/message/')) {
+        this.tourService.startReportMessageTour();
+      }
+    }
   }
+
+  @HostListener('document:click')
+  closeAll(): void { this.activeMenu.set(null); }
 
   ngOnDestroy(): void {
     this._destroying$.next(undefined);

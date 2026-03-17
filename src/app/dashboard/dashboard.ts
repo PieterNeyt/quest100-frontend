@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ModerationService } from '../services/moderationService';
 import { ChannelType, Report, ReportType } from '../model/report';
 import type { Report as ModerationReport } from '../model/report';
+import {TranslationService} from '../services/translationService';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,7 @@ import type { Report as ModerationReport } from '../model/report';
 export class Dashboard implements OnInit {
   private readonly moderationService = inject(ModerationService);
   private readonly router = inject(Router);
+  readonly t = inject(TranslationService);
 
   reports = signal<ModerationReport[]>([]);
   loading = signal(true);

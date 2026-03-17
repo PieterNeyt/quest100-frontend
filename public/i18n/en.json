@@ -504,6 +504,38 @@
       "spam": "Spam",
       "hateSpeech": "Hate Speech",
       "other": "Other"
+    },
+    "back": "Back to reports",
+    "award": {
+      "label": "Reported award",
+      "resolve": "Resolve report",
+      "resolved": "Resolved",
+      "entry": "Award Entry",
+      "reason": "Reason",
+      "sender": "Sender",
+      "receiver": "Receiver"
+    },
+    "modal": {
+      "title": "Resolve this report?",
+      "desc": "Are you sure you want to mark this report as resolved? This action cannot be undone.",
+      "confirm": "Yes, resolve",
+      "cancel": "Cancel"
+    },
+    "message": {
+      "label": "Reported message",
+      "flagged": "Flagged",
+      "chat": "Chat"
+    },
+    "event": {
+      "reportedFor": "Reported for",
+      "title": "Title",
+      "organizer": "Organizer",
+      "date": "Event Date",
+      "attendees": "Attendees",
+      "visibility": "Visibility",
+      "created": "Created",
+      "updated": "Updated",
+      "description": "Description"
     }
   },
   "avatar": {
@@ -527,6 +559,92 @@
     "setAsProfilePictureMessage": {
       "success": "Profile picture updated successfully.",
       "error": "Failed to set profile picture. Please try again."
+    }
+  },
+  "tour": {
+    "btns": { "next": "Next step", "prev": "Go back", "done": "Done!" },
+    "event": {
+      "title": "Events Overview",
+      "desc": "This is where all the action happens. Browse through upcoming activities and see who else is joining.",
+      "create": "Organize Activity",
+      "createDesc": "Have a great idea? Use this button to host your own event and invite other students.",
+      "filter": "Smart Filters",
+      "filterDesc": "Looking for something specific? Filter by category or search by name to find your next event.",
+      "report": "Safety & Moderation",
+      "reportDesc": "Spotted something inappropriate? Use the flag icon on any card to notify our team instantly.",
+      "noEventReport": "Safety & Moderation",
+      "noEventReportDesc": "No events yet! Once they appear, you can use the flag icon on any card to report content that shouldn't be there."
+    },
+    "gotcha": {
+      "title": "Ready for Gotcha?",
+      "desc": "It's time for the ultimate campus game. This banner leads you to your dashboard where you can see your target and track your eliminations. Click the banner now to join the game!"
+    },
+    "mod": {
+      "header": "Moderation Center",
+      "headerDesc": "Welcome to the control room. Here you keep the community safe and friendly.",
+      "filters": "Narrow it down",
+      "filtersDesc": "Filter by report type or channel to find exactly what needs your attention.",
+      "open": "Active Reports",
+      "openDesc": "These items need a pair of eyes. Click 'Resolve' to see the details and take action.",
+      "noOpen": "Clean Slate",
+      "noOpenDesc": "Currently no open reports. Great job! This is exactly how we like our dashboard.",
+      "closed": "Mission Accomplished",
+      "closedDesc": "Here you'll find the history of resolved cases. A true hall of fame for a moderator!"
+    },
+    "avatar": {
+      "kudos": "Your Kudos Balance",
+      "kudosDesc": "These are your achievements! In the avatar shop, you don't spend them; you just need to have enough to unlock items. Your balance stays the same!",
+      "preview": "Avatar Preview",
+      "previewDesc": "See your changes in real-time. Once you're happy, hit the button to update your profile picture everywhere.",
+      "shop": "Unlock Assets",
+      "shopDesc": "Browse through different categories. If you have enough Kudos, you can unlock and equip new styles instantly."
+    },
+    "about": {
+      "hero": "The Ecosystem",
+      "heroDesc": "Welcome to the overview of all essential KdG tools. Everything you need for your studies, all in one place.",
+      "counters": "Quick Navigation",
+      "countersDesc": "Use these shortcuts to jump directly to a specific application's details.",
+      "apps": "Tool Details",
+      "appsDesc": "Each section explains what the tool is for, its key features, and provides a direct link to open it."
+    },
+    "reportDetail": {
+      "banner": "Report Context",
+      "bannerDesc": "Here you can see exactly why this award was flagged and what the reporter had to say.",
+      "content": "Award Details",
+      "contentDesc": "Check the points, the reason given by the sender, and who the involved parties are.",
+      "action": "Take Action",
+      "actionDesc": "Once you've made a decision, use this button to mark the report as handled."
+    },
+    "reportMessage": {
+      "chat": "Chat Context",
+      "chatDesc": "Review the conversation history to understand the context of the reported message.",
+      "flagged": "Flagged Message",
+      "flaggedDesc": "The specific message that was reported is highlighted and marked with a flag."
+    },
+    "reportEvent": {
+      "photo": "Event Visuals",
+      "photoDesc": "Check the uploaded image and category to see if they follow the community guidelines.",
+      "details": "Event Information",
+      "detailsDesc": "Review the title, organizer, and visibility settings of this event.",
+      "attendees": "Participant List",
+      "attendeesDesc": "Here you can see everyone who registered for this event."
+    }
+  },
+  "mod": {
+    "title": "Moderation Reports",
+    "subtitle": "Review and resolve flagged content from users",
+    "status": {
+      "open": "Open",
+      "closed": "Closed",
+      "resolved": "Resolved",
+      "loading": "Loading...",
+      "allClear": "All clear!",
+      "noResolved": "No resolved reports",
+      "error": "Failed to load reports."
+    },
+    "actions": {
+      "resolve": "Resolve",
+      "retry": "Try again"
     }
   }
 }
