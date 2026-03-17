@@ -654,6 +654,27 @@
       "info": "Jouw Gegevens",
       "infoDesc": "Je naam, Kudos-saldo en student-ID. Kudos verdien je door aanwezig te zijn bij lessen en awards te ontvangen van teamgenoten."
     },
+    "gotchaSettings": {
+      "gameCard": "Spelinstellingen",
+      "prizeDesc2": "Prijsbeschrijving",
+      "prizeDesc2Desc": "Voer de prijsbeschrijving in het Engels én Nederlands in — het platform is tweetalig dus beide velden zijn verplicht.",
+      "gameCardDesc": "Stel de startdatum, kill deadline en prijs in voor dit toernooi. Wijzigingen worden per veld opgeslagen.",
+      "gameCardLocked": "Het spel is momenteel actief, dus deze instellingen zijn vergrendeld. Je kunt de prijsinformatie nog wel aanpassen.",
+      "startDate": "Startdatum",
+      "startDateDesc": "Wanneer begint het spel? Spelers kunnen zich inschrijven tot dit moment. Na de start worden doelwitten automatisch toegewezen.",
+      "deadline": "Kill Deadline",
+      "deadlineDesc": "Hoeveel uur een speler heeft om zijn doelwit uit te schakelen voordat de keten naar de volgende jager gaat.",
+      "prize": "Prijs",
+      "prizeDesc": "Upload een foto van de prijs en voeg een beschrijving toe in het Engels en Nederlands. Spelers zien dit in het regels-tabblad.",
+      "props": "Voorwerpen",
+      "propsDesc": "Voorwerpen zijn de items die spelers moeten gebruiken bij hun eliminatie. Elke speler krijgt er één willekeurig toegewezen bij de start.",
+      "propRow": "Een Voorwerp",
+      "propRowDesc": "Elk voorwerp heeft een Engelse en Nederlandse naam. Gebruik het potlood om te bewerken of de prullenbak om te verwijderen — alleen mogelijk voor de start.",
+      "noProps": "Nog Geen Voorwerpen",
+      "noPropsDesc": "Je hebt minimaal één voorwerp nodig voor het spel kan starten. Voeg er een paar toe via de knop hierboven.",
+      "addProp": "Voorwerp Toevoegen",
+      "addPropDesc": "Klik hier om een nieuw voorwerp toe te voegen. Vul zowel de Engelse als Nederlandse naam in en bevestig om op te slaan."
+    },
     "eventDetail": {
       "photo": "Event Beeldmateriaal",
       "photoDesc": "De omslagafbeelding en categorie van dit event. Categorieën helpen je snel het type activiteit te vinden dat je zoekt.",

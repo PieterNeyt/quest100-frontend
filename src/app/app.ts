@@ -178,6 +178,8 @@ export class App implements OnInit, OnDestroy {
       this.tourService.startGotchaHistoryTour();
     } else if (path === 'gotcha/end' || path.startsWith('gotcha/end/')) {
       this.tourService.startGotchaEndTour();
+    } else if (path === 'gotcha/settings') {
+      this.tourService.startGotchaSettingsTour();
     } else if (path === 'gotcha') {
       const activeTab = this.gotchaState.activeTab();
 

@@ -37,7 +37,7 @@
         }
       </div>
 
-      <div class="field-group">
+      <div class="field-group field-group--startdate">
         <label class="field-label">{{ t.t('gotcha.editModal.startDate') }}</label>
         <input class="field-input" type="datetime-local"
                [disabled]="!isEditable()"
@@ -45,7 +45,7 @@
                (input)="editStartDate.set($any($event.target).value)" />
       </div>
 
-      <div class="field-group">
+      <div class="field-group field-group--deadline">
         <label class="field-label">{{ t.t('gotcha.editModal.killDeadline') }}</label>
         <input class="field-input" type="number" min="1" max="336"
                [disabled]="!isEditable()"
@@ -54,7 +54,7 @@
         <p class="field-hint">{{ t.t('gotcha.editModal.killDeadlineHint') }}</p>
       </div>
 
-      <div class="field-group">
+      <div class="field-group field-group--prize-photo">
         <label class="field-label">{{ t.t('gotcha.editModal.prizePhoto') }}</label>
         <div class="file-upload-area" [class.file-upload-area--disabled]="!isEditable()">
 
@@ -81,7 +81,7 @@
         </div>
       </div>
 
-      <div class="field-row">
+      <div class="field-row field-row--prize-desc">
         <div class="field-group field-group--half">
           <label class="field-label">
             <span class="lang-tag">EN</span>{{ t.t('gotcha.editModal.prizeDescEN') }}

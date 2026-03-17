@@ -820,5 +820,101 @@ export class TourService {
 
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
+  }startGotchaSettingsTour() {
+    this.initDriver();
+    const isLocked = !!document.querySelector('.settings-card--locked');
+    const hasProps = !!document.querySelector('.prop-row');
+    const steps: DriveStep[] = [];
+
+    steps.push({
+      element: '.settings-card:first-child',
+      popover: {
+        title: `${this.getIcon('sliders')} ${this.t.t('tour.gotchaSettings.gameCard')}`,
+        description: isLocked
+          ? this.t.t('tour.gotchaSettings.gameCardLocked')
+          : this.t.t('tour.gotchaSettings.gameCardDesc'),
+        side: 'top'
+      }
+    });
+
+    steps.push({
+      element: '.field-group--startdate',
+      popover: {
+        title: `${this.getIcon('calendar')} ${this.t.t('tour.gotchaSettings.startDate')}`,
+        description: this.t.t('tour.gotchaSettings.startDateDesc'),
+        side: 'bottom'
+      }
+    });
+
+    steps.push({
+      element: '.field-group--deadline',
+      popover: {
+        title: `${this.getIcon('timer')} ${this.t.t('tour.gotchaSettings.deadline')}`,
+        description: this.t.t('tour.gotchaSettings.deadlineDesc'),
+        side: 'bottom'
+      }
+    });
+
+    steps.push({
+      element: '.field-group--prize-photo',
+      popover: {
+        title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaSettings.prize')}`,
+        description: this.t.t('tour.gotchaSettings.prizeDesc'),
+        side: 'top'
+      }
+    });
+
+    steps.push({
+      element: '.field-row--prize-desc',
+      popover: {
+        title: `${this.getIcon('flag')} ${this.t.t('tour.gotchaSettings.prizeDesc2')}`,
+        description: this.t.t('tour.gotchaSettings.prizeDesc2Desc'),
+        side: 'top'
+      }
+    });
+
+    steps.push({
+      element: '.settings-card:last-child',
+      popover: {
+        title: `${this.getIcon('shopping')} ${this.t.t('tour.gotchaSettings.props')}`,
+        description: this.t.t('tour.gotchaSettings.propsDesc'),
+        side: 'top'
+      }
+    });
+
+    if (hasProps) {
+      steps.push({
+        element: '.prop-row',
+        popover: {
+          title: `${this.getIcon('check')} ${this.t.t('tour.gotchaSettings.propRow')}`,
+          description: this.t.t('tour.gotchaSettings.propRowDesc'),
+          side: 'right'
+        }
+      });
+    } else {
+      steps.push({
+        element: '.props-empty',
+        popover: {
+          title: `${this.getIcon('alert')} ${this.t.t('tour.gotchaSettings.noProps')}`,
+          description: this.t.t('tour.gotchaSettings.noPropsDesc'),
+          side: 'top'
+        }
+      });
+    }
+
+    if (!isLocked && document.querySelector('.btn-add-prop')) {
+      steps.push({
+        element: '.btn-add-prop',
+        popover: {
+          title: `${this.getIcon('plus')} ${this.t.t('tour.gotchaSettings.addProp')}`,
+          description: this.t.t('tour.gotchaSettings.addPropDesc'),
+          side: 'left'
+        }
+      });
+    }
+
+    this.driverObj?.setSteps(steps);
+    this.driverObj?.drive();
   }
 }
+

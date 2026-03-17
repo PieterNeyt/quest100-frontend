@@ -704,6 +704,27 @@
       "empty": "No Kudos Yet",
       "emptyDesc": "You haven't received any Kudos yet. Attend classes and collaborate with teammates to start earning points!"
     },
+    "gotchaSettings": {
+      "gameCard": "Game Settings",
+      "prizeDesc2": "Prize Description",
+      "prizeDesc2Desc": "Enter the prize description in both English and Dutch — the platform is bilingual so both fields are required.",
+      "gameCardDesc": "Configure the start date, kill deadline and prize for this tournament. Changes are saved per field.",
+      "gameCardLocked": "The game is currently active so these settings are locked. You can still update the prize info.",
+      "startDate": "Start Date",
+      "startDateDesc": "When does the game kick off? Players can sign up until this moment. Once started, targets are assigned automatically.",
+      "deadline": "Kill Deadline",
+      "deadlineDesc": "How many hours a player has to eliminate their target before the chain moves on to the next hunter.",
+      "prize": "Prize",
+      "prizeDesc": "Upload a photo of the prize and add a description in both English and Dutch. Players will see this in the rules tab.",
+      "props": "Props",
+      "propsDesc": "Props are the items players must use during their elimination. Each player gets one assigned randomly at game start.",
+      "propRow": "A Prop",
+      "propRowDesc": "Each prop has an English and Dutch name. Use the pencil to edit or the bin to delete — only possible before the game starts.",
+      "noProps": "No Props Yet",
+      "noPropsDesc": "You need at least one prop before the game can start. Add some using the button above.",
+      "addProp": "Add Prop",
+      "addPropDesc": "Click here to add a new prop. Fill in both the English and Dutch name and confirm to save it."
+    },
     "eventDetail": {
       "photo": "Event Visuals",
       "photoDesc": "The cover image and category of this event. Categories help you quickly find the type of activity you're looking for.",
