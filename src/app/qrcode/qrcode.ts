@@ -31,8 +31,11 @@ export class Qrcode {
         this.toastService.success('qrCode.success');
       },
       error: (error) => {
-        console.error(error);
-        this.toastService.error();
+        if (error.status === 404) {
+          this.toastService.error("qrCode.error.noLesson");
+        } else {
+          this.toastService.error("qrCode.error.generic");
+        }
         this.isLoading.set(false);
       }
     });

@@ -57,7 +57,10 @@
     "scanTitle": "Scan this QR code for attendance",
     "infoText": "Students can scan this code to register their attendance",
     "success": "QR code generated successfully",
-    "error": "Failed to generate QR code"
+    "error": {
+      "generic": "Failed to generate QR code",
+      "noLesson": "No lesson planned"
+    }
   },
   "event": {
     "title": "Events",
