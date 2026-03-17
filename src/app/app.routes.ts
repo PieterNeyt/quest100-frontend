@@ -20,7 +20,7 @@ export const routes: Routes = [
   {path: 'profile', component: Profile, canActivate: [MsalGuard]},
   {path: 'event/:eventId', component: EventDetailComponent, canActivate: [MsalGuard]},
   {path: 'event', component: EventComponent, canActivate: [MsalGuard]},
-  {path: 'attendance/:classId', component: AttendanceComponent},
+  {path: 'attendance/:classId', component: AttendanceComponent, canActivate: [MsalGuard]},
   {path: 'qrcode', component: Qrcode, canActivate: [MsalGuard]},
   {path: 'userlist', component: Userlist, canActivate: [MsalGuard]},
   {path: 'avatar', component: Avatar, canActivate: [MsalGuard]},

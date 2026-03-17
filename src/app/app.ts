@@ -31,7 +31,16 @@ type MenuState = 'languages' | 'user' | 'mobile' | null;
   selector: 'app-root',
   imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
   providers: [
-    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap,lucideChevronRight})
+    provideIcons({
+      lucideUser,
+      lucideSettings,
+      lucideLogOut,
+      lucideQrCode,
+      lucideMenu,
+      lucideX,
+      lucideZap,
+      lucideChevronRight
+    })
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

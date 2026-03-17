@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection
 } from '@angular/core';
-import {provideRouter} from '@angular/router';
+import {provideRouter, withEnabledBlockingInitialNavigation} from '@angular/router';
 
 import {routes} from './app.routes';
 import {
@@ -82,7 +82,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(withInterceptorsFromDi()),
     {
