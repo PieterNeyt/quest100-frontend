@@ -25,22 +25,22 @@ export class ModerationService {
   }
 
   getReports(): Observable<Report[]> {
-    return this.http.get<Report[]>(`${this.url}/api/moderation/reports`);
+    return this.http.get<Report[]>(`/api/moderation/reports`);
   }
 
   resolveReport(reportId: string): Observable<{ status: string }> {
     return this.http.patch<{ status: string }>(
-      `${this.url}/api/moderation/report/${reportId}/resolve`,
+      `/api/moderation/report/${reportId}/resolve`,
       {}
     );
   }
 
   getReportedEventById(eventId: string): Observable<StudentEvent> {
-    return this.http.get<StudentEvent>(`${this.url}/api/events/${eventId}/reported`);
+    return this.http.get<StudentEvent>(`/api/events/${eventId}/reported`);
   }
 
   getKudoEntryById(id: string): Observable<KudosEntry> {
-    return this.http.get<KudosEntry>(`${this.url}/api/profiles/kudos/${id}`);
+    return this.http.get<KudosEntry>(`/api/profiles/kudos/${id}`);
   }
 
 }
