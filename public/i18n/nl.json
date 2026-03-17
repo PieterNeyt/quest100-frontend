@@ -187,7 +187,8 @@
     },
     "tabs": {
       "feed": "Kill Feed",
-      "review": "Beoordelen"
+      "review": "Beoordelen",
+      "rules": "Spelregels"
     },
     "target": {
       "label": "Jouw doelwit",
@@ -196,6 +197,32 @@
       "eliminated": "Je bent uitgeschakeld",
       "timeLeft": "Tijd over",
       "waitingForReview": "Wacht op beoordeling"
+    },
+    "rules": {
+      "zoomHint": "Klik om te vergroten",
+      "prizeTitle": "Prijs",
+      "prizeUnknown": "Prijs wordt later bekendgemaakt",
+      "deadlineLabel": "Kill deadline",
+      "noGameYet": "Er is nog geen spel geconfigureerd. De spelregels zijn beschikbaar zodra een spel is ingesteld.",
+      "killDeadlineInfo": "Je hebt",
+      "killDeadlineInfoSuffix": "uur om je doelwit uit te schakelen voordat de keten verdergaat.",
+      "killDeadlineUnknown": "Kill deadline is nog niet ingesteld.",
+      "howItWorks": "Zo werkt het",
+      "step1Title": "Inschrijven",
+      "step1Desc": "Doe mee tijdens de inschrijvingsperiode. Zodra het spel start, krijg je een willekeurig doelwit en een willekeurig voorwerp.",
+      "step2Title": "Vind je doelwit",
+      "step2Desc": "Ga naar je dashboard om te zien wie jouw doelwit is. Je vindt er de naam en profielfoto.",
+      "step3Title": "Gebruik je voorwerp",
+      "step3Desc": "Je moet je toegewezen voorwerp gebruiken bij de uitschakeling. Het moet duidelijk zichtbaar zijn op je bewijsfoto.",
+      "step4Title": "Dien bewijs in",
+      "step4Desc": "Maak een foto van jezelf met je doelwit en je voorwerp, en dien die in via 'Kill indienen' — voor je kill deadline verstrijkt.",
+      "step5Title": "Beoordeling & verder",
+      "step5Desc": "Een lector beoordeelt je foto. Na goedkeuring verschijnt de kill in de Kill Feed en krijg je een nieuw doelwit. De laatste overlever wint!",
+      "importantTitle": "Belangrijke regels",
+      "rule1": "Uitschakelingen moeten plaatsvinden op de campus of bij officiële schoolactiviteiten.",
+      "rule2": "Fysiek contact is niet toegestaan — het spel is volledig op foto's gebaseerd.",
+      "rule3": "Je kunt niemand targeten die al uitgeschakeld is of waarvan een review lopende is.",
+      "rule4": "Onsportief gedrag of misbruik kan leiden tot diskwalificatie."
     },
     "feed": {
       "title": "Kill Feed",
@@ -581,7 +608,31 @@
     },
     "gotcha": {
       "title": "Klaar voor Gotcha?",
-      "desc": "Tijd voor het ultieme spel op de campus. Deze banner brengt je naar je dashboard waar je je doelwit kunt zien en je scores kunt bijhouden. Klik nu op de banner om mee te doen!"
+      "desc": "Tijd voor het ultieme spel op de campus. Deze banner brengt je naar je dashboard waar je je doelwit kunt zien en je scores kunt bijhouden. Klik nu op de banner om mee te doen!",
+      "target": "Jouw Doelwit",
+      "targetDesc": "Dit is de persoon die je moet 'elimineren'. Je ziet hier ook welk voorwerp je moet gebruiken.",
+      "timer": "Aftelklok",
+      "timerDesc": "Elimineer je doelwit voordat de tijd op is, anders lig je zelf uit het spel!",
+      "tabs": "Feed & Spelregels",
+      "tabsDesc": "Wissel tussen de regels, de live killfeed en (voor leerkrachten) het beoordelingspaneel.",
+      "submit": "Moord Melden",
+      "submitDesc": "Doelwit succesvol uitgeschakeld? Upload hier een foto als bewijs.",
+      "review": "Beoordelen",
+      "reviewDesc": "Als leerkracht beslis jij hier of een moord geldig is of wordt afgekeurd.",
+      "rulesInfo": "Prijs & Deadline",
+      "rulesInfoDesc": "Hier zie je de prijs en hoeveel tijd je per kill hebt voordat de keten verdergaat.",
+      "rulesSteps": "Zo Werkt Het",
+      "rulesStepsDesc": "Vijf stappen die het spel uitleggen van inschrijving tot winnen. Lees dit voor je start!",
+      "rulesImportant": "De Regels",
+      "rulesImportantDesc": "Dit zijn de grenzen van het spel. Overtreding kan leiden tot diskwalificatie.",
+      "feed": "Kill Feed",
+      "feedDesc": "Elke goedgekeurde eliminatie verschijnt hier live. Je kunt ook kills liken!",
+      "feedEmptyDesc": "Nog geen kills — het spel is net begonnen. Kom later terug!",
+      "reviewActions": "Goedkeuren of Afkeuren",
+      "reviewActionsDesc": "Gebruik de knoppen om een geldige kill goed te keuren of een valse kill af te keuren.",
+      "reviewEmpty": "Wachtrij Leeg",
+      "reviewEmptyDesc": "Alle ingediende kills zijn beoordeeld. Niets meer te doen hier voor nu!"
+
     },
     "mod": {
       "header": "Moderatie Centrum",
@@ -594,6 +645,32 @@
       "noOpenDesc": "Er zijn momenteel geen meldingen. Lekker bezig! Precies hoe we het dashboard graag zien.",
       "closed": "Missie Voltooid",
       "closedDesc": "Hier vind je de geschiedenis van opgeloste zaken. Een echt archief voor een top-moderator!"
+    },
+    "gotchaHistory": {
+      "header": "Spelgeschiedenis",
+      "headerDesc": "Een overzicht van alle afgelopen Gotcha-toernooien. Bekijk wie er in vorige spellen bovenuit kwam.",
+      "grid": "Vorige Spellen",
+      "gridDesc": "Elke kaart staat voor één afgelopen toernooi. Klik op een kaart om de volledige resultaten te bekijken.",
+      "card": "Spelkaart",
+      "cardDesc": "Een samenvatting van het spel: wanneer het gespeeld werd, wie won en hoeveel spelers er waren.",
+      "winner": "De Winnaar",
+      "winnerDesc": "De laatste overlever van dat toernooi, samen met het totale aantal kills.",
+      "stats": "Toernooistatistieken",
+      "statsDesc": "In één oogopslag: totaal deelnemers, totaal kills en wanneer het spel gestart is.",
+      "view": "Volledige Resultaten",
+      "viewDesc": "Klik ergens op de kaart om het gedetailleerde eindscherm van dat spel te openen.",
+      "empty": "Nog Geen Geschiedenis",
+      "emptyDesc": "Er zijn nog geen afgelopen spellen. Zodra een toernooi afloopt, verschijnt het hier."
+    },
+    "gotchaEnd": {
+      "winner": "De Winnaar",
+      "winnerDesc": "Deze speler heeft iedereen overleefd. Bekijk hoeveel kills hij of zij heeft gemaakt.",
+      "prize": "De Prijs",
+      "prizeDesc": "Dit is wat de winnaar mee naar huis neemt. Was de jacht het waard?",
+      "awards": "Awards",
+      "awardsDesc": "Bijzondere prestaties voor opvallende spelers — van snelste kill tot meest ongelukkig slachtoffer.",
+      "graph": "Toernooikaart",
+      "graphDesc": "Elke eliminatie in beeld. Klik op een naam om kills te zien, of op een pijl voor de details."
     },
     "avatar": {
       "kudos": "Je Kudos Saldo",

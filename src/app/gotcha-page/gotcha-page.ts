@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {CommonModule, Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
@@ -27,7 +27,7 @@ export class GotchaPageComponent implements OnInit {
   private readonly router        = inject(Router);
   private readonly location      = inject(Location);
   readonly t = inject(TranslationService);
-
+  @ViewChild(GotchaKillFeedComponent) killFeed?: GotchaKillFeedComponent;
   // Submit kill modal
   showSubmitModal = signal(false);
   photoBase64     = signal<string | null>(null);

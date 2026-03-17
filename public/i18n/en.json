@@ -205,7 +205,8 @@
     },
     "tabs": {
       "feed": "Kill Feed",
-      "review": "Review"
+      "review": "Review",
+      "rules": "Rules"
     },
     "target": {
       "label": "Your target",
@@ -413,6 +414,32 @@
       "optedOut": "You've left the game.",
       "optOutGameStarted": "You can't leave after the game has started.",
       "optOutError": "Failed to leave the game."
+    },
+    "rules": {
+      "zoomHint": "Click to enlarge",
+      "prizeTitle": "Prize",
+      "prizeUnknown": "Prize to be announced",
+      "deadlineLabel": "Kill deadline",
+      "noGameYet": "No game has been configured yet. Rules will be available once a game is set up.",
+      "killDeadlineInfo": "You have",
+      "killDeadlineInfoSuffix": "hours to eliminate your target before the chain moves on.",
+      "killDeadlineUnknown": "Kill deadline not yet set.",
+      "howItWorks": "How it works",
+      "step1Title": "Sign up",
+      "step1Desc": "Join the game during the sign-up period. Once the game starts, you receive a random target and a random prop.",
+      "step2Title": "Find your target",
+      "step2Desc": "Check your dashboard to see who your target is. You'll find their name and profile photo there.",
+      "step3Title": "Use your prop",
+      "step3Desc": "You must use your randomly assigned prop during the elimination. It must clearly appear in your evidence photo.",
+      "step4Title": "Submit proof",
+      "step4Desc": "Take a photo of yourself with your target and prop, then submit it via the 'Submit Kill' button — before your kill deadline expires.",
+      "step5Title": "Get reviewed & move on",
+      "step5Desc": "A lecturer reviews your photo. Once approved, the kill appears in the Kill Feed and you receive a new target. Last one standing wins!",
+      "importantTitle": "Important rules",
+      "rule1": "Eliminations must take place on campus or at official school activities.",
+      "rule2": "No physical contact allowed — the game is entirely photo-based.",
+      "rule3": "You cannot target someone who is already eliminated or has a pending review.",
+      "rule4": "Unsportsmanlike behaviour or misuse can result in disqualification."
     }
   },
   "about": {
@@ -577,7 +604,30 @@
     },
     "gotcha": {
       "title": "Ready for Gotcha?",
-      "desc": "It's time for the ultimate campus game. This banner leads you to your dashboard where you can see your target and track your eliminations. Click the banner now to join the game!"
+      "desc": "It's time for the ultimate campus game. This banner leads you to your dashboard where you can see your target and track your eliminations. Click the banner now to join the game!",
+      "target": "Your Target",
+      "targetDesc": "This is the person you need to 'eliminate'. You also see which item you must use.",
+      "timer": "Countdown",
+      "timerDesc": "Eliminate your target before time runs out, or you will be eliminated yourself!",
+      "tabs": "Game Feed & Rules",
+      "tabsDesc": "Switch between the rules, the live killfeed, and (for teachers) the review panel.",
+      "submit": "Report a Kill",
+      "submitDesc": "Successfully eliminated your target? Upload a photo here as proof.",
+      "review": "Review Panel",
+      "reviewDesc": "As a teacher, you decide here if a kill is valid or should be rejected.",
+      "rulesInfo": "Prize & Deadline",
+      "rulesInfoDesc": "Here you see the prize and how long you have per kill before the chain moves on.",
+      "rulesSteps": "How It Works",
+      "rulesStepsDesc": "Five steps that explain the game from sign-up to winning. Read these before you start!",
+      "rulesImportant": "The Rules",
+      "rulesImportantDesc": "These are the boundaries of the game. Violating them can result in disqualification.",
+      "feed": "Kill Feed",
+      "feedDesc": "Every approved elimination appears here in real time. You can like kills too!",
+      "feedEmptyDesc": "No kills yet — the game just started. Check back soon!",
+      "reviewActions": "Approve or Deny",
+      "reviewActionsDesc": "Swipe or use the buttons to approve a valid kill or deny a fraudulent one.",
+      "reviewEmpty": "Queue is Empty",
+      "reviewEmptyDesc": "All pending kills have been reviewed. Nothing left to do here for now!"
     },
     "mod": {
       "header": "Moderation Center",
@@ -614,6 +664,32 @@
       "contentDesc": "Check the points, the reason given by the sender, and who the involved parties are.",
       "action": "Take Action",
       "actionDesc": "Once you've made a decision, use this button to mark the report as handled."
+    },
+    "gotchaEnd": {
+      "winner": "The Winner",
+      "winnerDesc": "This player outlasted everyone. Check their kill count and claim to fame.",
+      "prize": "The Prize",
+      "prizeDesc": "This is what the winner takes home. Was it worth the hunt?",
+      "awards": "Awards",
+      "awardsDesc": "Special achievements handed out to standout players — from fastest kill to most unlucky victim.",
+      "graph": "Tournament Map",
+      "graphDesc": "Every elimination visualised. Click a node to see someone's kills, or click an arrow for kill details."
+    },
+    "gotchaHistory": {
+      "header": "Game History",
+      "headerDesc": "An overview of all finished Gotcha tournaments. See who came out on top in previous games.",
+      "grid": "Past Games",
+      "gridDesc": "Each card represents one finished tournament. Click any card to view the full results.",
+      "card": "Game Card",
+      "cardDesc": "A quick summary of the game: when it was played, who won, and how many players took part.",
+      "winner": "The Winner",
+      "winnerDesc": "The last player standing in that tournament, along with their total kill count.",
+      "stats": "Tournament Stats",
+      "statsDesc": "At a glance: total participants, total kills made, and when the game started.",
+      "view": "View Full Results",
+      "viewDesc": "Click anywhere on the card to open the detailed end screen for that game.",
+      "empty": "No History Yet",
+      "emptyDesc": "No finished games yet. Once a tournament wraps up, it will appear here."
     },
     "reportMessage": {
       "chat": "Chat Context",

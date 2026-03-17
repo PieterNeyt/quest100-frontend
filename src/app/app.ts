@@ -26,6 +26,7 @@ import {NgxSonnerToaster} from 'ngx-sonner';
 import {jwtDecode} from 'jwt-decode';
 import {RoleService} from './services/roleService';
 import {TourService} from './services/tourService';
+import {GotchaStateService} from './services/GotchaStateService';
 
 type MenuState = 'languages' | 'user' | 'mobile' | null;
 
@@ -34,7 +35,17 @@ type MenuState = 'languages' | 'user' | 'mobile' | null;
   standalone: true,
   imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
   providers: [
-    provideIcons({lucideUser, lucideSettings, lucideLogOut, lucideQrCode, lucideMenu, lucideX, lucideZap, lucideChevronRight, lucideHelpCircle})
+    provideIcons({
+      lucideUser,
+      lucideSettings,
+      lucideLogOut,
+      lucideQrCode,
+      lucideMenu,
+      lucideX,
+      lucideZap,
+      lucideChevronRight,
+      lucideHelpCircle
+    })
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -46,7 +57,7 @@ export class App implements OnInit, OnDestroy {
   showUserDropdown = signal(false);
   isMobileMenuOpen = signal(false);
   activeMenu = signal<MenuState>(null);
-
+  private readonly gotchaState = inject(GotchaStateService);
   private readonly tourService = inject(TourService);
   private readonly router = inject(Router);
 
@@ -113,7 +124,10 @@ export class App implements OnInit, OnDestroy {
           this.profileService.syncUser();
           const account = this.authService.instance.getActiveAccount();
           if (!account) return;
-          const tokenResponse = await this.authService.instance.acquireTokenSilent({ account, scopes: environment.apiConfig.scopes });
+          const tokenResponse = await this.authService.instance.acquireTokenSilent({
+            account,
+            scopes: environment.apiConfig.scopes
+          });
           const decoded: any = jwtDecode(tokenResponse.accessToken);
           this.roleService.roles.set(decoded.roles || []);
         }
@@ -122,13 +136,15 @@ export class App implements OnInit, OnDestroy {
 
   login() {
     if (this.msalGuardConfig.authRequest) {
-      this.authService.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
+      this.authService.loginRedirect({...this.msalGuardConfig.authRequest} as RedirectRequest);
     } else {
       this.authService.loginRedirect();
     }
   }
 
-  logout() { this.authService.logoutRedirect(); }
+  logout() {
+    this.authService.logoutRedirect();
+  }
 
   async changeLanguage(lang: Language): Promise<void> {
     await this.translationService.setLanguage(lang);
@@ -139,7 +155,6 @@ export class App implements OnInit, OnDestroy {
     event?.stopPropagation();
     this.activeMenu.update(current => current === menu ? null : menu);
   }
-
 
   startContextualTour(): void {
     const urlTree = this.router.parseUrl(this.router.url);
@@ -153,22 +168,31 @@ export class App implements OnInit, OnDestroy {
       this.tourService.startAvatarTour();
     } else if (path === 'about') {
       this.tourService.startAboutTour();
-    }
-    else if (path.startsWith('report/')) {
-      if (path.includes('/award/')) {
-        this.tourService.startReportAwardTour();
-      }
-      else if (path.includes('/event/')) {
-        this.tourService.startReportEventTour();
-      }
-      else if (path.includes('/message/')) {
-        this.tourService.startReportMessageTour();
+    } else if (path.startsWith('report/')) {
+      if (path.includes('/award/')) this.tourService.startReportAwardTour();
+      else if (path.includes('/event/')) this.tourService.startReportEventTour();
+      else if (path.includes('/message/')) this.tourService.startReportMessageTour();
+    } else if (path === 'gotcha/history') {
+      this.tourService.startGotchaHistoryTour();
+    } else if (path === 'gotcha/end' || path.startsWith('gotcha/end/')) {
+      this.tourService.startGotchaEndTour();
+    } else if (path === 'gotcha') {
+      const activeTab = this.gotchaState.activeTab();
+
+      if (activeTab === 'feed') {
+        this.tourService.startGotchaFeedTour();
+      } else if (activeTab === 'review') {
+        this.tourService.startGotchaReviewTour();
+      } else {
+        this.tourService.startGotchaRulesTour();
       }
     }
   }
 
   @HostListener('document:click')
-  closeAll(): void { this.activeMenu.set(null); }
+  closeAll(): void {
+    this.activeMenu.set(null);
+  }
 
   ngOnDestroy(): void {
     this._destroying$.next(undefined);
