@@ -1,0 +1,123 @@
+<div class="rules-wrap">
+
+  <!-- ── Prize block (shown when game has prize info) ── -->
+  @if (hasPrize) {
+    <div class="prize-card">
+      <div class="prize-header">
+        <div class="prize-icon-wrap">
+          <ng-icon hlm name="lucideTrophy" size="sm" />
+        </div>
+        <div class="prize-header-text">
+          <span class="prize-label">{{ t.t('gotcha.rules.prizeTitle') }}</span>
+          @if (prizeDescription) {
+            <span class="prize-desc">{{ prizeDescription }}</span>
+          } @else {
+            <span class="prize-desc prize-desc--unknown">{{ t.t('gotcha.rules.prizeUnknown') }}</span>
+          }
+        </div>
+      </div>
+      @if (game()?.prizePhotoBase64) {
+        <img class="prize-photo"
+             [src]="'data:image/jpeg;base64,' + game()!.prizePhotoBase64"
+             alt="prize" />
+      }
+    </div>
+  }
+
+  <!-- ── No game yet fallback ── -->
+  @if (!game()) {
+    <div class="no-game-notice">
+      <ng-icon hlm name="lucideInfo" size="sm" />
+      <span>{{ t.t('gotcha.rules.noGameYet') }}</span>
+    </div>
+  }
+
+  <!-- ── Kill deadline info ── -->
+  @if (killDeadlineHours !== null) {
+    <div class="info-pill">
+      <ng-icon hlm name="lucideTimer" size="xs" />
+      <span>
+        {{ t.t('gotcha.rules.killDeadlineInfo') }}
+        <strong>{{ killDeadlineHours }}u</strong>
+      </span>
+    </div>
+  } @else {
+    <div class="info-pill info-pill--muted">
+      <ng-icon hlm name="lucideTimer" size="xs" />
+      <span>{{ t.t('gotcha.rules.killDeadlineUnknown') }}</span>
+    </div>
+  }
+
+  <!-- ── Step-by-step rules ── -->
+  <div class="rules-section">
+    <h3 class="rules-section-title">
+      <ng-icon hlm name="lucideScrollText" size="xs" />
+      {{ t.t('gotcha.rules.howItWorks') }}
+    </h3>
+
+    <ol class="steps-list">
+      <li class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <span class="step-title">{{ t.t('gotcha.rules.step1Title') }}</span>
+          <span class="step-desc">{{ t.t('gotcha.rules.step1Desc') }}</span>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <span class="step-title">{{ t.t('gotcha.rules.step2Title') }}</span>
+          <span class="step-desc">{{ t.t('gotcha.rules.step2Desc') }}</span>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <span class="step-title">{{ t.t('gotcha.rules.step3Title') }}</span>
+          <span class="step-desc">{{ t.t('gotcha.rules.step3Desc') }}</span>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <span class="step-title">{{ t.t('gotcha.rules.step4Title') }}</span>
+          <span class="step-desc">{{ t.t('gotcha.rules.step4Desc') }}</span>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <span class="step-title">{{ t.t('gotcha.rules.step5Title') }}</span>
+          <span class="step-desc">{{ t.t('gotcha.rules.step5Desc') }}</span>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ── Important rules ── -->
+  <div class="rules-section">
+    <h3 class="rules-section-title">
+      <ng-icon hlm name="lucideShieldAlert" size="xs" />
+      {{ t.t('gotcha.rules.importantTitle') }}
+    </h3>
+    <ul class="rules-list">
+      <li>
+        <ng-icon hlm name="lucideAlertTriangle" size="xs" class="rule-icon rule-icon--warn" />
+        {{ t.t('gotcha.rules.rule1') }}
+      </li>
+      <li>
+        <ng-icon hlm name="lucideAlertTriangle" size="xs" class="rule-icon rule-icon--warn" />
+        {{ t.t('gotcha.rules.rule2') }}
+      </li>
+      <li>
+        <ng-icon hlm name="lucideAlertTriangle" size="xs" class="rule-icon rule-icon--warn" />
+        {{ t.t('gotcha.rules.rule3') }}
+      </li>
+      <li>
+        <ng-icon hlm name="lucideAlertTriangle" size="xs" class="rule-icon rule-icon--warn" />
+        {{ t.t('gotcha.rules.rule4') }}
+      </li>
+    </ul>
+  </div>
+
+</div>

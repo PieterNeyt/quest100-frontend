@@ -40,6 +40,9 @@
         <button class="btn-primary" (click)="$event.stopPropagation(); navigateToEndScreen()">
           {{ t.t('gotcha.endScreen.viewResults') }} <ng-icon name="lucideArrowRight" size="sm"></ng-icon>
         </button>
+        <button class="btn-settings" (click)="navigateToSettings()">
+          <ng-icon name="lucideSettings2" size="sm"></ng-icon>
+        </button>
       </div>
     </div>
   </div>

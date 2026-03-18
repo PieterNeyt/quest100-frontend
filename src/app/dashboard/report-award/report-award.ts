@@ -5,6 +5,7 @@ import { ModerationService } from '../../services/moderationService';
 import { ProfileService } from '../../services/profileService';
 import { Report } from '../../model/report';
 import { KudosEntry, Profile } from '../../model/profile';
+import {TranslationService} from '../../services/translationService';
 
 @Component({
   selector: 'app-report-award',
@@ -18,6 +19,7 @@ export class ReportAward implements OnInit {
   private readonly router = inject(Router);
   private readonly moderationService = inject(ModerationService);
   private readonly profileService = inject(ProfileService);
+  readonly t = inject(TranslationService);
 
   reportId!: string;
   targetId!: string;

@@ -1,0 +1,202 @@
+:host { display: block; }
+
+.rules-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.25rem 0 0.5rem;
+}
+
+/* ── Prize card ── */
+.prize-card {
+  background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.04));
+  border: 1.5px solid rgba(251,191,36,0.35);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.prize-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+}
+
+.prize-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  background: rgba(251,191,36,0.18);
+  border: 1px solid rgba(251,191,36,0.35);
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.prize-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.prize-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #d97706;
+}
+
+.prize-desc {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--foreground);
+  line-height: 1.45;
+}
+
+.prize-desc--unknown {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.prize-photo {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  display: block;
+  border-top: 1px solid rgba(251,191,36,0.2);
+}
+
+/* ── No game notice ── */
+.no-game-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1rem;
+  background: rgba(90,170,180,0.07);
+  border: 1px solid rgba(90,170,180,0.2);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  color: var(--muted-foreground);
+}
+
+/* ── Info pill (deadline) ── */
+.info-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(90,170,180,0.09);
+  border: 1px solid rgba(90,170,180,0.25);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-blue-dark);
+  width: fit-content;
+}
+
+.info-pill--muted {
+  background: var(--muted);
+  border-color: var(--border);
+  color: var(--muted-foreground);
+}
+
+/* ── Sections ── */
+.rules-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.rules-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted-foreground);
+}
+
+/* ── Steps ── */
+.steps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.15s;
+}
+
+.step:hover { border-color: rgba(90,170,180,0.3); }
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 6px;
+  background: rgba(90,170,180,0.12);
+  border: 1px solid rgba(90,170,180,0.25);
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: var(--color-blue);
+  flex-shrink: 0;
+}
+
+.step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.step-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.step-desc {
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+/* ── Important rules list ── */
+.rules-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--foreground);
+  line-height: 1.5;
+}
+
+.rule-icon { flex-shrink: 0; margin-top: 0.1rem; }
+.rule-icon--warn { color: var(--color-warning, #f59e0b); }

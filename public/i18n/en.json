@@ -19,10 +19,10 @@
     "name": "Name",
     "percentOfTotal": "% of total",
     "archetypes": {
-      "wizard":           "Wizard",
-      "teamCatalyst":     "Team Catalyst",
-      "atmosphereMaker":  "Atmosphere Maker",
-      "campusExplorer":   "Campus Explorer",
+      "wizard": "Wizard",
+      "teamCatalyst": "Team Catalyst",
+      "atmosphereMaker": "Atmosphere Maker",
+      "campusExplorer": "Campus Explorer",
       "academicGuardian": "Academic Guardian"
     }
   },
@@ -208,7 +208,8 @@
     },
     "tabs": {
       "feed": "Kill Feed",
-      "review": "Review"
+      "review": "Review",
+      "rules": "Rules"
     },
     "target": {
       "label": "Your target",
@@ -416,6 +417,32 @@
       "optedOut": "You've left the game.",
       "optOutGameStarted": "You can't leave after the game has started.",
       "optOutError": "Failed to leave the game."
+    },
+    "rules": {
+      "zoomHint": "Click to enlarge",
+      "prizeTitle": "Prize",
+      "prizeUnknown": "Prize to be announced",
+      "deadlineLabel": "Kill deadline",
+      "noGameYet": "No game has been configured yet. Rules will be available once a game is set up.",
+      "killDeadlineInfo": "You have",
+      "killDeadlineInfoSuffix": "hours to eliminate your target before the chain moves on.",
+      "killDeadlineUnknown": "Kill deadline not yet set.",
+      "howItWorks": "How it works",
+      "step1Title": "Sign up",
+      "step1Desc": "Join the game during the sign-up period. Once the game starts, you receive a random target and a random prop.",
+      "step2Title": "Find your target",
+      "step2Desc": "Check your dashboard to see who your target is. You'll find their name and profile photo there.",
+      "step3Title": "Use your prop",
+      "step3Desc": "You must use your randomly assigned prop during the elimination. It must clearly appear in your evidence photo.",
+      "step4Title": "Submit proof",
+      "step4Desc": "Take a photo of yourself with your target and prop, then submit it via the 'Submit Kill' button — before your kill deadline expires.",
+      "step5Title": "Get reviewed & move on",
+      "step5Desc": "A lecturer reviews your photo. Once approved, the kill appears in the Kill Feed and you receive a new target. Last one standing wins!",
+      "importantTitle": "Important rules",
+      "rule1": "Eliminations must take place on campus or at official school activities.",
+      "rule2": "No physical contact allowed — the game is entirely photo-based.",
+      "rule3": "You cannot target someone who is already eliminated or has a pending review.",
+      "rule4": "Unsportsmanlike behaviour or misuse can result in disqualification."
     }
   },
   "about": {
@@ -507,6 +534,38 @@
       "spam": "Spam",
       "hateSpeech": "Hate Speech",
       "other": "Other"
+    },
+    "back": "Back to reports",
+    "award": {
+      "label": "Reported award",
+      "resolve": "Resolve report",
+      "resolved": "Resolved",
+      "entry": "Award Entry",
+      "reason": "Reason",
+      "sender": "Sender",
+      "receiver": "Receiver"
+    },
+    "modal": {
+      "title": "Resolve this report?",
+      "desc": "Are you sure you want to mark this report as resolved? This action cannot be undone.",
+      "confirm": "Yes, resolve",
+      "cancel": "Cancel"
+    },
+    "message": {
+      "label": "Reported message",
+      "flagged": "Flagged",
+      "chat": "Chat"
+    },
+    "event": {
+      "reportedFor": "Reported for",
+      "title": "Title",
+      "organizer": "Organizer",
+      "date": "Event Date",
+      "attendees": "Attendees",
+      "visibility": "Visibility",
+      "created": "Created",
+      "updated": "Updated",
+      "description": "Description"
     }
   },
   "avatar": {
@@ -530,6 +589,207 @@
     "setAsProfilePictureMessage": {
       "success": "Profile picture updated successfully.",
       "error": "Failed to set profile picture. Please try again."
+    }
+  },
+  "tour": {
+    "btns": {
+      "next": "Next step",
+      "prev": "Go back",
+      "done": "Done!"
+    },
+    "event": {
+      "title": "Events Overview",
+      "desc": "This is where all the action happens. Browse through upcoming activities and see who else is joining.",
+      "create": "Organize Activity",
+      "createDesc": "Have a great idea? Use this button to host your own event and invite other students.",
+      "filter": "Smart Filters",
+      "filterDesc": "Looking for something specific? Filter by category or search by name to find your next event.",
+      "report": "Safety & Moderation",
+      "reportDesc": "Spotted something inappropriate? Use the flag icon on any card to notify our team instantly.",
+      "noEventReport": "Safety & Moderation",
+      "noEventReportDesc": "No events yet! Once they appear, you can use the flag icon on any card to report content that shouldn't be there."
+    },
+    "gotcha": {
+      "title": "Ready for Gotcha?",
+      "desc": "It's time for the ultimate campus game. This banner leads you to your dashboard where you can see your target and track your eliminations. Click the banner now to join the game!",
+      "target": "Your Target",
+      "targetDesc": "This is the person you need to 'eliminate'. You also see which item you must use.",
+      "timer": "Countdown",
+      "timerDesc": "Eliminate your target before time runs out, or you will be eliminated yourself!",
+      "tabs": "Game Feed & Rules",
+      "tabsDesc": "Switch between the rules, the live killfeed, and (for teachers) the review panel.",
+      "submit": "Report a Kill",
+      "submitDesc": "Successfully eliminated your target? Upload a photo here as proof.",
+      "review": "Review Panel",
+      "reviewDesc": "As a teacher, you decide here if a kill is valid or should be rejected.",
+      "rulesInfo": "Prize & Deadline",
+      "rulesInfoDesc": "Here you see the prize and how long you have per kill before the chain moves on.",
+      "rulesSteps": "How It Works",
+      "rulesStepsDesc": "Five steps that explain the game from sign-up to winning. Read these before you start!",
+      "rulesImportant": "The Rules",
+      "rulesImportantDesc": "These are the boundaries of the game. Violating them can result in disqualification.",
+      "feed": "Kill Feed",
+      "feedDesc": "Every approved elimination appears here in real time. You can like kills too!",
+      "feedEmptyDesc": "No kills yet — the game just started. Check back soon!",
+      "reviewActions": "Approve or Deny",
+      "reviewActionsDesc": "Swipe or use the buttons to approve a valid kill or deny a fraudulent one.",
+      "reviewEmpty": "Queue is Empty",
+      "reviewEmptyDesc": "All pending kills have been reviewed. Nothing left to do here for now!"
+    },
+    "mod": {
+      "header": "Moderation Center",
+      "headerDesc": "Welcome to the control room. Here you keep the community safe and friendly.",
+      "filters": "Narrow it down",
+      "filtersDesc": "Filter by report type or channel to find exactly what needs your attention.",
+      "open": "Active Reports",
+      "openDesc": "These items need a pair of eyes. Click 'Resolve' to see the details and take action.",
+      "noOpen": "Clean Slate",
+      "noOpenDesc": "Currently no open reports. Great job! This is exactly how we like our dashboard.",
+      "closed": "Mission Accomplished",
+      "closedDesc": "Here you'll find the history of resolved cases. A true hall of fame for a moderator!"
+    },
+    "avatar": {
+      "kudos": "Your Kudos Balance",
+      "kudosDesc": "These are your achievements! In the avatar shop, you don't spend them; you just need to have enough to unlock items. Your balance stays the same!",
+      "preview": "Avatar Preview",
+      "previewDesc": "See your changes in real-time. Once you're happy, hit the button to update your profile picture everywhere.",
+      "shop": "Unlock Assets",
+      "shopDesc": "Browse through different categories. If you have enough Kudos, you can unlock and equip new styles instantly."
+    },
+    "about": {
+      "hero": "The Ecosystem",
+      "heroDesc": "Welcome to the overview of all essential KdG tools. Everything you need for your studies, all in one place.",
+      "counters": "Quick Navigation",
+      "countersDesc": "Use these shortcuts to jump directly to a specific application's details.",
+      "apps": "Tool Details",
+      "appsDesc": "Each section explains what the tool is for, its key features, and provides a direct link to open it."
+    },
+    "reportDetail": {
+      "banner": "Report Context",
+      "bannerDesc": "Here you can see exactly why this award was flagged and what the reporter had to say.",
+      "content": "Award Details",
+      "contentDesc": "Check the points, the reason given by the sender, and who the involved parties are.",
+      "action": "Take Action",
+      "actionDesc": "Once you've made a decision, use this button to mark the report as handled."
+    },
+    "gotchaEnd": {
+      "winner": "The Winner",
+      "winnerDesc": "This player outlasted everyone. Check their kill count and claim to fame.",
+      "prize": "The Prize",
+      "prizeDesc": "This is what the winner takes home. Was it worth the hunt?",
+      "awards": "Awards",
+      "awardsDesc": "Special achievements handed out to standout players — from fastest kill to most unlucky victim.",
+      "graph": "Tournament Map",
+      "graphDesc": "Every elimination visualised. Click a node to see someone's kills, or click an arrow for kill details."
+    },
+    "profile": {
+      "picture": "Your Profile Picture",
+      "pictureDesc": "This is how other students see you across the platform — in the kill feed, awards, and leaderboards.",
+      "actions": "Update Your Photo",
+      "actionsDesc": "Upload a new photo or remove your current one. Your avatar can also be set as your profile picture from the avatar page.",
+      "info": "Your Details",
+      "infoDesc": "Your name, Kudos balance and student ID. Kudos are earned by attending classes and receiving awards from teammates."
+    },
+    "kudoOverview": {
+      "stats": "Your Kudo Statistics",
+      "reportDescNoBtn": "Awards sent by teammates can be reported if they feel inappropriate. The flag icon appears on any award entry in your timeline.",
+      "statsDesc": "An overview of all the Kudos you've earned. Click the header to expand or collapse this panel.",
+      "summary": "Total & Archetype",
+      "summaryDesc": "Your total Kudos balance and your current archetype — determined by which category you score highest in.",
+      "bars": "Breakdown by Category",
+      "barsDesc": "See exactly how your Kudos are distributed across Knowledge, Attendance, Teamwork, Atmosphere and Engagement.",
+      "timeline": "Recent Kudos",
+      "timelineDesc": "A chronological feed of every Kudo you've received. Click the header to expand this panel.",
+      "entry": "Kudo Entry",
+      "entryDesc": "Each entry shows the type, date, reason and how many points it was worth. Awards from teammates also show who sent it.",
+      "report": "Report an Award",
+      "reportDesc": "If you received an award that feels inappropriate or was sent in bad faith, use this flag to report it to a moderator.",
+      "empty": "No Kudos Yet",
+      "emptyDesc": "You haven't received any Kudos yet. Attend classes and collaborate with teammates to start earning points!"
+    },
+    "gotchaSettings": {
+      "gameCard": "Game Settings",
+      "prizeDesc2": "Prize Description",
+      "prizeDesc2Desc": "Enter the prize description in both English and Dutch — the platform is bilingual so both fields are required.",
+      "gameCardDesc": "Configure the start date, kill deadline and prize for this tournament. Changes are saved per field.",
+      "gameCardLocked": "The game is currently active so these settings are locked. You can still update the prize info.",
+      "startDate": "Start Date",
+      "startDateDesc": "When does the game kick off? Players can sign up until this moment. Once started, targets are assigned automatically.",
+      "deadline": "Kill Deadline",
+      "deadlineDesc": "How many hours a player has to eliminate their target before the chain moves on to the next hunter.",
+      "prize": "Prize",
+      "prizeDesc": "Upload a photo of the prize and add a description in both English and Dutch. Players will see this in the rules tab.",
+      "props": "Props",
+      "propsDesc": "Props are the items players must use during their elimination. Each player gets one assigned randomly at game start.",
+      "propRow": "A Prop",
+      "propRowDesc": "Each prop has an English and Dutch name. Use the pencil to edit or the bin to delete — only possible before the game starts.",
+      "noProps": "No Props Yet",
+      "noPropsDesc": "You need at least one prop before the game can start. Add some using the button above.",
+      "addProp": "Add Prop",
+      "addPropDesc": "Click here to add a new prop. Fill in both the English and Dutch name and confirm to save it."
+    },
+    "eventDetail": {
+      "photo": "Event Visuals",
+      "photoDesc": "The cover image and category of this event. Categories help you quickly find the type of activity you're looking for.",
+      "info": "Event Details",
+      "infoDesc": "Title, date and description of the event. Everything you need to decide if you want to join.",
+      "report": "Report This Event",
+      "reportDesc": "If this event violates community guidelines — inappropriate content, misleading info, or anything else — use this flag to notify a moderator.",
+      "action": "Join or Leave",
+      "actionDesc": "Use this button to register your attendance. You can cancel later if your plans change.",
+      "chat": "Event Chat",
+      "chatDesc": "Talk directly with other attendees. Ask questions, coordinate meetups, or just get hyped together!",
+      "chatLocked": "Event Chat",
+      "chatLockedDesc": "Once you join this event, a chat opens up where you can talk with all other attendees.",
+      "attendees": "Who's Coming",
+      "attendeesDesc": "A list of everyone attending. The star icon marks the organizer. You can see how many spots are left if there's a maximum."
+    },
+    "gotchaHistory": {
+      "header": "Game History",
+      "headerDesc": "An overview of all finished Gotcha tournaments. See who came out on top in previous games.",
+      "grid": "Past Games",
+      "gridDesc": "Each card represents one finished tournament. Click any card to view the full results.",
+      "card": "Game Card",
+      "cardDesc": "A quick summary of the game: when it was played, who won, and how many players took part.",
+      "winner": "The Winner",
+      "winnerDesc": "The last player standing in that tournament, along with their total kill count.",
+      "stats": "Tournament Stats",
+      "statsDesc": "At a glance: total participants, total kills made, and when the game started.",
+      "view": "View Full Results",
+      "viewDesc": "Click anywhere on the card to open the detailed end screen for that game.",
+      "empty": "No History Yet",
+      "emptyDesc": "No finished games yet. Once a tournament wraps up, it will appear here."
+    },
+    "reportMessage": {
+      "chat": "Chat Context",
+      "chatDesc": "Review the conversation history to understand the context of the reported message.",
+      "flagged": "Flagged Message",
+      "flaggedDesc": "The specific message that was reported is highlighted and marked with a flag."
+    },
+    "reportEvent": {
+      "photo": "Event Visuals",
+      "photoDesc": "Check the uploaded image and category to see if they follow the community guidelines.",
+      "details": "Event Information",
+      "detailsDesc": "Review the title, organizer, and visibility settings of this event.",
+      "attendees": "Participant List",
+      "attendeesDesc": "Here you can see everyone who registered for this event."
+    }
+  },
+  "mod": {
+    "title": "Moderation Reports",
+    "subtitle": "Review and resolve flagged content from users",
+    "status": {
+      "open": "Open",
+      "closed": "Closed",
+      "resolved": "Resolved",
+      "loading": "Loading...",
+      "allClear": "All clear!",
+      "noResolved": "No resolved reports",
+      "error": "Failed to load reports."
+    },
+    "actions": {
+      "resolve": "Resolve",
+      "retry": "Try again"
     }
   }
 }

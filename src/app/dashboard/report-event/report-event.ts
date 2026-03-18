@@ -8,6 +8,7 @@ import { StudentEvent } from '../../model/studentEvent';
 import { Profile } from '../../model/profile';
 import { Report } from '../../model/report';
 import { categoryColor, categoryIconSvg } from '../../utils/Categoryutils';
+import {TranslationService} from '../../services/translationService';
 
 @Component({
   selector: 'app-report-event',
@@ -21,6 +22,7 @@ export class reportEvent implements OnInit {
   private readonly router = inject(Router);
   private readonly moderationService = inject(ModerationService);
   private readonly profileService = inject(ProfileService);
+  readonly t = inject(TranslationService);
 
   event = signal<StudentEvent | null>(null);
   report = signal<Report | null>(null);

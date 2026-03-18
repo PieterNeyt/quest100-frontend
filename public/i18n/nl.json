@@ -190,7 +190,8 @@
     },
     "tabs": {
       "feed": "Kill Feed",
-      "review": "Beoordelen"
+      "review": "Beoordelen",
+      "rules": "Spelregels"
     },
     "target": {
       "label": "Jouw doelwit",
@@ -199,6 +200,32 @@
       "eliminated": "Je bent uitgeschakeld",
       "timeLeft": "Tijd over",
       "waitingForReview": "Wacht op beoordeling"
+    },
+    "rules": {
+      "zoomHint": "Klik om te vergroten",
+      "prizeTitle": "Prijs",
+      "prizeUnknown": "Prijs wordt later bekendgemaakt",
+      "deadlineLabel": "Kill deadline",
+      "noGameYet": "Er is nog geen spel geconfigureerd. De spelregels zijn beschikbaar zodra een spel is ingesteld.",
+      "killDeadlineInfo": "Je hebt",
+      "killDeadlineInfoSuffix": "uur om je doelwit uit te schakelen voordat de keten verdergaat.",
+      "killDeadlineUnknown": "Kill deadline is nog niet ingesteld.",
+      "howItWorks": "Zo werkt het",
+      "step1Title": "Inschrijven",
+      "step1Desc": "Doe mee tijdens de inschrijvingsperiode. Zodra het spel start, krijg je een willekeurig doelwit en een willekeurig voorwerp.",
+      "step2Title": "Vind je doelwit",
+      "step2Desc": "Ga naar je dashboard om te zien wie jouw doelwit is. Je vindt er de naam en profielfoto.",
+      "step3Title": "Gebruik je voorwerp",
+      "step3Desc": "Je moet je toegewezen voorwerp gebruiken bij de uitschakeling. Het moet duidelijk zichtbaar zijn op je bewijsfoto.",
+      "step4Title": "Dien bewijs in",
+      "step4Desc": "Maak een foto van jezelf met je doelwit en je voorwerp, en dien die in via 'Kill indienen' — voor je kill deadline verstrijkt.",
+      "step5Title": "Beoordeling & verder",
+      "step5Desc": "Een lector beoordeelt je foto. Na goedkeuring verschijnt de kill in de Kill Feed en krijg je een nieuw doelwit. De laatste overlever wint!",
+      "importantTitle": "Belangrijke regels",
+      "rule1": "Uitschakelingen moeten plaatsvinden op de campus of bij officiële schoolactiviteiten.",
+      "rule2": "Fysiek contact is niet toegestaan — het spel is volledig op foto's gebaseerd.",
+      "rule3": "Je kunt niemand targeten die al uitgeschakeld is of waarvan een review lopende is.",
+      "rule4": "Onsportief gedrag of misbruik kan leiden tot diskwalificatie."
     },
     "feed": {
       "title": "Kill Feed",
@@ -473,10 +500,10 @@
     "name": "Naam",
     "percentOfTotal": "% van totaal",
     "archetypes": {
-      "wizard":           "Tovenaar",
-      "teamCatalyst":     "Teamkatalysator",
-      "atmosphereMaker":  "Sfeermaker",
-      "campusExplorer":   "Campusverkenner",
+      "wizard": "Tovenaar",
+      "teamCatalyst": "Teamkatalysator",
+      "atmosphereMaker": "Sfeermaker",
+      "campusExplorer": "Campusverkenner",
       "academicGuardian": "Academisch Bewaker"
     }
   },
@@ -507,6 +534,38 @@
       "spam": "Spam",
       "hateSpeech": "Haatspraak",
       "other": "Andere"
+    },
+    "back": "Terug naar meldingen",
+    "award": {
+      "label": "Gerapporteerde award",
+      "resolve": "Melding afhandelen",
+      "resolved": "Afgehandeld",
+      "entry": "Award Gegevens",
+      "reason": "Reden",
+      "sender": "Zender",
+      "receiver": "Ontvanger"
+    },
+    "modal": {
+      "title": "Melding afhandelen?",
+      "desc": "Weet je zeker dat je deze melding als afgehandeld wilt markeren? Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Ja, handel af",
+      "cancel": "Annuleren"
+    },
+    "message": {
+      "label": "Gerapporteerd bericht",
+      "flagged": "Gemarkeerd",
+      "chat": "Chat"
+    },
+    "event": {
+      "reportedFor": "Gerapporteerd voor",
+      "title": "Titel",
+      "organizer": "Organisator",
+      "date": "Datum Event",
+      "attendees": "Deelnemers",
+      "visibility": "Zichtbaarheid",
+      "created": "Aangemaakt",
+      "updated": "Bijgewerkt",
+      "description": "Beschrijving"
     }
   },
   "avatar": {
@@ -530,6 +589,208 @@
     "setAsProfilePictureMessage": {
       "success": "Profielfoto succesvol bijgewerkt.",
       "error": "Instellen van profielfoto mislukt. Probeer het opnieuw."
+    }
+  },
+  "tour": {
+    "btns": {
+      "next": "Volgende stap",
+      "prev": "Ga terug",
+      "done": "Klaar!"
+    },
+    "event": {
+      "title": "Events Overzicht",
+      "desc": "Dit is het hart van Quest100. Bekijk alle geplande activiteiten en ontdek wie er nog meer aanwezig zijn.",
+      "create": "Activiteit Organiseren",
+      "createDesc": "Heb je zelf een leuk idee? Gebruik deze knop om je eigen event aan te maken en studenten uit te nodigen.",
+      "filter": "Slimme Filters",
+      "filterDesc": "Op zoek naar iets specifieks? Filter op categorie of zoek op naam om snel je volgende event te vinden.",
+      "report": "Veiligheid & Moderatie",
+      "reportDesc": "Zie je iets dat niet klopt? Gebruik het vlaggetje op een kaart om onze beheerders direct te waarschuwen.",
+      "noEventReport": "Veiligheid & Moderatie",
+      "noEventReportDesc": "Er zijn nog geen events! Zodra ze er zijn, kun je het vlaggetje gebruiken om ongepaste inhoud te melden."
+    },
+    "gotcha": {
+      "title": "Klaar voor Gotcha?",
+      "desc": "Tijd voor het ultieme spel op de campus. Deze banner brengt je naar je dashboard waar je je doelwit kunt zien en je scores kunt bijhouden. Klik nu op de banner om mee te doen!",
+      "target": "Jouw Doelwit",
+      "targetDesc": "Dit is de persoon die je moet 'elimineren'. Je ziet hier ook welk voorwerp je moet gebruiken.",
+      "timer": "Aftelklok",
+      "timerDesc": "Elimineer je doelwit voordat de tijd op is, anders lig je zelf uit het spel!",
+      "tabs": "Feed & Spelregels",
+      "tabsDesc": "Wissel tussen de regels, de live killfeed en (voor leerkrachten) het beoordelingspaneel.",
+      "submit": "Moord Melden",
+      "submitDesc": "Doelwit succesvol uitgeschakeld? Upload hier een foto als bewijs.",
+      "review": "Beoordelen",
+      "reviewDesc": "Als leerkracht beslis jij hier of een moord geldig is of wordt afgekeurd.",
+      "rulesInfo": "Prijs & Deadline",
+      "rulesInfoDesc": "Hier zie je de prijs en hoeveel tijd je per kill hebt voordat de keten verdergaat.",
+      "rulesSteps": "Zo Werkt Het",
+      "rulesStepsDesc": "Vijf stappen die het spel uitleggen van inschrijving tot winnen. Lees dit voor je start!",
+      "rulesImportant": "De Regels",
+      "rulesImportantDesc": "Dit zijn de grenzen van het spel. Overtreding kan leiden tot diskwalificatie.",
+      "feed": "Kill Feed",
+      "feedDesc": "Elke goedgekeurde eliminatie verschijnt hier live. Je kunt ook kills liken!",
+      "feedEmptyDesc": "Nog geen kills — het spel is net begonnen. Kom later terug!",
+      "reviewActions": "Goedkeuren of Afkeuren",
+      "reviewActionsDesc": "Gebruik de knoppen om een geldige kill goed te keuren of een valse kill af te keuren.",
+      "reviewEmpty": "Wachtrij Leeg",
+      "reviewEmptyDesc": "Alle ingediende kills zijn beoordeeld. Niets meer te doen hier voor nu!"
+
+    },
+    "mod": {
+      "header": "Moderatie Centrum",
+      "headerDesc": "Welkom in de controlekamer. Hier zorg jij voor een veilige en gezellige community.",
+      "filters": "Selectief kijken",
+      "filtersDesc": "Filter op type rapport of kanaal om precies te vinden wat aandacht nodig heeft.",
+      "open": "Actieve Rapporten",
+      "openDesc": "Deze zaken hebben je aandacht nodig. Klik op 'Oplossen' om de details te zien.",
+      "noOpen": "Schone Lei",
+      "noOpenDesc": "Er zijn momenteel geen meldingen. Lekker bezig! Precies hoe we het dashboard graag zien.",
+      "closed": "Missie Voltooid",
+      "closedDesc": "Hier vind je de geschiedenis van opgeloste zaken. Een echt archief voor een top-moderator!"
+    },
+    "profile": {
+      "picture": "Jouw Profielfoto",
+      "pictureDesc": "Zo zien andere studenten jou op het platform — in de kill feed, bij awards en op de ranglijsten.",
+      "actions": "Foto Bijwerken",
+      "actionsDesc": "Upload een nieuwe foto of verwijder je huidige. Je avatar kan ook als profielfoto ingesteld worden via de avatarpagina.",
+      "info": "Jouw Gegevens",
+      "infoDesc": "Je naam, Kudos-saldo en student-ID. Kudos verdien je door aanwezig te zijn bij lessen en awards te ontvangen van teamgenoten."
+    },
+    "gotchaSettings": {
+      "gameCard": "Spelinstellingen",
+      "prizeDesc2": "Prijsbeschrijving",
+      "prizeDesc2Desc": "Voer de prijsbeschrijving in het Engels én Nederlands in — het platform is tweetalig dus beide velden zijn verplicht.",
+      "gameCardDesc": "Stel de startdatum, kill deadline en prijs in voor dit toernooi. Wijzigingen worden per veld opgeslagen.",
+      "gameCardLocked": "Het spel is momenteel actief, dus deze instellingen zijn vergrendeld. Je kunt de prijsinformatie nog wel aanpassen.",
+      "startDate": "Startdatum",
+      "startDateDesc": "Wanneer begint het spel? Spelers kunnen zich inschrijven tot dit moment. Na de start worden doelwitten automatisch toegewezen.",
+      "deadline": "Kill Deadline",
+      "deadlineDesc": "Hoeveel uur een speler heeft om zijn doelwit uit te schakelen voordat de keten naar de volgende jager gaat.",
+      "prize": "Prijs",
+      "prizeDesc": "Upload een foto van de prijs en voeg een beschrijving toe in het Engels en Nederlands. Spelers zien dit in het regels-tabblad.",
+      "props": "Voorwerpen",
+      "propsDesc": "Voorwerpen zijn de items die spelers moeten gebruiken bij hun eliminatie. Elke speler krijgt er één willekeurig toegewezen bij de start.",
+      "propRow": "Een Voorwerp",
+      "propRowDesc": "Elk voorwerp heeft een Engelse en Nederlandse naam. Gebruik het potlood om te bewerken of de prullenbak om te verwijderen — alleen mogelijk voor de start.",
+      "noProps": "Nog Geen Voorwerpen",
+      "noPropsDesc": "Je hebt minimaal één voorwerp nodig voor het spel kan starten. Voeg er een paar toe via de knop hierboven.",
+      "addProp": "Voorwerp Toevoegen",
+      "addPropDesc": "Klik hier om een nieuw voorwerp toe te voegen. Vul zowel de Engelse als Nederlandse naam in en bevestig om op te slaan."
+    },
+    "eventDetail": {
+      "photo": "Event Beeldmateriaal",
+      "photoDesc": "De omslagafbeelding en categorie van dit event. Categorieën helpen je snel het type activiteit te vinden dat je zoekt.",
+      "info": "Eventdetails",
+      "infoDesc": "Titel, datum en beschrijving van het event. Alles wat je nodig hebt om te beslissen of je wil deelnemen.",
+      "report": "Event Melden",
+      "reportDesc": "Schendt dit event de communityrichtlijnen — ongepaste inhoud, misleidende info of iets anders — gebruik dit vlaggetje om een moderator te waarschuwen.",
+      "action": "Deelnemen of Verlaten",
+      "actionDesc": "Gebruik deze knop om je aanwezigheid te registreren. Je kunt later annuleren als je plannen veranderen.",
+      "chat": "Event Chat",
+      "chatDesc": "Praat rechtstreeks met andere deelnemers. Stel vragen, spreek af of word samen enthousiast!",
+      "chatLocked": "Event Chat",
+      "chatLockedDesc": "Zodra je deelneemt aan dit event, opent er een chat waar je met alle andere aanwezigen kunt praten.",
+      "attendees": "Wie Komt Er",
+      "attendeesDesc": "Een lijst van iedereen die aanwezig is. Het sterretje markeert de organisator. Je ziet ook hoeveel plekken er nog over zijn als er een maximum is."
+    },
+    "kudoOverview": {
+      "stats": "Jouw Kudo Statistieken",
+      "reportDescNoBtn": "Awards van teamgenoten kun je melden als ze ongepast aanvoelen. Het vlaggetje verschijnt op elke award-vermelding in je tijdlijn.",
+      "statsDesc": "Een overzicht van alle Kudos die je hebt verdiend. Klik op de header om dit paneel uit of in te klappen.",
+      "summary": "Totaal & Archetype",
+      "summaryDesc": "Je totale Kudos-saldo en je huidige archetype — bepaald door welke categorie het hoogst scoort.",
+      "bars": "Verdeling per Categorie",
+      "barsDesc": "Bekijk hoe je Kudos verdeeld zijn over Kennis, Aanwezigheid, Teamwerk, Sfeer en Betrokkenheid.",
+      "timeline": "Recente Kudos",
+      "timelineDesc": "Een chronologisch overzicht van elke Kudo die je ontvangen hebt. Klik op de header om dit paneel uit te klappen.",
+      "entry": "Kudo Vermelding",
+      "entryDesc": "Elke vermelding toont het type, de datum, de reden en hoeveel punten het waard was. Awards van teamgenoten tonen ook de afzender.",
+      "report": "Award Melden",
+      "reportDesc": "Heb je een award ontvangen die ongepast aanvoelt of in bad faith verstuurd werd? Gebruik dit vlaggetje om het te melden bij een moderator.",
+      "empty": "Nog Geen Kudos",
+      "emptyDesc": "Je hebt nog geen Kudos ontvangen. Kom opdagen bij lessen en werk samen met teamgenoten om punten te verdienen!"
+    },
+    "gotchaHistory": {
+      "header": "Spelgeschiedenis",
+      "headerDesc": "Een overzicht van alle afgelopen Gotcha-toernooien. Bekijk wie er in vorige spellen bovenuit kwam.",
+      "grid": "Vorige Spellen",
+      "gridDesc": "Elke kaart staat voor één afgelopen toernooi. Klik op een kaart om de volledige resultaten te bekijken.",
+      "card": "Spelkaart",
+      "cardDesc": "Een samenvatting van het spel: wanneer het gespeeld werd, wie won en hoeveel spelers er waren.",
+      "winner": "De Winnaar",
+      "winnerDesc": "De laatste overlever van dat toernooi, samen met het totale aantal kills.",
+      "stats": "Toernooistatistieken",
+      "statsDesc": "In één oogopslag: totaal deelnemers, totaal kills en wanneer het spel gestart is.",
+      "view": "Volledige Resultaten",
+      "viewDesc": "Klik ergens op de kaart om het gedetailleerde eindscherm van dat spel te openen.",
+      "empty": "Nog Geen Geschiedenis",
+      "emptyDesc": "Er zijn nog geen afgelopen spellen. Zodra een toernooi afloopt, verschijnt het hier."
+    },
+    "gotchaEnd": {
+      "winner": "De Winnaar",
+      "winnerDesc": "Deze speler heeft iedereen overleefd. Bekijk hoeveel kills hij of zij heeft gemaakt.",
+      "prize": "De Prijs",
+      "prizeDesc": "Dit is wat de winnaar mee naar huis neemt. Was de jacht het waard?",
+      "awards": "Awards",
+      "awardsDesc": "Bijzondere prestaties voor opvallende spelers — van snelste kill tot meest ongelukkig slachtoffer.",
+      "graph": "Toernooikaart",
+      "graphDesc": "Elke eliminatie in beeld. Klik op een naam om kills te zien, of op een pijl voor de details."
+    },
+    "avatar": {
+      "kudos": "Je Kudos Saldo",
+      "kudosDesc": "Dit zijn je verdiende punten! In de shop geef je ze niet uit; je moet er alleen genoeg hebben om items te ontgrendelen. Je behoudt dus altijd je punten!",
+      "preview": "Avatar Voorbeeld",
+      "previewDesc": "Bekijk je wijzigingen direct. Ben je tevreden? Klik op de knop om je profielfoto overal bij te werken.",
+      "shop": "Items Ontgrendelen",
+      "shopDesc": "Blader door de categorieën. Als je genoeg Kudos hebt, kun je nieuwe items ontgrendelen en direct aantrekken."
+    },
+    "about": {
+      "hero": "Het Ecosysteem",
+      "heroDesc": "Welkom bij het overzicht van alle essentiële KdG-tools. Alles wat je nodig hebt voor je studie op één plek.",
+      "counters": "Snelle Navigatie",
+      "countersDesc": "Gebruik deze sneltoetsen om direct naar de details van een specifieke applicatie te springen.",
+      "apps": "Tool Details",
+      "appsDesc": "Elke sectie legt uit waar de tool voor dient, wat de belangrijkste functies zijn en bevat een directe link."
+    },
+    "reportDetail": {
+      "banner": "Context van de melding",
+      "bannerDesc": "Hier zie je precies waarom deze award is gerapporteerd en wat de reden van de melder was.",
+      "content": "Award Details",
+      "contentDesc": "Controleer het aantal punten, de reden van de zender en wie de betrokken studenten zijn.",
+      "action": "Actie ondernemen",
+      "actionDesc": "Zodra je een beslissing hebt genomen, gebruik je deze knop om de melding als afgehandeld te markeren."
+    },
+    "reportMessage": {
+      "chat": "Chat Context",
+      "chatDesc": "Bekijk de gespreksgeschiedenis om de context van het gerapporteerde bericht te begrijpen.",
+      "flagged": "Gemarkeerd bericht",
+      "flaggedDesc": "Het specifieke bericht dat is gerapporteerd, is geaccentueerd en gemarkeerd met een vlag."
+    },
+    "reportEvent": {
+      "photo": "Event Beeldmateriaal",
+      "photoDesc": "Controleer de geüploade afbeelding en categorie om te zien of deze voldoen aan de richtlijnen.",
+      "details": "Evenement Details",
+      "detailsDesc": "Bekijk de titel, organisator en de zichtbaarheidsinstellingen van dit evenement.",
+      "attendees": "Deelnemerslijst",
+      "attendeesDesc": "Hier kun je zien wie zich allemaal heeft ingeschreven voor dit evenement."
+    }
+  },
+  "mod": {
+    "title": "Moderatie Rapporten",
+    "subtitle": "Beoordeel en los gerapporteerde inhoud van gebruikers op",
+    "status": {
+      "open": "Open",
+      "closed": "Gesloten",
+      "resolved": "Opgelost",
+      "loading": "Laden...",
+      "allClear": "Geen openstaande reports!",
+      "noResolved": "Geen opgeloste rapporten",
+      "error": "Laden van rapporten mislukt."
+    },
+    "actions": {
+      "resolve": "Oplossen",
+      "retry": "Opnieuw proberen"
     }
   }
 }

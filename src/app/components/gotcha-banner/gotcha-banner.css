@@ -81,7 +81,8 @@ ng-icon {
   height: 24px;
 }
 
-.action-group ng-icon {
+.action-group ng-icon,
+.btn-settings ng-icon {
   width: 18px;
   height: 18px;
 }

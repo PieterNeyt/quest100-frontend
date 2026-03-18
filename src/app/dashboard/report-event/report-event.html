@@ -2,7 +2,7 @@
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
     <polyline points="15 18 9 12 15 6"/>
   </svg>
-  Back to reports
+  {{ t.t('report.back') }}
 </button>
 
 @if (loading()) {
@@ -14,14 +14,13 @@
 @if (error()) {
   <div class="state-center">
     <p class="error-text">{{ error() }}</p>
-    <button class="back-btn" (click)="goBack()">Go back</button>
+    <button class="back-btn" (click)="goBack()">{{ t.t('report.back') }}</button>
   </div>
 }
 
 @if (!loading() && !error() && event()) {
   <div class="detail-content">
 
-    <!-- Report reason banner -->
     @if (report()) {
       <div class="report-reason-banner" [class.is-resolved]="report()!.resolved">
         <div class="report-reason-left">
@@ -31,7 +30,7 @@
             <circle cx="12" cy="17" r="1" fill="currentColor"/>
           </svg>
           <div class="report-reason-text">
-            <span class="report-reason-label">Reported for</span>
+            <span class="report-reason-label">{{ t.t('report.event.reportedFor') }}</span>
             <span class="report-reason-message">{{ report()!.message || 'No reason provided' }}</span>
           </div>
         </div>
@@ -40,14 +39,14 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            Resolve report
+            {{ t.t('report.award.resolve') }}
           </button>
         } @else {
           <span class="resolved-badge">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            Resolved
+            {{ t.t('report.award.resolved') }}
           </span>
         }
       </div>
@@ -55,7 +54,6 @@
 
     <div class="top-section">
 
-      <!-- Photo -->
       <div class="top-photo">
         @if (event()!.photo) {
           <img class="top-img" [src]="event()!.photo!" [alt]="event()!.title"/>
@@ -74,14 +72,12 @@
         </span>
       </div>
 
-      <!-- Info -->
       <div class="top-info">
         <div class="info-grid">
 
-          <!-- Title + Event ID -->
           <div class="info-item-row">
             <div class="info-half">
-              <span class="info-label">Title</span>
+              <span class="info-label">{{ t.t('report.event.title') }}</span>
               <span class="info-value">{{ event()!.title }}</span>
             </div>
             <div class="info-divider"></div>
@@ -92,7 +88,7 @@
           </div>
 
           <div class="info-item">
-            <span class="info-label">Organizer</span>
+            <span class="info-label">{{ t.t('report.event.organizer') }}</span>
             <span class="info-value">
               @if (organizer()) {
                 <span class="organizer-name">{{ organizer()!.firstName }} {{ organizer()!.lastName }}</span>
@@ -104,14 +100,13 @@
           </div>
 
           <div class="info-item">
-            <span class="info-label">Event Date</span>
+            <span class="info-label">{{ t.t('report.event.date') }}</span>
             <span class="info-value">{{ formatDate(event()!.eventDate) }}</span>
           </div>
 
-          <!-- Attendees + Visibility -->
           <div class="info-item-row">
             <div class="info-half">
-              <span class="info-label">Attendees</span>
+              <span class="info-label">{{ t.t('report.event.attendees') }}</span>
               <span class="info-value">
                 {{ event()!.attendees.length }}
                 @if (event()!.maxAttendees) {
@@ -121,7 +116,7 @@
             </div>
             <div class="info-divider"></div>
             <div class="info-half">
-              <span class="info-label">Visibility</span>
+              <span class="info-label">{{ t.t('report.event.visibility') }}</span>
               <span class="info-value">
                 <span class="visibility-badge" [class]="event()!.visibility">
                   {{ event()!.visibility }}
@@ -130,15 +125,14 @@
             </div>
           </div>
 
-          <!-- Created + Updated -->
           <div class="info-item-row">
             <div class="info-half">
-              <span class="info-label">Created</span>
+              <span class="info-label">{{ t.t('report.event.created') }}</span>
               <span class="info-value">{{ formatDate(event()!.createdAt) }}</span>
             </div>
             <div class="info-divider"></div>
             <div class="info-half">
-              <span class="info-label">Updated</span>
+              <span class="info-label">{{ t.t('report.event.updated') }}</span>
               <span class="info-value">{{ formatDate(event()!.updatedAt) }}</span>
             </div>
           </div>
@@ -147,13 +141,12 @@
       </div>
     </div>
 
-    <!-- Bottom: attendees + description -->
     <div class="bottom-section">
 
       @if (event()!.attendees.length > 0) {
         <div class="attendees-section">
           <div class="section-header">
-            <h3 class="section-title">Attendees</h3>
+            <h3 class="section-title">{{ t.t('report.event.attendees') }}</h3>
             <span class="section-count">{{ event()!.attendees.length }}</span>
           </div>
           <div class="attendees-grid">
@@ -179,7 +172,7 @@
       @if (event()!.description) {
         <div class="description-section">
           <div class="section-header">
-            <h3 class="section-title">Description</h3>
+            <h3 class="section-title">{{ t.t('report.event.description') }}</h3>
           </div>
           <div class="description-block">
             <p>{{ event()!.description }}</p>
@@ -190,7 +183,6 @@
   </div>
 }
 
-<!-- Resolve Modal -->
 @if (showResolveModal()) {
   <div class="modal-overlay" (click)="showResolveModal.set(false)">
     <div class="modal" (click)="$event.stopPropagation()">
@@ -201,7 +193,7 @@
             <line x1="12" y1="9" x2="12" y2="13"/>
             <circle cx="12" cy="17" r="1" fill="#d97706"/>
           </svg>
-          <h2>Resolve this report?</h2>
+          <h2>{{ t.t('report.modal.title') }}</h2>
         </div>
         <button class="modal-close" (click)="showResolveModal.set(false)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -211,10 +203,10 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to mark this report as resolved? This action cannot be undone.</p>
+        <p>{{ t.t('report.modal.desc') }}</p>
         @if (report()?.message) {
           <div class="modal-reason">
-            <span class="modal-reason-label">Report reason</span>
+            <span class="modal-reason-label">{{ t.t('report.award.reason') }}</span>
             <span class="modal-reason-text">{{ report()!.message }}</span>
           </div>
         }
@@ -223,10 +215,10 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            {{ resolving() ? 'Resolving…' : 'Yes, resolve' }}
+            {{ resolving() ? 'Resolving…' : t.t('report.modal.confirm') }}
           </button>
           <button class="btn-modal-cancel" (click)="showResolveModal.set(false)">
-            Cancel
+            {{ t.t('report.modal.cancel') }}
           </button>
         </div>
       </div>

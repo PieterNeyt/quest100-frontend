@@ -200,21 +200,22 @@
   position: absolute;
   top: 0.6rem;
   right: 0.6rem;
-  z-index: 10;
+  z-index: 50; /* Verhoogd om boven alles te staan */
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: transparent;
+  width: 32px;  /* Iets groter */
+  height: 32px;
+  background: rgba(255, 255, 255, 0.8); /* Witte cirkel erachter voor leesbaarheid */
   color: oklch(0.55 0.02 264);
-  border: none;
-  border-radius: 6px;
+  border: 1px solid var(--border);
+  border-radius: 50%; /* Mooie ronde knop */
   cursor: pointer;
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 0.15s, transform 0.15s, color 0.15s;
+  opacity: 1; /* Altijd zichtbaar */
+  transform: scale(1);
+  transition: all 0.2s ease;
   padding: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* The ng-icon inside — switch to filled red flag on hover via SVG fill trick */
@@ -232,8 +233,10 @@
 }
 
 .card-report-btn:hover {
+  background: #fee2e2;
   color: #ef4444;
-  transform: scale(1.15) !important;
+  transform: scale(1.1) !important;
+  border-color: #fecaca;
 }
 
 /* Fill the flag interior red on hover */
@@ -247,7 +250,9 @@
 .card-report-btn:active {
   transform: scale(0.95) !important;
 }
-
+.card-report-btn ng-icon {
+  stroke-width: 2;
+}
 /* ---- Card Image ---- */
 .card-image-wrap { position: relative; aspect-ratio: 16/9; overflow: hidden; }
 .card-image {
