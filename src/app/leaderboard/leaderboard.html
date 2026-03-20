@@ -450,7 +450,7 @@
           <!-- Prize banner -->
           @if (standingsLeaderboard()!.Prize.Name) {
             <div class="standings-prize-banner">
-              @if (standingsLeaderboard()!.Prize?.PhotoURL) {
+              @if (standingsLeaderboard()!.Prize.PhotoURL) {
                 <img
                   class="standings-prize-img"
                   [src]="standingsLeaderboard()!.Prize!.PhotoURL"

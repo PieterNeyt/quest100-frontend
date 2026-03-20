@@ -14,23 +14,28 @@
         class="search-input"
         type="text"
         [placeholder]="translate.t('userlist.searchPlaceholder')"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
       />
     </div>
 
-    <select class="class-select">
+    <select
+      class="class-select"
+      [ngModel]="selectedClassId()"
+      (ngModelChange)="selectedClassId.set($event)"
+    >
       <option value="">{{ translate.t('userlist.allClasses') }}</option>
-      <option value="101">101</option>
-      <option value="102">102</option>
-      <option value="201">201</option>
-      <option value="202">202</option>
-      <option value="301">301</option>
-      <option value="302">302</option>
+      @for (cls of availableClasses(); track $index) {
+        <option [value]="cls.Id">{{ cls.Name }}</option>
+      }
     </select>
   </div>
 
   <!-- Results count -->
   <p class="results-count">
-    {{ translate.t('userlist.showing') }} <span>{{ filteredProfileAwards().length }}</span> {{ translate.t('userlist.students') }}
+    {{ translate.t('userlist.showing') }}
+    <span>{{ filteredProfileAwards().length }}</span>
+    {{ translate.t('userlist.students') }}
   </p>
 
   <!-- User Grid -->
@@ -53,10 +58,9 @@
         <div class="user-details">
           <span class="user-name">{{ pa.profile.firstName }} {{ pa.profile.lastName }}</span>
           <div class="user-meta">
-            <span class="user-kudos">
-              <ng-icon name="lucideZap" class="size-3.5"></ng-icon>
-              {{ pa.profile.kudos }} {{ translate.t('userlist.kudos') }}
-            </span>
+            @if (pa.profile.class) {
+              <span class="user-class-badge">{{ pa.profile.class.Name }}</span>
+            }
           </div>
         </div>
 
@@ -64,8 +68,7 @@
         <div class="award-action">
           @if (pa.hasSentAward) {
             <span class="award-sent-message">
-              <ng-icon name="lucideCheckCircle" class="size-4"></ng-icon>
-              {{ translate.t('userlist.awardSentToday') }}
+              ✓ {{ translate.t('userlist.awardSentToday') }}
             </span>
           } @else {
             <button class="btn-award" (click)="openModal(pa.profile)">

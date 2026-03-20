@@ -7,6 +7,7 @@ import {ToastService} from '../services/toastService';
 import {TranslationService} from '../services/translationService';
 import {NgIcon, provideIcons} from '@ng-icons/core';
 import {lucideSearch} from '@ng-icons/lucide';
+import {LeaderboardService} from '../services/leaderboardService';
 
 @Component({
   selector: 'app-userlist',
@@ -18,24 +19,49 @@ import {lucideSearch} from '@ng-icons/lucide';
 })
 export class Userlist implements OnInit {
   private profileService = inject(ProfileService);
+  private leaderboardService = inject(LeaderboardService);
   private toastService = inject(ToastService);
   public translate = inject(TranslationService);
 
   profileAwards = this.profileService.profilesAwards;
+  courses = this.leaderboardService.courses;
+
   selectedProfile = signal<Profile | null>(null);
+  searchQuery = signal('');
+  selectedClassId = signal('');
   message = '';
   selectedType = KudoType.KudoTeamwork;
-
   kudoTypes = Object.values(KudoType);
 
+  // The course the logged-in user belongs to
+  private myProfile = this.profileService.profile;
+
+  // Classes that belong to the same course as the logged-in user
+  availableClasses = computed(() => {
+    const myCourseId = this.myProfile()?.class?.CourseId;
+    if (!myCourseId) return [];
+    const course = this.courses().find(c => c.Id === myCourseId);
+    return course?.Classes ?? [];
+  });
+
   filteredProfileAwards = computed(() => {
-    const myId = this.profileService.profile()?.id;
+    const myId = this.myProfile()?.id;
+    const myCourseId = this.myProfile()?.class?.CourseId;
     const awards = this.profileAwards() ?? [];
-    return awards.filter(pa => pa.profile.id !== myId);
+
+    return awards.filter(pa => {
+      if (pa.profile.id === myId) return false;
+
+      // Only show people from the same course
+      if (myCourseId && pa.profile.class?.CourseId !== myCourseId) return false;
+
+      return true;
+    });
   });
 
   ngOnInit() {
     this.profileService.getAllProfilesAwards();
+    this.leaderboardService.getAllCoursesWithClasses().subscribe();
   }
 
   openModal(profile: Profile) {
@@ -65,9 +91,7 @@ export class Userlist implements OnInit {
           lastName: updatedProfile.lastName
         });
         this.toastService.success(message);
-
         this.profileService.markProfileAsAwarded(updatedProfile);
-
         this.closeModal();
       },
       error: () => {

@@ -31,7 +31,6 @@ import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@ang
 import {TranslationService} from './services/translationService';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
-  console.log(message);
 }
 
 export function MSALInstanceFactory(): IPublicClientApplication {

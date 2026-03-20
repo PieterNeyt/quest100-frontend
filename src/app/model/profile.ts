@@ -17,6 +17,12 @@ export interface Profile {
   customProfilePicture?: string | null;
   campus: string;
   archetypeId: number;
+  classId?: string | null;
+  class?: {
+    Id: string;
+    Name: string;
+    CourseId: string;
+  } | null;
 }
 
 export enum ArchetypeId {
