@@ -491,6 +491,11 @@
   },
   "home": {
     "title": "Welkom terug",
+    "agenda": "Agenda van vandaag",
+    "attended": "Aanwezig",
+    "agendaLoading": "Rooster laden…",
+    "agendaEmpty": "Geen lessen gepland voor vandaag.",
+    "agendaUnknownCourse": "Onbekend vak",
     "subtitle": "Hier vind je de belangrijkste links en je persoonlijke statistieken.",
     "myProfile": "Mijn Profiel",
     "games": "Spellen",
