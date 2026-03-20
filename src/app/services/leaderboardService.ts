@@ -33,12 +33,22 @@ export class LeaderboardService {
     );
   }
 
+  getLeaderboardByID(id: string): Observable<Leaderboard> {
+    return this.http.get<Leaderboard>(`/api/leaderboard/${id}`);
+  }
+
+  getAllLeaderboards(): Observable<Leaderboard[]> {
+    return this.http.get<Leaderboard[]>(`/api/leaderboard`).pipe(
+      tap(list => this.leaderboards.set(list))
+    );
+  }
+
   updateLeaderboard(id: string, payload: UpdateLeaderboardRequest): Observable<Leaderboard> {
     return this.http.put<Leaderboard>(`/api/leaderboard/${id}`, payload).pipe(
       tap((lb) => {
         this.currentLeaderboard.set(lb);
         this.leaderboards.update((list) =>
-          list.map((item) => (item.id === id ? lb : item))
+          list.map((item) => (item.Id === id ? lb : item))
         );
       })
     );

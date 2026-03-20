@@ -10,7 +10,7 @@
   </button>
 </div>
 
-<!-- Search & Sort Bar -->
+<!-- ── Search & Sort Bar ──────────────────────────────────────────────────── -->
 <div class="filter-bar">
   <div class="search-wrap">
     <ng-icon hlm name="lucideSearch" class="search-icon" size="sm"/>
@@ -25,28 +25,52 @@
 
   <div class="sort-buttons">
     <span class="sort-label">Sorteren</span>
-    <button class="sort-btn" [class.active]="sortBy() === 'startDate'" (click)="toggleSort('startDate')">
+    <button
+      class="sort-btn"
+      [class.active]="sortBy() === 'startDate'"
+      (click)="toggleSort('startDate')"
+    >
       Startdatum
       @if (sortBy() === 'startDate') {
-        <ng-icon hlm [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'" size="xs"/>
+        <ng-icon
+          hlm
+          [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'"
+          size="xs"
+        />
       }
     </button>
-    <button class="sort-btn" [class.active]="sortBy() === 'endDate'" (click)="toggleSort('endDate')">
+    <button
+      class="sort-btn"
+      [class.active]="sortBy() === 'endDate'"
+      (click)="toggleSort('endDate')"
+    >
       Einddatum
       @if (sortBy() === 'endDate') {
-        <ng-icon hlm [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'" size="xs"/>
+        <ng-icon
+          hlm
+          [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'"
+          size="xs"
+        />
       }
     </button>
-    <button class="sort-btn" [class.active]="sortBy() === 'prize'" (click)="toggleSort('prize')">
+    <button
+      class="sort-btn"
+      [class.active]="sortBy() === 'prize'"
+      (click)="toggleSort('prize')"
+    >
       Prijs
       @if (sortBy() === 'prize') {
-        <ng-icon hlm [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'" size="xs"/>
+        <ng-icon
+          hlm
+          [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'"
+          size="xs"
+        />
       }
     </button>
   </div>
 </div>
 
-<!-- Loading -->
+<!-- ── Loading ────────────────────────────────────────────────────────────── -->
 @if (loading()) {
   <div class="state-container">
     <div class="spinner"></div>
@@ -54,7 +78,7 @@
   </div>
 }
 
-<!-- Error -->
+<!-- ── Error ──────────────────────────────────────────────────────────────── -->
 @if (error()) {
   <div class="state-container">
     <ng-icon hlm name="lucideCircleAlert" size="56" class="text-destructive"/>
@@ -63,25 +87,34 @@
   </div>
 }
 
-<!-- Empty -->
+<!-- ── Empty ──────────────────────────────────────────────────────────────── -->
 @if (!loading() && !error() && filteredLeaderboards().length === 0) {
   <div class="state-container">
     <ng-icon hlm name="lucideTrophy" size="56"/>
     <p>Nog geen leaderboards aangemaakt.</p>
-    <button class="btn-create" (click)="openCreateModal()">Eerste leaderboard</button>
+    <button class="btn-create" (click)="openCreateModal()">
+      Eerste leaderboard
+    </button>
   </div>
 }
 
-<!-- Leaderboard Grid -->
+<!-- ── Leaderboard Grid ───────────────────────────────────────────────────── -->
 @if (!loading() && !error()) {
   <div class="lb-grid">
-    @for (lb of filteredLeaderboards(); track $index) {
-      <div class="lb-card" [class.lb-card--active]="isActive(lb)">
-
+    @for (lb of filteredLeaderboards(); track lb.Id) {
+      <div
+        class="lb-card"
+        [class.lb-card--active]="isActive(lb)"
+        (click)="openStandingsModal(lb)"
+      >
         <!-- Status badge -->
-        <div class="lb-status-badge" [class.lb-status-badge--active]="isActive(lb)">
+        <div
+          class="lb-status-badge"
+          [class.lb-status-badge--active]="isActive(lb)"
+        >
           @if (isActive(lb)) {
-            <span class="status-dot"></span> Actief
+            <span class="status-dot"></span>
+            Actief
           } @else if (daysLeft(lb) === 0) {
             Afgelopen
           } @else {
@@ -100,11 +133,21 @@
 
         <!-- Prize photo -->
         <div class="lb-image-wrap">
-          @if (lb.prize.photoUrl) {
-            <img class="lb-image" [src]="lb.prize.photoUrl" [alt]="lb.prize.name" loading="lazy"/>
+          @if (lb.Prize.PhotoURL) {
+            <img
+              class="lb-image"
+              [src]="lb.Prize.PhotoURL"
+              [alt]="lb.Prize.Name"
+              loading="lazy"
+            />
           } @else {
             <div class="lb-image-placeholder">
-              <ng-icon hlm name="lucideTrophy" size="xl" class="placeholder-trophy"/>
+              <ng-icon
+                hlm
+                name="lucideTrophy"
+                size="xl"
+                class="placeholder-trophy"
+              />
             </div>
           }
         </div>
@@ -113,26 +156,28 @@
           <!-- Course name -->
           <div class="lb-course">
             <ng-icon hlm name="lucideGraduationCap" size="xs"/>
-            {{ courseName(lb.courseId) }}
+            {{ courseName(lb.CourseId) }}
           </div>
 
           <!-- Prize name -->
-          <h3 class="lb-prize-name">{{ lb.prize.name || 'Geen prijs ingesteld' }}</h3>
+          <h3 class="lb-prize-name">
+            {{ lb.Prize.Name || 'Geen prijs ingesteld' }}
+          </h3>
 
-          @if (lb.prize.description) {
-            <p class="lb-prize-desc">{{ lb.prize.description }}</p>
+          @if (lb.Prize.Description) {
+            <p class="lb-prize-desc">{{ lb.Prize.Description }}</p>
           }
 
           <!-- Dates -->
           <div class="lb-dates">
             <span class="lb-date">
               <ng-icon hlm name="lucideCalendarCheck" size="xs"/>
-              {{ formatDate(lb.startDate) }}
+              {{ formatDate(lb.StartDate) }}
             </span>
             <ng-icon hlm name="lucideArrowRight" size="xs" class="lb-arrow"/>
             <span class="lb-date">
               <ng-icon hlm name="lucideCalendarX" size="xs"/>
-              {{ formatDate(lb.endDate) }}
+              {{ formatDate(lb.EndDate) }}
             </span>
           </div>
 
@@ -140,8 +185,7 @@
           <div class="lb-footer">
             <span class="lb-classes">
               <ng-icon hlm name="lucideUsers" size="xs"/>
-              <strong>{{ lb.classes.length ?? 0 }}</strong> klassen
-            </span>
+<strong>{{ lb.Classes.length }}</strong> klassen            </span>
             @if (isActive(lb)) {
               <span class="lb-days-left">
                 <ng-icon hlm name="lucideClock" size="xs"/>
@@ -149,13 +193,21 @@
               </span>
             }
           </div>
+
+          <!-- Click hint -->
+          <div class="lb-click-hint">
+            <ng-icon hlm name="lucideBarChart2" size="xs"/>
+            Bekijk standings
+          </div>
         </div>
       </div>
     }
   </div>
 }
 
-<!-- ── Create Modal ─────────────────────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════════════════
+     CREATE MODAL
+     ══════════════════════════════════════════════════════════════════════════ -->
 @if (showCreateModal()) {
   <div class="modal-overlay" (click)="closeCreateModal()">
     <div class="modal" (click)="$event.stopPropagation()">
@@ -174,14 +226,19 @@
           <select
             class="form-select"
             formControlName="courseId"
-            (change)="createForm.get('courseId')!.setValue($any($event.target).value)"
+            (change)="
+              createForm
+                .get('courseId')!
+                .setValue($any($event.target).value)
+            "
           >
             <option value="">Kies een richting...</option>
-            @for (course of courses(); track $index) {
+            @for (course of courses(); track course.Id) {
               <option [value]="course.Id">{{ course.Name }}</option>
             }
           </select>
-          @if (createForm.get('courseId')?.invalid && createForm.get('courseId')?.touched) {
+          @if (createForm.get('courseId')?.invalid &&
+          createForm.get('courseId')?.touched) {
             <span class="form-error">Richting is verplicht</span>
           }
         </div>
@@ -207,15 +264,25 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Startdatum *</label>
-            <input class="form-input" type="datetime-local" formControlName="startDate"/>
-            @if (createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched) {
+            <input
+              class="form-input"
+              type="datetime-local"
+              formControlName="startDate"
+            />
+            @if (createForm.get('startDate')?.invalid &&
+            createForm.get('startDate')?.touched) {
               <span class="form-error">Startdatum is verplicht</span>
             }
           </div>
           <div class="form-group">
             <label class="form-label">Einddatum *</label>
-            <input class="form-input" type="datetime-local" formControlName="endDate"/>
-            @if (createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched) {
+            <input
+              class="form-input"
+              type="datetime-local"
+              formControlName="endDate"
+            />
+            @if (createForm.get('endDate')?.invalid &&
+            createForm.get('endDate')?.touched) {
               <span class="form-error">Einddatum is verplicht</span>
             }
           </div>
@@ -226,26 +293,45 @@
 
         <div class="form-group">
           <label class="form-label">Naam prijs</label>
-          <input class="form-input" type="text" placeholder="bijv. Pizza-party voor de winnaar" formControlName="prizeName"/>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="bijv. Pizza-party voor de winnaar"
+            formControlName="prizeName"
+          />
         </div>
         <div class="form-group">
           <label class="form-label">Beschrijving</label>
-          <textarea class="form-textarea" placeholder="Beschrijf de prijs..." rows="3" formControlName="prizeDescription"></textarea>
+          <textarea
+            class="form-textarea"
+            placeholder="Beschrijf de prijs..."
+            rows="3"
+            formControlName="prizeDescription"
+          ></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">Foto URL</label>
-          <input class="form-input" type="url" placeholder="https://..." formControlName="prizePhotoUrl"/>
+          <input
+            class="form-input"
+            type="url"
+            placeholder="https://..."
+            formControlName="prizePhotoUrl"
+          />
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="closeCreateModal()">Annuleren</button>
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()">
+            Annuleren
+          </button>
           <button
             type="button"
             class="btn-create"
             [disabled]="createForm.invalid || creating()"
             (click)="submitCreate()"
           >
-            @if (creating()) { <div class="btn-spinner"></div> }
+            @if (creating()) {
+              <div class="btn-spinner"></div>
+            }
             Aanmaken
           </button>
         </div>
@@ -254,7 +340,9 @@
   </div>
 }
 
-<!-- ── Edit Modal ───────────────────────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════════════════
+     EDIT MODAL
+     ══════════════════════════════════════════════════════════════════════════ -->
 @if (showEditModal()) {
   <div class="modal-overlay" (click)="closeEditModal()">
     <div class="modal" (click)="$event.stopPropagation()">
@@ -271,11 +359,19 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Startdatum</label>
-            <input class="form-input" type="datetime-local" formControlName="startDate"/>
+            <input
+              class="form-input"
+              type="datetime-local"
+              formControlName="startDate"
+            />
           </div>
           <div class="form-group">
             <label class="form-label">Einddatum</label>
-            <input class="form-input" type="datetime-local" formControlName="endDate"/>
+            <input
+              class="form-input"
+              type="datetime-local"
+              formControlName="endDate"
+            />
           </div>
         </div>
 
@@ -288,26 +384,180 @@
         </div>
         <div class="form-group">
           <label class="form-label">Beschrijving</label>
-          <textarea class="form-textarea" rows="3" formControlName="prizeDescription"></textarea>
+          <textarea
+            class="form-textarea"
+            rows="3"
+            formControlName="prizeDescription"
+          ></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">Foto URL</label>
-          <input class="form-input" type="url" formControlName="prizePhotoUrl"/>
+          <input
+            class="form-input"
+            type="url"
+            formControlName="prizePhotoUrl"
+          />
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="closeEditModal()">Annuleren</button>
+          <button type="button" class="btn-cancel" (click)="closeEditModal()">
+            Annuleren
+          </button>
           <button
             type="button"
             class="btn-create"
             [disabled]="saving()"
             (click)="submitEdit()"
           >
-            @if (saving()) { <div class="btn-spinner"></div> }
+            @if (saving()) {
+              <div class="btn-spinner"></div>
+            }
             Opslaan
           </button>
         </div>
       </form>
+    </div>
+  </div>
+}
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     STANDINGS MODAL
+     ══════════════════════════════════════════════════════════════════════════ -->
+@if (showStandingsModal()) {
+  <div class="modal-overlay" (click)="closeStandingsModal()">
+    <div class="modal modal--standings" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="standings-header-text">
+          <h2>Standings</h2>
+          @if (standingsLeaderboard()) {
+            <p class="modal-subtitle">
+              {{ courseName(standingsLeaderboard()!.CourseId) }}
+            </p>
+          }
+        </div>
+        <button class="modal-close" (click)="closeStandingsModal()">
+          <ng-icon hlm name="lucideX" size="sm"/>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (loadingStandings()) {
+          <div class="state-container" style="padding: 2.5rem 0">
+            <div class="spinner"></div>
+            <p>Standings laden...</p>
+          </div>
+        } @else if (standingsLeaderboard()) {
+          <!-- Prize banner -->
+          @if (standingsLeaderboard()!.Prize.Name) {
+            <div class="standings-prize-banner">
+              @if (standingsLeaderboard()!.Prize?.PhotoURL) {
+                <img
+                  class="standings-prize-img"
+                  [src]="standingsLeaderboard()!.Prize!.PhotoURL"
+                  [alt]="standingsLeaderboard()!.Prize!.Name"
+                />
+              } @else {
+                <div class="standings-prize-icon">
+                  <ng-icon hlm name="lucideGift" size="md"/>
+                </div>
+              }
+              <div class="standings-prize-info">
+                <div class="standings-prize-label">Te winnen</div>
+                <div class="standings-prize-name">
+                  {{ standingsLeaderboard()!.Prize.Name }}
+                </div>
+                @if (standingsLeaderboard()!.Prize.Description) {
+                  <div class="standings-prize-desc">
+                    {{ standingsLeaderboard()!.Prize.Description }}
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Period + status -->
+          <div class="standings-meta">
+            <div class="standings-period">
+              <ng-icon hlm name="lucideCalendarCheck" size="xs"/>
+              {{ formatDate(standingsLeaderboard()!.StartDate) }}
+              <ng-icon hlm name="lucideArrowRight" size="xs"/>
+              {{ formatDate(standingsLeaderboard()!.EndDate) }}
+            </div>
+            @if (isActive(standingsLeaderboard()!)) {
+              <span class="standings-active-badge">
+                <span class="status-dot"></span>
+                Actief &middot; {{ daysLeft(standingsLeaderboard()!) }} dagen
+                resterend
+              </span>
+            } @else if (daysLeft(standingsLeaderboard()!) === 0) {
+              <span class="standings-ended-badge">Afgelopen</span>
+            } @else {
+              <span class="standings-planned-badge">Gepland</span>
+            }
+          </div>
+
+          <!-- Rankings -->
+          <div class="standings-section-label">
+            <ng-icon hlm name="lucideBarChart2" size="xs"/>
+            Klassement
+          </div>
+
+          <div class="standings-list">
+            @if (sortedClasses().length === 0) {
+              <div class="standings-empty">
+                <ng-icon hlm name="lucideUsers" size="32"/>
+                <p>Nog geen klassen of kudos geregistreerd.</p>
+              </div>
+            }
+
+            @for (cls of sortedClasses(); track cls.ClassId; let i = $index) {
+              <div
+                class="standings-row"
+                [class.standings-row--gold]="i === 0"
+                [class.standings-row--silver]="i === 1"
+                [class.standings-row--bronze]="i === 2"
+              >
+                <!-- Rank -->
+                <div class="standings-rank">
+                  @if (i === 0) {
+                    <span class="medal medal--gold">🥇</span>
+                  } @else if (i === 1) {
+                    <span class="medal medal--silver">🥈</span>
+                  } @else if (i === 2) {
+                    <span class="medal medal--bronze">🥉</span>
+                  } @else {
+                    <span class="rank-num">{{ i + 1 }}</span>
+                  }
+                </div>
+
+                <!-- Class name -->
+                <div class="standings-class-info">
+                  <span class="standings-class-name">
+                    {{ cls.ClassName || classNameById(cls.ClassId) }}
+                  </span>
+                </div>
+
+                <!-- Kudos bar + number -->
+                <div class="standings-kudos-wrap">
+                  <div class="standings-kudos-bar-track">
+                    <div
+                      class="standings-kudos-bar-fill"
+                      [style.width.%]="getKudosPercent(cls.TotalKudos)"
+                      [class.bar--gold]="i === 0"
+                      [class.bar--silver]="i === 1"
+                      [class.bar--bronze]="i === 2"
+                    ></div>
+                  </div>
+                  <span class="standings-kudos-num">
+                    {{ cls.TotalKudos }}
+                    <span class="kudos-label">kudos</span>
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
     </div>
   </div>
 }

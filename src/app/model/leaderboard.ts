@@ -1,22 +1,23 @@
 export interface Prize {
-  name: string;
-  description: string;
-  photoUrl: string;
-}
-
-export interface Leaderboard {
-  id: string;
-  courseId: string;
-  startDate: string;
-  endDate: string;
-  prize: Prize;
-  classes: LeaderboardClass[];
+  Name: string;
+  Description: string;
+  PhotoURL: string;
 }
 
 export interface LeaderboardClass {
-  leaderboardId: string;
-  classId: string;
-  totalKudos: number;
+  LeaderboardId: string;
+  ClassId:       string;
+  ClassName?:    string;
+  TotalKudos:    number;
+}
+
+export interface Leaderboard {
+  Id:        string;
+  CourseId:  string;
+  StartDate: string;
+  EndDate:   string;
+  Prize:     Prize;
+  Classes:   LeaderboardClass[];
 }
 export interface PrizeRequest {
   name: string;
