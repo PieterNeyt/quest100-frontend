@@ -1,10 +1,44 @@
 <div class="userlist-wrapper">
 
+
+
   <!-- Header -->
   <div class="header-section">
     <h2>{{ translate.t('userlist.colleagues') }} <span>Quest100</span></h2>
     <p class="subtitle">{{ translate.t('userlist.awardSubtitle') }}</p>
   </div>
+
+  <!-- Leaderboard Banner -->
+  @if (bannerLeaderboard(); as banner) {
+    <div class="leaderboard-banner" [class]="'banner-' + banner.state" (click)="navigateToLeaderboard(banner.lb.Id)">
+      <div class="banner-left">
+        <div class="banner-icon">
+          <ng-icon name="lucideTrophy"></ng-icon>
+        </div>
+        <div class="banner-text">
+          @if (banner.state === 'active') {
+            <span class="banner-label">Lopend leaderboard</span>
+            <span class="banner-sub">Loopt tot {{ formatDate(banner.lb.EndDate) }} · {{ banner.lb.Prize.Name }}</span>
+          } @else if (banner.state === 'upcoming') {
+            <span class="banner-label">Volgend leaderboard</span>
+            <span class="banner-sub">Start op {{ formatDate(banner.lb.StartDate) }} · {{ banner.lb.Prize.Name }}</span>
+          } @else {
+            <span class="banner-label">Vorig leaderboard</span>
+            <span class="banner-sub">Afgelopen op {{ formatDate(banner.lb.EndDate) }} · {{ banner.lb.Prize.Name }}</span>
+          }
+        </div>
+      </div>
+      <div class="banner-right">
+        @if (banner.state === 'active') {
+          <span class="banner-live-dot"></span>
+          <span class="banner-cta">Bekijk standings</span>
+        } @else {
+          <span class="banner-cta">Bekijk details</span>
+        }
+        <ng-icon name="lucideChevronRight" class="banner-chevron"></ng-icon>
+      </div>
+    </div>
+  }
 
   <!-- Filter Bar -->
   <div class="filter-bar">
