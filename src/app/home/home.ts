@@ -20,7 +20,7 @@ import {ToastService} from '../services/toastService';
 import {Router} from '@angular/router';
 import {ArchetypeId} from '../model/profile';
 import {AgendaItem} from '../model/agenda';
-import {UnixTimePipe} from '../utils/gotchaPipes';
+import {UnixTimePipe} from '../utils/unixPipe';
 
 const TIMELINE_START = 7;
 const TIMELINE_END   = 21;
