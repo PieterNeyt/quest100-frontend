@@ -131,6 +131,11 @@
   </div>
 }
 
+<!-- Blocking modal — shown when the synced profile has no class assigned yet -->
+@if (showNoClassModal()) {
+  <app-no-class-modal />
+}
+
 <main class="main">
   @if (!isIframe()) {
     <router-outlet></router-outlet>

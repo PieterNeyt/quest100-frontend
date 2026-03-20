@@ -40,6 +40,7 @@ export interface KudosEntry {
 export interface SyncProfileResponse {
   profile: Profile;
   microsoftProfilePicture: string;
+  hasClass: boolean;
 }
 
 export interface AwardTransaction {

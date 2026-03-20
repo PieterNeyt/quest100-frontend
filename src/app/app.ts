@@ -27,13 +27,14 @@ import {jwtDecode} from 'jwt-decode';
 import {RoleService} from './services/roleService';
 import {TourService} from './services/tourService';
 import {GotchaStateService} from './services/GotchaStateService';
+import {NoClassModalComponent} from './noclass/no-class-modal';
 
 type MenuState = 'languages' | 'user' | 'mobile' | null;
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster, NoClassModalComponent],
   providers: [
     provideIcons({
       lucideUser,
@@ -69,6 +70,7 @@ export class App implements OnInit, OnDestroy {
   profile = this.profileService.profile;
   roleService = inject(RoleService);
   public translationService = inject(TranslationService);
+  showNoClassModal = this.profileService.showNoClassModal;
 
   private setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
