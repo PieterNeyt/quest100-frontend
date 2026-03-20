@@ -33,10 +33,8 @@ export class Userlist implements OnInit {
   selectedType = KudoType.KudoTeamwork;
   kudoTypes = Object.values(KudoType);
 
-  // The course the logged-in user belongs to
   private myProfile = this.profileService.profile;
 
-  // Classes that belong to the same course as the logged-in user
   availableClasses = computed(() => {
     const myCourseId = this.myProfile()?.class?.CourseId;
     if (!myCourseId) return [];
