@@ -1,14 +1,3 @@
-export interface GameStatus {
-  gameId: string;
-  date: string;
-  hasSession: boolean;
-  solved: boolean;
-  attemptsUsed: number;
-  attemptsLeft: number;
-  maxAttempts: number;
-  completedAt?: string;
-}
-
 export interface NerdleSession {
   id: string;
   gameId: string;
@@ -32,6 +21,7 @@ export interface TileResult {
   char: string;
   status: 'correct' | 'present' | 'absent';
 }
+
 export interface GuessResponse {
   attempt: NerdleAttempt;
   session: NerdleSession;

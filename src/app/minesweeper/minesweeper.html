@@ -1,0 +1,211 @@
+<div class="ms-page">
+
+  <!-- Header -->
+  <div class="ms-header">
+    <div class="ms-header-left">
+      <div class="ms-logo">
+        <ng-icon hlm name="lucideBomb" class="ms-logo-icon" />
+      </div>
+      <div>
+        <h1 class="ms-title">Minesweeper</h1>
+        <p class="ms-subtitle">{{ t.t('minesweeper.subtitle') }}</p>
+      </div>
+    </div>
+    <div class="ms-header-right">
+      <div class="ms-stat-badge">
+        <ng-icon hlm name="lucideFlag" class="ms-stat-icon" />
+        <span class="ms-stat-value">{{ minesLeft() }}</span>
+      </div>
+      <button class="btn-icon" (click)="showHowToPlay.set(true)" [title]="t.t('minesweeper.howToPlay.title')">
+        <ng-icon hlm name="lucideCircleHelp" size="sm" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (gameState() === 'loading') {
+    <div class="ms-loading">
+      <div class="loading-spinner"></div>
+    </div>
+  }
+
+  <!-- Error Toast -->
+  @if (errorMessage()) {
+    <div class="error-toast" role="alert">{{ errorMessage() }}</div>
+  }
+
+  <!-- Game -->
+  @if (gameState() !== 'loading') {
+
+    <!-- Flag mode toggle (mobile-friendly) -->
+    <div class="ms-toolbar">
+      <button
+        class="toolbar-btn"
+        [class.toolbar-btn-active]="!flagMode()"
+        (click)="flagMode.set(false)"
+      >
+        <ng-icon hlm name="lucideMousePointerClick" size="sm" />
+        {{ t.t('minesweeper.toolbar.reveal') }}
+      </button>
+      <button
+        class="toolbar-btn"
+        [class.toolbar-btn-active]="flagMode()"
+        (click)="flagMode.set(true)"
+      >
+        <ng-icon hlm name="lucideFlag" size="sm" />
+        {{ t.t('minesweeper.toolbar.flag') }}
+      </button>
+      <span class="toolbar-hint">{{ t.t('minesweeper.toolbar.rightClickHint') }}</span>
+    </div>
+
+    <!-- Grid -->
+    <div class="ms-board" [class.ms-board-over]="gameState() === 'won' || gameState() === 'lost'">
+      @for (row of gridIndices; track row) {
+        <div class="ms-row">
+          @for (col of gridIndices; track col) {
+            <div
+              class="ms-cell"
+              [ngClass]="getCellClass(row, col)"
+              (click)="onCellClick(row, col)"
+              (contextmenu)="onCellRightClick($event, row, col)"
+            >
+              @if (explodedCell()?.row === row && explodedCell()?.col === col) {
+                <ng-icon hlm name="lucideZap" class="cell-icon-exploded" />
+              } @else if (mineLocations()[row]?.[col] && (gameState() === 'won' || gameState() === 'lost')) {
+                <ng-icon hlm name="lucideBomb" class="cell-icon-mine" />
+              } @else if (flagMap()[row]?.[col]) {
+                <ng-icon hlm name="lucideFlag" class="cell-icon-flag" />
+              } @else if (revealedMap()[row]?.[col] === 'revealed') {
+                @if ((boardHints()[row]?.[col] ?? 0) > 0) {
+                  {{ boardHints()[row][col] }}
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Stats bar -->
+    <div class="ms-stats-bar">
+      <span class="ms-stat-pill">
+        <ng-icon hlm name="lucideFlag" size="xs" />
+        {{ flagCount() }} / {{ MINE_COUNT }} {{ t.t('minesweeper.stats.flagged') }}
+      </span>
+    </div>
+  }
+
+  <!-- Result Popup -->
+  @if (showResultPopup()) {
+    <div class="popup-backdrop" (click)="closePopup()">
+      <div
+        class="popup"
+        [class.popup-won]="gameState() === 'won'"
+        [class.popup-lost]="gameState() === 'lost'"
+        (click)="$event.stopPropagation()"
+      >
+        @if (gameState() === 'won') {
+          <div class="popup-icon popup-icon-won">
+            <ng-icon hlm name="lucidePartyPopper" size="xl" />
+          </div>
+          <h2 class="popup-title">{{ t.t('minesweeper.result.won') }}</h2>
+          <p class="popup-subtitle">{{ t.t('minesweeper.result.wonSub') }}</p>
+
+          @if (kudosEarned() > 0) {
+            <div class="kudos-badge">
+              <ng-icon hlm name="lucideStar" size="xs" />
+              <span class="kudos-plus">+{{ kudosEarned() }}</span>
+              <span class="kudos-label">kudos</span>
+            </div>
+          }
+        }
+
+        @if (gameState() === 'lost') {
+          <div class="popup-icon popup-icon-lost">
+            <ng-icon hlm name="lucideZap" size="xl" />
+          </div>
+          <h2 class="popup-title">{{ t.t('minesweeper.result.lost') }}</h2>
+          <p class="popup-subtitle">{{ t.t('minesweeper.result.lostSub') }}</p>
+        }
+
+        <button class="popup-close" (click)="closePopup()">
+          {{ t.t('minesweeper.result.close') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- How To Play -->
+  @if (showHowToPlay()) {
+    <div class="popup-backdrop" (click)="showHowToPlay.set(false)">
+      <div class="popup popup-info" (click)="$event.stopPropagation()">
+        <div class="popup-header">
+          <h2 class="popup-title">{{ t.t('minesweeper.howToPlay.title') }}</h2>
+          <button class="btn-icon" (click)="showHowToPlay.set(false)">
+            <ng-icon hlm name="lucideX" size="sm" />
+          </button>
+        </div>
+
+        <p class="popup-intro">{{ t.t('minesweeper.howToPlay.intro') }}</p>
+
+        <div class="htp-legend">
+          <div class="htp-row">
+            <span class="htp-cell cell-hidden"></span>
+            <div class="htp-desc">
+              <strong>{{ t.t('minesweeper.howToPlay.rule.hidden.label') }}</strong>
+              <span>{{ t.t('minesweeper.howToPlay.rule.hidden.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-revealed hint-2" style="font-size:0.9rem;font-weight:700;">2</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('minesweeper.howToPlay.rule.number.label') }}</strong>
+              <span>{{ t.t('minesweeper.howToPlay.rule.number.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-flagged">
+              <ng-icon hlm name="lucideFlag" class="cell-icon-flag" />
+            </span>
+            <div class="htp-desc">
+              <strong>{{ t.t('minesweeper.howToPlay.rule.flag.label') }}</strong>
+              <span>{{ t.t('minesweeper.howToPlay.rule.flag.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-exploded">
+              <ng-icon hlm name="lucideZap" class="cell-icon-exploded" />
+            </span>
+            <div class="htp-desc">
+              <strong>{{ t.t('minesweeper.howToPlay.rule.mine.label') }}</strong>
+              <span>{{ t.t('minesweeper.howToPlay.rule.mine.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-revealed hint-2" style="font-size:0.9rem;font-weight:700;cursor:pointer;">2</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('minesweeper.howToPlay.rule.chord.label') }}</strong>
+              <span>{{ t.t('minesweeper.howToPlay.rule.chord.desc') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="htp-rules">
+          <p class="htp-rules-title">{{ t.t('minesweeper.howToPlay.rules.title') }}</p>
+          <ul>
+            <li>{{ t.t('minesweeper.howToPlay.rules.1') }}</li>
+            <li>{{ t.t('minesweeper.howToPlay.rules.2') }}</li>
+            <li>{{ t.t('minesweeper.howToPlay.rules.3') }}</li>
+            <li>{{ t.t('minesweeper.howToPlay.rules.4') }}</li>
+            <li>{{ t.t('minesweeper.howToPlay.rules.5') }}</li>
+          </ul>
+        </div>
+
+        <button class="popup-close" (click)="showHowToPlay.set(false)">
+          {{ t.t('minesweeper.result.close') }}
+        </button>
+      </div>
+    </div>
+  }
+
+</div>

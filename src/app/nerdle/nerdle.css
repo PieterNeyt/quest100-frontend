@@ -475,7 +475,7 @@
 .popup-info {
   align-items: flex-start;
   text-align: left;
-  max-width: 380px;
+  max-width: 480px;
   gap: 1rem;
 }
 

@@ -1,10 +1,17 @@
-import {Component, computed, HostListener, inject, OnInit, signal,} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {NgIconComponent, provideIcons} from '@ng-icons/core';
+import {
+  Component,
+  computed,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import {HlmIconImports} from '@spartan-ng/helm/icon';
-import {NerdleService} from '../services/nerdleService';
-import {TranslationService} from '../services/translationService';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { NerdleService } from '../services/nerdleService';
+import { TranslationService } from '../services/translationService';
 import {
   DEFAULT_EQUATION_LENGTH,
   GameState,
@@ -41,7 +48,6 @@ export class NerdlePageComponent implements OnInit {
   kudosEarned = signal(0);
   showHowToPlay = signal(false);
 
-
   keyColors = computed<KeyColorMap>(() => {
     const map: KeyColorMap = {};
     for (const row of this.rows()) {
@@ -57,16 +63,34 @@ export class NerdlePageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loadTodayState();
-  }
+    this.nerdleService.getSession().subscribe({
+      next: (session) => {
+        if (session.attempts.length > 0) {
+          const length = session.attempts[0].guess.length;
+          this.equationLength.set(length);
+          this.rows.set(this.buildEmptyRows(length));
 
-  private loadTodayState(): void {
-    this.nerdleService.getToday().subscribe({
-      next: (status) => {
-        if (status.solved || status.attemptsLeft === 0) {
-          this.restoreSession(status.solved ? 'won' : 'lost');
-        } else if (status.attemptsUsed > 0) {
-          this.restoreSession('playing');
+          this.rows.update((rows) => {
+            const updated = rows.map((r) => ({ ...r, chars: [...r.chars], results: [...r.results] }));
+            session.attempts.forEach((attempt, i) => {
+              if (i >= MAX_ATTEMPTS) return;
+              updated[i].chars = attempt.guess.split('');
+              updated[i].results = attempt.result;
+              updated[i].submitted = true;
+            });
+            return updated;
+          });
+
+          this.currentRow.set(Math.min(session.attempts.length, MAX_ATTEMPTS - 1));
+          this.currentCol.set(0);
+        }
+
+        if (session.solved) {
+          this.gameState.set('won');
+          this.showResultPopup.set(true);
+        } else if (session.attempts.length >= MAX_ATTEMPTS) {
+          this.gameState.set('lost');
+          this.showResultPopup.set(true);
         } else {
           this.gameState.set('playing');
         }
@@ -74,46 +98,6 @@ export class NerdlePageComponent implements OnInit {
       error: () => {
         this.errorMessage.set(this.t.t('nerdle.error.loadFailed'));
         this.gameState.set('playing');
-      },
-    });
-  }
-
-  private restoreSession(finalState: GameState): void {
-    this.nerdleService.getSession().subscribe({
-      next: (session) => {
-        if (session.attempts.length === 0) {
-          this.gameState.set(finalState === 'playing' ? 'playing' : finalState);
-          if (finalState !== 'playing') this.showResultPopup.set(true);
-          return;
-        }
-
-        const length = session.attempts[0].guess.length;
-        this.equationLength.set(length);
-        this.rows.set(this.buildEmptyRows(length));
-
-        this.rows.update((rows) => {
-          const updated = rows.map((r) => ({ ...r, chars: [...r.chars], results: [...r.results] }));
-          session.attempts.forEach((attempt, i) => {
-            if (i >= MAX_ATTEMPTS) return;
-            updated[i].chars = attempt.guess.split('');
-            updated[i].results = attempt.result;
-            updated[i].submitted = true;
-          });
-          return updated;
-        });
-
-        const nextRow = session.attempts.length;
-        this.currentRow.set(Math.min(nextRow, MAX_ATTEMPTS - 1));
-        this.currentCol.set(0);
-        this.gameState.set(finalState);
-
-        if (finalState !== 'playing') {
-          this.showResultPopup.set(true);
-        }
-      },
-      error: () => {
-        this.gameState.set(finalState === 'playing' ? 'playing' : finalState);
-        if (finalState !== 'playing') this.showResultPopup.set(true);
       },
     });
   }

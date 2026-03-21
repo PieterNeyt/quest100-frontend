@@ -19,6 +19,7 @@ import {reportEvent} from './dashboard/report-event/report-event';
 import {reportChat} from './dashboard/report-chat/report-chat';
 import {ReportAward} from './dashboard/report-award/report-award';
 import {NerdlePageComponent} from './nerdle/nerdle';
+import {MinesweeperPageComponent} from './minesweeper/minesweeper';
 
 export const routes: Routes = [
   {path: '', component: Home},
@@ -41,4 +42,6 @@ export const routes: Routes = [
   {path: 'report/:reportId/message/:messageId/chat/:chatId', component: reportChat, canActivate: [MsalGuard]},
   {path: 'report/:reportId/award/:targetId', component: ReportAward, canActivate: [MsalGuard]},
   {path: 'minigames/nerdle', component: NerdlePageComponent, canActivate: [MsalGuard]},
+  { path: 'minigames/minesweeper', component: MinesweeperPageComponent, canActivate: [MsalGuard] },
+
 ];

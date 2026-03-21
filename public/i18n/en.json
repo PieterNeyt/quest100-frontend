@@ -853,5 +853,61 @@
       "close": "Close",
       "attempts": "Solved in {{n}} attempts"
     }
+  },
+  "minesweeper": {
+    "subtitle": "A new field every day. One chance.",
+    "toolbar": {
+      "reveal": "Reveal",
+      "flag": "Flag",
+      "rightClickHint": "Right-click = flag"
+    },
+    "stats": {
+      "flagged": "flagged"
+    },
+    "error": {
+      "loadFailed": "Failed to load the game.",
+      "invalidMove": "Invalid move."
+    },
+    "result": {
+      "won": "You won!",
+      "wonSub": "You cleared all the mines!",
+      "lost": "Boom!",
+      "lostSub": "You hit a mine. Try again tomorrow.",
+      "close": "Close"
+    },
+    "howToPlay": {
+      "title": "How to play",
+      "intro": "Reveal all safe cells without hitting a mine. Use the numbers to figure out where mines are hiding.",
+      "rule": {
+        "hidden": {
+          "label": "Hidden cell",
+          "desc": "Click to reveal. Right-click to place a flag."
+        },
+        "number": {
+          "label": "Number",
+          "desc": "Shows how many mines are adjacent to that cell."
+        },
+        "flag": {
+          "label": "Flag",
+          "desc": "Mark a cell you suspect hides a mine."
+        },
+        "mine": {
+          "label": "Mine",
+          "desc": "Click on one and the game is over."
+        },
+        "chord": {
+          "label": "Chord click",
+          "desc": "Click a revealed number whose neighbours are all flagged to automatically reveal the remaining hidden neighbours."
+        }
+      },
+      "rules": {
+        "1": "16×16 grid with 40 mines.",
+        "2": "Click to reveal a cell. Empty cells cascade automatically.",
+        "3": "Right-click (or switch to flag mode) to mark a suspected mine.",
+        "4": "Reveal all safe cells to win and earn kudos!",
+        "5": "Chord: click a number whose surrounding flag count matches it to auto-reveal the rest.",
+        "title": "Rules"
+      }
+    }
   }
 }

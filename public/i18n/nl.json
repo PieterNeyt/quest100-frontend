@@ -854,5 +854,61 @@
       "close": "Sluiten",
       "attempts": "Opgelost in {{n}} pogingen"
     }
+  },
+  "minesweeper": {
+    "subtitle": "Elke dag een nieuw veld. Één kans.",
+    "toolbar": {
+      "reveal": "Onthullen",
+      "flag": "Markeren",
+      "rightClickHint": "Rechtermuisknop = vlag"
+    },
+    "stats": {
+      "flagged": "gemarkeerd"
+    },
+    "error": {
+      "loadFailed": "Kon het spel niet laden.",
+      "invalidMove": "Ongeldige zet."
+    },
+    "result": {
+      "won": "Gewonnen!",
+      "wonSub": "Je hebt alle mijnen gevonden!",
+      "lost": "Boem!",
+      "lostSub": "Je hebt een mijn geraakt. Probeer het morgen opnieuw.",
+      "close": "Sluiten"
+    },
+    "howToPlay": {
+      "title": "Hoe speel je?",
+      "intro": "Onthul alle vakjes zonder een mijn te raken. Gebruik de cijfers om te achterhalen waar de mijnen zich bevinden.",
+      "rule": {
+        "hidden": {
+          "label": "Verborgen vakje",
+          "desc": "Klik om te onthullen. Rechtsklik om een vlag te plaatsen."
+        },
+        "number": {
+          "label": "Cijfer",
+          "desc": "Geeft aan hoeveel mijnen er rondom dat vakje liggen."
+        },
+        "flag": {
+          "label": "Vlag",
+          "desc": "Markeer een vakje waarvan je denkt dat er een mijn onder ligt."
+        },
+        "mine": {
+          "label": "Mijn",
+          "desc": "Als je hierop klikt, is het spel voorbij."
+        },
+        "chord": {
+          "label": "Chord klik",
+          "desc": "Klik op een onthuld getal waarvan alle buren al gevlagd zijn om de resterende buren automatisch te onthullen."
+        }
+      },
+      "rules": {
+        "1": "16×16 raster met 40 mijnen.",
+        "2": "Klik om een vakje te onthullen. Lege vakjes worden automatisch uitgebreid.",
+        "3": "Rechtsklik (of schakel naar vlagmodus) om een mijn te markeren.",
+        "4": "Onthul alle veilige vakjes om te winnen en kudos te verdienen!",
+        "5": "Chord: klik op een getal waarvan het aantal vlaggen rondom klopt om de rest automatisch te onthullen.",
+        "title": "Regels"
+      }
+    }
   }
 }
