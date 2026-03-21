@@ -10,7 +10,10 @@
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">Students</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/about" class="nav-link">About</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/avatar" class="nav-link">Avatar</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/reports/dashboard" class="nav-link">Reports</a></li>
+      @if (roleService.hasRole(role.ADMIN)) {
+        <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/reports/dashboard" class="nav-link">Reports</a>
+        </li>
+      }
     </ul>
   </div>
 
@@ -63,7 +66,9 @@
           @if (activeMenu() === 'user') {
             <div class="custom-dropdown-menu">
               <button class="dropdown-item-pill" routerLink="/profile" (click)="activeMenu.set(null)">Profile</button>
-              <button class="dropdown-item-pill" routerLink="/qrcode" (click)="activeMenu.set(null)">QrCode</button>
+              @if (roleService.hasRole(role.LECTOR)) {
+                <button class="dropdown-item-pill" routerLink="/qrcode" (click)="activeMenu.set(null)">QrCode</button>
+              }
               <button class="dropdown-item-pill" (click)="logout()">Log out</button>
             </div>
           }
@@ -109,7 +114,8 @@
 
     <nav class="sidebar-nav">
       <button (click)="startContextualTour(); activeMenu.set(null)" class="sidebar-link flex items-center gap-2">
-        <ng-icon name="lucideHelpCircle" class="text-yellow-500"></ng-icon> Tour deze pagina
+        <ng-icon name="lucideHelpCircle" class="text-yellow-500"></ng-icon>
+        Tour deze pagina
       </button>
 
       <a routerLink="/" class="sidebar-link" (click)="activeMenu.set(null)">Home</a>
@@ -117,12 +123,16 @@
       <a routerLink="/userlist" class="sidebar-link" (click)="activeMenu.set(null)">Students</a>
       <a routerLink="/avatar" class="sidebar-link" (click)="activeMenu.set(null)">Avatar</a>
       <a routerLink="/about" class="sidebar-link" (click)="activeMenu.set(null)">About</a>
-      <a routerLink="/report/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
-
+      @if (roleService.hasRole(role.ADMIN)) {
+        <a routerLink="/reports/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
+      }
       <div class="sidebar-divider"></div>
 
       @if (loginDisplay()) {
         <a routerLink="/profile" class="sidebar-link" (click)="activeMenu.set(null)">Profile</a>
+        @if (roleService.hasRole(role.LECTOR)) {
+          <button class="sidebar-link" routerLink="/qrcode" (click)="activeMenu.set(null)">QrCode</button>
+        }
         <button (click)="logout(); activeMenu.set(null)" class="sidebar-link text-red-400">Log out</button>
       } @else {
         <button (click)="login(); activeMenu.set(null)" class="sidebar-login-btn">Login</button>

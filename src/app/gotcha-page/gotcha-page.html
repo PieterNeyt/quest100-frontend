@@ -33,12 +33,14 @@
             <ng-icon hlm name="lucideBarChart2" size="sm" />
             {{ t.t('gotcha.endScreen.viewResults') }}
           </button>
-          <button class="btn-new-game" (click)="goToSettings()">
-            <ng-icon hlm name="lucidePlus" size="sm" />
-            {{ t.t('gotcha.settings.newGame') }}
-          </button>
+          @if (roleService.hasRole(role.LECTOR)){
+            <button class="btn-new-game" (click)="goToSettings()">
+              <ng-icon hlm name="lucidePlus" size="sm" />
+              {{ t.t('gotcha.settings.newGame') }}
+            </button>
+          }
         }
-        @if (currentGame()) {
+        @if (currentGame() && roleService.hasRole(role.LECTOR)) {
           <button class="btn-icon-action" (click)="goToSettings()" [title]="t.t('gotcha.settings.title')">
             <ng-icon hlm name="lucideSettings2" size="sm" />
           </button>

@@ -19,6 +19,8 @@ import {GotchaService} from '../../services/gotchaService';
 import {TranslationService} from '../../services/translationService';
 import {ToastService} from '../../services/toastService';
 import {FullNamePipe, InitialsPipe, PhotoSrcPipe} from '../../utils/gotchaPipes';
+import {RoleService} from '../../services/roleService';
+import {Role} from '../../model/role';
 
 @Component({
   selector: 'app-gotcha-banner',
@@ -66,6 +68,9 @@ export class GotchaBannerComponent implements OnInit {
   });
 
   canOptOut = computed(() => this.isOptedIn() && this.gameStatus() === 'OPT_IN');
+
+  roleService = inject(RoleService);
+  role = Role;
 
   ngOnInit() { this.loadAll(); }
 

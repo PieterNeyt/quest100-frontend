@@ -60,11 +60,11 @@ export class Dashboard implements OnInit {
     const type = Number(report.channelType);
 
     if (type === 0) {
-      this.router.navigate(['/report', report.id, 'event', report.targetId]);
+      this.router.navigate(['/reports', report.id, 'event', report.targetId]);
     } else if (type === 1) {
-      this.router.navigate(['/report', report.id, 'message', report.targetId, 'chat', report.contextId]);
+      this.router.navigate(['/reports', report.id, 'message', report.targetId, 'chat', report.contextId]);
     } else if (type === 2) {
-      this.router.navigate(['/report', report.id, 'award', report.targetId]);
+      this.router.navigate(['/reports', report.id, 'award', report.targetId]);
     }
   }
 

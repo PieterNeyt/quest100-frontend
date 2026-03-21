@@ -19,7 +19,7 @@
               <div class="winner-avatar-ring">
                 <div class="winner-avatar">
                   @if (screen.winner?.profilePicture) {
-                    <img [src]="screen.winner?.profilePicture | photoSrc" />
+                    <img [src]="screen.winner?.profilePicture | photoSrc" alt="Profile picture winner"/>
                   } @else {
                     <span>{{ screen.winner | initials }}</span>
                   }
@@ -38,11 +38,14 @@
       </div>
       <div class="banner-right">
         <button class="btn-primary" (click)="$event.stopPropagation(); navigateToEndScreen()">
-          {{ t.t('gotcha.endScreen.viewResults') }} <ng-icon name="lucideArrowRight" size="sm"></ng-icon>
+          {{ t.t('gotcha.endScreen.viewResults') }}
+          <ng-icon name="lucideArrowRight" size="sm"></ng-icon>
         </button>
-        <button class="btn-settings" (click)="navigateToSettings()">
-          <ng-icon name="lucideSettings2" size="sm"></ng-icon>
-        </button>
+        @if (roleService.hasRole(role.LECTOR)) {
+          <button class="btn-settings" (click)="navigateToSettings()">
+            <ng-icon name="lucideSettings2" size="sm"></ng-icon>
+          </button>
+        }
       </div>
     </div>
   </div>
@@ -115,12 +118,15 @@
             </div>
           } @else {
             <button class="btn-primary" (click)="optIn()">
-              <ng-icon name="lucideZap" size="sm"></ng-icon> {{ t.t('gotcha.joinGame') }}
+              <ng-icon name="lucideZap" size="sm"></ng-icon>
+              {{ t.t('gotcha.joinGame') }}
             </button>
           }
-          <button class="btn-settings" (click)="navigateToSettings()">
-            <ng-icon name="lucideSettings2" size="sm"></ng-icon>
-          </button>
+          @if (roleService.hasRole(role.LECTOR)) {
+            <button class="btn-settings" (click)="navigateToSettings()">
+              <ng-icon name="lucideSettings2" size="sm"></ng-icon>
+            </button>
+          }
         </div>
       </div>
     </div>

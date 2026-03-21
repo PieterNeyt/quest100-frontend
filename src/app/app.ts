@@ -27,6 +27,7 @@ import {jwtDecode} from 'jwt-decode';
 import {RoleService} from './services/roleService';
 import {TourService} from './services/tourService';
 import {GotchaStateService} from './services/GotchaStateService';
+import {Role} from './model/role';
 
 type MenuState = 'languages' | 'user' | 'mobile' | 'minigames' | null;
 @Component({
@@ -58,8 +59,6 @@ export class App implements OnInit, OnDestroy {
   loginDisplay = signal(false);
   isIframe = signal(false);
   showLanguageDropdown = signal(false);
-  showUserDropdown = signal(false);
-  isMobileMenuOpen = signal(false);
   activeMenu = signal<MenuState>(null);
   private readonly gotchaState = inject(GotchaStateService);
   private readonly tourService = inject(TourService);
@@ -73,6 +72,7 @@ export class App implements OnInit, OnDestroy {
   profile = this.profileService.profile;
   roleService = inject(RoleService);
   public translationService = inject(TranslationService);
+  public role = Role;
 
   private setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
@@ -150,6 +150,7 @@ export class App implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logoutRedirect();
+    this.roleService.roles.set([])
   }
 
   async changeLanguage(lang: Language): Promise<void> {

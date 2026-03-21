@@ -10,6 +10,11 @@
   },
   "home": {
     "title": "Welcome back",
+    "agenda": "Today's Agenda",
+    "attended": "Attended",
+    "agendaLoading": "Loading your schedule…",
+    "agendaEmpty": "No classes scheduled for today.",
+    "agendaUnknownCourse": "Unknown Course",
     "subtitle": "Here you'll find the most important links and your personal statistics.",
     "myProfile": "My Profile",
     "games": "Games",

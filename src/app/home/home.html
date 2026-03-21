@@ -4,7 +4,7 @@
     <div class="top-section">
       <div class="welcome-header">
         <h1 class="welcome-title">
-          {{ translationService.t('home.title') }} {{ profile()?.firstName }}, to <span class="logo-text-yellow">Quest 100</span>
+          {{ translationService.t('home.title') }} {{ profile()?.firstName }}
         </h1>
         <p class="welcome-subtitle">
           {{ translationService.t('home.subtitle') }}
@@ -15,7 +15,7 @@
         @for (btn of actionButtons; track btn.key) {
           <div class="action-group">
             <button class="main-action-btn" (click)="navigateToAbout(btn.key)">
-              <img [src]="btn.logoUrl" [alt]="btn.label" class="action-btn-logo" />
+              <img [src]="btn.logoUrl" [alt]="btn.label" class="action-btn-logo"/>
               {{ btn.label }}
             </button>
             <button class="info-pill-btn" (click)="navigateToAbout(btn.key)">
@@ -27,6 +27,8 @@
     </div>
 
     <div class="content-grid">
+
+      <!-- My Profile card -->
       <div class="content-card accordion-item" [class.open]="activeAccordion() === 'profile'">
         <div class="accordion-header" (click)="toggleAccordion('profile')">
           <h1 class="content-title">{{ translationService.t('home.myProfile') }}</h1>
@@ -37,7 +39,13 @@
           <div class="accordion-content">
             <div class="stats-display">
               <div class="stats-avatar-container">
-                <img [src]="profile()?.customProfilePicture" alt="Profile" class="stats-avatar" />
+                @if (profile()?.customProfilePicture) {
+                  <img [src]="profile()?.customProfilePicture" alt="Profile" class="stats-avatar"/>
+                } @else {
+                  <div class="stats-avatar stats-avatar-placeholder">
+                    <ng-icon name="lucideUser" class="size-10"></ng-icon>
+                  </div>
+                }
               </div>
               <div class="stats-info">
                 <div class="info-block">
@@ -58,7 +66,8 @@
                   <div class="stat-bar-header">
                     <span class="stat-bar-label">{{ translationService.t('kudoTypes.' + item.key) }}</span>
                     <div class="stat-meta-info">
-                      <span class="stat-percentage-label">{{ item.percentage }}{{ translationService.t('home.percentOfTotal') }}</span>
+                      <span
+                        class="stat-percentage-label">{{ item.percentage }}{{ translationService.t('home.percentOfTotal') }}</span>
                       <span class="stat-points-label">{{ item.value }} PTS</span>
                     </div>
                   </div>
@@ -72,20 +81,101 @@
         </div>
       </div>
 
-      <div class="content-card accordion-item" [class.open]="activeAccordion() === 'games'">
-        <div class="accordion-header" (click)="toggleAccordion('games')">
-          <h2 class="content-title">{{ translationService.t('home.games') }}</h2>
+      <!-- Today's Agenda card — day-view timeline -->
+      <div class="content-card accordion-item" [class.open]="activeAccordion() === 'agenda'">
+        <div class="accordion-header" (click)="toggleAccordion('agenda')">
+          <div class="accordion-header-left">
+            <ng-icon name="lucideCalendar" class="accordion-header-icon"></ng-icon>
+            <h2 class="content-title">{{ translationService.t('home.agenda') }}</h2>
+          </div>
           <ng-icon name="lucideChevronDown" class="accordion-icon"></ng-icon>
         </div>
 
         <div class="accordion-wrapper">
           <div class="accordion-content">
-            <div class="content-placeholder">
-              <p>{{ translationService.t('home.gamesPlaceholder') }}</p>
-            </div>
+
+            <p class="agenda-date-label">{{ todayLabel() }}</p>
+
+            <!-- Loading -->
+            @if (agendaLoading()) {
+              <div class="agenda-loading">
+                <div class="agenda-spinner"></div>
+                <span>{{ translationService.t('home.agendaLoading') }}</span>
+              </div>
+            }
+
+            @if (!agendaLoading()) {
+              <div class="tl-wrap">
+                <!-- Left: hour labels -->
+                <div class="tl-hours-col">
+                  @for (hour of timelineHours; track hour) {
+                    <div class="tl-hour-cell">
+                      <span class="tl-hour-label">{{ hour }}:00</span>
+                    </div>
+                  }
+                </div>
+
+                <!-- Right: grid + events -->
+                <div class="tl-grid-col" [style.height.px]="timelineHeight">
+
+                  <!-- Hour lines -->
+                  @for (hour of timelineHours; track hour) {
+                    <div class="tl-hour-line"></div>
+                  }
+
+                  <!-- Empty state floated inside the grid -->
+                  @if (agendaItems().length === 0) {
+                    <div class="tl-empty">
+                      <ng-icon name="lucideCalendar" class="tl-empty-icon"></ng-icon>
+                      <span>{{ translationService.t('home.agendaEmpty') }}</span>
+                    </div>
+                  }
+
+                  <!-- Event blocks -->
+                  @for (item of agendaItems(); track item.id; let i = $index) {
+                    <div class="tl-event"
+                         [style.top.px]="getEventTop(item.begin)"
+                         [style.height.px]="getEventHeight(item.begin, item.end)"
+                         [ngClass]="item.attended ? 'tl-attended' : 'tl-color-' + (i % 4)">
+
+                      <div class="tl-ev-top-row">
+                        <span class="tl-ev-time">{{ item.begin | unixTime }} – {{ item.end | unixTime }}</span>
+                        @if (item.attended) {
+                          <span class="tl-attended-badge">
+                             <ng-icon name="lucideCheck" class="tl-attended-icon"></ng-icon>
+                            {{ translationService.t('home.attended') }}
+                          </span>
+                        }
+                      </div>
+
+                      <span class="tl-ev-name">{{ item.courseName || item.activity || translationService.t('home.agendaUnknownCourse') }}</span>
+
+                      @if (item.rooms.length) {
+                        <div class="tl-ev-rooms">
+                          @for (room of item.rooms; track room) {
+                            <span class="tl-ev-room-chip">{{ room }}</span>
+                          }
+                        </div>
+                      }
+
+                    </div>
+                  }
+
+                  <!-- "Now" line -->
+                  @if (nowLineVisible()) {
+                    <div class="tl-now-line" [style.top.px]="nowLineTop()">
+                      <div class="tl-now-dot"></div>
+                    </div>
+                  }
+
+                </div>
+              </div>
+            }
+
           </div>
         </div>
       </div>
+
     </div>
 
   </section>
