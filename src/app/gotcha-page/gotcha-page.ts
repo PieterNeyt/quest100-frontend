@@ -11,6 +11,8 @@ import {ToastService} from '../services/toastService';
 import {GotchaKillFeedComponent} from '../components/gotcha-kill-feed/gotcha-kill-feed';
 import {ProfileService} from '../services/profileService';
 import {FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, StatusClassPipe,} from '../utils/gotchaPipes';
+import {RoleService} from '../services/roleService';
+import {Role} from '../model/role';
 
 @Component({
   selector: 'app-gotcha-page',
@@ -60,6 +62,9 @@ export class GotchaPageComponent implements OnInit {
   canSubmitKill = computed(() =>
     this.isActive() && this.isAlive() && this.hasTarget() && !this.hasPendingKill()
   );
+
+  roleService = inject(RoleService);
+  role = Role;
 
   get countdownUrgent(): boolean {
     const cd = this.countdown();
