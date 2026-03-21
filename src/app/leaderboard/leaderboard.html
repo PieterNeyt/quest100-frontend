@@ -1,4 +1,3 @@
-<!-- ── Leaderboard Header ─────────────────────────────────────────────────── -->
 <div class="lb-header">
   <div class="header-text">
     <h1>Leaderboards</h1>
@@ -10,7 +9,6 @@
   </button>
 </div>
 
-<!-- ── Search & Sort Bar ──────────────────────────────────────────────────── -->
 <div class="filter-bar">
   <div class="search-wrap">
     <ng-icon hlm name="lucideSearch" class="search-icon" size="sm"/>
@@ -70,7 +68,6 @@
   </div>
 </div>
 
-<!-- ── Loading ────────────────────────────────────────────────────────────── -->
 @if (loading()) {
   <div class="state-container">
     <div class="spinner"></div>
@@ -78,7 +75,6 @@
   </div>
 }
 
-<!-- ── Error ──────────────────────────────────────────────────────────────── -->
 @if (error()) {
   <div class="state-container">
     <ng-icon hlm name="lucideCircleAlert" size="56" class="text-destructive"/>
@@ -87,7 +83,6 @@
   </div>
 }
 
-<!-- ── Empty ──────────────────────────────────────────────────────────────── -->
 @if (!loading() && !error() && filteredLeaderboards().length === 0) {
   <div class="state-container">
     <ng-icon hlm name="lucideTrophy" size="56"/>
@@ -98,7 +93,6 @@
   </div>
 }
 
-<!-- ── Leaderboard Grid ───────────────────────────────────────────────────── -->
 @if (!loading() && !error()) {
   <div class="lb-grid">
     @for (lb of filteredLeaderboards(); track lb.Id) {
@@ -206,9 +200,7 @@
   </div>
 }
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     CREATE MODAL
-     ══════════════════════════════════════════════════════════════════════════ -->
+
 @if (showCreateModal()) {
   <div class="modal-overlay" (click)="closeCreateModal()">
     <div class="modal" (click)="$event.stopPropagation()">
@@ -306,9 +298,6 @@
   </div>
 }
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     EDIT MODAL
-     ══════════════════════════════════════════════════════════════════════════ -->
 @if (showEditModal()) {
   <div class="modal-overlay" (click)="closeEditModal()">
     <div class="modal" (click)="$event.stopPropagation()">
@@ -366,9 +355,7 @@
   </div>
 }
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     STANDINGS MODAL → aparte component
-     ══════════════════════════════════════════════════════════════════════════ -->
+
 @if (showStandingsModal() && standingsLeaderboard()) {
   <app-leaderboard-modal
     [leaderboard]="standingsLeaderboard()!"

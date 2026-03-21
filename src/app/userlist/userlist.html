@@ -10,7 +10,7 @@
 
   <!-- Leaderboard Banner -->
   @if (bannerLeaderboard(); as banner) {
-    <div class="leaderboard-banner" [class]="'banner-' + banner.state" (click)="navigateToLeaderboard(banner.lb.Id)">
+    <div class="leaderboard-banner" [class]="'banner-' + banner.state" (click)="openStandingsModal(banner.lb)">
       <div class="banner-left">
         <div class="banner-icon">
           <ng-icon name="lucideTrophy"></ng-icon>
@@ -158,4 +158,13 @@
 
     </div>
   </div>
+}
+
+<!-- Leaderboard Standings Modal -->
+@if (showStandingsModal() && standingsLeaderboard()) {
+  <app-leaderboard-modal
+    [leaderboard]="standingsLeaderboard()!"
+    [courses]="courses()"
+    (closed)="closeStandingsModal()"
+  />
 }

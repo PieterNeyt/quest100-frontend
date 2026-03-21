@@ -11,11 +11,13 @@ import {LeaderboardService} from '../services/leaderboardService';
 import {Leaderboard} from '../model/leaderboard';
 import {Router} from '@angular/router';
 import {SendMessage} from '../model/chat';
+import {LeaderboardModalComponent} from '../leaderboard-modal/leaderboard-modal';
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-userlist',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgIcon],
+  imports: [CommonModule, FormsModule, NgIcon, LeaderboardModalComponent],
   providers: [provideIcons({lucideSearch, lucideTrophy, lucideChevronRight})],
   templateUrl: './userlist.html',
   styleUrl: './userlist.css',
@@ -30,6 +32,9 @@ export class Userlist implements OnInit {
   profileAwards = this.profileService.profilesAwards;
   courses = this.leaderboardService.courses;
   courseLeaderboards = this.leaderboardService.courseLeaderboards;
+
+  showStandingsModal = signal(false);
+  standingsLeaderboard = signal<Leaderboard | null>(null);
 
   selectedProfile = signal<Profile | null>(null);
   searchQuery = signal('');
@@ -102,7 +107,11 @@ export class Userlist implements OnInit {
 
   ngOnInit() {
     this.profileService.getAllProfilesAwards();
-    this.leaderboardService.getAllCoursesWithClasses();
+    this.leaderboardService.getAllCoursesWithClasses().subscribe({
+      next: (courses ) => {
+        this.courses.set(courses);
+      }
+    });
   }
 
   constructor() {
@@ -125,8 +134,14 @@ export class Userlist implements OnInit {
     this.message = '';
   }
 
-  navigateToLeaderboard(id: string) {
-    this.router.navigate(['/leaderboard', id]);
+  openStandingsModal(lb: Leaderboard) {
+    this.standingsLeaderboard.set(lb);
+    this.showStandingsModal.set(true);
+  }
+
+  closeStandingsModal() {
+    this.showStandingsModal.set(false);
+    this.standingsLeaderboard.set(null);
   }
 
   formatDate(date: string): string {
