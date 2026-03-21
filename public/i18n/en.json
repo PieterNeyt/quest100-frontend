@@ -791,5 +791,67 @@
       "resolve": "Resolve",
       "retry": "Try again"
     }
+  },
+  "minigames": {
+    "sidebar": {
+      "title": "Mini Games"
+    },
+    "comingSoon": "Coming soon",
+    "playNow": "Play now",
+    "nerdle": {
+      "name": "Nerdle"
+    },
+    "sudoku": {
+      "name": "Sudoku"
+    },
+    "quiz": {
+      "name": "Quiz"
+    }
+  },
+  "nerdle": {
+    "subtitle": "Guess today's equation",
+    "enter": "Enter",
+    "howToPlay": {
+      "title": "How to play",
+      "intro": "Guess the hidden equation in 6 tries. Each guess must be a mathematically correct equation.",
+      "rule": {
+        "correct": {
+          "label": "Correct position",
+          "desc": "The character is in the equation and in the right spot."
+        },
+        "present": {
+          "label": "Wrong position",
+          "desc": "The character is in the equation but in the wrong spot."
+        },
+        "absent": {
+          "label": "Not in the equation",
+          "desc": "The character is not in the equation at all."
+        }
+      },
+      "rules": {
+        "1": "Every guess must be a valid equation (e.g. 10+5=15).",
+        "2": "The equation must contain exactly one = sign.",
+        "3": "The right-hand side must be a plain integer.",
+        "4": "No leading zeros (e.g. 01 is not allowed).",
+        "5": "A new puzzle is available every day.",
+        "title": "Rules"
+      }
+    },
+    "leaderboard": {
+      "empty": "Nobody has played today yet."
+    },
+    "error": {
+      "loadFailed": "Could not load the puzzle.",
+      "tooShort": "Fill in all tiles before submitting.",
+      "invalidEquation": "Invalid equation. Check your math."
+    },
+    "result": {
+      "won": "Well done!",
+      "wonSub": "Come back tomorrow for a new challenge.",
+      "lost": "Better luck next time.",
+      "lostSub": "A new puzzle is waiting tomorrow.",
+      "close": "Close",
+      "attempts": "Solved in {{n}} attempts"
+    }
   }
 }

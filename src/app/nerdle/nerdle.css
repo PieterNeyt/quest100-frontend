@@ -1,0 +1,575 @@
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+
+.nerdle-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 1rem 2rem;
+  min-height: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.nerdle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.nerdle-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nerdle-logo {
+  display: flex;
+  gap: 3px;
+}
+
+.logo-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.logo-tile.correct  { background: var(--nerdle-correct, #538d4e); }
+.logo-tile.present  { background: var(--nerdle-present, #b59f3b); }
+.logo-tile.absent   { background: var(--nerdle-absent,  #3a3a3c); }
+
+.nerdle-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  line-height: 1;
+}
+
+.nerdle-subtitle {
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  margin-top: 2px;
+}
+
+/* ── Loading ─────────────────────────────────────────────────────────────── */
+
+.nerdle-loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--nerdle-correct, #538d4e);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error Toast ─────────────────────────────────────────────────────────── */
+
+.error-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--foreground);
+  color: var(--background);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 100;
+  animation: slideDown 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Board ───────────────────────────────────────────────────────────────── */
+
+.nerdle-board {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.guess-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+/* ── Tiles ───────────────────────────────────────────────────────────────── */
+
+.tile {
+  --tile-size: clamp(36px, 10vw, 52px);
+  width: var(--tile-size);
+  height: var(--tile-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--foreground);
+  transition: border-color 0.1s;
+  user-select: none;
+}
+
+.tile-filled {
+  border-color: var(--muted-foreground);
+  animation: pop 0.1s ease;
+}
+
+.tile-active {
+  border-color: var(--foreground);
+}
+
+.tile-correct {
+  background: var(--nerdle-correct, #538d4e);
+  border-color: var(--nerdle-correct, #538d4e);
+  color: #fff;
+}
+
+.tile-present {
+  background: var(--nerdle-present, #b59f3b);
+  border-color: var(--nerdle-present, #b59f3b);
+  color: #fff;
+}
+
+.tile-absent {
+  background: var(--nerdle-absent, #3a3a3c);
+  border-color: var(--nerdle-absent, #3a3a3c);
+  color: #fff;
+}
+
+.tile-clickable {
+  cursor: pointer;
+}
+
+.tile-clickable:hover:not(.tile-active) {
+  border-color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+}
+
+/* ── Row animations ──────────────────────────────────────────────────────── */
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.guess-row.shake {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  15%     { transform: translateX(-6px); }
+  30%     { transform: translateX(6px); }
+  45%     { transform: translateX(-4px); }
+  60%     { transform: translateX(4px); }
+  75%     { transform: translateX(-2px); }
+  90%     { transform: translateX(2px); }
+}
+
+.guess-row.flip .tile {
+  animation: flip 0.5s ease forwards;
+}
+
+@keyframes flip {
+  0%   { transform: rotateX(0deg); }
+  50%  { transform: rotateX(-90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+/* ── Keyboard ────────────────────────────────────────────────────────────── */
+
+.nerdle-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.key {
+  height: 56px;
+  min-width: 36px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--foreground);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.08s;
+  user-select: none;
+  flex: 1;
+  max-width: 52px;
+}
+
+.key:active:not(:disabled) {
+  transform: scale(0.93);
+}
+
+.key:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.key-op {
+  font-size: 1.1rem;
+}
+
+.key-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 60px;
+}
+
+.key-enter {
+  max-width: 72px;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+
+.key-correct {
+  background: var(--nerdle-correct, #538d4e);
+  color: #fff;
+}
+
+.key-present {
+  background: var(--nerdle-present, #b59f3b);
+  color: #fff;
+}
+
+.key-absent {
+  background: var(--nerdle-absent, #3a3a3c);
+  color: #6b7280;
+}
+
+/* ── Result Popup ────────────────────────────────────────────────────────── */
+
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.25s ease;
+}
+
+.popup {
+  background: var(--card, #1c1c1e);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  min-width: 280px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  animation: popupIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.popup-won {
+  border-color: var(--nerdle-correct, #538d4e);
+}
+
+.popup-lost {
+  border-color: var(--nerdle-absent, #3a3a3c);
+}
+
+@keyframes popupIn {
+  from { opacity: 0; transform: scale(0.85) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* popup-icon moved to icon-based styles below */
+
+.popup-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.popup-subtitle {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* Kudos badge — the +N snap */
+.kudos-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: color-mix(in srgb, var(--nerdle-correct, #538d4e) 20%, transparent);
+  border: 1px solid var(--nerdle-correct, #538d4e);
+  border-radius: 999px;
+  padding: 6px 18px;
+  margin-top: 0.5rem;
+  animation: kudosPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+.kudos-plus {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--nerdle-correct, #538d4e);
+  letter-spacing: -0.02em;
+}
+
+.kudos-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+@keyframes kudosPop {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.popup-close {
+  margin-top: 1rem;
+  padding: 10px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--foreground);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.08s;
+  width: 100%;
+}
+
+.popup-close:hover {
+  background: color-mix(in srgb, var(--foreground) 12%, var(--accent));
+}
+
+.popup-close:active {
+  transform: scale(0.97);
+}
+
+/* ── Shared animation ────────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── CSS vars fallbacks ──────────────────────────────────────────────────── */
+
+:host {
+  --nerdle-correct: #538d4e;
+  --nerdle-present: #b59f3b;
+  --nerdle-absent:  #3a3a3c;
+}
+
+/* ── Header icon button ───────────────────────────────────────────────────── */
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-icon:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+/* ── Popup icon (replaces emoji) ─────────────────────────────────────────── */
+
+.popup-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
+}
+
+.popup-icon-won {
+  background: color-mix(in srgb, var(--nerdle-correct, #538d4e) 18%, transparent);
+  color: var(--nerdle-correct, #538d4e);
+}
+
+.popup-icon-lost {
+  background: color-mix(in srgb, var(--destructive, #dc2626) 14%, transparent);
+  color: var(--destructive, #dc2626);
+}
+
+/* ── Popup header row (title + close button) ─────────────────────────────── */
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.popup-header .popup-title {
+  margin: 0;
+}
+
+/* ── Info popup (how to play) ────────────────────────────────────────────── */
+
+.popup-info {
+  align-items: flex-start;
+  text-align: left;
+  max-width: 380px;
+  gap: 1rem;
+}
+
+.popup-intro {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Tile legend ─────────────────────────────────────────────────────────── */
+
+.htp-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.htp-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.htp-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.htp-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.htp-desc strong {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.htp-desc span {
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+  line-height: 1.4;
+}
+
+/* ── Rules list ──────────────────────────────────────────────────────────── */
+
+.htp-rules {
+  width: 100%;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.htp-rules-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted-foreground);
+  margin: 0 0 0.5rem;
+}
+
+.htp-rules ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.htp-rules li {
+  font-size: 0.84rem;
+  color: var(--foreground);
+  line-height: 1.5;
+}
+
+/* ── Kudos badge icon ────────────────────────────────────────────────────── */
+
+.kudos-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.kudos-badge ng-icon {
+  color: var(--nerdle-correct, #538d4e);
+}

@@ -792,5 +792,67 @@
       "resolve": "Oplossen",
       "retry": "Opnieuw proberen"
     }
+  },
+  "minigames": {
+    "sidebar": {
+      "title": "Minigames"
+    },
+    "comingSoon": "Binnenkort",
+    "playNow": "Speel nu",
+    "nerdle": {
+      "name": "Nerdle"
+    },
+    "sudoku": {
+      "name": "Sudoku"
+    },
+    "quiz": {
+      "name": "Quiz"
+    }
+  },
+  "nerdle": {
+    "subtitle": "Raad de vergelijking van vandaag",
+    "enter": "Invoer",
+    "howToPlay": {
+      "title": "Hoe te spelen",
+      "intro": "Raad de verborgen vergelijking in 6 pogingen. Elke gok moet een wiskundig correcte vergelijking zijn.",
+      "rule": {
+        "correct": {
+          "label": "Juiste positie",
+          "desc": "Het karakter staat in de vergelijking op de juiste positie."
+        },
+        "present": {
+          "label": "Verkeerde positie",
+          "desc": "Het karakter staat in de vergelijking maar op de verkeerde positie."
+        },
+        "absent": {
+          "label": "Niet aanwezig",
+          "desc": "Het karakter komt niet voor in de vergelijking."
+        }
+      },
+      "rules": {
+        "1": "Elke gok moet een geldige vergelijking zijn (bv. 10+5=15).",
+        "2": "De vergelijking moet precies één = teken bevatten.",
+        "3": "De rechterkant moet een geheel getal zijn.",
+        "4": "Geen voorloopnullen (bv. 01 is niet toegestaan).",
+        "5": "Elke dag is er een nieuwe puzzel beschikbaar.",
+        "title": "Regels"
+      }
+    },
+    "leaderboard": {
+      "empty": "Nog niemand heeft vandaag gespeeld."
+    },
+    "error": {
+      "loadFailed": "Kon de puzzel niet laden.",
+      "tooShort": "Vul alle vakjes in voor het indienen.",
+      "invalidEquation": "Ongeldige vergelijking. Controleer de wiskunde."
+    },
+    "result": {
+      "won": "Goed gedaan!",
+      "wonSub": "Kom morgen terug voor een nieuwe uitdaging.",
+      "lost": "Beter geluk volgende keer.",
+      "lostSub": "Morgen wacht er een nieuwe puzzel.",
+      "close": "Sluiten",
+      "attempts": "Opgelost in {{n}} pogingen"
+    }
   }
 }
