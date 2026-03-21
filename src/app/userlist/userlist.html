@@ -12,7 +12,6 @@
     <!-- Active Leaderboard Card -->
     @if (activeLeaderboard(); as lb) {
       <div class="lb-card lb-card--active" (click)="openStandingsModal(lb)">
-        <div class="lb-card__glow"></div>
         <div class="lb-card__top">
           <div class="lb-badge lb-badge--live">
             <span class="lb-live-dot"></span>
@@ -27,8 +26,12 @@
             <ng-icon name="lucideTrophy"></ng-icon>
           </div>
           <div class="lb-card__info">
-            <span class="lb-card__title">{{ lb.Prize.Name }}</span>
-            <span class="lb-card__meta">Ends {{ formatDate(lb.EndDate) }}</span>
+            @if (myClassStanding(); as standing) {
+              <span class="my-standing-banner__position">
+                <strong>#{{ standing.position }}</strong> · {{ standing.kudos }} kudos
+              </span>
+            }
+              <span class="lb-card__meta">Ends {{ formatDate(lb.EndDate) }}</span>
           </div>
         </div>
         <div class="lb-card__footer">
@@ -66,7 +69,9 @@
     <!-- No leaderboards at all -->
     @if (!activeLeaderboard() && !upcomingLeaderboard()) {
       <div class="lb-empty">
-        <div class="lb-empty__icon"><ng-icon name="lucideTrophy"></ng-icon></div>
+        <div class="lb-empty__icon">
+          <ng-icon name="lucideTrophy"></ng-icon>
+        </div>
         <span>No active leaderboard right now</span>
         <button class="lb-history-btn lb-history-btn--standalone" (click)="openHistoryModal()">
           View history
@@ -146,6 +151,7 @@
 
 </div>
 
+<!-- Award Modal -->
 @if (selectedProfile(); as user) {
   <div class="modal-backdrop" (click)="closeModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
@@ -184,6 +190,7 @@
   </div>
 }
 
+<!-- Standings Modal -->
 @if (showStandingsModal() && standingsLeaderboard()) {
   <app-leaderboard-modal
     [leaderboard]="standingsLeaderboard()!"
@@ -192,6 +199,7 @@
   />
 }
 
+<!-- History Modal -->
 @if (showHistoryModal()) {
   <div class="modal-backdrop" (click)="closeHistoryModal()">
     <div class="modal-content modal-content--wide" (click)="$event.stopPropagation()">
@@ -207,7 +215,9 @@
         }
         @for (lb of finishedLeaderboards(); track lb.Id) {
           <div class="history-row" (click)="openStandingsModal(lb); closeHistoryModal()">
-            <div class="history-row__icon"><ng-icon name="lucideTrophy"></ng-icon></div>
+            <div class="history-row__icon">
+              <ng-icon name="lucideTrophy"></ng-icon>
+            </div>
             <div class="history-row__info">
               <span class="history-row__name">{{ lb.Prize.Name }}</span>
               <span class="history-row__dates">{{ formatDate(lb.StartDate) }} – {{ formatDate(lb.EndDate) }}</span>

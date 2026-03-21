@@ -1,6 +1,89 @@
 @reference "../../styles.css";
 
 /* ============================================
+   MY STANDING BANNER
+   ============================================ */
+
+.my-standing-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  border: 1.5px solid rgba(90, 170, 180, 0.2);
+  border-radius: 16px;
+  padding: 0.9rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.my-standing-banner__left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.my-standing-banner__live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 100px;
+  background: rgba(29, 158, 117, 0.1);
+  color: #0f6e56;
+  border: 1px solid rgba(29, 158, 117, 0.25);
+  flex-shrink: 0;
+}
+
+.my-standing-banner__live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1d9e75;
+  animation: pulse-dot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.my-standing-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.my-standing-banner__position {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: oklch(0.25 0.02 264);
+  letter-spacing: -0.01em;
+}
+
+.my-standing-banner__position strong {
+  color: #0f6e56;
+}
+
+.my-standing-banner__meta {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: oklch(0.55 0.02 264);
+}
+
+.my-standing-banner__class {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(90, 170, 180, 0.12);
+  color: #3d8f98;
+  border: 1px solid rgba(90, 170, 180, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* ============================================
    LEADERBOARD SECTION
    ============================================ */
 
@@ -11,7 +94,6 @@
   align-items: stretch;
 }
 
-/* Base card */
 .lb-card {
   position: relative;
   flex: 1;
@@ -33,7 +115,6 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Active card — subtle colored glow */
 .lb-card--active {
   border-color: rgba(90, 170, 180, 0.35);
   box-shadow: 0 2px 20px rgba(90, 170, 180, 0.12);
@@ -43,18 +124,6 @@
   box-shadow: 0 8px 32px rgba(90, 170, 180, 0.22);
 }
 
-.lb-card__glow {
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(90, 170, 180, 0.18) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* Upcoming card */
 .lb-card--upcoming {
   border-color: rgba(139, 92, 246, 0.25);
   box-shadow: 0 2px 16px rgba(139, 92, 246, 0.07);
@@ -64,14 +133,12 @@
   box-shadow: 0 8px 28px rgba(139, 92, 246, 0.15);
 }
 
-/* Top row: badge + history button */
 .lb-card__top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Badges */
 .lb-badge {
   display: inline-flex;
   align-items: center;
@@ -107,10 +174,9 @@
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.8); }
+  50%       { opacity: 0.45; transform: scale(0.8); }
 }
 
-/* History button */
 .lb-history-btn {
   font-size: 0.8rem;
   font-weight: 600;
@@ -134,7 +200,6 @@
   margin-top: 0.5rem;
 }
 
-/* Body: trophy + info */
 .lb-card__body {
   display: flex;
   align-items: center;
@@ -182,7 +247,6 @@
   color: oklch(0.55 0.02 264);
 }
 
-/* Footer */
 .lb-card__footer {
   margin-top: auto;
   padding-top: 0.5rem;
@@ -207,7 +271,6 @@
   gap: 0.4rem;
 }
 
-/* Empty state */
 .lb-empty {
   display: flex;
   flex-direction: column;
@@ -230,7 +293,10 @@
   margin-bottom: 0.25rem;
 }
 
-/* History Modal rows */
+/* ============================================
+   HISTORY MODAL
+   ============================================ */
+
 .history-empty {
   text-align: center;
   color: oklch(0.55 0.02 264);
@@ -296,7 +362,7 @@
 }
 
 /* ============================================
-   REST OF EXISTING STYLES
+   LAYOUT & HOST
    ============================================ */
 
 :host {
@@ -310,6 +376,10 @@
   max-width: 1200px;
   margin: 0 auto;
 }
+
+/* ============================================
+   HEADER
+   ============================================ */
 
 .header-section {
   text-align: center;
@@ -333,6 +403,10 @@
   font-size: 1rem;
   font-weight: 500;
 }
+
+/* ============================================
+   FILTER BAR
+   ============================================ */
 
 .filter-bar {
   display: flex;
@@ -407,6 +481,10 @@
   box-shadow: 0 0 0 3px rgba(90, 170, 180, 0.15);
 }
 
+/* ============================================
+   RESULTS & USER GRID
+   ============================================ */
+
 .results-count {
   font-size: 0.85rem;
   font-weight: 600;
@@ -435,7 +513,7 @@
   border: 1.5px solid var(--border);
   backdrop-filter: blur(12px);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .user-card:hover {
@@ -550,6 +628,10 @@
   font-size: 1rem;
 }
 
+/* ============================================
+   MODALS
+   ============================================ */
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -568,7 +650,7 @@
   border-radius: 20px;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -605,7 +687,7 @@
 
 .btn-close:hover {
   color: oklch(0.25 0.02 264);
-  background: rgba(0,0,0,0.06);
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .modal-body {
@@ -630,7 +712,8 @@ label {
   letter-spacing: 0.05em;
 }
 
-select, textarea {
+select,
+textarea {
   width: 100%;
   background: color-mix(in oklch, var(--card) 80%, transparent);
   border: 1.5px solid var(--border);
@@ -646,7 +729,8 @@ select, textarea {
   resize: vertical;
 }
 
-select:focus, textarea:focus {
+select:focus,
+textarea:focus {
   border-color: #5aaab4;
   box-shadow: 0 0 0 3px rgba(90, 170, 180, 0.15);
 }
@@ -704,6 +788,10 @@ select:focus, textarea:focus {
   color: oklch(0.25 0.02 264);
 }
 
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 768px) {
   :host { padding: 1.5rem 1rem; }
   .header-section h2 { font-size: 2rem; }
@@ -715,4 +803,5 @@ select:focus, textarea:focus {
   .award-action { width: 100%; margin-top: 0.5rem; }
   .btn-award { width: 100%; text-align: center; justify-content: center; display: flex; }
   .leaderboard-section { flex-direction: column; }
+  .my-standing-banner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
 }

@@ -93,6 +93,24 @@ export class Userlist implements OnInit {
       .sort((a, b) => new Date(b.EndDate).getTime() - new Date(a.EndDate).getTime());
   });
 
+  myClassStanding = computed(() => {
+    const lb = this.activeLeaderboard();
+    const myClassId = this.myProfile()?.class?.Id;
+    if (!lb || !myClassId) return null;
+
+    const sorted = [...lb.Classes].sort((a, b) => b.TotalKudos - a.TotalKudos);
+    const position = sorted.findIndex(c => c.ClassId === myClassId) + 1;
+    if (position === 0) return null;
+
+    const myEntry = sorted[position - 1];
+    const course = this.courses().find(c =>
+      c.Classes?.some((cl: any) => cl.Id === myClassId)
+    );
+    const className = course?.Classes?.find((cl: any) => cl.Id === myClassId)?.Name ?? myClassId;
+
+    return { position, kudos: myEntry.TotalKudos, className };
+  });
+
   ngOnInit() {
     this.profileService.getAllProfilesAwards();
     this.leaderboardService.getAllCoursesWithClasses().subscribe({
