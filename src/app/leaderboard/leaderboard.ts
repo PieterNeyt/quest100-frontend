@@ -15,6 +15,7 @@ import { LeaderboardService } from '../services/leaderboardService';
 import { TranslationService } from '../services/translationService';
 import { Leaderboard } from '../model/leaderboard';
 import { Class, Course } from '../model/class';
+import {LeaderboardModalComponent} from '../leaderboard-modal/leaderboard-modal';
 
 @Component({
   selector: 'app-leaderboard',
@@ -25,6 +26,7 @@ import { Class, Course } from '../model/class';
     ReactiveFormsModule,
     NgIconComponent,
     HlmIconImports,
+    LeaderboardModalComponent,
   ],
   providers: [provideIcons(lucideIcons)],
   templateUrl: './leaderboard.html',

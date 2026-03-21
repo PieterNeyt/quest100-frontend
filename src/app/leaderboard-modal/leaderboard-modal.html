@@ -1,0 +1,107 @@
+<div class="modal-overlay" (click)="close()">
+  <div class="modal modal--standings" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="standings-header-text">
+        <h2>Standings</h2>
+        <p class="modal-subtitle">{{ courseName(leaderboard().CourseId) }}</p>
+      </div>
+      <button class="modal-close" (click)="close()">
+        <ng-icon hlm name="lucideX" size="sm"/>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Prize banner -->
+      @if (leaderboard().Prize.Name) {
+        <div class="standings-prize-banner">
+          @if (leaderboard().Prize.PhotoURL) {
+            <img class="standings-prize-img" [src]="leaderboard().Prize.PhotoURL" [alt]="leaderboard().Prize.Name"/>
+          } @else {
+            <div class="standings-prize-icon">
+              <ng-icon hlm name="lucideGift" size="md"/>
+            </div>
+          }
+          <div class="standings-prize-info">
+            <div class="standings-prize-label">Te winnen</div>
+            <div class="standings-prize-name">{{ leaderboard().Prize.Name }}</div>
+            @if (leaderboard().Prize.Description) {
+              <div class="standings-prize-desc">{{ leaderboard().Prize.Description }}</div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Period + status -->
+      <div class="standings-meta">
+        <div class="standings-period">
+          <ng-icon hlm name="lucideCalendarCheck" size="xs"/>
+          {{ formatDate(leaderboard().StartDate) }}
+          <ng-icon hlm name="lucideArrowRight" size="xs"/>
+          {{ formatDate(leaderboard().EndDate) }}
+        </div>
+        @if (isActive()) {
+          <span class="standings-active-badge">
+            <span class="status-dot"></span>
+            Actief &middot; {{ daysLeft() }} dagen resterend
+          </span>
+        } @else if (daysLeft() === 0) {
+          <span class="standings-ended-badge">Afgelopen</span>
+        } @else {
+          <span class="standings-planned-badge">Gepland</span>
+        }
+      </div>
+
+      <!-- Rankings -->
+      <div class="standings-section-label">
+        <ng-icon hlm name="lucideBarChart2" size="xs"/>
+        Klassement
+      </div>
+
+      <div class="standings-list">
+        @if (sortedClasses().length === 0) {
+          <div class="standings-empty">
+            <ng-icon hlm name="lucideUsers" size="32"/>
+            <p>Nog geen klassen of kudos geregistreerd.</p>
+          </div>
+        }
+
+        @for (cls of sortedClasses(); track cls.ClassId; let i = $index) {
+          <div
+            class="standings-row"
+            [class.standings-row--gold]="i === 0"
+            [class.standings-row--silver]="i === 1"
+            [class.standings-row--bronze]="i === 2"
+          >
+            <div class="standings-rank">
+              @if (i === 0) { <span class="medal">🥇</span> }
+              @else if (i === 1) { <span class="medal">🥈</span> }
+              @else if (i === 2) { <span class="medal">🥉</span> }
+              @else { <span class="rank-num">{{ i + 1 }}</span> }
+            </div>
+
+            <div class="standings-class-info">
+              <span class="standings-class-name">
+                {{ cls.ClassName || classNameById(cls.ClassId) }}
+              </span>
+            </div>
+
+            <div class="standings-kudos-wrap">
+              <div class="standings-kudos-bar-track">
+                <div
+                  class="standings-kudos-bar-fill"
+                  [style.width.%]="getKudosPercent(cls.TotalKudos)"
+                  [class.bar--gold]="i === 0"
+                  [class.bar--silver]="i === 1"
+                  [class.bar--bronze]="i === 2"
+                ></div>
+              </div>
+              <span class="standings-kudos-num">
+                {{ cls.TotalKudos }}<span class="kudos-label">kudos</span>
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
