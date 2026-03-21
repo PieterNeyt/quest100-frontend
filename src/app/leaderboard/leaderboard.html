@@ -133,7 +133,11 @@
               [src]="lb.Prize.PhotoURL"
               [alt]="lb.Prize.Name"
               loading="lazy"
+              (error)="$any($event.target).style.display='none'; $any($event.target).nextElementSibling.style.display='flex'"
             />
+            <div class="lb-image-placeholder" style="display:none">
+              <ng-icon hlm name="lucideTrophy" size="xl" class="placeholder-trophy"/>
+            </div>
           } @else {
             <div class="lb-image-placeholder">
               <ng-icon

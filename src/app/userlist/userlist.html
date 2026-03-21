@@ -1,44 +1,80 @@
 <div class="userlist-wrapper">
 
-
-
   <!-- Header -->
   <div class="header-section">
-    <h2>{{ translate.t('userlist.colleagues') }} <span>Quest100</span></h2>
-    <p class="subtitle">{{ translate.t('userlist.awardSubtitle') }}</p>
+    <h2>Colleagues <span>Quest100</span></h2>
+    <p class="subtitle">Recognize your peers for their great work</p>
   </div>
 
-  <!-- Leaderboard Banner -->
-  @if (bannerLeaderboard(); as banner) {
-    <div class="leaderboard-banner" [class]="'banner-' + banner.state" (click)="openStandingsModal(banner.lb)">
-      <div class="banner-left">
-        <div class="banner-icon">
-          <ng-icon name="lucideTrophy"></ng-icon>
+  <!-- Leaderboard Section -->
+  <div class="leaderboard-section">
+
+    <!-- Active Leaderboard Card -->
+    @if (activeLeaderboard(); as lb) {
+      <div class="lb-card lb-card--active" (click)="openStandingsModal(lb)">
+        <div class="lb-card__glow"></div>
+        <div class="lb-card__top">
+          <div class="lb-badge lb-badge--live">
+            <span class="lb-live-dot"></span>
+            Live
+          </div>
+          <button class="lb-history-btn" (click)="$event.stopPropagation(); openHistoryModal()">
+            History
+          </button>
         </div>
-        <div class="banner-text">
-          @if (banner.state === 'active') {
-            <span class="banner-label">Lopend leaderboard</span>
-            <span class="banner-sub">Loopt tot {{ formatDate(banner.lb.EndDate) }} · {{ banner.lb.Prize.Name }}</span>
-          } @else if (banner.state === 'upcoming') {
-            <span class="banner-label">Volgend leaderboard</span>
-            <span class="banner-sub">Start op {{ formatDate(banner.lb.StartDate) }} · {{ banner.lb.Prize.Name }}</span>
-          } @else {
-            <span class="banner-label">Vorig leaderboard</span>
-            <span class="banner-sub">Afgelopen op {{ formatDate(banner.lb.EndDate) }} · {{ banner.lb.Prize.Name }}</span>
+        <div class="lb-card__body">
+          <div class="lb-trophy-icon">
+            <ng-icon name="lucideTrophy"></ng-icon>
+          </div>
+          <div class="lb-card__info">
+            <span class="lb-card__title">{{ lb.Prize.Name }}</span>
+            <span class="lb-card__meta">Ends {{ formatDate(lb.EndDate) }}</span>
+          </div>
+        </div>
+        <div class="lb-card__footer">
+          <span class="lb-view-link">View standings <ng-icon name="lucideChevronRight"></ng-icon></span>
+        </div>
+      </div>
+    }
+
+    <!-- Upcoming Leaderboard Card -->
+    @if (upcomingLeaderboard(); as lb) {
+      <div class="lb-card lb-card--upcoming" (click)="openStandingsModal(lb)">
+        <div class="lb-card__top">
+          <div class="lb-badge lb-badge--upcoming">Upcoming</div>
+          @if (!activeLeaderboard()) {
+            <button class="lb-history-btn" (click)="$event.stopPropagation(); openHistoryModal()">
+              History
+            </button>
           }
         </div>
+        <div class="lb-card__body">
+          <div class="lb-trophy-icon lb-trophy-icon--dim">
+            <ng-icon name="lucideTrophy"></ng-icon>
+          </div>
+          <div class="lb-card__info">
+            <span class="lb-card__title">{{ lb.Prize.Name }}</span>
+            <span class="lb-card__meta">Starts {{ formatDate(lb.StartDate) }}</span>
+          </div>
+        </div>
+        <div class="lb-card__footer">
+          <span class="lb-view-link">View details <ng-icon name="lucideChevronRight"></ng-icon></span>
+        </div>
       </div>
-      <div class="banner-right">
-        @if (banner.state === 'active') {
-          <span class="banner-live-dot"></span>
-          <span class="banner-cta">Bekijk standings</span>
-        } @else {
-          <span class="banner-cta">Bekijk details</span>
-        }
-        <ng-icon name="lucideChevronRight" class="banner-chevron"></ng-icon>
+    }
+
+    <!-- No leaderboards at all -->
+    @if (!activeLeaderboard() && !upcomingLeaderboard()) {
+      <div class="lb-empty">
+        <div class="lb-empty__icon"><ng-icon name="lucideTrophy"></ng-icon></div>
+        <span>No active leaderboard right now</span>
+        <button class="lb-history-btn lb-history-btn--standalone" (click)="openHistoryModal()">
+          View history
+        </button>
       </div>
-    </div>
-  }
+    }
+
+  </div>
 
   <!-- Filter Bar -->
   <div class="filter-bar">
@@ -47,7 +83,7 @@
       <input
         class="search-input"
         type="text"
-        [placeholder]="translate.t('userlist.searchPlaceholder')"
+        placeholder="Search students..."
         [ngModel]="searchQuery()"
         (ngModelChange)="searchQuery.set($event)"
       />
@@ -58,7 +94,7 @@
       [ngModel]="selectedClassId()"
       (ngModelChange)="selectedClassId.set($event)"
     >
-      <option value="">{{ translate.t('userlist.allClasses') }}</option>
+      <option value="">All classes</option>
       @for (cls of availableClasses(); track $index) {
         <option [value]="cls.Id">{{ cls.Name }}</option>
       }
@@ -67,9 +103,7 @@
 
   <!-- Results count -->
   <p class="results-count">
-    {{ translate.t('userlist.showing') }}
-    <span>{{ filteredProfileAwards().length }}</span>
-    {{ translate.t('userlist.students') }}
+    Showing <span>{{ filteredProfileAwards().length }}</span> students
   </p>
 
   <!-- User Grid -->
@@ -77,7 +111,6 @@
     @for (pa of filteredProfileAwards(); track pa.profile.id) {
       <div class="user-card">
 
-        <!-- Avatar -->
         <div class="profile-avatar">
           @if (pa.profile.customProfilePicture) {
             <img [src]="pa.profile.customProfilePicture" alt="{{ pa.profile.firstName }} profile picture">
@@ -88,7 +121,6 @@
           }
         </div>
 
-        <!-- Details -->
         <div class="user-details">
           <span class="user-name">{{ pa.profile.firstName }} {{ pa.profile.lastName }}</span>
           <div class="user-meta">
@@ -98,40 +130,34 @@
           </div>
         </div>
 
-        <!-- Award action -->
         <div class="award-action">
           @if (pa.hasSentAward) {
-            <span class="award-sent-message">
-              ✓ {{ translate.t('userlist.awardSentToday') }}
-            </span>
+            <span class="award-sent-message">✓ Award sent today</span>
           } @else {
-            <button class="btn-award" (click)="openModal(pa.profile)">
-              {{ translate.t('userlist.giveAward') }}
-            </button>
+            <button class="btn-award" (click)="openModal(pa.profile)">Give award</button>
           }
         </div>
 
       </div>
     } @empty {
-      <div class="loading-state">{{ translate.t('userlist.loadingProfiles') }}</div>
+      <div class="loading-state">Loading profiles...</div>
     }
   </div>
 
 </div>
 
-<!-- Modal -->
 @if (selectedProfile(); as user) {
   <div class="modal-backdrop" (click)="closeModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
 
       <div class="modal-header">
-        <h3>{{ translate.t('userlist.awardFor') }} <span>{{ user.firstName }}</span></h3>
+        <h3>Award for <span>{{ user.firstName }}</span></h3>
         <button class="btn-close" (click)="closeModal()">&times;</button>
       </div>
 
       <div class="modal-body">
         <div class="input-group">
-          <label>{{ translate.t('userlist.awardCategory') }}</label>
+          <label>Award category</label>
           <select [(ngModel)]="selectedType">
             @for (type of kudoTypes; track type) {
               <option [value]="type">{{ getKudoLabel(type) }}</option>
@@ -140,31 +166,57 @@
         </div>
 
         <div class="input-group">
-          <label>{{ translate.t('userlist.personalMessage') }}</label>
+          <label>Personal message</label>
           <textarea
             [(ngModel)]="message"
-            [placeholder]="translate.t('userlist.personalMessagePlaceholder')"
+            placeholder="Write a personal message..."
             rows="4">
           </textarea>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" (click)="closeModal()">{{ translate.t('userlist.cancel') }}</button>
-        <button class="btn-primary" (click)="submitAward()" [disabled]="!message.trim()">
-          {{ translate.t('userlist.send') }}
-        </button>
+        <button class="btn-secondary" (click)="closeModal()">Cancel</button>
+        <button class="btn-primary" (click)="submitAward()" [disabled]="!message.trim()">Send</button>
       </div>
 
     </div>
   </div>
 }
 
-<!-- Leaderboard Standings Modal -->
 @if (showStandingsModal() && standingsLeaderboard()) {
   <app-leaderboard-modal
     [leaderboard]="standingsLeaderboard()!"
     [courses]="courses()"
     (closed)="closeStandingsModal()"
   />
+}
+
+@if (showHistoryModal()) {
+  <div class="modal-backdrop" (click)="closeHistoryModal()">
+    <div class="modal-content modal-content--wide" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>Leaderboard <span>History</span></h3>
+        <button class="btn-close" (click)="closeHistoryModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        @if (finishedLeaderboards().length === 0) {
+          <p class="history-empty">No finished leaderboards yet.</p>
+        }
+        @for (lb of finishedLeaderboards(); track lb.Id) {
+          <div class="history-row" (click)="openStandingsModal(lb); closeHistoryModal()">
+            <div class="history-row__icon"><ng-icon name="lucideTrophy"></ng-icon></div>
+            <div class="history-row__info">
+              <span class="history-row__name">{{ lb.Prize.Name }}</span>
+              <span class="history-row__dates">{{ formatDate(lb.StartDate) }} – {{ formatDate(lb.EndDate) }}</span>
+            </div>
+            <ng-icon name="lucideChevronRight" class="history-row__chevron"></ng-icon>
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
 }

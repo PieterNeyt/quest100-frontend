@@ -15,7 +15,15 @@
       @if (leaderboard().Prize.Name) {
         <div class="standings-prize-banner">
           @if (leaderboard().Prize.PhotoURL) {
-            <img class="standings-prize-img" [src]="leaderboard().Prize.PhotoURL" [alt]="leaderboard().Prize.Name"/>
+            <img
+              class="standings-prize-img"
+              [src]="leaderboard().Prize.PhotoURL"
+              [alt]="leaderboard().Prize.Name"
+              (error)="$any($event.target).style.display='none'; $any($event.target).nextElementSibling.style.display='flex'"
+            />
+            <div class="standings-prize-icon" style="display:none">
+              <ng-icon hlm name="lucideGift" size="1"/>
+            </div>
           } @else {
             <div class="standings-prize-icon">
               <ng-icon hlm name="lucideGift" size="md"/>
@@ -73,10 +81,15 @@
             [class.standings-row--bronze]="i === 2"
           >
             <div class="standings-rank">
-              @if (i === 0) { <span class="medal">🥇</span> }
-              @else if (i === 1) { <span class="medal">🥈</span> }
-              @else if (i === 2) { <span class="medal">🥉</span> }
-              @else { <span class="rank-num">{{ i + 1 }}</span> }
+              @if (i === 0) {
+                <span class="medal">🥇</span>
+              } @else if (i === 1) {
+                <span class="medal">🥈</span>
+              } @else if (i === 2) {
+                <span class="medal">🥉</span>
+              } @else {
+                <span class="rank-num">{{ i + 1 }}</span>
+              }
             </div>
 
             <div class="standings-class-info">

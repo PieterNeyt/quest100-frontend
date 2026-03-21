@@ -10,9 +10,7 @@ import {lucideSearch, lucideTrophy, lucideChevronRight} from '@ng-icons/lucide';
 import {LeaderboardService} from '../services/leaderboardService';
 import {Leaderboard} from '../model/leaderboard';
 import {Router} from '@angular/router';
-import {SendMessage} from '../model/chat';
 import {LeaderboardModalComponent} from '../leaderboard-modal/leaderboard-modal';
-import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-userlist',
@@ -35,6 +33,7 @@ export class Userlist implements OnInit {
 
   showStandingsModal = signal(false);
   standingsLeaderboard = signal<Leaderboard | null>(null);
+  showHistoryModal = signal(false);
 
   selectedProfile = signal<Profile | null>(null);
   searchQuery = signal('');
@@ -71,7 +70,6 @@ export class Userlist implements OnInit {
     });
   });
 
-  // Leaderboard banner logic
   activeLeaderboard = computed<Leaderboard | null>(() => {
     const now = new Date();
     return this.courseLeaderboards().find(lb => {
@@ -88,27 +86,17 @@ export class Userlist implements OnInit {
       .sort((a, b) => new Date(a.StartDate).getTime() - new Date(b.StartDate).getTime())[0] ?? null;
   });
 
-  recentlyFinishedLeaderboard = computed<Leaderboard | null>(() => {
+  finishedLeaderboards = computed<Leaderboard[]>(() => {
     const now = new Date();
     return this.courseLeaderboards()
       .filter(lb => new Date(lb.EndDate) < now)
-      .sort((a, b) => new Date(b.EndDate).getTime() - new Date(a.EndDate).getTime())[0] ?? null;
-  });
-
-  bannerLeaderboard = computed<{ lb: Leaderboard; state: 'active' | 'upcoming' | 'finished' } | null>(() => {
-    const active = this.activeLeaderboard();
-    if (active) return {lb: active, state: 'active'};
-    const upcoming = this.upcomingLeaderboard();
-    if (upcoming) return {lb: upcoming, state: 'upcoming'};
-    const finished = this.recentlyFinishedLeaderboard();
-    if (finished) return {lb: finished, state: 'finished'};
-    return null;
+      .sort((a, b) => new Date(b.EndDate).getTime() - new Date(a.EndDate).getTime());
   });
 
   ngOnInit() {
     this.profileService.getAllProfilesAwards();
     this.leaderboardService.getAllCoursesWithClasses().subscribe({
-      next: (courses ) => {
+      next: (courses) => {
         this.courses.set(courses);
       }
     });
@@ -144,8 +132,16 @@ export class Userlist implements OnInit {
     this.standingsLeaderboard.set(null);
   }
 
+  openHistoryModal() {
+    this.showHistoryModal.set(true);
+  }
+
+  closeHistoryModal() {
+    this.showHistoryModal.set(false);
+  }
+
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString('nl-BE', {day: 'numeric', month: 'short'});
+    return new Date(date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short'});
   }
 
   submitAward() {
@@ -160,17 +156,12 @@ export class Userlist implements OnInit {
 
     this.profileService.giveAward(award).subscribe({
       next: (updatedProfile: Profile) => {
-        const message = this.translate.tp('userlist.awardSuccess', {
-          type: this.translate.tk(this.selectedType),
-          firstName: updatedProfile.firstName,
-          lastName: updatedProfile.lastName
-        });
-        this.toastService.success(message);
+        this.toastService.success(`Sent ${this.selectedType} to ${updatedProfile.firstName} ${updatedProfile.lastName}`);
         this.profileService.markProfileAsAwarded(updatedProfile);
         this.closeModal();
       },
       error: () => {
-        this.toastService.error('userlist.awardError');
+        this.toastService.error('Failed to send award. Please try again.');
       }
     });
   }
