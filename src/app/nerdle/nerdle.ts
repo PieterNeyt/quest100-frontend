@@ -1,17 +1,10 @@
-import {
-  Component,
-  computed,
-  HostListener,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, HostListener, inject, OnInit, signal,} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { NerdleService } from '../services/nerdleService';
-import { TranslationService } from '../services/translationService';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {NerdleService} from '../services/nerdleService';
+import {TranslationService} from '../services/translationService';
 import {
   DEFAULT_EQUATION_LENGTH,
   GameState,

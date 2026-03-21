@@ -910,5 +910,60 @@
         "title": "Regels"
       }
     }
+  },
+  "sudoku": {
+    "subtitle": "Dagelijks puzzel • Eén per dag",
+    "toolbar": {
+      "selectCell": "Selecteer een cel, typ dan een cijfer",
+      "erase": "Wissen",
+      "eraseHint": "Druk op Delete of Backspace om te wissen"
+    },
+    "stats": {
+      "moves": "zetten",
+      "conflicts": "conflicten"
+    },
+    "howToPlay": {
+      "title": "Hoe speel je",
+      "intro": "Vul het 9×9-raster zo in dat elke rij, kolom en 3×3-blok de cijfers 1–9 exact één keer bevat.",
+      "rule": {
+        "given": {
+          "label": "Gegeven cijfers",
+          "desc": "Vetgedrukte cijfers zijn vooraf ingevuld en kunnen niet worden gewijzigd."
+        },
+        "empty": {
+          "label": "Lege cellen",
+          "desc": "Klik op een lege cel om hem te selecteren, typ dan een cijfer (1–9) om het in te vullen."
+        },
+        "filled": {
+          "label": "Jouw cijfer",
+          "desc": "Cijfers die jij hebt ingevoerd. Druk op Delete of Backspace om een cel te wissen."
+        },
+        "conflict": {
+          "label": "Conflict",
+          "desc": "Een rode cel schendt een rij-, kolom- of blok-regel. Verbeter hem om de puzzel op te lossen."
+        },
+        "selected": {
+          "label": "Geselecteerde cel",
+          "desc": "De gemarkeerde cel is momenteel geselecteerd. Overeenkomende cijfers worden ook gemarkeerd."
+        }
+      },
+      "rules": {
+        "1": "Elke rij moet de cijfers 1–9 bevatten zonder herhaling.",
+        "2": "Elke kolom moet de cijfers 1–9 bevatten zonder herhaling.",
+        "3": "Elk van de negen 3×3-blokken moet de cijfers 1–9 bevatten zonder herhaling.",
+        "4": "Gegeven (vetgedrukte) cijfers zijn vast — je kunt ze niet wissen.",
+        "5": "De puzzel is elke dag voor iedereen hetzelfde en wordt dagelijks vernieuwd.",
+        "title": "Regels"
+      }
+    },
+    "result": {
+      "won": "Puzzel opgelost!",
+      "wonSub": "Je hebt de dagelijkse Sudoku voltooid.",
+      "close": "Sluiten"
+    },
+    "error": {
+      "loadFailed": "Ophalen van de dagelijkse puzzel mislukt.",
+      "invalidMove": "Ongeldige zet."
+    }
   }
 }

@@ -909,5 +909,60 @@
         "title": "Rules"
       }
     }
+  },
+  "sudoku": {
+    "subtitle": "Daily puzzle • One per day",
+    "toolbar": {
+      "selectCell": "Select a cell, then type a number",
+      "erase": "Erase",
+      "eraseHint": "Press Delete or Backspace to erase"
+    },
+    "stats": {
+      "moves": "moves",
+      "conflicts": "conflicts"
+    },
+    "howToPlay": {
+      "title": "How to Play",
+      "intro": "Fill the 9×9 grid so every row, column and 3×3 box contains the digits 1–9 exactly once.",
+      "rule": {
+        "given": {
+          "label": "Given digits",
+          "desc": "Bold digits are pre-filled and cannot be changed."
+        },
+        "empty": {
+          "label": "Empty cells",
+          "desc": "Click an empty cell to select it, then type a digit (1–9) to fill it in."
+        },
+        "filled": {
+          "label": "Your digit",
+          "desc": "Digits you have entered. Press Delete or Backspace to clear a cell."
+        },
+        "conflict": {
+          "label": "Conflict",
+          "desc": "A red cell violates a row, column or box rule. Fix it to solve the puzzle."
+        },
+        "selected": {
+          "label": "Selected cell",
+          "desc": "The highlighted cell is currently selected. All matching digits are also highlighted."
+        }
+      },
+      "rules": {
+        "1": "Each row must contain digits 1–9 with no repetition.",
+        "2": "Each column must contain digits 1–9 with no repetition.",
+        "3": "Each of the nine 3×3 boxes must contain digits 1–9 with no repetition.",
+        "4": "Given (bold) digits are fixed — you cannot erase them.",
+        "5": "The puzzle is the same for everyone and resets every day.",
+        "title": "Rules"
+      }
+    },
+    "result": {
+      "won": "Puzzle Solved!",
+      "wonSub": "You completed today's Sudoku.",
+      "close": "Close"
+    },
+    "error": {
+      "loadFailed": "Failed to load today's puzzle.",
+      "invalidMove": "Invalid move."
+    }
   }
 }

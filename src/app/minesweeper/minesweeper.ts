@@ -1,25 +1,11 @@
-import {
-  Component,
-  computed,
-  HostListener,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import {Component, computed, HostListener, inject, OnInit, signal,} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
-import { MinesweeperService } from '../services/minesweeperService';
-import { TranslationService } from '../services/translationService';
-import {
-  CellState,
-  GameState,
-  GRID_SIZE,
-  MINE_COUNT,
-  MoveAction,
-  SessionResponse,
-} from '../model/minesweeper';
+import {HlmIconImports} from '@spartan-ng/helm/icon';
+import {MinesweeperService} from '../services/minesweeperService';
+import {TranslationService} from '../services/translationService';
+import {CellState, GameState, GRID_SIZE, MINE_COUNT, MoveAction,} from '../model/minesweeper';
 
 @Component({
   selector: 'app-minesweeper',
@@ -33,7 +19,6 @@ export class MinesweeperPageComponent implements OnInit {
   private readonly minesweeperService = inject(MinesweeperService);
   readonly t = inject(TranslationService);
 
-  readonly GRID_SIZE = GRID_SIZE;
   readonly MINE_COUNT = MINE_COUNT;
   readonly gridIndices = Array.from({ length: GRID_SIZE }, (_, i) => i);
 
