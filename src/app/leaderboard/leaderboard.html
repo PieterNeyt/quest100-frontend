@@ -101,7 +101,6 @@
         [class.lb-card--active]="isActive(lb)"
         (click)="openStandingsModal(lb)"
       >
-        <!-- Status badge -->
         <div
           class="lb-status-badge"
           [class.lb-status-badge--active]="isActive(lb)"
@@ -116,7 +115,6 @@
           }
         </div>
 
-        <!-- Edit button -->
         <button
           class="card-edit-btn"
           (click)="openEditModal(lb, $event)"
@@ -125,7 +123,6 @@
           <ng-icon hlm name="lucidePencil" size="sm"/>
         </button>
 
-        <!-- Prize photo -->
         <div class="lb-image-wrap">
           @if (lb.Prize.PhotoURL) {
             <img
@@ -140,24 +137,17 @@
             </div>
           } @else {
             <div class="lb-image-placeholder">
-              <ng-icon
-                hlm
-                name="lucideTrophy"
-                size="xl"
-                class="placeholder-trophy"
-              />
+              <ng-icon hlm name="lucideTrophy" size="xl" class="placeholder-trophy"/>
             </div>
           }
         </div>
 
         <div class="lb-card-body">
-          <!-- Course name -->
           <div class="lb-course">
             <ng-icon hlm name="lucideGraduationCap" size="xs"/>
             {{ courseName(lb.CourseId) }}
           </div>
 
-          <!-- Prize name -->
           <h3 class="lb-prize-name">
             {{ lb.Prize.Name || 'Geen prijs ingesteld' }}
           </h3>
@@ -166,7 +156,6 @@
             <p class="lb-prize-desc">{{ lb.Prize.Description }}</p>
           }
 
-          <!-- Dates -->
           <div class="lb-dates">
             <span class="lb-date">
               <ng-icon hlm name="lucideCalendarCheck" size="xs"/>
@@ -179,7 +168,6 @@
             </span>
           </div>
 
-          <!-- Classes & days left -->
           <div class="lb-footer">
             <span class="lb-classes">
               <ng-icon hlm name="lucideUsers" size="xs"/>
@@ -193,7 +181,6 @@
             }
           </div>
 
-          <!-- Click hint -->
           <div class="lb-click-hint">
             <ng-icon hlm name="lucideBarChart2" size="xs"/>
             Bekijk standings
@@ -255,14 +242,14 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Startdatum *</label>
-            <input class="form-input" type="datetime-local" formControlName="startDate"/>
+            <input class="form-input" type="date" formControlName="startDate"/>
             @if (createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched) {
               <span class="form-error">Startdatum is verplicht</span>
             }
           </div>
           <div class="form-group">
             <label class="form-label">Einddatum *</label>
-            <input class="form-input" type="datetime-local" formControlName="endDate"/>
+            <input class="form-input" type="date" formControlName="endDate"/>
             @if (createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched) {
               <span class="form-error">Einddatum is verplicht</span>
             }
@@ -318,11 +305,11 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Startdatum</label>
-            <input class="form-input" type="datetime-local" formControlName="startDate"/>
+            <input class="form-input" type="date" formControlName="startDate"/>
           </div>
           <div class="form-group">
             <label class="form-label">Einddatum</label>
-            <input class="form-input" type="datetime-local" formControlName="endDate"/>
+            <input class="form-input" type="date" formControlName="endDate"/>
           </div>
         </div>
 
@@ -358,7 +345,6 @@
     </div>
   </div>
 }
-
 
 @if (showStandingsModal() && standingsLeaderboard()) {
   <app-leaderboard-modal

@@ -133,7 +133,6 @@ export class LeaderboardComponent implements OnInit {
     });
   }
 
-
   openStandingsModal(lb: Leaderboard) {
     this.standingsLeaderboard.set(lb);
     console.log(this.standingsLeaderboard());
@@ -192,12 +191,19 @@ export class LeaderboardComponent implements OnInit {
     }
   }
 
+  // ── Helpers (date) ────────────────────────────────────────────────────────
+
+  private toMidnightISO(dateStr: string): string {
+    return dateStr ? `${dateStr}T00:00:00` : dateStr;
+  }
+
   // ── Create ────────────────────────────────────────────────────────────────
 
   openCreateModal() {
     this.createForm.reset();
     this.showCreateModal.set(true);
   }
+
   closeCreateModal() {
     this.showCreateModal.set(false);
   }
@@ -210,8 +216,8 @@ export class LeaderboardComponent implements OnInit {
     this.leaderboardService
       .createLeaderboard({
         courseId: v.courseId,
-        startDate: new Date(v.startDate).toISOString(),
-        endDate: new Date(v.endDate).toISOString(),
+        startDate: new Date(this.toMidnightISO(v.startDate)).toISOString(),
+        endDate: new Date(this.toMidnightISO(v.endDate)).toISOString(),
         prize: {
           name: v.prizeName ?? '',
           description: v.prizeDescription ?? '',
@@ -234,8 +240,8 @@ export class LeaderboardComponent implements OnInit {
     $event.stopPropagation();
     this.selectedLeaderboard.set(lb);
     this.editForm.patchValue({
-      startDate: lb.StartDate ? lb.StartDate.substring(0, 16) : '',
-      endDate: lb.EndDate ? lb.EndDate.substring(0, 16) : '',
+      startDate: lb.StartDate ? lb.StartDate.substring(0, 10) : '',
+      endDate: lb.EndDate ? lb.EndDate.substring(0, 10) : '',
       prizeName: lb.Prize?.Name ?? '',
       prizeDescription: lb.Prize?.Description ?? '',
       prizePhotoUrl: lb.Prize?.PhotoURL ?? '',
@@ -256,9 +262,11 @@ export class LeaderboardComponent implements OnInit {
     this.leaderboardService
       .updateLeaderboard(lb.Id, {
         startDate: v.startDate
-          ? new Date(v.startDate).toISOString()
+          ? new Date(this.toMidnightISO(v.startDate)).toISOString()
           : undefined,
-        endDate: v.endDate ? new Date(v.endDate).toISOString() : undefined,
+        endDate: v.endDate
+          ? new Date(this.toMidnightISO(v.endDate)).toISOString()
+          : undefined,
         prize: {
           name: v.prizeName ?? '',
           description: v.prizeDescription ?? '',
