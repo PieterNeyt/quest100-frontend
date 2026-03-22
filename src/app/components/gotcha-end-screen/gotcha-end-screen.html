@@ -1,5 +1,22 @@
 <div class="end-wrap">
   <div class="end-hero">
+    <div class="firework"></div>
+    <div class="firework-2"></div>
+    <div class="confetti-bg">
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+    </div>
+
     @if (data.winner) {
       <div class="winner-card">
         <div class="winner-avatar">
@@ -33,50 +50,134 @@
     }
   </div>
 
+  <!-- STATS -->
   <div class="stats-section">
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon--prop"><ng-icon hlm name="lucidePackage" size="sm" /></div>
-        <span class="stat-value stat-value--sm">{{ mostUsedProp() }}</span>
-        <span class="stat-label">{{ t.t('gotcha.endScreen.statMostUsedProp') }}</span>
-      </div>
+      @if (data.stats.totalKills > 0) {
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-icon--kills"><ng-icon hlm name="lucideSwords" size="sm" /></div>
+          <span class="stat-value">{{ data.stats.totalKills }}</span>
+          <span class="stat-label">{{ t.t('gotcha.endScreen.statTotalKills') }}</span>
+        </div>
+      }
+      @if (data.stats.totalParticipants > 0) {
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-icon--players"><ng-icon hlm name="lucideUsers" size="sm" /></div>
+          <span class="stat-value">{{ data.stats.totalParticipants }}</span>
+          <span class="stat-label">{{ t.t('gotcha.endScreen.statTotalPlayers') }}</span>
+        </div>
+      }
+      @if (mostUsedProp()) {
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-icon--prop"><ng-icon hlm name="lucidePackage" size="sm" /></div>
+          <span class="stat-value stat-value--sm">{{ mostUsedProp() }}</span>
+          <span class="stat-label">{{ t.t('gotcha.endScreen.statMostUsedProp') }}</span>
+        </div>
+      }
+      @if (fastestKillFormatted !== '—') {
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-icon--speed"><ng-icon hlm name="lucideTimer" size="sm" /></div>
+          <span class="stat-value stat-value--sm">{{ fastestKillFormatted }}</span>
+          <span class="stat-label">{{ t.t('gotcha.endScreen.statFastestKill') }}</span>
+        </div>
+      }
     </div>
   </div>
 
+  <!-- AWARDS -->
   @if (awards().length > 0) {
     <div class="awards-section">
-      @for (cat of awardCategories; track cat.key) {
-        @if (awardsByCategory(cat.key).length > 0) {
-          <div class="award-category">
-            <div class="award-cat-label"><ng-icon hlm [name]="cat.icon" size="xs" /><span>{{ t.t(cat.labelKey) }}</span></div>
-            <div class="award-list">
-              @for (award of awardsByCategory(cat.key); track award.id) {
-                <div class="award-card">
-                  <div class="award-icon-wrap"><ng-icon hlm [name]="award.icon" size="sm" /></div>
-                  <div class="award-body">
-                    <span class="award-title">{{ t.t(award.titleKey) }}</span>
+      <div class="awards-section-header">
+        <ng-icon hlm name="lucideTrophy" size="sm" class="awards-header-icon" />
+        <h3>{{ t.t('gotcha.awards.title') }}</h3>
+      </div>
+
+      <div class="awards-inner">
+        @for (cat of awardCategories; track cat.key) {
+          @if (awardsByCategory(cat.key).length > 0) {
+            <div class="award-category">
+              <div class="award-cat-label">
+                <ng-icon hlm [name]="cat.icon" size="xs" />
+                <span>{{ t.t(cat.labelKey) }}</span>
+              </div>
+
+              <div class="award-list">
+                @for (award of awardsByCategory(cat.key); track award.id) {
+                  <div class="award-card">
+
+                    <!-- Icon + title (left side) -->
+                    <div class="award-top">
+                      <div class="award-icon-wrap">
+                        <ng-icon hlm [name]="award.icon" size="sm" />
+                      </div>
+                      <div class="award-body">
+                        <span class="award-title">{{ t.t(award.titleKey) }}</span>
+                        <span class="award-desc">{{ t.t(award.descriptionKey) }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Winner side (right, pushed via margin-left: auto) -->
+
                     @if (award.profile) {
                       <div class="award-profile">
                         <div class="award-avatar">
                           @if (award.profile.profilePicture) {
-                            <img [src]="award.profile.profilePicture | photoSrc" [alt]="award.profile | fullName" width="28" height="28" />
+                            <img [src]="award.profile.profilePicture | photoSrc"
+                                 [alt]="award.profile | fullName"
+                                 width="24" height="24" />
                           } @else {
                             <span class="award-initials">{{ award.profile | initials }}</span>
                           }
                         </div>
                         <span class="award-name">{{ award.profile | fullName }}</span>
+                        @if (award.count) {
+                          <span class="award-count">×{{ award.count }}</span>
+                        }
                       </div>
                     }
+
+                    @if (award.profiles && award.profiles.length > 0) {
+                      <div class="award-profiles">
+                        @for (p of award.profiles; track p.id) {
+                          <div class="award-profile-chip">
+                            <div class="award-avatar award-avatar--sm">
+                              @if (p.profilePicture) {
+                                <img [src]="p.profilePicture | photoSrc" [alt]="p | fullName" width="20" height="20" />
+                              } @else {
+                                <span class="award-initials award-initials--sm">{{ p | initials }}</span>
+                              }
+                            </div>
+                            <span class="award-chip-name">{{ p | fullName }}</span>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    @if (award.propName) {
+                      <div class="award-prop-value">
+                        <ng-icon hlm name="lucidePackage" size="xs" />
+                        {{ award.propName }}
+                      </div>
+                    }
+
+                    @if (award.day) {
+                      <div class="award-day-value">
+                        <ng-icon hlm name="lucideCalendarDays" size="xs" />
+                        {{ award.day | formatDate }}
+                      </div>
+                    }
+
                   </div>
-                </div>
-              }
+                }
+              </div>
             </div>
-          </div>
+          }
         }
-      }
+      </div>
     </div>
   }
 
+  <!-- KILL GRAPH -->
   @if (data.kills.length > 0) {
     <div class="graph-section">
       <div class="graph-wrap"><svg #graphCanvas class="graph-svg"></svg></div>
@@ -103,12 +204,12 @@
         <img class="kill-detail-photo" [src]="kill.photoBase64 | photoSrc" alt="kill photo" />
         <div class="kill-detail-info">
           <div class="kill-detail-row">
-            <div class="kill-detail-avatar">{{ kill.hunter | initials }}</div>
+            <div class="kill-detail-avatar kill-detail-avatar--hunter">{{ kill.hunter | initials }}</div>
             <span class="kill-detail-name">{{ kill.hunter | fullName }}</span>
             <div class="kill-detail-sword"><ng-icon hlm name="lucideSwords" size="sm" /></div>
             <span class="kill-detail-name">{{ kill.victim | fullName }}</span>
           </div>
-          @if (kill.prop) { <div class="kill-detail-prop">{{ kill.prop | propName }}</div> }
+          @if (kill.prop) { <div class="kill-detail-prop"><ng-icon hlm name="lucidePackage" size="xs" />{{ kill.prop | propName }}</div> }
           <span class="kill-detail-time">{{ kill.createdAt | formatDate }}</span>
         </div>
       </div>

@@ -299,6 +299,7 @@
     },
     "endScreen": {
       "loading": "Loading tournament results...",
+      "statTotalPlayers": "Total players",
       "title": "Game Over!",
       "kills": "kills",
       "prize": "Prize",
@@ -361,11 +362,11 @@
       },
       "speedDemon": {
         "title": "Speed Demon",
-        "desc": "Fastest back-to-back kills."
+        "desc": "Fastest kill after target assignment"
       },
       "patientHunter": {
         "title": "Patient Hunter",
-        "desc": "Took the longest time between kills."
+        "desc": "Waited longest before going for a kill"
       },
       "bestDisguise": {
         "title": "Best Disguise",
