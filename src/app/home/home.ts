@@ -76,21 +76,10 @@ export class Home implements OnInit, OnDestroy {
     },
   ];
 
-  // ── Games ────────────────────────────────────────────────────────────────
-  private readonly STORAGE_KEY = 'quest100_games_played';
-
-  /** Dummy signal ticked every second so the countdown pipe re-evaluates */
   tick = signal(0);
   private tickInterval?: ReturnType<typeof setInterval>;
 
-  gamesPlayed = signal<Record<GameKey, string | null>>({
-    nerdle: null,
-    minesweeper: null,
-    sudoku: null,
-  });
-
   ngOnInit(): void {
-    this.loadGamesPlayed();
     this.tickInterval = setInterval(() => this.tick.update(v => v + 1), 1000);
   }
 
@@ -98,26 +87,10 @@ export class Home implements OnInit, OnDestroy {
     if (this.tickInterval) clearInterval(this.tickInterval);
   }
 
-  private todayKey(): string {
-    return new Date().toISOString().slice(0, 10);
-  }
-
-  private loadGamesPlayed(): void {
-    try {
-      const raw = localStorage.getItem(this.STORAGE_KEY);
-      if (raw) this.gamesPlayed.set(JSON.parse(raw));
-    } catch { /* ignore */ }
-  }
-
-  isGamePlayed(key: GameKey): boolean {
-    return this.gamesPlayed()[key] === this.todayKey();
-  }
-
   navigateToGame(key: GameKey): void {
     this.router.navigate(['/minigames/' + key]);
   }
 
-  // ── Agenda ───────────────────────────────────────────────────────────────
   agendaItems    = signal<AgendaItem[]>([]);
   agendaLoading  = signal<boolean>(false);
   activeAccordion = signal<string | null>('profile');

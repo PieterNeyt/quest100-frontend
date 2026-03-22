@@ -80,62 +80,44 @@
             <div class="games-list">
 
               <!-- Nerdle -->
-              <div class="game-card" [class.game-played]="isGamePlayed('nerdle')" (click)="navigateToGame('nerdle')">
+              <div class="game-card" (click)="navigateToGame('nerdle')">
                 <img class="game-thumb" src="https://play-lh.googleusercontent.com/QKvA4HCQARUOtyDAwqM-gFeKc_4793WGbmnd1_kgBwOS4RRbIMdnQ3wovZRYhCSRs4E" alt="Nerdle"/>
                 <div class="game-body">
                   <span class="game-name">Nerdle</span>
                   <span class="game-desc">{{ translationService.t('home.nerdleDesc') }}</span>
                 </div>
                 <div class="game-status">
-                  @if (isGamePlayed('nerdle')) {
-                    <div class="status-done">
-                      <ng-icon name="lucideCheck" class="status-check-icon"></ng-icon>
-                    </div>
-                  } @else {
-                    <div class="status-play">
-                      <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
-                    </div>
-                  }
+                  <div class="status-play">
+                    <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
+                  </div>
                 </div>
               </div>
 
               <!-- Minesweeper -->
-              <div class="game-card" [class.game-played]="isGamePlayed('minesweeper')" (click)="navigateToGame('minesweeper')">
+              <div class="game-card" (click)="navigateToGame('minesweeper')">
                 <img class="game-thumb" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/3840px-Minesweeper_flag.svg.png" alt="Minesweeper"/>
                 <div class="game-body">
                   <span class="game-name">Minesweeper</span>
                   <span class="game-desc">{{ translationService.t('home.minesweeperDesc') }}</span>
                 </div>
                 <div class="game-status">
-                  @if (isGamePlayed('minesweeper')) {
-                    <div class="status-done">
-                      <ng-icon name="lucideCheck" class="status-check-icon"></ng-icon>
-                    </div>
-                  } @else {
-                    <div class="status-play">
-                      <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
-                    </div>
-                  }
+                  <div class="status-play">
+                    <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
+                  </div>
                 </div>
               </div>
 
               <!-- Sudoku -->
-              <div class="game-card" [class.game-played]="isGamePlayed('sudoku')" (click)="navigateToGame('sudoku')">
+              <div class="game-card" (click)="navigateToGame('sudoku')">
                 <img class="game-thumb" src="https://m.media-amazon.com/images/I/51-1kEEzQ3L.png" alt="Sudoku"/>
                 <div class="game-body">
                   <span class="game-name">Sudoku</span>
                   <span class="game-desc">{{ translationService.t('home.sudokuDesc') }}</span>
                 </div>
                 <div class="game-status">
-                  @if (isGamePlayed('sudoku')) {
-                    <div class="status-done">
-                      <ng-icon name="lucideCheck" class="status-check-icon"></ng-icon>
-                    </div>
-                  } @else {
-                    <div class="status-play">
-                      <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
-                    </div>
-                  }
+                  <div class="status-play">
+                    <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
+                  </div>
                 </div>
               </div>
 
