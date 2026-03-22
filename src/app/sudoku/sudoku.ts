@@ -6,6 +6,7 @@ import {HlmIconImports} from '@spartan-ng/helm/icon';
 import {SudokuService} from '../services/sudokuService';
 import {TranslationService} from '../services/translationService';
 import {CellState, GameState, GRID_SIZE, SessionResponse,} from '../model/sudoku';
+import {buildEmptyBoard, buildEmptyCellStates, buildEmptyConflicts} from '../utils/sudokuUtils';
 
 @Component({
   selector: 'app-sudoku',
@@ -22,11 +23,11 @@ export class SudokuPageComponent implements OnInit {
   readonly gridIndices = Array.from({ length: GRID_SIZE }, (_, i) => i);
 
   gameState = signal<GameState>('loading');
-  playerBoard = signal<number[][]>(this.buildEmptyBoard());
-  cellStates = signal<CellState[][]>(this.buildEmptyCellStates());
-  conflictMap = signal<boolean[][]>(this.buildEmptyConflicts());
+  playerBoard = signal<number[][]>(buildEmptyBoard());
+  private cellStates = signal<CellState[][]>(buildEmptyCellStates());
+  private conflictMap = signal<boolean[][]>(buildEmptyConflicts());
 
-  selectedCell = signal<{ row: number; col: number } | null>(null);
+  private selectedCell = signal<{ row: number; col: number } | null>(null);
   errorMessage = signal<string | null>(null);
   showResultPopup = signal(false);
   kudosEarned = signal(0);
@@ -181,20 +182,6 @@ export class SudokuPageComponent implements OnInit {
 
   closePopup(): void {
     this.showResultPopup.set(false);
-  }
-
-  private buildEmptyBoard(): number[][] {
-    return Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(0));
-  }
-
-  private buildEmptyCellStates(): CellState[][] {
-    return Array.from({ length: GRID_SIZE }, () =>
-      Array<CellState>(GRID_SIZE).fill('empty')
-    );
-  }
-
-  private buildEmptyConflicts(): boolean[][] {
-    return Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(false));
   }
 
   private showError(msg: string): void {

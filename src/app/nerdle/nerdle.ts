@@ -14,6 +14,7 @@ import {
   NerdleAttempt,
   TileColor,
 } from '../model/nerdle';
+import {buildEmptyRows, colorPriority, triggerSignal} from '../utils/nerdleUtils';
 
 @Component({
   selector: 'app-nerdle',
@@ -26,16 +27,17 @@ import {
 export class NerdlePageComponent implements OnInit {
   private readonly nerdleService = inject(NerdleService);
   readonly t = inject(TranslationService);
-  private readonly location       = inject(Location);
-  equationLength = signal(DEFAULT_EQUATION_LENGTH);
+  private readonly location = inject(Location);
+
+  private equationLength = signal(DEFAULT_EQUATION_LENGTH);
   gameState = signal<GameState>('loading');
-  rows = signal<GuessRow[]>(this.buildEmptyRows(DEFAULT_EQUATION_LENGTH));
-  currentRow = signal(0);
-  currentCol = signal(0);
+  rows = signal<GuessRow[]>(buildEmptyRows(DEFAULT_EQUATION_LENGTH));
+  private currentRow = signal(0);
+  private currentCol = signal(0);
   errorMessage = signal<string | null>(null);
   shakeRow = signal<number | null>(null);
   flipRow = signal<number | null>(null);
-  selectedCol = signal<number | null>(null);
+  private selectedCol = signal<number | null>(null);
 
   showResultPopup = signal(false);
   kudosEarned = signal(0);
@@ -47,7 +49,7 @@ export class NerdlePageComponent implements OnInit {
       if (!row.submitted) continue;
       for (const result of row.results) {
         const existing = map[result.char];
-        if (!existing || this.colorPriority(result.status) > this.colorPriority(existing)) {
+        if (!existing || colorPriority(result.status) > colorPriority(existing)) {
           map[result.char] = result.status;
         }
       }
@@ -61,10 +63,10 @@ export class NerdlePageComponent implements OnInit {
         if (session.attempts.length > 0) {
           const length = session.attempts[0].guess.length;
           this.equationLength.set(length);
-          this.rows.set(this.buildEmptyRows(length));
+          this.rows.set(buildEmptyRows(length));
 
           this.rows.update((rows) => {
-            const updated = rows.map((r) => ({ ...r, chars: [...r.chars], results: [...r.results] }));
+            const updated = rows.map((r) => ({...r, chars: [...r.chars], results: [...r.results]}));
             session.attempts.forEach((attempt, i) => {
               if (i >= MAX_ATTEMPTS) return;
               updated[i].chars = attempt.guess.split('');
@@ -95,7 +97,7 @@ export class NerdlePageComponent implements OnInit {
     });
   }
 
-  goBack() {
+  goBack(): void {
     this.location.back();
   }
 
@@ -126,18 +128,14 @@ export class NerdlePageComponent implements OnInit {
     if (col >= length) return;
 
     this.rows.update((rows) => {
-      const updated = rows.map((r) => ({ ...r, chars: [...r.chars] }));
+      const updated = rows.map((r) => ({...r, chars: [...r.chars]}));
       updated[this.currentRow()].chars[col] = key;
       return updated;
     });
 
     const chars = this.rows()[this.currentRow()].chars;
     const nextEmpty = chars.findIndex((c, i) => i > col && c === '');
-    if (nextEmpty !== -1) {
-      this.currentCol.set(nextEmpty);
-    } else {
-      this.currentCol.set(Math.min(col + 1, length - 1));
-    }
+    this.currentCol.set(nextEmpty !== -1 ? nextEmpty : Math.min(col + 1, length - 1));
     this.selectedCol.set(null);
     this.errorMessage.set(null);
   }
@@ -147,7 +145,7 @@ export class NerdlePageComponent implements OnInit {
     const col = this.currentCol();
 
     this.rows.update((rows) => {
-      const updated = rows.map((r) => ({ ...r, chars: [...r.chars] }));
+      const updated = rows.map((r) => ({...r, chars: [...r.chars]}));
       updated[this.currentRow()].chars[col] = '';
       return updated;
     });
@@ -163,22 +161,21 @@ export class NerdlePageComponent implements OnInit {
     if (this.gameState() !== 'playing') return;
     const row = this.currentRow();
     const chars = this.rows()[row].chars;
-    const guess = chars.join('');
 
     if (chars.some((c) => c === '')) {
       this.showError(this.t.t('nerdle.error.tooShort'));
-      this.triggerShake(row);
+      triggerSignal(this.shakeRow, row, 600);
       return;
     }
 
-    this.nerdleService.submitGuess(guess).subscribe({
+    this.nerdleService.submitGuess(chars.join('')).subscribe({
       next: (resp) => {
         this.applyAttempt(row, resp.attempt, resp.solved, resp.gameOver, resp.kudosEarned);
       },
       error: (err) => {
         const msg = err?.error?.error ?? this.t.t('nerdle.error.invalidEquation');
         this.showError(msg);
-        this.triggerShake(row);
+        triggerSignal(this.shakeRow, row, 600);
       },
     });
   }
@@ -194,19 +191,18 @@ export class NerdlePageComponent implements OnInit {
       this.equationLength.set(attempt.result.length);
     }
 
-    this.rows.update((rows) => {
-      return rows.map((r, i) => {
-        if (i !== row) return r;
-        return {
+    this.rows.update((rows) =>
+      rows.map((r, i) =>
+        i !== row ? r : {
           ...r,
           chars: attempt.guess.split(''),
           results: attempt.result,
           submitted: true,
-        };
-      });
-    });
+        }
+      )
+    );
 
-    this.triggerFlip(row);
+    triggerSignal(this.flipRow, row, 500);
 
     if (solved) {
       setTimeout(() => {
@@ -230,27 +226,9 @@ export class NerdlePageComponent implements OnInit {
     this.showResultPopup.set(false);
   }
 
-  private buildEmptyRows(length: number): GuessRow[] {
-    return Array.from({ length: MAX_ATTEMPTS }, () => ({
-      chars: Array(length).fill(''),
-      results: [],
-      submitted: false,
-    }));
-  }
-
   private showError(msg: string): void {
     this.errorMessage.set(msg);
     setTimeout(() => this.errorMessage.set(null), 2000);
-  }
-
-  private triggerShake(row: number): void {
-    this.shakeRow.set(row);
-    setTimeout(() => this.shakeRow.set(null), 600);
-  }
-
-  private triggerFlip(row: number): void {
-    this.flipRow.set(row);
-    setTimeout(() => this.flipRow.set(null), 500);
   }
 
   getTileColor(rowIndex: number, colIndex: number): TileColor {
@@ -277,10 +255,5 @@ export class NerdlePageComponent implements OnInit {
 
   getKeyColor(key: string): TileColor {
     return this.keyColors()[key] ?? 'empty';
-  }
-
-  private colorPriority(color: TileColor): number {
-    const p: Record<TileColor, number> = { correct: 3, present: 2, absent: 1, empty: 0 };
-    return p[color];
   }
 }

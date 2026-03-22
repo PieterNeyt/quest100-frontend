@@ -6,6 +6,7 @@ import {HlmIconImports} from '@spartan-ng/helm/icon';
 import {MinesweeperService} from '../services/minesweeperService';
 import {TranslationService} from '../services/translationService';
 import {CellState, GameState, GRID_SIZE, MINE_COUNT, MoveAction,} from '../model/minesweeper';
+import {buildEmptyFlags, buildEmptyHints, buildEmptyRevealed, countFlags} from '../utils/minesweeperUtils';
 
 @Component({
   selector: 'app-minesweeper',
@@ -23,10 +24,10 @@ export class MinesweeperPageComponent implements OnInit {
   readonly gridIndices = Array.from({ length: GRID_SIZE }, (_, i) => i);
 
   gameState = signal<GameState>('loading');
-  revealedMap = signal<CellState[][]>(this.buildEmptyRevealed());
-  flagMap = signal<boolean[][]>(this.buildEmptyFlags());
-  boardHints = signal<number[][]>(this.buildEmptyHints());
-  mineLocations = signal<boolean[][]>(this.buildEmptyFlags());
+  revealedMap = signal<CellState[][]>(buildEmptyRevealed());
+  flagMap = signal<boolean[][]>(buildEmptyFlags());
+  boardHints = signal<number[][]>(buildEmptyHints());
+  mineLocations = signal<boolean[][]>(buildEmptyFlags());
 
   errorMessage = signal<string | null>(null);
   showResultPopup = signal(false);
@@ -53,10 +54,7 @@ export class MinesweeperPageComponent implements OnInit {
         if (session.mineLocations) {
           this.mineLocations.set(session.mineLocations.map((r) => [...r]));
         }
-
-        let flags = 0;
-        session.flagMap?.forEach((row) => row.forEach((f) => { if (f) flags++; }));
-        this.flagCount.set(flags);
+        this.flagCount.set(countFlags(session.flagMap));
 
         if (session.solved) {
           this.gameState.set('won');
@@ -118,9 +116,7 @@ export class MinesweeperPageComponent implements OnInit {
         }
         if (resp.session.flagMap) {
           this.flagMap.set(resp.session.flagMap.map((r) => [...r]));
-          let flags = 0;
-          resp.session.flagMap.forEach((r) => r.forEach((f) => { if (f) flags++; }));
-          this.flagCount.set(flags);
+          this.flagCount.set(countFlags(resp.session.flagMap));
         }
         if (resp.mineLocations) {
           this.mineLocations.set(resp.mineLocations);
@@ -166,18 +162,6 @@ export class MinesweeperPageComponent implements OnInit {
 
   closePopup(): void {
     this.showResultPopup.set(false);
-  }
-
-  private buildEmptyRevealed(): CellState[][] {
-    return Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill('hidden'));
-  }
-
-  private buildEmptyFlags(): boolean[][] {
-    return Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(false));
-  }
-
-  private buildEmptyHints(): number[][] {
-    return Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(-1));
   }
 
   private showError(msg: string): void {
