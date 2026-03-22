@@ -11,6 +11,12 @@
   "home": {
     "title": "Welcome back",
     "agenda": "Today's Agenda",
+    "miniGames": "Mini-games",
+    "miniGamesKudoHint": "Earn daily kudos",
+    "nerdleDesc": "Guess the equation",
+    "minesweeperDesc": "Clear the minefield",
+    "sudokuDesc": "Fill in the grid",
+    "played": "Played",
     "attended": "Attended",
     "agendaLoading": "Loading your schedule…",
     "agendaEmpty": "No classes scheduled for today.",

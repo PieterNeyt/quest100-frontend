@@ -1,5 +1,5 @@
 import {Component, computed, HostListener, inject, OnInit, signal,} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, Location} from '@angular/common';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
@@ -18,7 +18,7 @@ import {CellState, GameState, GRID_SIZE, MINE_COUNT, MoveAction,} from '../model
 export class MinesweeperPageComponent implements OnInit {
   private readonly minesweeperService = inject(MinesweeperService);
   readonly t = inject(TranslationService);
-
+  private readonly location       = inject(Location);
   readonly MINE_COUNT = MINE_COUNT;
   readonly gridIndices = Array.from({ length: GRID_SIZE }, (_, i) => i);
 
@@ -74,7 +74,9 @@ export class MinesweeperPageComponent implements OnInit {
       },
     });
   }
-
+  goBack() {
+    this.location.back();
+  }
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'f' || event.key === 'F') {

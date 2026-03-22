@@ -1,5 +1,5 @@
 import {Component, computed, HostListener, inject, OnInit, signal,} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, Location} from '@angular/common';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import * as lucideIcons from '@ng-icons/lucide';
 import {HlmIconImports} from '@spartan-ng/helm/icon';
@@ -26,7 +26,7 @@ import {
 export class NerdlePageComponent implements OnInit {
   private readonly nerdleService = inject(NerdleService);
   readonly t = inject(TranslationService);
-
+  private readonly location       = inject(Location);
   equationLength = signal(DEFAULT_EQUATION_LENGTH);
   gameState = signal<GameState>('loading');
   rows = signal<GuessRow[]>(this.buildEmptyRows(DEFAULT_EQUATION_LENGTH));
@@ -93,6 +93,10 @@ export class NerdlePageComponent implements OnInit {
         this.gameState.set('playing');
       },
     });
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   @HostListener('window:keydown', ['$event'])

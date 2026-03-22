@@ -491,6 +491,12 @@
   },
   "home": {
     "title": "Welkom terug",
+    "miniGames": "Mini-games",
+    "miniGamesKudoHint": "Verdien dagelijks kudos",
+    "nerdleDesc": "Raad de vergelijking",
+    "minesweeperDesc": "Klik de mijnen vrij",
+    "sudokuDesc": "Vul het raster in",
+    "played": "Gespeeld",
     "agenda": "Agenda van vandaag",
     "attended": "Aanwezig",
     "agendaLoading": "Rooster laden…",
