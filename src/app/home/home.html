@@ -37,6 +37,8 @@
 
         <div class="accordion-wrapper">
           <div class="accordion-content">
+
+            <!-- Profile info -->
             <div class="stats-display">
               <div class="stats-avatar-container">
                 @if (profile()?.customProfilePicture) {
@@ -59,29 +61,72 @@
               </div>
             </div>
 
-            <h4 class="content-mini-title">{{ translationService.t('home.statistics') }}</h4>
-            <div class="stats-bars-container">
-              @for (item of statItems(); track item.key) {
-                <div class="stat-bar-group">
-                  <div class="stat-bar-header">
-                    <span class="stat-bar-label">{{ translationService.t('kudoTypes.' + item.key) }}</span>
-                    <div class="stat-meta-info">
-                      <span
-                        class="stat-percentage-label">{{ item.percentage }}{{ translationService.t('home.percentOfTotal') }}</span>
-                      <span class="stat-points-label">{{ item.value }} PTS</span>
-                    </div>
-                  </div>
-                  <div class="progress-track">
-                    <div class="progress-fill" [style.width.%]="item.percentage"></div>
+            <!-- Mini-games header -->
+            <div class="games-section-header">
+              <div class="games-title-row">
+                <h4 class="content-mini-title">{{ translationService.t('home.miniGames') }}</h4>
+                <span class="games-reset-countdown">
+                  <ng-icon name="lucideClock" class="countdown-icon"></ng-icon>
+                  {{ tick | countdown }}
+                </span>
+              </div>
+              <span class="games-kudo-hint">
+                <ng-icon name="lucideZap" class="kudo-hint-icon"></ng-icon>
+                {{ translationService.t('home.miniGamesKudoHint') }}
+              </span>
+            </div>
+
+            <!-- Game cards -->
+            <div class="games-list">
+
+              <!-- Nerdle -->
+              <div class="game-card" (click)="navigateToGame('nerdle')">
+                <img class="game-thumb" src="https://play-lh.googleusercontent.com/QKvA4HCQARUOtyDAwqM-gFeKc_4793WGbmnd1_kgBwOS4RRbIMdnQ3wovZRYhCSRs4E" alt="Nerdle"/>
+                <div class="game-body">
+                  <span class="game-name">Nerdle</span>
+                  <span class="game-desc">{{ translationService.t('home.nerdleDesc') }}</span>
+                </div>
+                <div class="game-status">
+                  <div class="status-play">
+                    <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
                   </div>
                 </div>
-              }
+              </div>
+
+              <!-- Minesweeper -->
+              <div class="game-card" (click)="navigateToGame('minesweeper')">
+                <img class="game-thumb" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/3840px-Minesweeper_flag.svg.png" alt="Minesweeper"/>
+                <div class="game-body">
+                  <span class="game-name">Minesweeper</span>
+                  <span class="game-desc">{{ translationService.t('home.minesweeperDesc') }}</span>
+                </div>
+                <div class="game-status">
+                  <div class="status-play">
+                    <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sudoku -->
+              <div class="game-card" (click)="navigateToGame('sudoku')">
+                <img class="game-thumb" src="https://m.media-amazon.com/images/I/51-1kEEzQ3L.png" alt="Sudoku"/>
+                <div class="game-body">
+                  <span class="game-name">Sudoku</span>
+                  <span class="game-desc">{{ translationService.t('home.sudokuDesc') }}</span>
+                </div>
+                <div class="game-status">
+                  <div class="status-play">
+                    <ng-icon name="lucideChevronRight" class="play-icon"></ng-icon>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Today's Agenda card — day-view timeline -->
+      <!-- Today's Agenda card -->
       <div class="content-card accordion-item" [class.open]="activeAccordion() === 'agenda'">
         <div class="accordion-header" (click)="toggleAccordion('agenda')">
           <div class="accordion-header-left">
@@ -96,7 +141,6 @@
 
             <p class="agenda-date-label">{{ todayLabel() }}</p>
 
-            <!-- Loading -->
             @if (agendaLoading()) {
               <div class="agenda-loading">
                 <div class="agenda-spinner"></div>
@@ -106,7 +150,6 @@
 
             @if (!agendaLoading()) {
               <div class="tl-wrap">
-                <!-- Left: hour labels -->
                 <div class="tl-hours-col">
                   @for (hour of timelineHours; track hour) {
                     <div class="tl-hour-cell">
@@ -115,15 +158,11 @@
                   }
                 </div>
 
-                <!-- Right: grid + events -->
                 <div class="tl-grid-col" [style.height.px]="timelineHeight">
-
-                  <!-- Hour lines -->
                   @for (hour of timelineHours; track hour) {
                     <div class="tl-hour-line"></div>
                   }
 
-                  <!-- Empty state floated inside the grid -->
                   @if (agendaItems().length === 0) {
                     <div class="tl-empty">
                       <ng-icon name="lucideCalendar" class="tl-empty-icon"></ng-icon>
@@ -131,25 +170,21 @@
                     </div>
                   }
 
-                  <!-- Event blocks -->
                   @for (item of agendaItems(); track item.id; let i = $index) {
                     <div class="tl-event"
                          [style.top.px]="getEventTop(item.begin)"
                          [style.height.px]="getEventHeight(item.begin, item.end)"
                          [ngClass]="item.attended ? 'tl-attended' : 'tl-color-' + (i % 4)">
-
                       <div class="tl-ev-top-row">
                         <span class="tl-ev-time">{{ item.begin | unixTime }} – {{ item.end | unixTime }}</span>
                         @if (item.attended) {
                           <span class="tl-attended-badge">
-                             <ng-icon name="lucideCheck" class="tl-attended-icon"></ng-icon>
+                            <ng-icon name="lucideCheck" class="tl-attended-icon"></ng-icon>
                             {{ translationService.t('home.attended') }}
                           </span>
                         }
                       </div>
-
                       <span class="tl-ev-name">{{ item.courseName || item.activity || translationService.t('home.agendaUnknownCourse') }}</span>
-
                       @if (item.rooms.length) {
                         <div class="tl-ev-rooms">
                           @for (room of item.rooms; track room) {
@@ -157,17 +192,14 @@
                           }
                         </div>
                       }
-
                     </div>
                   }
 
-                  <!-- "Now" line -->
                   @if (nowLineVisible()) {
                     <div class="tl-now-line" [style.top.px]="nowLineTop()">
                       <div class="tl-now-dot"></div>
                     </div>
                   }
-
                 </div>
               </div>
             }
@@ -177,6 +209,5 @@
       </div>
 
     </div>
-
   </section>
 </div>

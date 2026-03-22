@@ -18,7 +18,7 @@ import {
   lucideUser,
   lucideX,
   lucideZap,
-  lucideHelpCircle
+  lucideHelpCircle, lucideGamepad2, lucideCalculator, lucideGrid3x3, lucideBrain, lucideChevronDown
 } from '@ng-icons/lucide';
 import {environment} from '../environments/environment';
 import {Language, TranslationService} from './services/translationService';
@@ -29,8 +29,7 @@ import {TourService} from './services/tourService';
 import {GotchaStateService} from './services/GotchaStateService';
 import {Role} from './model/role';
 
-type MenuState = 'languages' | 'user' | 'mobile' | null;
-
+type MenuState = 'languages' | 'user' | 'mobile' | 'minigames' | null;
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -45,7 +44,12 @@ type MenuState = 'languages' | 'user' | 'mobile' | null;
       lucideX,
       lucideZap,
       lucideChevronRight,
-      lucideHelpCircle
+      lucideHelpCircle,
+      lucideGamepad2,
+      lucideCalculator,
+      lucideGrid3x3,
+      lucideBrain,
+      lucideChevronDown,
     })
   ],
   templateUrl: './app.html',

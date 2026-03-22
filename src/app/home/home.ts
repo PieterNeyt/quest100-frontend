@@ -1,16 +1,14 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
+import {Component, computed, effect, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {NgIcon, provideIcons} from "@ng-icons/core";
 import {CommonModule} from '@angular/common';
 import {ProfileService} from '../services/profileService';
 import {
   lucideCalendar,
+  lucideCheck,
   lucideChevronDown,
+  lucideChevronRight,
   lucideClock,
   lucideInfo,
-  lucideMapPin,
-  lucideQrCode,
-  lucideStar,
-  lucideTarget,
   lucideUser,
   lucideUsers,
   lucideZap
@@ -20,25 +18,26 @@ import {ToastService} from '../services/toastService';
 import {Router} from '@angular/router';
 import {ArchetypeId} from '../model/profile';
 import {AgendaItem} from '../model/agenda';
-import {UnixTimePipe} from '../utils/unixPipe';
+import {UnixTimePipe,CountdownPipe} from '../utils/unixPipe';
 
 const TIMELINE_START = 7;
 const TIMELINE_END   = 21;
 const HOUR_PX        = 60;
 
+type GameKey = 'nerdle' | 'minesweeper' | 'sudoku';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgIcon, CommonModule, UnixTimePipe],
+  imports: [NgIcon, CommonModule, UnixTimePipe, CountdownPipe],
   providers: [provideIcons({
-    lucideQrCode, lucideStar, lucideZap, lucideTarget,
-    lucideUsers, lucideInfo, lucideChevronDown,
-    lucideCalendar, lucideClock, lucideMapPin, lucideUser
+    lucideZap, lucideUsers, lucideInfo, lucideChevronDown, lucideChevronRight,
+    lucideCalendar, lucideClock, lucideUser, lucideCheck
   })],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
+export class Home implements OnInit, OnDestroy {
   private readonly profileService = inject(ProfileService);
   private readonly router = inject(Router);
   translationService = inject(TranslationService);
@@ -77,7 +76,21 @@ export class Home {
     },
   ];
 
-  playerStats    = signal<any | null>(null);
+  tick = signal(0);
+  private tickInterval?: ReturnType<typeof setInterval>;
+
+  ngOnInit(): void {
+    this.tickInterval = setInterval(() => this.tick.update(v => v + 1), 1000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.tickInterval) clearInterval(this.tickInterval);
+  }
+
+  navigateToGame(key: GameKey): void {
+    this.router.navigate(['/minigames/' + key]);
+  }
+
   agendaItems    = signal<AgendaItem[]>([]);
   agendaLoading  = signal<boolean>(false);
   activeAccordion = signal<string | null>('profile');
@@ -86,31 +99,22 @@ export class Home {
     {length: TIMELINE_END - TIMELINE_START},
     (_, i) => TIMELINE_START + i
   );
-
   readonly timelineHeight = (TIMELINE_END - TIMELINE_START) * HOUR_PX;
 
   constructor() {
     effect(() => {
       if (this.profile()) {
-        this.profileService.getPlayerStats()
-          .subscribe({
-            next: (stats) => this.playerStats.set(stats),
-            error: (err) => this.ts.error('Failed to load player stats: ' + err.message)
-          });
-
         this.agendaLoading.set(true);
-        this.profileService.getTodayAgenda()
-          .subscribe({
-            next: (items) => {
-              const sorted = [...items].sort((a, b) => a.begin - b.begin);
-              this.agendaItems.set(sorted);
-              this.agendaLoading.set(false);
-            },
-            error: (err) => {
-              this.ts.error('Failed to load agenda: ' + err.message);
-              this.agendaLoading.set(false);
-            }
-          });
+        this.profileService.getTodayAgenda().subscribe({
+          next: (items) => {
+            this.agendaItems.set([...items].sort((a, b) => a.begin - b.begin));
+            this.agendaLoading.set(false);
+          },
+          error: (err) => {
+            this.ts.error('Failed to load agenda: ' + err.message);
+            this.agendaLoading.set(false);
+          }
+        });
       }
     });
   }
@@ -123,43 +127,18 @@ export class Home {
   navigateToAbout(appKey: string) {
     this.router.navigate(['/about']).then(() => {
       setTimeout(() => {
-        const element = document.getElementById('section-' + appKey);
-        if (element) element.scrollIntoView({behavior: 'smooth', block: 'start'});
+        document.getElementById('section-' + appKey)?.scrollIntoView({behavior: 'smooth', block: 'start'});
       }, 100);
     });
   }
 
-  statItems = computed(() => {
-    const s = this.playerStats();
-    if (!s || s.KudoKnowledge === undefined) return [];
-    const statsArray = [
-      {key: 'KudoKnowledge',  value: s.KudoKnowledge  || 0},
-      {key: 'KudoAttendance', value: s.KudoAttendance || 0},
-      {key: 'KudoTeamwork',   value: s.KudoTeamwork   || 0},
-      {key: 'KudoAtmosphere', value: s.KudoAtmosphere || 0},
-      {key: 'KudoEngagement', value: s.KudoEngagement || 0},
-    ];
-    const totalKudos = statsArray.reduce((acc, curr) => acc + curr.value, 0);
-    return statsArray.map(stat => ({
-      ...stat,
-      percentage: totalKudos > 0 ? Math.round((stat.value / totalKudos) * 100) : 0
-    }));
-  });
-
   private tsToPixels(unix: number): number {
     const d = new Date(unix * 1000);
-    const minutes = (d.getHours() - TIMELINE_START) * 60 + d.getMinutes();
-    return (minutes / 60) * HOUR_PX;
+    return ((d.getHours() - TIMELINE_START) * 60 + d.getMinutes()) / 60 * HOUR_PX;
   }
 
-  getEventTop(beginUnix: number): number {
-    return Math.max(0, this.tsToPixels(beginUnix));
-  }
-
-  getEventHeight(beginUnix: number, endUnix: number): number {
-    return Math.max(this.tsToPixels(endUnix) - this.tsToPixels(beginUnix), 28);
-  }
-
+  getEventTop(beginUnix: number): number    { return Math.max(0, this.tsToPixels(beginUnix)); }
+  getEventHeight(b: number, e: number): number { return Math.max(this.tsToPixels(e) - this.tsToPixels(b), 28); }
 
   nowLineVisible(): boolean {
     const h = new Date().getHours();
@@ -168,15 +147,12 @@ export class Home {
 
   nowLineTop(): number {
     const now = new Date();
-    const mins = (now.getHours() - TIMELINE_START) * 60 + now.getMinutes();
-    return (mins / 60) * HOUR_PX;
+    return ((now.getHours() - TIMELINE_START) * 60 + now.getMinutes()) / 60 * HOUR_PX;
   }
 
   readonly todayLabel = computed(() => {
     const lang = this.translationService.currentLanguage();
     const locale = lang === 'nl' ? 'nl-BE' : 'en-GB';
-    return new Date().toLocaleDateString(locale, {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-    });
+    return new Date().toLocaleDateString(locale, {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'});
   });
 }

@@ -18,6 +18,9 @@ import {Dashboard} from './dashboard/dashboard';
 import {reportEvent} from './dashboard/report-event/report-event';
 import {reportChat} from './dashboard/report-chat/report-chat';
 import {ReportAward} from './dashboard/report-award/report-award';
+import {NerdlePageComponent} from './nerdle/nerdle';
+import {MinesweeperPageComponent} from './minesweeper/minesweeper';
+import {SudokuPageComponent} from './sudoku/sudoku';
 import {roleGuard} from './guards/role-guard';
 import {Role} from './model/role';
 
@@ -40,12 +43,7 @@ export const routes: Routes = [
   {path: 'gotcha/end', component: GotchaEndPageComponent, canActivate: [MsalGuard]},
   {path: 'gotcha/end/:gameId', component: GotchaEndPageComponent, canActivate: [MsalGuard]},
   {path: 'gotcha/history', component: GotchaHistoryPageComponent, canActivate: [MsalGuard]},
-  {
-    path: 'gotcha/settings',
-    component: GotchaSettingsComponent,
-    canActivate: [MsalGuard, roleGuard],
-    data: {role: Role.LECTOR}
-  },
+  {path: 'gotcha/settings', component: GotchaSettingsComponent, canActivate: [MsalGuard, roleGuard], data: {role: Role.LECTOR}},
   {path: 'about', component: AboutComponent, canActivate: [MsalGuard]},
   {
     path: 'reports',
@@ -58,4 +56,8 @@ export const routes: Routes = [
       {path: ':reportId/award/:targetId', component: ReportAward}
     ]
   },
+  { path: 'minigames/nerdle', component: NerdlePageComponent, canActivate: [MsalGuard]},
+  { path: 'minigames/minesweeper', component: MinesweeperPageComponent, canActivate: [MsalGuard] },
+  { path: 'minigames/sudoku', component: SudokuPageComponent, canActivate: [MsalGuard] },
+
 ];

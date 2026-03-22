@@ -491,6 +491,12 @@
   },
   "home": {
     "title": "Welkom terug",
+    "miniGames": "Mini-games",
+    "miniGamesKudoHint": "Verdien dagelijks kudos",
+    "nerdleDesc": "Raad de vergelijking",
+    "minesweeperDesc": "Klik de mijnen vrij",
+    "sudokuDesc": "Vul het raster in",
+    "played": "Gespeeld",
     "agenda": "Agenda van vandaag",
     "attended": "Aanwezig",
     "agendaLoading": "Rooster laden…",
@@ -796,6 +802,179 @@
     "actions": {
       "resolve": "Oplossen",
       "retry": "Opnieuw proberen"
+    }
+  },
+  "minigames": {
+    "sidebar": {
+      "title": "Minigames"
+    },
+    "comingSoon": "Binnenkort",
+    "playNow": "Speel nu",
+    "nerdle": {
+      "name": "Nerdle"
+    },
+    "sudoku": {
+      "name": "Sudoku"
+    },
+    "quiz": {
+      "name": "Quiz"
+    }
+  },
+  "nerdle": {
+    "subtitle": "Raad de vergelijking van vandaag",
+    "enter": "Invoer",
+    "howToPlay": {
+      "title": "Hoe te spelen",
+      "intro": "Raad de verborgen vergelijking in 6 pogingen. Elke gok moet een wiskundig correcte vergelijking zijn.",
+      "rule": {
+        "correct": {
+          "label": "Juiste positie",
+          "desc": "Het karakter staat in de vergelijking op de juiste positie."
+        },
+        "present": {
+          "label": "Verkeerde positie",
+          "desc": "Het karakter staat in de vergelijking maar op de verkeerde positie."
+        },
+        "absent": {
+          "label": "Niet aanwezig",
+          "desc": "Het karakter komt niet voor in de vergelijking."
+        }
+      },
+      "rules": {
+        "1": "Elke gok moet een geldige vergelijking zijn (bv. 10+5=15).",
+        "2": "De vergelijking moet precies één = teken bevatten.",
+        "3": "De rechterkant moet een geheel getal zijn.",
+        "4": "Geen voorloopnullen (bv. 01 is niet toegestaan).",
+        "5": "Elke dag is er een nieuwe puzzel beschikbaar.",
+        "title": "Regels"
+      }
+    },
+    "leaderboard": {
+      "empty": "Nog niemand heeft vandaag gespeeld."
+    },
+    "error": {
+      "loadFailed": "Kon de puzzel niet laden.",
+      "tooShort": "Vul alle vakjes in voor het indienen.",
+      "invalidEquation": "Ongeldige vergelijking. Controleer de wiskunde."
+    },
+    "result": {
+      "won": "Goed gedaan!",
+      "wonSub": "Kom morgen terug voor een nieuwe uitdaging.",
+      "lost": "Beter geluk volgende keer.",
+      "lostSub": "Morgen wacht er een nieuwe puzzel.",
+      "close": "Sluiten",
+      "attempts": "Opgelost in {{n}} pogingen"
+    }
+  },
+  "minesweeper": {
+    "subtitle": "Elke dag een nieuw veld. Één kans.",
+    "toolbar": {
+      "reveal": "Onthullen",
+      "flag": "Markeren",
+      "rightClickHint": "Rechtermuisknop = vlag"
+    },
+    "stats": {
+      "flagged": "gemarkeerd"
+    },
+    "error": {
+      "loadFailed": "Kon het spel niet laden.",
+      "invalidMove": "Ongeldige zet."
+    },
+    "result": {
+      "won": "Gewonnen!",
+      "wonSub": "Je hebt alle mijnen gevonden!",
+      "lost": "Boem!",
+      "lostSub": "Je hebt een mijn geraakt. Probeer het morgen opnieuw.",
+      "close": "Sluiten"
+    },
+    "howToPlay": {
+      "title": "Hoe speel je?",
+      "intro": "Onthul alle vakjes zonder een mijn te raken. Gebruik de cijfers om te achterhalen waar de mijnen zich bevinden.",
+      "rule": {
+        "hidden": {
+          "label": "Verborgen vakje",
+          "desc": "Klik om te onthullen. Rechtsklik om een vlag te plaatsen."
+        },
+        "number": {
+          "label": "Cijfer",
+          "desc": "Geeft aan hoeveel mijnen er rondom dat vakje liggen."
+        },
+        "flag": {
+          "label": "Vlag",
+          "desc": "Markeer een vakje waarvan je denkt dat er een mijn onder ligt."
+        },
+        "mine": {
+          "label": "Mijn",
+          "desc": "Als je hierop klikt, is het spel voorbij."
+        },
+        "chord": {
+          "label": "Chord klik",
+          "desc": "Klik op een onthuld getal waarvan alle buren al gevlagd zijn om de resterende buren automatisch te onthullen."
+        }
+      },
+      "rules": {
+        "1": "16×16 raster met 40 mijnen.",
+        "2": "Klik om een vakje te onthullen. Lege vakjes worden automatisch uitgebreid.",
+        "3": "Rechtsklik (of schakel naar vlagmodus) om een mijn te markeren.",
+        "4": "Onthul alle veilige vakjes om te winnen en kudos te verdienen!",
+        "5": "Chord: klik op een getal waarvan het aantal vlaggen rondom klopt om de rest automatisch te onthullen.",
+        "title": "Regels"
+      }
+    }
+  },
+  "sudoku": {
+    "subtitle": "Dagelijks puzzel • Eén per dag",
+    "toolbar": {
+      "selectCell": "Selecteer een cel, typ dan een cijfer",
+      "erase": "Wissen",
+      "eraseHint": "Druk op Delete of Backspace om te wissen"
+    },
+    "stats": {
+      "moves": "zetten",
+      "conflicts": "conflicten"
+    },
+    "howToPlay": {
+      "title": "Hoe speel je",
+      "intro": "Vul het 9×9-raster zo in dat elke rij, kolom en 3×3-blok de cijfers 1–9 exact één keer bevat.",
+      "rule": {
+        "given": {
+          "label": "Gegeven cijfers",
+          "desc": "Vetgedrukte cijfers zijn vooraf ingevuld en kunnen niet worden gewijzigd."
+        },
+        "empty": {
+          "label": "Lege cellen",
+          "desc": "Klik op een lege cel om hem te selecteren, typ dan een cijfer (1–9) om het in te vullen."
+        },
+        "filled": {
+          "label": "Jouw cijfer",
+          "desc": "Cijfers die jij hebt ingevoerd. Druk op Delete of Backspace om een cel te wissen."
+        },
+        "conflict": {
+          "label": "Conflict",
+          "desc": "Een rode cel schendt een rij-, kolom- of blok-regel. Verbeter hem om de puzzel op te lossen."
+        },
+        "selected": {
+          "label": "Geselecteerde cel",
+          "desc": "De gemarkeerde cel is momenteel geselecteerd. Overeenkomende cijfers worden ook gemarkeerd."
+        }
+      },
+      "rules": {
+        "1": "Elke rij moet de cijfers 1–9 bevatten zonder herhaling.",
+        "2": "Elke kolom moet de cijfers 1–9 bevatten zonder herhaling.",
+        "3": "Elk van de negen 3×3-blokken moet de cijfers 1–9 bevatten zonder herhaling.",
+        "4": "Gegeven (vetgedrukte) cijfers zijn vast — je kunt ze niet wissen.",
+        "5": "De puzzel is elke dag voor iedereen hetzelfde en wordt dagelijks vernieuwd.",
+        "title": "Regels"
+      }
+    },
+    "result": {
+      "won": "Puzzel opgelost!",
+      "wonSub": "Je hebt de dagelijkse Sudoku voltooid.",
+      "close": "Sluiten"
+    },
+    "error": {
+      "loadFailed": "Ophalen van de dagelijkse puzzel mislukt.",
+      "invalidMove": "Ongeldige zet."
     }
   }
 }

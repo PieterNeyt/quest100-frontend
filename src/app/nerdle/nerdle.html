@@ -1,0 +1,205 @@
+<div class="nerdle-page">
+
+  <div class="header-title-row">
+    <button class="btn-back" (click)="goBack()">
+      <ng-icon hlm name="lucideArrowLeft" size="sm" />
+    </button>
+    <h1 class="header-title">{{ t.t('gotcha.settings.title') }}</h1>
+  </div>
+
+  <!-- Header-->
+  <div class="nerdle-header">
+    <div class="nerdle-header-left">
+      <div class="nerdle-logo">
+        <span class="logo-tile correct">8</span>
+        <span class="logo-tile present">+</span>
+        <span class="logo-tile correct">4</span>
+        <span class="logo-tile absent">=</span>
+      </div>
+      <div>
+        <h1 class="nerdle-title">Nerdle</h1>
+        <p class="nerdle-subtitle">{{ t.t('nerdle.subtitle') }}</p>
+      </div>
+    </div>
+
+    <button class="btn-icon" (click)="showHowToPlay.set(true)" [title]="t.t('nerdle.howToPlay.title')">
+      <ng-icon hlm name="lucideCircleHelp" size="sm" />
+    </button>
+  </div>
+
+  <!-- Loading  -->
+  @if (gameState() === 'loading') {
+    <div class="nerdle-loading">
+      <div class="loading-spinner"></div>
+    </div>
+  }
+
+  <!-- Error Toast  -->
+  @if (errorMessage()) {
+    <div class="error-toast" role="alert">{{ errorMessage() }}</div>
+  }
+
+  <!-- Game Board -->
+  @if (gameState() !== 'loading') {
+    <div class="nerdle-board">
+      @for (row of rows(); track $index; let rowIdx = $index) {
+        <div
+          class="guess-row"
+          [class.shake]="shakeRow() === rowIdx"
+          [class.flip]="flipRow() === rowIdx"
+        >
+          @for (col of row.chars; track $index; let colIdx = $index) {
+            <div
+              class="tile"
+              [class.tile-correct]="getTileColor(rowIdx, colIdx) === 'correct'"
+              [class.tile-present]="getTileColor(rowIdx, colIdx) === 'present'"
+              [class.tile-absent]="getTileColor(rowIdx, colIdx) === 'absent'"
+              [class.tile-active]="isCurrentTile(rowIdx, colIdx)"
+              [class.tile-filled]="getTileChar(rowIdx, colIdx) !== ''"
+              [class.tile-clickable]="isClickableRow(rowIdx)"
+              [style.animation-delay]="row.submitted ? colIdx * 80 + 'ms' : '0ms'"
+              (click)="clickTile(rowIdx, colIdx)"
+            >
+              {{ getTileChar(rowIdx, colIdx) }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Keyboard -->
+  @if (gameState() !== 'loading') {
+    <div class="nerdle-keyboard">
+      <div class="keyboard-row">
+        @for (key of ['1','2','3','4','5','6','7','8','9','0']; track key) {
+          <button
+            class="key"
+            [class.key-correct]="getKeyColor(key) === 'correct'"
+            [class.key-present]="getKeyColor(key) === 'present'"
+            [class.key-absent]="getKeyColor(key) === 'absent'"
+            [disabled]="gameState() !== 'playing'"
+            (click)="pressKey(key)"
+          >{{ key }}</button>
+        }
+      </div>
+      <div class="keyboard-row">
+        @for (key of ['+','-','*','/','=']; track key) {
+          <button
+            class="key key-op"
+            [class.key-correct]="getKeyColor(key) === 'correct'"
+            [class.key-present]="getKeyColor(key) === 'present'"
+            [class.key-absent]="getKeyColor(key) === 'absent'"
+            [disabled]="gameState() !== 'playing'"
+            (click)="pressKey(key)"
+          >{{ key }}</button>
+        }
+        <button class="key key-action" [disabled]="gameState() !== 'playing'" (click)="pressDelete()">
+          <ng-icon hlm name="lucideDelete" size="sm" />
+        </button>
+        <button class="key key-enter" [disabled]="gameState() !== 'playing'" (click)="pressEnter()">
+          {{ t.t('nerdle.enter') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Result Popup-->
+  @if (showResultPopup()) {
+    <div class="popup-backdrop" (click)="closePopup()">
+      <div
+        class="popup"
+        [class.popup-won]="gameState() === 'won'"
+        [class.popup-lost]="gameState() === 'lost'"
+        (click)="$event.stopPropagation()"
+      >
+        @if (gameState() === 'won') {
+          <div class="popup-icon popup-icon-won">
+            <ng-icon hlm name="lucidePartyPopper" size="xl" />
+          </div>
+          <h2 class="popup-title">{{ t.t('nerdle.result.won') }}</h2>
+          <p class="popup-subtitle">{{ t.t('nerdle.result.wonSub') }}</p>
+
+          @if (kudosEarned() > 0) {
+            <div class="kudos-badge">
+              <ng-icon hlm name="lucideStar" size="xs" />
+              <span class="kudos-plus">+{{ kudosEarned() }}</span>
+              <span class="kudos-label">kudos</span>
+            </div>
+          }
+        }
+
+        @if (gameState() === 'lost') {
+          <div class="popup-icon popup-icon-lost">
+            <ng-icon hlm name="lucideHeartCrack" size="xl" />
+          </div>
+          <h2 class="popup-title">{{ t.t('nerdle.result.lost') }}</h2>
+          <p class="popup-subtitle">{{ t.t('nerdle.result.lostSub') }}</p>
+        }
+
+        <button class="popup-close" (click)="closePopup()">
+          {{ t.t('nerdle.result.close') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- How To Play Panel  -->
+  @if (showHowToPlay()) {
+    <div class="popup-backdrop" (click)="showHowToPlay.set(false)">
+      <div class="popup popup-info" (click)="$event.stopPropagation()">
+
+        <div class="popup-header">
+          <h2 class="popup-title">{{ t.t('nerdle.howToPlay.title') }}</h2>
+          <button class="btn-icon" (click)="showHowToPlay.set(false)">
+            <ng-icon hlm name="lucideX" size="sm" />
+          </button>
+        </div>
+
+        <p class="popup-intro">{{ t.t('nerdle.howToPlay.intro') }}</p>
+
+        <!-- Tile legend -->
+        <div class="htp-legend">
+          <div class="htp-row">
+            <span class="htp-tile tile-correct">5</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('nerdle.howToPlay.rule.correct.label') }}</strong>
+              <span>{{ t.t('nerdle.howToPlay.rule.correct.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-tile tile-present">+</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('nerdle.howToPlay.rule.present.label') }}</strong>
+              <span>{{ t.t('nerdle.howToPlay.rule.present.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-tile tile-absent">3</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('nerdle.howToPlay.rule.absent.label') }}</strong>
+              <span>{{ t.t('nerdle.howToPlay.rule.absent.desc') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rules list -->
+        <div class="htp-rules">
+          <p class="htp-rules-title">{{ t.t('nerdle.howToPlay.rules.title') }}</p>
+          <ul>
+            <li>{{ t.t('nerdle.howToPlay.rules.1') }}</li>
+            <li>{{ t.t('nerdle.howToPlay.rules.2') }}</li>
+            <li>{{ t.t('nerdle.howToPlay.rules.3') }}</li>
+            <li>{{ t.t('nerdle.howToPlay.rules.4') }}</li>
+            <li>{{ t.t('nerdle.howToPlay.rules.5') }}</li>
+          </ul>
+        </div>
+
+        <button class="popup-close" (click)="showHowToPlay.set(false)">
+          {{ t.t('nerdle.result.close') }}
+        </button>
+      </div>
+    </div>
+  }
+
+</div>
