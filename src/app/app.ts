@@ -18,7 +18,7 @@ import {
   lucideUser,
   lucideX,
   lucideZap,
-  lucideHelpCircle
+  lucideHelpCircle, lucideGamepad2, lucideCalculator, lucideGrid3x3, lucideBrain, lucideChevronDown
 } from '@ng-icons/lucide';
 import {environment} from '../environments/environment';
 import {Language, TranslationService} from './services/translationService';
@@ -27,10 +27,10 @@ import {jwtDecode} from 'jwt-decode';
 import {RoleService} from './services/roleService';
 import {TourService} from './services/tourService';
 import {GotchaStateService} from './services/GotchaStateService';
+import {Role} from './model/role';
 import {NoClassModalComponent} from './noclass/no-class-modal';
 
-type MenuState = 'languages' | 'user' | 'mobile' | null;
-
+type MenuState = 'languages' | 'user' | 'mobile' | 'minigames' | null;
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -45,7 +45,12 @@ type MenuState = 'languages' | 'user' | 'mobile' | null;
       lucideX,
       lucideZap,
       lucideChevronRight,
-      lucideHelpCircle
+      lucideHelpCircle,
+      lucideGamepad2,
+      lucideCalculator,
+      lucideGrid3x3,
+      lucideBrain,
+      lucideChevronDown,
     })
   ],
   templateUrl: './app.html',
@@ -55,8 +60,6 @@ export class App implements OnInit, OnDestroy {
   loginDisplay = signal(false);
   isIframe = signal(false);
   showLanguageDropdown = signal(false);
-  showUserDropdown = signal(false);
-  isMobileMenuOpen = signal(false);
   activeMenu = signal<MenuState>(null);
   private readonly gotchaState = inject(GotchaStateService);
   private readonly tourService = inject(TourService);
@@ -70,6 +73,7 @@ export class App implements OnInit, OnDestroy {
   profile = this.profileService.profile;
   roleService = inject(RoleService);
   public translationService = inject(TranslationService);
+  public role = Role;
   showNoClassModal = this.profileService.showNoClassModal;
 
   private setLoginDisplay() {

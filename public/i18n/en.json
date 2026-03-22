@@ -10,6 +10,17 @@
   },
   "home": {
     "title": "Welcome back",
+    "agenda": "Today's Agenda",
+    "miniGames": "Mini-games",
+    "miniGamesKudoHint": "Earn daily kudos",
+    "nerdleDesc": "Guess the equation",
+    "minesweeperDesc": "Clear the minefield",
+    "sudokuDesc": "Fill in the grid",
+    "played": "Played",
+    "attended": "Attended",
+    "agendaLoading": "Loading your schedule…",
+    "agendaEmpty": "No classes scheduled for today.",
+    "agendaUnknownCourse": "Unknown Course",
     "subtitle": "Here you'll find the most important links and your personal statistics.",
     "myProfile": "My Profile",
     "games": "Games",
@@ -790,6 +801,179 @@
     "actions": {
       "resolve": "Resolve",
       "retry": "Try again"
+    }
+  },
+  "minigames": {
+    "sidebar": {
+      "title": "Mini Games"
+    },
+    "comingSoon": "Coming soon",
+    "playNow": "Play now",
+    "nerdle": {
+      "name": "Nerdle"
+    },
+    "sudoku": {
+      "name": "Sudoku"
+    },
+    "quiz": {
+      "name": "Quiz"
+    }
+  },
+  "nerdle": {
+    "subtitle": "Guess today's equation",
+    "enter": "Enter",
+    "howToPlay": {
+      "title": "How to play",
+      "intro": "Guess the hidden equation in 6 tries. Each guess must be a mathematically correct equation.",
+      "rule": {
+        "correct": {
+          "label": "Correct position",
+          "desc": "The character is in the equation and in the right spot."
+        },
+        "present": {
+          "label": "Wrong position",
+          "desc": "The character is in the equation but in the wrong spot."
+        },
+        "absent": {
+          "label": "Not in the equation",
+          "desc": "The character is not in the equation at all."
+        }
+      },
+      "rules": {
+        "1": "Every guess must be a valid equation (e.g. 10+5=15).",
+        "2": "The equation must contain exactly one = sign.",
+        "3": "The right-hand side must be a plain integer.",
+        "4": "No leading zeros (e.g. 01 is not allowed).",
+        "5": "A new puzzle is available every day.",
+        "title": "Rules"
+      }
+    },
+    "leaderboard": {
+      "empty": "Nobody has played today yet."
+    },
+    "error": {
+      "loadFailed": "Could not load the puzzle.",
+      "tooShort": "Fill in all tiles before submitting.",
+      "invalidEquation": "Invalid equation. Check your math."
+    },
+    "result": {
+      "won": "Well done!",
+      "wonSub": "Come back tomorrow for a new challenge.",
+      "lost": "Better luck next time.",
+      "lostSub": "A new puzzle is waiting tomorrow.",
+      "close": "Close",
+      "attempts": "Solved in {{n}} attempts"
+    }
+  },
+  "minesweeper": {
+    "subtitle": "A new field every day. One chance.",
+    "toolbar": {
+      "reveal": "Reveal",
+      "flag": "Flag",
+      "rightClickHint": "Right-click = flag"
+    },
+    "stats": {
+      "flagged": "flagged"
+    },
+    "error": {
+      "loadFailed": "Failed to load the game.",
+      "invalidMove": "Invalid move."
+    },
+    "result": {
+      "won": "You won!",
+      "wonSub": "You cleared all the mines!",
+      "lost": "Boom!",
+      "lostSub": "You hit a mine. Try again tomorrow.",
+      "close": "Close"
+    },
+    "howToPlay": {
+      "title": "How to play",
+      "intro": "Reveal all safe cells without hitting a mine. Use the numbers to figure out where mines are hiding.",
+      "rule": {
+        "hidden": {
+          "label": "Hidden cell",
+          "desc": "Click to reveal. Right-click to place a flag."
+        },
+        "number": {
+          "label": "Number",
+          "desc": "Shows how many mines are adjacent to that cell."
+        },
+        "flag": {
+          "label": "Flag",
+          "desc": "Mark a cell you suspect hides a mine."
+        },
+        "mine": {
+          "label": "Mine",
+          "desc": "Click on one and the game is over."
+        },
+        "chord": {
+          "label": "Chord click",
+          "desc": "Click a revealed number whose neighbours are all flagged to automatically reveal the remaining hidden neighbours."
+        }
+      },
+      "rules": {
+        "1": "16×16 grid with 40 mines.",
+        "2": "Click to reveal a cell. Empty cells cascade automatically.",
+        "3": "Right-click (or switch to flag mode) to mark a suspected mine.",
+        "4": "Reveal all safe cells to win and earn kudos!",
+        "5": "Chord: click a number whose surrounding flag count matches it to auto-reveal the rest.",
+        "title": "Rules"
+      }
+    }
+  },
+  "sudoku": {
+    "subtitle": "Daily puzzle • One per day",
+    "toolbar": {
+      "selectCell": "Select a cell, then type a number",
+      "erase": "Erase",
+      "eraseHint": "Press Delete or Backspace to erase"
+    },
+    "stats": {
+      "moves": "moves",
+      "conflicts": "conflicts"
+    },
+    "howToPlay": {
+      "title": "How to Play",
+      "intro": "Fill the 9×9 grid so every row, column and 3×3 box contains the digits 1–9 exactly once.",
+      "rule": {
+        "given": {
+          "label": "Given digits",
+          "desc": "Bold digits are pre-filled and cannot be changed."
+        },
+        "empty": {
+          "label": "Empty cells",
+          "desc": "Click an empty cell to select it, then type a digit (1–9) to fill it in."
+        },
+        "filled": {
+          "label": "Your digit",
+          "desc": "Digits you have entered. Press Delete or Backspace to clear a cell."
+        },
+        "conflict": {
+          "label": "Conflict",
+          "desc": "A red cell violates a row, column or box rule. Fix it to solve the puzzle."
+        },
+        "selected": {
+          "label": "Selected cell",
+          "desc": "The highlighted cell is currently selected. All matching digits are also highlighted."
+        }
+      },
+      "rules": {
+        "1": "Each row must contain digits 1–9 with no repetition.",
+        "2": "Each column must contain digits 1–9 with no repetition.",
+        "3": "Each of the nine 3×3 boxes must contain digits 1–9 with no repetition.",
+        "4": "Given (bold) digits are fixed — you cannot erase them.",
+        "5": "The puzzle is the same for everyone and resets every day.",
+        "title": "Rules"
+      }
+    },
+    "result": {
+      "won": "Puzzle Solved!",
+      "wonSub": "You completed today's Sudoku.",
+      "close": "Close"
+    },
+    "error": {
+      "loadFailed": "Failed to load today's puzzle.",
+      "invalidMove": "Invalid move."
     }
   }
 }

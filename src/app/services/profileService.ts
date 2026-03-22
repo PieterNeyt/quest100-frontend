@@ -14,6 +14,7 @@ import {
 import {Language, TranslationService} from './translationService';
 import {InteractionRequiredAuthError} from '@azure/msal-browser';
 import {Asset, Category} from '../model/avatar';
+import {AgendaItem} from '../model/agenda';
 
 @Injectable({
   providedIn: 'root',
@@ -165,5 +166,8 @@ export class ProfileService {
   }
   getLastKudosEntries(): Observable<KudosEntry[]> {
     return this.http.get<KudosEntry[]>(`/api/profiles/kudos/recent`);
+  }
+  getTodayAgenda(): Observable<AgendaItem[]> {
+    return this.http.get<AgendaItem[]>(`/api/profiles/agenda`);
   }
 }

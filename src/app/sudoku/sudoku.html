@@ -1,0 +1,191 @@
+<div class="sd-page">
+
+  <div class="header-title-row">
+    <button class="btn-back" (click)="goBack()">
+      <ng-icon hlm name="lucideArrowLeft" size="sm" />
+    </button>
+    <h1 class="header-title">{{ t.t('gotcha.settings.title') }}</h1>
+  </div>
+
+  <!-- Header -->
+  <div class="sd-header">
+    <div class="sd-header-left">
+      <div class="sd-logo">
+        <ng-icon hlm name="lucideGrid3x3" class="sd-logo-icon" />
+      </div>
+      <div>
+        <h1 class="sd-title">Sudoku</h1>
+        <p class="sd-subtitle">{{ t.t('sudoku.subtitle') }}</p>
+      </div>
+    </div>
+    <div class="sd-header-right">
+      @if (conflictCount() > 0 && gameState() === 'playing') {
+        <div class="sd-stat-badge sd-stat-badge-conflict">
+          <ng-icon hlm name="lucideTriangleAlert" class="sd-stat-icon" />
+          <span class="sd-stat-value">{{ conflictCount() }}</span>
+        </div>
+      }
+      <button class="btn-icon" (click)="showHowToPlay.set(true)" [title]="t.t('sudoku.howToPlay.title')">
+        <ng-icon hlm name="lucideCircleHelp" size="sm" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (gameState() === 'loading') {
+    <div class="sd-loading">
+      <div class="loading-spinner"></div>
+    </div>
+  }
+
+  <!-- Error Toast -->
+  @if (errorMessage()) {
+    <div class="error-toast" role="alert">{{ errorMessage() }}</div>
+  }
+
+  <!-- Game -->
+  @if (gameState() !== 'loading') {
+
+    <!-- Board -->
+    <div class="sd-board" [class.sd-board-won]="gameState() === 'won'">
+      @for (row of gridIndices; track row) {
+        <div class="sd-row" [class.sd-row-box-bottom]="isBoxBorderBottom(row)">
+          @for (col of gridIndices; track col) {
+            <div
+              class="sd-cell"
+              [ngClass]="getCellClass(row, col)"
+              [class.sd-cell-box-right]="isBoxBorderRight(col)"
+              (click)="onCellClick(row, col)"
+            >
+              @if ((playerBoard()[row]?.[col] ?? 0) !== 0) {
+                {{ playerBoard()[row][col] }}
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Digit pad (always visible, handy for touch) -->
+    <div class="sd-digit-pad">
+      @for (d of [1,2,3,4,5,6,7,8,9]; track d) {
+        <button class="digit-btn" (click)="onDigitPad(d)">{{ d }}</button>
+      }
+      <button class="digit-btn digit-btn-erase" (click)="onDigitPad(0)" [title]="t.t('sudoku.toolbar.eraseHint')">
+        <ng-icon hlm name="lucideEraser" size="sm" />
+      </button>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="sd-stats-bar">
+      <span class="sd-stat-pill">
+        <ng-icon hlm name="lucideHash" size="xs" />
+        {{ moveCount() }} {{ t.t('sudoku.stats.moves') }}
+      </span>
+      @if (conflictCount() > 0) {
+        <span class="sd-stat-pill sd-stat-pill-conflict">
+          <ng-icon hlm name="lucideTriangleAlert" size="xs" />
+          {{ conflictCount() }} {{ t.t('sudoku.stats.conflicts') }}
+        </span>
+      }
+    </div>
+  }
+
+  <!-- Result Popup -->
+  @if (showResultPopup()) {
+    <div class="popup-backdrop" (click)="closePopup()">
+      <div
+        class="popup popup-won"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="popup-icon popup-icon-won">
+          <ng-icon hlm name="lucidePartyPopper" size="xl" />
+        </div>
+        <h2 class="popup-title">{{ t.t('sudoku.result.won') }}</h2>
+        <p class="popup-subtitle">{{ t.t('sudoku.result.wonSub') }}</p>
+
+        @if (kudosEarned() > 0) {
+          <div class="kudos-badge">
+            <ng-icon hlm name="lucideStar" size="xs" />
+            <span class="kudos-plus">+{{ kudosEarned() }}</span>
+            <span class="kudos-label">kudos</span>
+          </div>
+        }
+
+        <button class="popup-close" (click)="closePopup()">
+          {{ t.t('sudoku.result.close') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- How To Play -->
+  @if (showHowToPlay()) {
+    <div class="popup-backdrop" (click)="showHowToPlay.set(false)">
+      <div class="popup popup-info" (click)="$event.stopPropagation()">
+        <div class="popup-header">
+          <h2 class="popup-title">{{ t.t('sudoku.howToPlay.title') }}</h2>
+          <button class="btn-icon" (click)="showHowToPlay.set(false)">
+            <ng-icon hlm name="lucideX" size="sm" />
+          </button>
+        </div>
+
+        <p class="popup-intro">{{ t.t('sudoku.howToPlay.intro') }}</p>
+
+        <div class="htp-legend">
+          <div class="htp-row">
+            <span class="htp-cell cell-given-demo">5</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('sudoku.howToPlay.rule.given.label') }}</strong>
+              <span>{{ t.t('sudoku.howToPlay.rule.given.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-empty-demo"></span>
+            <div class="htp-desc">
+              <strong>{{ t.t('sudoku.howToPlay.rule.empty.label') }}</strong>
+              <span>{{ t.t('sudoku.howToPlay.rule.empty.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-filled-demo">3</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('sudoku.howToPlay.rule.filled.label') }}</strong>
+              <span>{{ t.t('sudoku.howToPlay.rule.filled.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-conflict-demo">7</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('sudoku.howToPlay.rule.conflict.label') }}</strong>
+              <span>{{ t.t('sudoku.howToPlay.rule.conflict.desc') }}</span>
+            </div>
+          </div>
+          <div class="htp-row">
+            <span class="htp-cell cell-selected-demo">2</span>
+            <div class="htp-desc">
+              <strong>{{ t.t('sudoku.howToPlay.rule.selected.label') }}</strong>
+              <span>{{ t.t('sudoku.howToPlay.rule.selected.desc') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="htp-rules">
+          <p class="htp-rules-title">{{ t.t('sudoku.howToPlay.rules.title') }}</p>
+          <ul>
+            <li>{{ t.t('sudoku.howToPlay.rules.1') }}</li>
+            <li>{{ t.t('sudoku.howToPlay.rules.2') }}</li>
+            <li>{{ t.t('sudoku.howToPlay.rules.3') }}</li>
+            <li>{{ t.t('sudoku.howToPlay.rules.4') }}</li>
+            <li>{{ t.t('sudoku.howToPlay.rules.5') }}</li>
+          </ul>
+        </div>
+
+        <button class="popup-close" (click)="showHowToPlay.set(false)">
+          {{ t.t('sudoku.result.close') }}
+        </button>
+      </div>
+    </div>
+  }
+
+</div>
