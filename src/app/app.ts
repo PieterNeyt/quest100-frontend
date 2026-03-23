@@ -28,12 +28,13 @@ import {RoleService} from './services/roleService';
 import {TourService} from './services/tourService';
 import {GotchaStateService} from './services/GotchaStateService';
 import {Role} from './model/role';
+import {NoClassModalComponent} from './noclass/no-class-modal';
 
 type MenuState = 'languages' | 'user' | 'mobile' | 'minigames' | null;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster],
+  imports: [RouterOutlet, HlmNavigationMenuImports, RouterLink, HlmIconImports, HlmAvatarImports, CommonModule, NgxSonnerToaster, NoClassModalComponent],
   providers: [
     provideIcons({
       lucideUser,
@@ -73,6 +74,7 @@ export class App implements OnInit, OnDestroy {
   roleService = inject(RoleService);
   public translationService = inject(TranslationService);
   public role = Role;
+  showNoClassModal = this.profileService.showNoClassModal;
 
   private setLoginDisplay() {
     this.loginDisplay.set(this.authService.instance.getAllAccounts().length > 0);
@@ -150,7 +152,6 @@ export class App implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logoutRedirect();
-    this.roleService.roles.set([])
   }
 
   async changeLanguage(lang: Language): Promise<void> {

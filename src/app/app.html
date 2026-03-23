@@ -14,6 +14,8 @@
         <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/reports/dashboard" class="nav-link">Reports</a>
         </li>
       }
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/reports/dashboard" class="nav-link">Reports</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/leaderboard" class="nav-link">Leaderboard</a></li>
     </ul>
   </div>
 
@@ -139,6 +141,11 @@
       }
     </nav>
   </div>
+}
+
+<!-- Blocking modal — shown when the synced profile has no class assigned yet -->
+@if (showNoClassModal()) {
+  <app-no-class-modal />
 }
 
 <main class="main">

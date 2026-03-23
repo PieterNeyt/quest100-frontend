@@ -1,6 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, EMPTY, firstValueFrom, map, Observable, switchMap, throwError} from 'rxjs';
+import {catchError, EMPTY, firstValueFrom, map, Observable, switchMap, tap, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../environments/environment';
 import {
@@ -58,20 +58,23 @@ export class ProfileService {
   proxyAssetUrl(originalUrl: string): string {
     return `/api/profiles/proxy/asset?url=${encodeURIComponent(originalUrl)}`;
   }
+// In your service/component — add this signal:
+  showNoClassModal = signal(false);
+
   syncUser() {
-    this.authService.acquireTokenSilent({scopes: ["User.Read"]})
+    this.authService.acquireTokenSilent({ scopes: ['User.Read'] })
       .pipe(
         catchError(error => {
           if (error instanceof InteractionRequiredAuthError) {
-            this.authService.acquireTokenRedirect({scopes: ["User.Read"]});
+            this.authService.acquireTokenRedirect({ scopes: ['User.Read'] });
             return EMPTY;
           }
           return throwError(() => error);
         }),
         switchMap(response => {
           const graphToken = response.accessToken;
-          return this.http.get<SyncProfileResponse>("/api/profiles/sync", {
-            headers: {'X-Graph-Token': graphToken}
+          return this.http.get<SyncProfileResponse>('/api/profiles/sync', {
+            headers: { 'X-Graph-Token': graphToken }
           });
         })
       )
@@ -86,12 +89,26 @@ export class ProfileService {
           } else {
             this.translationService.setLanguageFromProfile('en');
           }
+
+          if (!response.hasClass) {
+            this.showNoClassModal.set(true);
+          }
         },
         error: (error) => {
           console.error('Failed to sync user profile:', error);
           this.translationService.setLanguageFromProfile('en');
         }
       });
+  }
+
+
+  updateClass(classId: string): Observable<Profile> {
+    return this.http.put<Profile>(`/api/profiles/class`, { classId }).pipe(
+      tap((updated) => {
+        this.profile.set(updated);
+        this.showNoClassModal.set(false);
+      })
+    );
   }
 
   updateProfilePicture(base64Img: string): void {

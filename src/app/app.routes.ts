@@ -18,6 +18,7 @@ import {Dashboard} from './dashboard/dashboard';
 import {reportEvent} from './dashboard/report-event/report-event';
 import {reportChat} from './dashboard/report-chat/report-chat';
 import {ReportAward} from './dashboard/report-award/report-award';
+import {LeaderboardComponent} from './leaderboard/leaderboard';
 import {NerdlePageComponent} from './nerdle/nerdle';
 import {MinesweeperPageComponent} from './minesweeper/minesweeper';
 import {SudokuPageComponent} from './sudoku/sudoku';
@@ -60,4 +61,5 @@ export const routes: Routes = [
   { path: 'minigames/minesweeper', component: MinesweeperPageComponent, canActivate: [MsalGuard] },
   { path: 'minigames/sudoku', component: SudokuPageComponent, canActivate: [MsalGuard] },
 
+  {path: 'leaderboard', component: LeaderboardComponent, canActivate: [MsalGuard]},
 ];

@@ -1,0 +1,355 @@
+<div class="lb-header">
+  <div class="header-text">
+    <h1>{{ translationService.t('leaderboard.title') }}</h1>
+    <p>{{ translationService.t('leaderboard.subtitle') }}</p>
+  </div>
+  <button class="btn-create" (click)="openCreateModal()" [disabled]="loading()">
+    <ng-icon hlm name="lucidePlus" size="sm"/>
+    {{ translationService.t('leaderboard.newButton') }}
+  </button>
+</div>
+
+<div class="filter-bar">
+  <div class="search-wrap">
+    <ng-icon hlm name="lucideSearch" class="search-icon" size="sm"/>
+    <input
+      class="search-input"
+      type="text"
+      [placeholder]="translationService.t('leaderboard.searchPlaceholder')"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)"
+    />
+  </div>
+
+  <div class="sort-buttons">
+    <span class="sort-label">{{ translationService.t('leaderboard.sortLabel') }}</span>
+    <button
+      class="sort-btn"
+      [class.active]="sortBy() === 'startDate'"
+      (click)="toggleSort('startDate')"
+    >
+      {{ translationService.t('leaderboard.sortStartDate') }}
+      @if (sortBy() === 'startDate') {
+        <ng-icon
+          hlm
+          [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'"
+          size="xs"
+        />
+      }
+    </button>
+    <button
+      class="sort-btn"
+      [class.active]="sortBy() === 'endDate'"
+      (click)="toggleSort('endDate')"
+    >
+      {{ translationService.t('leaderboard.sortEndDate') }}
+      @if (sortBy() === 'endDate') {
+        <ng-icon
+          hlm
+          [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'"
+          size="xs"
+        />
+      }
+    </button>
+    <button
+      class="sort-btn"
+      [class.active]="sortBy() === 'prize'"
+      (click)="toggleSort('prize')"
+    >
+      {{ translationService.t('leaderboard.sortPrize') }}
+      @if (sortBy() === 'prize') {
+        <ng-icon
+          hlm
+          [name]="sortDir() === 'asc' ? 'lucideChevronUp' : 'lucideChevronDown'"
+          size="xs"
+        />
+      }
+    </button>
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="state-container">
+    <div class="spinner"></div>
+    <p>{{ translationService.t('leaderboard.loading') }}</p>
+  </div>
+}
+
+@if (error()) {
+  <div class="state-container">
+    <ng-icon hlm name="lucideCircleAlert" size="56" class="text-destructive"/>
+    <p class="error-text">{{ error() }}</p>
+    <button class="btn-create" (click)="loadData()">{{ translationService.t('leaderboard.retry') }}</button>
+  </div>
+}
+
+@if (!loading() && !error() && filteredLeaderboards().length === 0) {
+  <div class="state-container">
+    <ng-icon hlm name="lucideTrophy" size="56"/>
+    <p>{{ translationService.t('leaderboard.empty') }}</p>
+    <button class="btn-create" (click)="openCreateModal()">
+      {{ translationService.t('leaderboard.firstButton') }}
+    </button>
+  </div>
+}
+
+@if (!loading() && !error()) {
+  <div class="lb-grid">
+    @for (lb of filteredLeaderboards(); track lb.ID) {
+      <div
+        class="lb-card"
+        [class.lb-card--active]="isActive(lb)"
+        (click)="openStandingsModal(lb)"
+      >
+        <div
+          class="lb-status-badge"
+          [class.lb-status-badge--active]="isActive(lb)"
+        >
+          @if (isActive(lb)) {
+            <span class="status-dot"></span>
+            {{ translationService.t('leaderboard.statusActive') }}
+          } @else if (daysLeft(lb) === 0) {
+            {{ translationService.t('leaderboard.statusFinished') }}
+          } @else {
+            {{ translationService.t('leaderboard.statusPlanned') }}
+          }
+        </div>
+
+        <button
+          class="card-edit-btn"
+          (click)="openEditModal(lb, $event)"
+          [title]="translationService.t('leaderboard.editTooltip')"
+        >
+          <ng-icon hlm name="lucidePencil" size="sm"/>
+        </button>
+
+        <div class="lb-image-wrap">
+          @if (lb.Prize.PhotoURL) {
+            <img
+              class="lb-image"
+              [src]="lb.Prize.PhotoURL"
+              [alt]="lb.Prize.Name"
+              loading="lazy"
+              (error)="$any($event.target).style.display='none'; $any($event.target).nextElementSibling.style.display='flex'"
+            />
+            <div class="lb-image-placeholder" style="display:none">
+              <ng-icon hlm name="lucideTrophy" size="xl" class="placeholder-trophy"/>
+            </div>
+          } @else {
+            <div class="lb-image-placeholder">
+              <ng-icon hlm name="lucideTrophy" size="xl" class="placeholder-trophy"/>
+            </div>
+          }
+        </div>
+
+        <div class="lb-card-body">
+          <div class="lb-course">
+            <ng-icon hlm name="lucideGraduationCap" size="xs"/>
+            {{ courseName(lb.CourseId) }}
+          </div>
+
+          <h3 class="lb-prize-name">
+            {{ lb.Prize.Name || translationService.t('leaderboard.noPrize') }}
+          </h3>
+
+          @if (lb.Prize.Description) {
+            <p class="lb-prize-desc">{{ lb.Prize.Description }}</p>
+          }
+
+          <div class="lb-dates">
+            <span class="lb-date">
+              <ng-icon hlm name="lucideCalendarCheck" size="xs"/>
+              {{ formatDate(lb.StartDate) }}
+            </span>
+            <ng-icon hlm name="lucideArrowRight" size="xs" class="lb-arrow"/>
+            <span class="lb-date">
+              <ng-icon hlm name="lucideCalendarX" size="xs"/>
+              {{ formatDate(lb.EndDate) }}
+            </span>
+          </div>
+
+          <div class="lb-footer">
+            <span class="lb-classes">
+              <ng-icon hlm name="lucideUsers" size="xs"/>
+              <strong>{{ lb.Classes.length }}</strong> {{ translationService.t('leaderboard.classes') }}
+            </span>
+            @if (isActive(lb)) {
+              <span class="lb-days-left">
+                <ng-icon hlm name="lucideClock" size="xs"/>
+                {{ daysLeft(lb) }} {{ translationService.t('leaderboard.daysLeft') }}
+              </span>
+            }
+          </div>
+
+          <div class="lb-click-hint">
+            <ng-icon hlm name="lucideBarChart2" size="xs"/>
+            {{ translationService.t('leaderboard.viewStandings') }}
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
+
+
+@if (showCreateModal()) {
+  <div class="modal-overlay" (click)="closeCreateModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ translationService.t('leaderboard.createModal.title') }}</h2>
+        <button class="modal-close" (click)="closeCreateModal()">
+          <ng-icon hlm name="lucideX" size="sm"/>
+        </button>
+      </div>
+
+      <form class="modal-body" [formGroup]="createForm">
+        <div class="form-section-label">{{ translationService.t('leaderboard.createModal.sectionCourse') }}</div>
+
+        <div class="form-group">
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.courseLabel') }}</label>
+          <select
+            class="form-select"
+            formControlName="courseId"
+            (change)="createForm.get('courseId')!.setValue($any($event.target).value)"
+          >
+            <option value="">{{ translationService.t('leaderboard.createModal.coursePlaceholder') }}</option>
+            @for (course of courses(); track course.Id) {
+              <option [value]="course.Id">{{ course.Name }}</option>
+            }
+          </select>
+          @if (createForm.get('courseId')?.invalid && createForm.get('courseId')?.touched) {
+            <span class="form-error">{{ translationService.t('leaderboard.createModal.courseRequired') }}</span>
+          }
+        </div>
+
+        @if (availableClasses().length > 0) {
+          <div class="classes-preview">
+            <span class="classes-preview-label">
+              <ng-icon hlm name="lucideUsers" size="xs"/>
+              {{ translationService.t('leaderboard.createModal.classesLabel') }}
+            </span>
+            <div class="classes-chips">
+              @for (cls of availableClasses(); track cls.Id) {
+                <span class="class-chip">{{ cls.Name }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="form-divider"></div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.createModal.sectionPeriod') }}</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">{{ translationService.t('leaderboard.createModal.startDateLabel') }}</label>
+            <input class="form-input" type="date" formControlName="startDate"/>
+            @if (createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched) {
+              <span class="form-error">{{ translationService.t('leaderboard.createModal.startDateRequired') }}</span>
+            }
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ translationService.t('leaderboard.createModal.endDateLabel') }}</label>
+            <input class="form-input" type="date" formControlName="endDate"/>
+            @if (createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched) {
+              <span class="form-error">{{ translationService.t('leaderboard.createModal.endDateRequired') }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.createModal.sectionPrize') }}</div>
+
+        <div class="form-group">
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.prizeNameLabel') }}</label>
+          <input class="form-input" type="text" [placeholder]="translationService.t('leaderboard.createModal.prizeNamePlaceholder')" formControlName="prizeName"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.prizeDescLabel') }}</label>
+          <textarea class="form-textarea" [placeholder]="translationService.t('leaderboard.createModal.prizeDescPlaceholder')" rows="3" formControlName="prizeDescription"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.prizePhotoLabel') }}</label>
+          <input class="form-input" type="url" placeholder="https://..." formControlName="prizePhotoUrl"/>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()">{{ translationService.t('leaderboard.createModal.cancel') }}</button>
+          <button
+            type="button"
+            class="btn-create"
+            [disabled]="createForm.invalid || creating()"
+            (click)="submitCreate()"
+          >
+            @if (creating()) { <div class="btn-spinner"></div> }
+            {{ translationService.t('leaderboard.createModal.submit') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (showEditModal()) {
+  <div class="modal-overlay" (click)="closeEditModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ translationService.t('leaderboard.editModal.title') }}</h2>
+        <button class="modal-close" (click)="closeEditModal()">
+          <ng-icon hlm name="lucideX" size="sm"/>
+        </button>
+      </div>
+
+      <form class="modal-body" [formGroup]="editForm">
+        <div class="form-section-label">{{ translationService.t('leaderboard.editModal.sectionPeriod') }}</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">{{ translationService.t('leaderboard.editModal.startDateLabel') }}</label>
+            <input class="form-input" type="date" formControlName="startDate"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ translationService.t('leaderboard.editModal.endDateLabel') }}</label>
+            <input class="form-input" type="date" formControlName="endDate"/>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.editModal.sectionPrize') }}</div>
+
+        <div class="form-group">
+          <label class="form-label">{{ translationService.t('leaderboard.editModal.prizeNameLabel') }}</label>
+          <input class="form-input" type="text" formControlName="prizeName"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ translationService.t('leaderboard.editModal.prizeDescLabel') }}</label>
+          <textarea class="form-textarea" rows="3" formControlName="prizeDescription"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{{ translationService.t('leaderboard.editModal.prizePhotoLabel') }}</label>
+          <input class="form-input" type="url" formControlName="prizePhotoUrl"/>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeEditModal()">{{ translationService.t('leaderboard.editModal.cancel') }}</button>
+          <button
+            type="button"
+            class="btn-create"
+            [disabled]="saving()"
+            (click)="submitEdit()"
+          >
+            @if (saving()) { <div class="btn-spinner"></div> }
+            {{ translationService.t('leaderboard.editModal.submit') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (showStandingsModal() && standingsLeaderboard()) {
+  <app-leaderboard-modal
+    [leaderboard]="standingsLeaderboard()!"
+    [courses]="courses()"
+    (closed)="closeStandingsModal()"
+  />
+}

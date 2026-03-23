@@ -1,0 +1,258 @@
+@reference "../../styles.css";
+
+/* ---- Overlay ---- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---- Modal card ---- */
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: color-mix(in oklch, var(--card) 90%, transparent);
+  border: 1.5px solid var(--border);
+  border-bottom: 4px solid #5aaab4;
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(90, 170, 180, 0.08);
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* Teal top accent stripe */
+.modal-accent-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #5aaab4 0%, #8cc8d2 50%, #5aaab4 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ---- Inner padding ---- */
+.modal-inner {
+  padding: 2rem 2rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ---- Icon ---- */
+.modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  background: rgba(90, 170, 180, 0.1);
+  border: 1.5px solid rgba(90, 170, 180, 0.25);
+  color: #5aaab4;
+  align-self: center;
+}
+
+/* ---- Heading ---- */
+.modal-heading {
+  text-align: center;
+}
+
+.modal-heading h1 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: oklch(0.25 0.02 264);
+  letter-spacing: -0.4px;
+  line-height: 1.15;
+}
+
+.modal-heading p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: oklch(0.5 0.02 264);
+  line-height: 1.5;
+}
+
+/* ---- Form stack ---- */
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ---- Field group ---- */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: opacity 0.2s;
+}
+
+.field-group.field-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: oklch(0.35 0.02 264);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.field-label svg {
+  color: #5aaab4;
+  flex-shrink: 0;
+}
+
+/* ---- Select wrapper ---- */
+.select-wrap {
+  position: relative;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 0.7rem 2.5rem 0.7rem 0.95rem;
+  background: color-mix(in oklch, var(--card) 60%, transparent);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: oklch(0.25 0.02 264);
+  font-size: 0.9rem;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.custom-select:focus {
+  border-color: #5aaab4;
+  box-shadow: 0 0 0 3px rgba(90, 170, 180, 0.15);
+}
+
+.custom-select:disabled {
+  cursor: not-allowed;
+  background: color-mix(in oklch, var(--card) 40%, transparent);
+}
+
+.select-chevron {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5aaab4;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+/* ---- Hint text ---- */
+.field-hint {
+  font-size: 0.78rem;
+  color: oklch(0.6 0.02 264);
+  padding-left: 0.2rem;
+}
+
+/* ---- Submit button ---- */
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  background: #5aaab4;
+  color: white;
+  border: none;
+  border-bottom: 4px solid #4a8f98;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.1s, opacity 0.15s;
+  letter-spacing: 0.2px;
+  margin-top: 0.25rem;
+}
+
+.btn-submit:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.btn-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading state */
+.btn-submit.btn-loading {
+  opacity: 0.75;
+  cursor: wait;
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- Error message ---- */
+.error-msg {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1.5px solid rgba(239, 68, 68, 0.2);
+  border-radius: 10px;
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 520px) {
+  .modal-inner { padding: 1.5rem 1.25rem 1.75rem; }
+  .modal-heading h1 { font-size: 1.3rem; }
+}
