@@ -13,5 +13,5 @@ export const environment = {
     uri: `https://${uri}/api`,
     assetsUri: `https://${uri}/i18n`
   },
-  wsUrl: `ws://${uri}/`
+  wsUrl: `wss://${uri}/`
 };
