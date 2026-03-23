@@ -1,0 +1,222 @@
+@reference "../styles.css";
+@import '_variables';
+@import '_mixins';
+
+/* --- Basis Navigatie Reset --- */
+[hlmNavigationMenuList] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* --- Hoofdcontainer (Desktop & Tablet) --- */
+.navbar-container {
+  height: 64px;
+  @apply sticky top-4 z-50 flex items-center justify-between w-[95%] max-w-[1400px] mx-auto px-6 transition-all duration-300;
+
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .navbar-container {
+    @apply top-0 w-full max-w-none border-x-0 border-t-0 rounded-none px-4;
+    height: 60px;
+  }
+}
+
+.nav-section-left { @apply flex items-center gap-8 h-full; }
+.nav-links-left { @apply hidden lg:flex items-center gap-1 h-full; }
+.nav-section-right { @apply hidden lg:flex items-center justify-end gap-4 flex-nowrap h-full; }
+
+.logo-text-yellow {
+  @apply text-2xl font-black tracking-tighter;
+  color: var(--color-primary);
+  text-shadow: 0 0 15px var(--color-primary-alpha-30);
+}
+
+/* --- Hamburger Button --- */
+.mobile-menu-trigger {
+  @apply flex lg:hidden items-center justify-center p-1.5 rounded-lg transition-colors;
+  color: oklch(0.554 0.046 257.417);
+}
+.mobile-menu-trigger:hover {
+  background: var(--color-primary-alpha-10);
+  color: var(--color-primary);
+}
+.mobile-menu-trigger ng-icon {
+  @apply size-6;
+}
+
+/* --- Sidebar & Overlay --- */
+.mobile-backdrop {
+  @apply fixed inset-0 z-55 bg-black/60 backdrop-blur-sm lg:hidden;
+}
+
+.mobile-sidebar {
+  @apply fixed top-0 right-0 z-60 h-full w-[300px] lg:hidden flex flex-col p-6 shadow-2xl;
+  background: color-mix(in oklch, var(--card) 98%, black);
+  border-left: 1px solid var(--border);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.sidebar-header {
+  @apply flex items-center justify-between mb-8 pb-6;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-user-info {
+  @apply flex items-center gap-3;
+}
+
+.sidebar-nav {
+  @apply flex flex-col gap-2;
+}
+
+.sidebar-link {
+  @apply flex items-center p-3.5 rounded-xl text-base font-semibold transition-all;
+  color: oklch(0.554 0.046 257.417);
+}
+
+.sidebar-link:hover {
+  background: var(--color-primary-alpha-10);
+  color: var(--color-primary);
+}
+
+.sidebar-divider {
+  @apply h-px w-full bg-border my-4;
+}
+
+.sidebar-login-btn {
+  @apply w-full mt-4 py-3.5 rounded-xl font-bold text-center transition-transform active:scale-95;
+  background: var(--color-primary);
+  color: var(--color-text-white)fff;
+}
+
+.close-sidebar {
+  @apply p-1.5 rounded-full hover:bg-white/10 transition-colors text-muted-foreground;
+}
+
+/* --- Desktop Nav Links --- */
+.nav-link {
+  @apply text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200;
+  color: oklch(0.554 0.046 257.417);
+}
+.nav-link:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-alpha-10);
+}
+
+/* --- Dropdowns & Avatars --- */
+.dropdown-wrapper { @apply relative shrink-0 flex items-center h-full; }
+
+.nav-pill-button {
+  @apply flex items-center gap-2 px-3 h-10 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer outline-none border-none bg-transparent whitespace-nowrap;
+  color: oklch(0.554 0.046 257.417);
+}
+
+.custom-dropdown-menu {
+  @apply absolute top-[calc(100%+12px)] right-0 min-w-[180px] p-1.5 z-50;
+  background: color-mix(in oklch, var(--card) 95%, transparent);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
+}
+
+.dropdown-item-pill {
+  @apply flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer outline-none border-none bg-transparent;
+  color: oklch(0.554 0.046 257.417);
+  text-align: left;
+}
+.dropdown-item-pill:hover {
+  background: var(--color-primary-alpha-10);
+  color: var(--color-primary);
+}
+
+/* Avatar Styling */
+.user-avatar-trigger {
+  @apply cursor-pointer outline-none border-none bg-transparent p-0 transition-transform active:scale-95 flex items-center justify-center shrink-0;
+}
+.avatar-ring {
+  @apply p-0.5 rounded-full border-2 transition-all duration-200 flex items-center justify-center shrink-0;
+  border-color: var(--color-primary-alpha-30);
+  width: 42px;
+  height: 42px;
+}
+.user-avatar-circle {
+  @apply size-9 border border-white/10 rounded-full overflow-hidden shrink-0 flex items-center justify-center;
+  background: var(--color-primary);
+}
+
+.hlmAvatarFallback {
+  @apply flex items-center justify-center w-full h-full text-base font-black text-white uppercase leading-none;
+}
+
+/* --- Kudos Badge Desktop (klikbaar) --- */
+.kudos-badge {
+  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg shrink-0 no-underline;
+  background: var(--color-primary-alpha-10);
+  border: 1px solid rgba(90, 170, 180, 0.2);
+}
+
+.kudos-badge-clickable {
+  @apply flex items-center justify-center gap-2 px-4 h-9 rounded-lg flex-shrink-0 no-underline transition-all duration-200 cursor-pointer;
+  background: var(--color-primary-alpha-10);
+  border: 1px solid rgba(90, 170, 180, 0.2);
+}
+.kudos-badge-clickable:hover {
+  background: rgba(90, 170, 180, 0.2);
+  border-color: rgba(90, 170, 180, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(90, 170, 180, 0.2);
+}
+.kudos-badge-clickable:active {
+  transform: translateY(0);
+}
+
+.kudos-amount {
+  @apply text-sm font-bold uppercase whitespace-nowrap tracking-wide;
+  color: var(--color-primary);
+}
+
+.kudos-chevron {
+  @apply size-3.5;
+  color: var(--color-primary);
+  opacity: 0.7;
+}
+
+/* --- Kudos Badge Mobile --- */
+.kudos-badge-mobile {
+  @apply flex items-center gap-1 text-sm font-bold cursor-pointer no-underline transition-all duration-200;
+  color: var(--color-primary);
+}
+.kudos-badge-mobile:hover {
+  opacity: 0.8;
+}
+
+/* --- Login Button --- */
+.login-btn-highlight {
+  background: var(--color-primary) !important;
+  color: var(--color-text-white)fff !important;
+}
+.login-btn-highlight:hover {
+  background: var(--color-primary-light) !important;
+}
+
+/* --- Main Content Spacing --- */
+.main {
+  @apply pt-4;
+}
+

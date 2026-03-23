@@ -1,0 +1,129 @@
+@reference "../styles.css";
+@import '_variables';
+@import '_mixins';
+
+/* =====================================================
+   PROFILE.CSS — Duolingo × Canvas palette
+   ===================================================== */
+
+.profile-container {
+  max-width: 520px;
+  margin: 3rem auto;
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius-xl);
+  background: var(--color-text-white)fff;
+  border: 2px solid var(--color-primary-alpha-12);
+  border-bottom: 4px solid #d1d5db;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  color: #1f2937;
+}
+
+.profile-picture-wrapper {
+
+
+  margin-bottom: 1.5rem;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-primary-alpha-12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.profile-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1cb0f6, #0a98d6);
+  border: 3px solid #bae6fd;
+
+
+
+  font-size: 2rem;
+  font-weight: var(--font-weight-extrabold);
+  color: white;
+  box-shadow: 0 2px 8px rgba(28, 176, 246, 0.25);
+}
+
+.profile-actions {
+
+
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.btn-upload,
+.btn-delete {
+  display: inline-flex;
+
+  gap: var(--spacing-sm);
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: inherit;
+}
+
+.btn-upload {
+  background: #58cc02;
+  color: white;
+  border: none;
+  border-bottom: 3px solid #46a302;
+}
+
+.btn-upload:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.btn-delete {
+  background: white;
+  color: var(--color-danger);
+  border: 2px solid #fca5a5;
+  border-bottom-width: 3px;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+}
+
+.btn-upload input {
+  display: none;
+}
+
+.profile-info {
+  background: #f9fafb;
+  border: 2px solid var(--color-primary-alpha-12);
+  border-radius: var(--radius-lg);
+  padding: calc(var(--spacing-lg) * 1.25) 1.5rem;
+}
+
+.profile-info p {
+  margin: 0.6rem 0;
+  font-size: var(--font-size-base);
+  color: #4b5563;
+
+
+  gap: var(--spacing-sm);
+}
+
+.profile-info p:first-child {
+  margin-top: 0;
+}
+
+.profile-info p:last-child {
+  margin-bottom: 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--color-primary-alpha-12);
+}
+
+.profile-info strong {
+  color: #1f2937;
+  font-weight: var(--font-weight-bold);
+  min-width: 90px;
+}

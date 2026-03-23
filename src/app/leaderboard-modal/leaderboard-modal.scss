@@ -1,0 +1,399 @@
+@reference "../styles.css";
+@import '_variables';
+@import '_mixins';
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MODAL BASE
+   ══════════════════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+
+
+
+  padding: var(--spacing-lg);
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: var(--background-hex);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-2xl);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.2s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+
+
+
+  padding: 1.5rem 1.75rem 1rem;
+  border-bottom: 1.5px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--background-hex);
+  z-index: 1;
+}
+.modal-header h2 {
+  margin: var(--spacing-0);
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-text-dark);
+}
+
+.modal-close {
+
+
+
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
+}
+.modal-close:hover {
+  background: #fee2e2;
+  color: var(--color-danger);
+}
+
+.modal-body {
+  padding: calc(var(--spacing-lg) * 1.25) 1.75rem 1.75rem;
+
+
+  gap: 0.85rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   STANDINGS MODAL
+   ══════════════════════════════════════════════════════════════════════════ */
+.modal--standings {
+  max-width: 520px;
+}
+
+.standings-header-text h2 {
+  margin: var(--spacing-0) 0 0.1rem 0;
+}
+
+.modal-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--spacing-0);
+  line-height: 1.3;
+}
+
+/* Prize banner */
+.standings-prize-banner {
+
+
+  gap: var(--spacing-lg);
+  padding: 0.9rem 1rem;
+  background: rgba(90, 170, 180, 0.06);
+  border: 1.5px solid var(--color-primary-alpha-25);
+  border-radius: var(--radius-lg);
+}
+
+.standings-prize-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+  border: 1.5px solid rgba(90, 170, 180, 0.2);
+}
+
+.standings-prize-icon {
+  width: 60px;
+  height: 60px;
+
+
+
+  background: var(--color-primary-alpha-12);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.standings-prize-info {
+
+
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.standings-prize-label {
+  font-size: 0.67rem;
+  font-weight: var(--font-weight-extrabold);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--color-primary);
+}
+
+.standings-prize-name {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  color: var(--color-text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.standings-prize-desc {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-top: 0.1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta row */
+.standings-meta {
+
+
+  gap: var(--spacing-md);
+
+}
+
+.standings-period {
+
+
+  gap: var(--spacing-xs);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.standings-active-badge {
+  display: inline-flex;
+
+  gap: var(--spacing-xs);
+  padding: 0.18rem 0.65rem;
+  background: var(--color-primary-alpha-12);
+  border: 1px solid var(--color-primary-alpha-30);
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: #3d8a94;
+}
+
+.standings-ended-badge {
+  display: inline-flex;
+
+  padding: 0.18rem 0.65rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger);
+}
+
+.standings-planned-badge {
+  display: inline-flex;
+
+  padding: 0.18rem 0.65rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: #d97706;
+}
+
+/* Section label */
+.standings-section-label {
+
+
+  gap: var(--spacing-xs);
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-extrabold);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-primary);
+  margin-bottom: -0.2rem;
+}
+
+/* Status dot */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* Rankings list */
+.standings-list {
+
+
+  gap: var(--spacing-sm);
+}
+
+.standings-empty {
+
+
+
+  gap: var(--spacing-sm);
+  padding: 2rem 1rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.standings-empty p {
+  margin: var(--spacing-0);
+  font-size: 0.88rem;
+}
+
+/* Row */
+.standings-row {
+
+
+  gap: var(--spacing-md);
+  padding: 0.7rem 0.9rem;
+  background: color-mix(in oklch, var(--card) 60%, transparent);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.15s, background 0.15s;
+}
+.standings-row:hover {
+  border-color: rgba(90, 170, 180, 0.4);
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+}
+.standings-row--gold {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.04);
+}
+.standings-row--silver {
+  border-color: rgba(148, 163, 184, 0.5);
+  background: rgba(148, 163, 184, 0.04);
+}
+.standings-row--bronze {
+  border-color: rgba(180, 83, 9, 0.35);
+  background: rgba(180, 83, 9, 0.04);
+}
+
+/* Rank */
+.standings-rank {
+  min-width: 36px;
+
+
+
+  flex-shrink: 0;
+}
+
+.medal {
+  font-size: var(--font-size-xl);
+  line-height: 1;
+}
+
+.rank-num {
+
+
+
+  width: 28px;
+  height: 28px;
+  background: color-mix(in oklch, var(--card) 80%, transparent);
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-text-secondary);
+}
+
+/* Class info */
+.standings-class-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.standings-class-name {
+  font-weight: var(--font-weight-bold);
+  font-size: 0.9rem;
+  color: var(--color-text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* Kudos bar */
+.standings-kudos-wrap {
+
+
+
+  gap: 0.25rem;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.standings-kudos-bar-track {
+  width: 100%;
+  height: 5px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.standings-kudos-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--color-primary);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.standings-kudos-bar-fill.bar--gold   { background: #f59e0b; }
+.standings-kudos-bar-fill.bar--silver { background: #94a3b8; }
+.standings-kudos-bar-fill.bar--bronze { background: #b45309; }
+
+.standings-kudos-num {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.kudos-label {
+  font-weight: var(--font-weight-medium);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin-left: 0.15rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .modal-body {
+    padding: var(--spacing-lg) calc(var(--spacing-lg) * 1.25) 1.25rem;
+  }
+  .modal-header {
+    padding: calc(var(--spacing-lg) * 1.25) 1.25rem 0.9rem;
+  }
+  .standings-kudos-wrap {
+    min-width: 80px;
+  }
+}

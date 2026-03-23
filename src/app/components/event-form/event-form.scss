@@ -1,0 +1,89 @@
+@reference "../styles.css";
+@import '_variables';
+@import '_mixins';
+
+.modal-form {
+  padding: 1.5rem 1.75rem;
+
+
+  gap: 1.1rem;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); }
+@media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+.form-group {   gap: var(--spacing-sm); }
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-bold);
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.7rem 0.9rem;
+  background: #f9fafb;
+  border: 2px solid var(--color-primary-alpha-12);
+  border-radius: var(--radius-md);
+  color: #1f2937;
+  font-size: 0.92rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #1cb0f6;
+  box-shadow: 0 0 0 3px rgba(28, 176, 246, 0.12);
+  background: white;
+}
+.form-group textarea { resize: vertical; }
+
+.form-error { font-size: 0.76rem; color: var(--color-danger); font-weight: var(--font-weight-semibold); }
+
+.modal-footer {
+
+
+  gap: var(--spacing-md);
+  padding-top: 0.5rem;
+}
+
+.btn-modal-cancel {
+  padding: 0.7rem 1.25rem;
+  background: white;
+  border: 2px solid var(--color-primary-alpha-12);
+  border-bottom-width: 3px;
+  border-radius: var(--radius-md);
+  color: #6b7280;
+  font-size: 0.92rem;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: inherit;
+}
+.btn-modal-cancel:hover { border-color: #9ca3af; color: #374151; }
+.btn-modal-cancel.full-width { width: 100%; text-align: center; }
+
+.btn-modal-submit {
+  display: inline-flex;
+
+  gap: var(--spacing-sm);
+  padding: 0.7rem 1.5rem;
+  background: #58cc02;
+  color: white;
+  border: none;
+  border-bottom: 3px solid #46a302;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.1s;
+  font-family: inherit;
+}
+.btn-modal-submit:hover:not(:disabled) { filter: brightness(1.06); }
+.btn-modal-submit:active:not(:disabled) { transform: translateY(1px); border-bottom-width: 1px; }
+.btn-modal-submit:disabled { opacity: 0.45; cursor: not-allowed; }

@@ -1,0 +1,106 @@
+// src/styles/_transitions.scss
+// Transition & Animation Mixins
+
+@mixin transition-all {
+  transition: all var(--transition-base) var(--ease-in-out);
+}
+
+@mixin transition-colors {
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+@mixin transition-transform {
+  transition:
+    transform var(--transition-fast),
+    filter var(--transition-base);
+}
+
+@mixin transition-shadow {
+  transition: box-shadow var(--transition-base);
+}
+
+.transition-all {
+  @include transition-all;
+}
+
+.transition-colors {
+  @include transition-colors;
+}
+
+.transition-transform {
+  @include transition-transform;
+}
+
+.transition-shadow {
+  @include transition-shadow;
+}
+
+@mixin hover-brightness {
+  &:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+}
+
+@mixin hover-opacity {
+  &:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+}
+
+@mixin active-transform {
+  &:active:not(:disabled) {
+    transform: translateY(2px);
+  }
+}
+
+@mixin disabled-state {
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+

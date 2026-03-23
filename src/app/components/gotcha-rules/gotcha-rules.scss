@@ -1,0 +1,206 @@
+@reference "../styles.css";
+@import '_variables';
+@import '_mixins';
+
+:host { display: block; }
+
+.rules-wrap {
+
+
+  gap: var(--spacing-lg);
+  padding: 0.25rem 0 0.5rem;
+}
+
+/* ── Prize card ── */
+.prize-card {
+  background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.04));
+  border: 1.5px solid rgba(251,191,36,0.35);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.prize-header {
+
+
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) 1.1rem;
+}
+
+.prize-icon-wrap {
+
+
+
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-sm);
+  background: rgba(251,191,36,0.18);
+  border: 1px solid rgba(251,191,36,0.35);
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.prize-header-text {
+
+
+  gap: 0.2rem;
+}
+
+.prize-label {
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-extrabold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #d97706;
+}
+
+.prize-desc {
+  font-size: 0.88rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
+  line-height: 1.45;
+}
+
+.prize-desc--unknown {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.prize-photo {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  display: block;
+  border-top: 1px solid rgba(251,191,36,0.2);
+}
+
+/* ── No game notice ── */
+.no-game-notice {
+
+
+  gap: 0.55rem;
+  padding: var(--spacing-md) 1rem;
+  background: rgba(90,170,180,0.07);
+  border: 1px solid rgba(90,170,180,0.2);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--muted-foreground);
+}
+
+/* ── Info pill (deadline) ── */
+.info-pill {
+  display: inline-flex;
+
+  gap: var(--spacing-sm);
+  padding: 0.5rem 0.9rem;
+  background: rgba(90,170,180,0.09);
+  border: 1px solid var(--color-primary-alpha-25);
+  border-radius: var(--radius-circle);
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-blue-dark);
+  width: fit-content;
+}
+
+.info-pill--muted {
+  background: var(--muted);
+  border-color: var(--border);
+  color: var(--muted-foreground);
+}
+
+/* ── Sections ── */
+.rules-section {
+
+
+  gap: 0.65rem;
+}
+
+.rules-section-title {
+
+
+  gap: var(--spacing-sm);
+  margin: var(--spacing-0);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-extrabold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted-foreground);
+}
+
+/* ── Steps ── */
+.steps-list {
+  list-style: none;
+  margin: var(--spacing-0);
+  padding: 0;
+
+
+  gap: var(--spacing-sm);
+}
+
+.step {
+
+
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0.9rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.15s;
+}
+
+.step:hover { border-color: var(--color-primary-alpha-30); }
+
+.step-num {
+
+
+
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 6px;
+  background: var(--color-primary-alpha-12);
+  border: 1px solid var(--color-primary-alpha-25);
+  font-size: var(--font-size-xs);
+  font-weight: 900;
+  color: var(--color-blue);
+  flex-shrink: 0;
+}
+
+.step-body {
+
+
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.step-title {
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--foreground);
+}
+
+.step-desc {
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+/* ── Important rules list ── */
+.rules-list {
+  list-style: none;
+  margin: var(--spacing-0);
+  padding: 0;
+
+
+  gap: var(--spacing-sm);
+}
+
+.rules-list li {
+
+
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--foreground);
+  line-height: 1.5;
+}
+
+.rule-icon { flex-shrink: 0; margin-top: 0.1rem; }
+.rule-icon--warn { color: var(--color-warning, #f59e0b); }
