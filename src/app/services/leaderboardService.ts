@@ -54,7 +54,7 @@ export class LeaderboardService {
       tap((lb) => {
         this.currentLeaderboard.set(lb);
         this.leaderboards.update((list) =>
-          list.map((item) => (item.Id === id ? lb : item))
+          list.map((item) => (item.ID === id ? lb : item))
         );
       })
     );

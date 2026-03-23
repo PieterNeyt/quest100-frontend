@@ -1,11 +1,11 @@
 <div class="lb-header">
   <div class="header-text">
-    <h1>Leaderboards</h1>
-    <p>Beheer actieve competities per richting</p>
+    <h1>{{ translationService.t('leaderboard.title') }}</h1>
+    <p>{{ translationService.t('leaderboard.subtitle') }}</p>
   </div>
   <button class="btn-create" (click)="openCreateModal()" [disabled]="loading()">
     <ng-icon hlm name="lucidePlus" size="sm"/>
-    Nieuw leaderboard
+    {{ translationService.t('leaderboard.newButton') }}
   </button>
 </div>
 
@@ -15,20 +15,20 @@
     <input
       class="search-input"
       type="text"
-      placeholder="Zoek op prijs of richting..."
+      [placeholder]="translationService.t('leaderboard.searchPlaceholder')"
       [ngModel]="searchQuery()"
       (ngModelChange)="searchQuery.set($event)"
     />
   </div>
 
   <div class="sort-buttons">
-    <span class="sort-label">Sorteren</span>
+    <span class="sort-label">{{ translationService.t('leaderboard.sortLabel') }}</span>
     <button
       class="sort-btn"
       [class.active]="sortBy() === 'startDate'"
       (click)="toggleSort('startDate')"
     >
-      Startdatum
+      {{ translationService.t('leaderboard.sortStartDate') }}
       @if (sortBy() === 'startDate') {
         <ng-icon
           hlm
@@ -42,7 +42,7 @@
       [class.active]="sortBy() === 'endDate'"
       (click)="toggleSort('endDate')"
     >
-      Einddatum
+      {{ translationService.t('leaderboard.sortEndDate') }}
       @if (sortBy() === 'endDate') {
         <ng-icon
           hlm
@@ -56,7 +56,7 @@
       [class.active]="sortBy() === 'prize'"
       (click)="toggleSort('prize')"
     >
-      Prijs
+      {{ translationService.t('leaderboard.sortPrize') }}
       @if (sortBy() === 'prize') {
         <ng-icon
           hlm
@@ -71,7 +71,7 @@
 @if (loading()) {
   <div class="state-container">
     <div class="spinner"></div>
-    <p>Leaderboards laden...</p>
+    <p>{{ translationService.t('leaderboard.loading') }}</p>
   </div>
 }
 
@@ -79,23 +79,23 @@
   <div class="state-container">
     <ng-icon hlm name="lucideCircleAlert" size="56" class="text-destructive"/>
     <p class="error-text">{{ error() }}</p>
-    <button class="btn-create" (click)="loadData()">Opnieuw proberen</button>
+    <button class="btn-create" (click)="loadData()">{{ translationService.t('leaderboard.retry') }}</button>
   </div>
 }
 
 @if (!loading() && !error() && filteredLeaderboards().length === 0) {
   <div class="state-container">
     <ng-icon hlm name="lucideTrophy" size="56"/>
-    <p>Nog geen leaderboards aangemaakt.</p>
+    <p>{{ translationService.t('leaderboard.empty') }}</p>
     <button class="btn-create" (click)="openCreateModal()">
-      Eerste leaderboard
+      {{ translationService.t('leaderboard.firstButton') }}
     </button>
   </div>
 }
 
 @if (!loading() && !error()) {
   <div class="lb-grid">
-    @for (lb of filteredLeaderboards(); track lb.Id) {
+    @for (lb of filteredLeaderboards(); track lb.ID) {
       <div
         class="lb-card"
         [class.lb-card--active]="isActive(lb)"
@@ -107,18 +107,18 @@
         >
           @if (isActive(lb)) {
             <span class="status-dot"></span>
-            Actief
+            {{ translationService.t('leaderboard.statusActive') }}
           } @else if (daysLeft(lb) === 0) {
-            Afgelopen
+            {{ translationService.t('leaderboard.statusFinished') }}
           } @else {
-            Gepland
+            {{ translationService.t('leaderboard.statusPlanned') }}
           }
         </div>
 
         <button
           class="card-edit-btn"
           (click)="openEditModal(lb, $event)"
-          title="Bewerk leaderboard"
+          [title]="translationService.t('leaderboard.editTooltip')"
         >
           <ng-icon hlm name="lucidePencil" size="sm"/>
         </button>
@@ -149,7 +149,7 @@
           </div>
 
           <h3 class="lb-prize-name">
-            {{ lb.Prize.Name || 'Geen prijs ingesteld' }}
+            {{ lb.Prize.Name || translationService.t('leaderboard.noPrize') }}
           </h3>
 
           @if (lb.Prize.Description) {
@@ -171,19 +171,19 @@
           <div class="lb-footer">
             <span class="lb-classes">
               <ng-icon hlm name="lucideUsers" size="xs"/>
-              <strong>{{ lb.Classes.length }}</strong> klassen
+              <strong>{{ lb.Classes.length }}</strong> {{ translationService.t('leaderboard.classes') }}
             </span>
             @if (isActive(lb)) {
               <span class="lb-days-left">
                 <ng-icon hlm name="lucideClock" size="xs"/>
-                {{ daysLeft(lb) }} dagen resterend
+                {{ daysLeft(lb) }} {{ translationService.t('leaderboard.daysLeft') }}
               </span>
             }
           </div>
 
           <div class="lb-click-hint">
             <ng-icon hlm name="lucideBarChart2" size="xs"/>
-            Bekijk standings
+            {{ translationService.t('leaderboard.viewStandings') }}
           </div>
         </div>
       </div>
@@ -196,29 +196,29 @@
   <div class="modal-overlay" (click)="closeCreateModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Nieuw leaderboard</h2>
+        <h2>{{ translationService.t('leaderboard.createModal.title') }}</h2>
         <button class="modal-close" (click)="closeCreateModal()">
           <ng-icon hlm name="lucideX" size="sm"/>
         </button>
       </div>
 
       <form class="modal-body" [formGroup]="createForm">
-        <div class="form-section-label">Richting</div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.createModal.sectionCourse') }}</div>
 
         <div class="form-group">
-          <label class="form-label">Richting (course) *</label>
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.courseLabel') }}</label>
           <select
             class="form-select"
             formControlName="courseId"
             (change)="createForm.get('courseId')!.setValue($any($event.target).value)"
           >
-            <option value="">Kies een richting...</option>
+            <option value="">{{ translationService.t('leaderboard.createModal.coursePlaceholder') }}</option>
             @for (course of courses(); track course.Id) {
               <option [value]="course.Id">{{ course.Name }}</option>
             }
           </select>
           @if (createForm.get('courseId')?.invalid && createForm.get('courseId')?.touched) {
-            <span class="form-error">Richting is verplicht</span>
+            <span class="form-error">{{ translationService.t('leaderboard.createModal.courseRequired') }}</span>
           }
         </div>
 
@@ -226,7 +226,7 @@
           <div class="classes-preview">
             <span class="classes-preview-label">
               <ng-icon hlm name="lucideUsers" size="xs"/>
-              Klassen die worden toegevoegd:
+              {{ translationService.t('leaderboard.createModal.classesLabel') }}
             </span>
             <div class="classes-chips">
               @for (cls of availableClasses(); track cls.Id) {
@@ -237,43 +237,43 @@
         }
 
         <div class="form-divider"></div>
-        <div class="form-section-label">Periode</div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.createModal.sectionPeriod') }}</div>
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Startdatum *</label>
+            <label class="form-label">{{ translationService.t('leaderboard.createModal.startDateLabel') }}</label>
             <input class="form-input" type="date" formControlName="startDate"/>
             @if (createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched) {
-              <span class="form-error">Startdatum is verplicht</span>
+              <span class="form-error">{{ translationService.t('leaderboard.createModal.startDateRequired') }}</span>
             }
           </div>
           <div class="form-group">
-            <label class="form-label">Einddatum *</label>
+            <label class="form-label">{{ translationService.t('leaderboard.createModal.endDateLabel') }}</label>
             <input class="form-input" type="date" formControlName="endDate"/>
             @if (createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched) {
-              <span class="form-error">Einddatum is verplicht</span>
+              <span class="form-error">{{ translationService.t('leaderboard.createModal.endDateRequired') }}</span>
             }
           </div>
         </div>
 
         <div class="form-divider"></div>
-        <div class="form-section-label">Prijs (optioneel)</div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.createModal.sectionPrize') }}</div>
 
         <div class="form-group">
-          <label class="form-label">Naam prijs</label>
-          <input class="form-input" type="text" placeholder="bijv. Pizza-party voor de winnaar" formControlName="prizeName"/>
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.prizeNameLabel') }}</label>
+          <input class="form-input" type="text" [placeholder]="translationService.t('leaderboard.createModal.prizeNamePlaceholder')" formControlName="prizeName"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Beschrijving</label>
-          <textarea class="form-textarea" placeholder="Beschrijf de prijs..." rows="3" formControlName="prizeDescription"></textarea>
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.prizeDescLabel') }}</label>
+          <textarea class="form-textarea" [placeholder]="translationService.t('leaderboard.createModal.prizeDescPlaceholder')" rows="3" formControlName="prizeDescription"></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label">Foto URL</label>
+          <label class="form-label">{{ translationService.t('leaderboard.createModal.prizePhotoLabel') }}</label>
           <input class="form-input" type="url" placeholder="https://..." formControlName="prizePhotoUrl"/>
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="closeCreateModal()">Annuleren</button>
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()">{{ translationService.t('leaderboard.createModal.cancel') }}</button>
           <button
             type="button"
             class="btn-create"
@@ -281,7 +281,7 @@
             (click)="submitCreate()"
           >
             @if (creating()) { <div class="btn-spinner"></div> }
-            Aanmaken
+            {{ translationService.t('leaderboard.createModal.submit') }}
           </button>
         </div>
       </form>
@@ -293,44 +293,44 @@
   <div class="modal-overlay" (click)="closeEditModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Leaderboard bewerken</h2>
+        <h2>{{ translationService.t('leaderboard.editModal.title') }}</h2>
         <button class="modal-close" (click)="closeEditModal()">
           <ng-icon hlm name="lucideX" size="sm"/>
         </button>
       </div>
 
       <form class="modal-body" [formGroup]="editForm">
-        <div class="form-section-label">Periode</div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.editModal.sectionPeriod') }}</div>
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Startdatum</label>
+            <label class="form-label">{{ translationService.t('leaderboard.editModal.startDateLabel') }}</label>
             <input class="form-input" type="date" formControlName="startDate"/>
           </div>
           <div class="form-group">
-            <label class="form-label">Einddatum</label>
+            <label class="form-label">{{ translationService.t('leaderboard.editModal.endDateLabel') }}</label>
             <input class="form-input" type="date" formControlName="endDate"/>
           </div>
         </div>
 
         <div class="form-divider"></div>
-        <div class="form-section-label">Prijs</div>
+        <div class="form-section-label">{{ translationService.t('leaderboard.editModal.sectionPrize') }}</div>
 
         <div class="form-group">
-          <label class="form-label">Naam prijs</label>
+          <label class="form-label">{{ translationService.t('leaderboard.editModal.prizeNameLabel') }}</label>
           <input class="form-input" type="text" formControlName="prizeName"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Beschrijving</label>
+          <label class="form-label">{{ translationService.t('leaderboard.editModal.prizeDescLabel') }}</label>
           <textarea class="form-textarea" rows="3" formControlName="prizeDescription"></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label">Foto URL</label>
+          <label class="form-label">{{ translationService.t('leaderboard.editModal.prizePhotoLabel') }}</label>
           <input class="form-input" type="url" formControlName="prizePhotoUrl"/>
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="closeEditModal()">Annuleren</button>
+          <button type="button" class="btn-cancel" (click)="closeEditModal()">{{ translationService.t('leaderboard.editModal.cancel') }}</button>
           <button
             type="button"
             class="btn-create"
@@ -338,7 +338,7 @@
             (click)="submitEdit()"
           >
             @if (saving()) { <div class="btn-spinner"></div> }
-            Opslaan
+            {{ translationService.t('leaderboard.editModal.submit') }}
           </button>
         </div>
       </form>

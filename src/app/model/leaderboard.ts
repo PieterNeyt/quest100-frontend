@@ -12,7 +12,7 @@ export interface LeaderboardClass {
 }
 
 export interface Leaderboard {
-  Id:        string;
+  ID:        string;
   CourseId:  string;
   StartDate: string;
   EndDate:   string;

@@ -2,8 +2,8 @@
 
   <!-- Header -->
   <div class="header-section">
-    <h2>Colleagues <span>Quest100</span></h2>
-    <p class="subtitle">Recognize your peers for their great work</p>
+    <h2>{{ translationService.t('userlist.colleagues') }} <span>Quest100</span></h2>
+    <p class="subtitle">{{ translationService.t('userlist.awardSubtitle') }}</p>
   </div>
 
   <!-- Leaderboard Section -->
@@ -15,10 +15,10 @@
         <div class="lb-card__top">
           <div class="lb-badge lb-badge--live">
             <span class="lb-live-dot"></span>
-            Live
+            {{ translationService.t('leaderboard.statusActive') }}
           </div>
           <button class="lb-history-btn" (click)="$event.stopPropagation(); openHistoryModal()">
-            History
+            {{ translationService.t('leaderboard.standingsModal.history') }}
           </button>
         </div>
         <div class="lb-card__body">
@@ -28,14 +28,14 @@
           <div class="lb-card__info">
             @if (myClassStanding(); as standing) {
               <span class="my-standing-banner__position">
-                <strong>#{{ standing.position }}</strong> · {{ standing.kudos }} kudos
+                <strong>#{{ standing.position }}</strong> · {{ standing.kudos }} {{ translationService.t('leaderboard.standingsModal.kudosLabel') }}
               </span>
             }
-              <span class="lb-card__meta">Ends {{ formatDate(lb.EndDate) }}</span>
+            <span class="lb-card__meta">{{ translationService.t('leaderboard.standingsModal.ends') }} {{ formatDate(lb.EndDate) }}</span>
           </div>
         </div>
         <div class="lb-card__footer">
-          <span class="lb-view-link">View standings <ng-icon name="lucideChevronRight"></ng-icon></span>
+          <span class="lb-view-link">{{ translationService.t('leaderboard.viewStandings') }} <ng-icon name="lucideChevronRight"></ng-icon></span>
         </div>
       </div>
     }
@@ -44,10 +44,10 @@
     @if (upcomingLeaderboard(); as lb) {
       <div class="lb-card lb-card--upcoming" (click)="openStandingsModal(lb)">
         <div class="lb-card__top">
-          <div class="lb-badge lb-badge--upcoming">Upcoming</div>
+          <div class="lb-badge lb-badge--upcoming">{{ translationService.t('leaderboard.statusPlanned') }}</div>
           @if (!activeLeaderboard()) {
             <button class="lb-history-btn" (click)="$event.stopPropagation(); openHistoryModal()">
-              History
+              {{ translationService.t('leaderboard.standingsModal.history') }}
             </button>
           }
         </div>
@@ -57,11 +57,11 @@
           </div>
           <div class="lb-card__info">
             <span class="lb-card__title">{{ lb.Prize.Name }}</span>
-            <span class="lb-card__meta">Starts {{ formatDate(lb.StartDate) }}</span>
+            <span class="lb-card__meta">{{ translationService.t('leaderboard.standingsModal.starts') }} {{ formatDate(lb.StartDate) }}</span>
           </div>
         </div>
         <div class="lb-card__footer">
-          <span class="lb-view-link">View details <ng-icon name="lucideChevronRight"></ng-icon></span>
+          <span class="lb-view-link">{{ translationService.t('leaderboard.viewStandings') }} <ng-icon name="lucideChevronRight"></ng-icon></span>
         </div>
       </div>
     }
@@ -72,9 +72,9 @@
         <div class="lb-empty__icon">
           <ng-icon name="lucideTrophy"></ng-icon>
         </div>
-        <span>No active leaderboard right now</span>
+        <span>{{ translationService.t('leaderboard.standingsModal.noActive') }}</span>
         <button class="lb-history-btn lb-history-btn--standalone" (click)="openHistoryModal()">
-          View history
+          {{ translationService.t('leaderboard.standingsModal.history') }}
         </button>
       </div>
     }
@@ -88,7 +88,7 @@
       <input
         class="search-input"
         type="text"
-        placeholder="Search students..."
+        [placeholder]="translationService.t('userlist.searchPlaceholder')"
         [ngModel]="searchQuery()"
         (ngModelChange)="searchQuery.set($event)"
       />
@@ -99,7 +99,7 @@
       [ngModel]="selectedClassId()"
       (ngModelChange)="selectedClassId.set($event)"
     >
-      <option value="">All classes</option>
+      <option value="">{{ translationService.t('userlist.allClasses') }}</option>
       @for (cls of availableClasses(); track $index) {
         <option [value]="cls.Id">{{ cls.Name }}</option>
       }
@@ -108,7 +108,7 @@
 
   <!-- Results count -->
   <p class="results-count">
-    Showing <span>{{ filteredProfileAwards().length }}</span> students
+    {{ translationService.t('userlist.showing') }} <span>{{ filteredProfileAwards().length }}</span> {{ translationService.t('userlist.students') }}
   </p>
 
   <!-- User Grid -->
@@ -137,15 +137,15 @@
 
         <div class="award-action">
           @if (pa.hasSentAward) {
-            <span class="award-sent-message">✓ Award sent today</span>
+            <span class="award-sent-message">✓ {{ translationService.t('userlist.awardSentToday') }}</span>
           } @else {
-            <button class="btn-award" (click)="openModal(pa.profile)">Give award</button>
+            <button class="btn-award" (click)="openModal(pa.profile)">{{ translationService.t('userlist.giveAward') }}</button>
           }
         </div>
 
       </div>
     } @empty {
-      <div class="loading-state">Loading profiles...</div>
+      <div class="loading-state">{{ translationService.t('userlist.loadingProfiles') }}</div>
     }
   </div>
 
@@ -157,13 +157,13 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
 
       <div class="modal-header">
-        <h3>Award for <span>{{ user.firstName }}</span></h3>
+        <h3>{{ translationService.t('userlist.awardFor') }} <span>{{ user.firstName }}</span></h3>
         <button class="btn-close" (click)="closeModal()">&times;</button>
       </div>
 
       <div class="modal-body">
         <div class="input-group">
-          <label>Award category</label>
+          <label>{{ translationService.t('userlist.awardCategory') }}</label>
           <select [(ngModel)]="selectedType">
             @for (type of kudoTypes; track type) {
               <option [value]="type">{{ getKudoLabel(type) }}</option>
@@ -172,18 +172,18 @@
         </div>
 
         <div class="input-group">
-          <label>Personal message</label>
+          <label>{{ translationService.t('userlist.personalMessage') }}</label>
           <textarea
             [(ngModel)]="message"
-            placeholder="Write a personal message..."
+            [placeholder]="translationService.t('userlist.personalMessagePlaceholder')"
             rows="4">
           </textarea>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" (click)="closeModal()">Cancel</button>
-        <button class="btn-primary" (click)="submitAward()" [disabled]="!message.trim()">Send</button>
+        <button class="btn-secondary" (click)="closeModal()">{{ translationService.t('userlist.cancel') }}</button>
+        <button class="btn-primary" (click)="submitAward()" [disabled]="!message.trim()">{{ translationService.t('userlist.send') }}</button>
       </div>
 
     </div>
@@ -205,15 +205,15 @@
     <div class="modal-content modal-content--wide" (click)="$event.stopPropagation()">
 
       <div class="modal-header">
-        <h3>Leaderboard <span>History</span></h3>
+        <h3>{{ translationService.t('leaderboard.standingsModal.historyTitle') }}</h3>
         <button class="btn-close" (click)="closeHistoryModal()">&times;</button>
       </div>
 
       <div class="modal-body">
         @if (finishedLeaderboards().length === 0) {
-          <p class="history-empty">No finished leaderboards yet.</p>
+          <p class="history-empty">{{ translationService.t('leaderboard.standingsModal.historyEmpty') }}</p>
         }
-        @for (lb of finishedLeaderboards(); track lb.Id) {
+        @for (lb of finishedLeaderboards(); track lb.ID) {
           <div class="history-row" (click)="openStandingsModal(lb); closeHistoryModal()">
             <div class="history-row__icon">
               <ng-icon name="lucideTrophy"></ng-icon>

@@ -646,7 +646,6 @@
       "reviewActionsDesc": "Gebruik de knoppen om een geldige kill goed te keuren of een valse kill af te keuren.",
       "reviewEmpty": "Wachtrij Leeg",
       "reviewEmptyDesc": "Alle ingediende kills zijn beoordeeld. Niets meer te doen hier voor nu!"
-
     },
     "mod": {
       "header": "Moderatie Centrum",
@@ -975,6 +974,76 @@
     "error": {
       "loadFailed": "Ophalen van de dagelijkse puzzel mislukt.",
       "invalidMove": "Ongeldige zet."
+    }
+  },
+  "leaderboard": {
+    "title": "Leaderboards",
+    "subtitle": "Beheer actieve competities per richting",
+    "newButton": "Nieuw leaderboard",
+    "searchPlaceholder": "Zoek op prijs of richting...",
+    "sortLabel": "Sorteren",
+    "sortStartDate": "Startdatum",
+    "sortEndDate": "Einddatum",
+    "sortPrize": "Prijs",
+    "loading": "Leaderboards laden...",
+    "error": "Laden mislukt.",
+    "createError": "Aanmaken van leaderboard mislukt.",
+    "editError": "Bijwerken van leaderboard mislukt.",
+    "retry": "Opnieuw proberen",
+    "empty": "Nog geen leaderboards aangemaakt.",
+    "firstButton": "Eerste leaderboard",
+    "statusActive": "Actief",
+    "statusFinished": "Afgelopen",
+    "statusPlanned": "Gepland",
+    "daysLeft": "dagen resterend",
+    "classes": "klassen",
+    "viewStandings": "Bekijk standings",
+    "noPrize": "Geen prijs ingesteld",
+    "createModal": {
+      "title": "Nieuw leaderboard",
+      "sectionCourse": "Richting",
+      "courseLabel": "Richting (course) *",
+      "coursePlaceholder": "Kies een richting...",
+      "courseRequired": "Richting is verplicht",
+      "classesLabel": "Klassen die worden toegevoegd:",
+      "sectionPeriod": "Periode",
+      "startDateLabel": "Startdatum *",
+      "startDateRequired": "Startdatum is verplicht",
+      "endDateLabel": "Einddatum *",
+      "endDateRequired": "Einddatum is verplicht",
+      "sectionPrize": "Prijs (optioneel)",
+      "prizeNameLabel": "Naam prijs",
+      "prizeNamePlaceholder": "bijv. Pizza-party voor de winnaar",
+      "prizeDescLabel": "Beschrijving",
+      "prizeDescPlaceholder": "Beschrijf de prijs...",
+      "prizePhotoLabel": "Foto URL",
+      "cancel": "Annuleren",
+      "submit": "Aanmaken"
+    },
+    "editModal": {
+      "title": "Leaderboard bewerken",
+      "sectionPeriod": "Periode",
+      "startDateLabel": "Startdatum",
+      "endDateLabel": "Einddatum",
+      "sectionPrize": "Prijs",
+      "prizeNameLabel": "Naam prijs",
+      "prizeDescLabel": "Beschrijving",
+      "prizePhotoLabel": "Foto URL",
+      "cancel": "Annuleren",
+      "submit": "Opslaan"
+    },
+    "standingsModal": {
+      "title": "Standings",
+      "prizeLabel": "Te winnen",
+      "rankingLabel": "Klassement",
+      "empty": "Nog geen klassen of kudos geregistreerd.",
+      "kudosLabel": "kudos",
+      "history": "Geschiedenis",
+      "historyTitle": "Leaderboard Geschiedenis",
+      "historyEmpty": "Nog geen afgelopen leaderboards.",
+      "noActive": "Momenteel geen actief leaderboard",
+      "ends": "Eindigt",
+      "starts": "Start"
     }
   }
 }

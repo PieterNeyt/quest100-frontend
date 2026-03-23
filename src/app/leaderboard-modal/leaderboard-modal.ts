@@ -5,6 +5,7 @@ import * as lucideIcons from '@ng-icons/lucide';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { Leaderboard } from '../model/leaderboard';
 import { Course } from '../model/class';
+import {TranslationService} from '../services/translationService';
 
 @Component({
   selector: 'app-leaderboard-modal',
@@ -18,6 +19,7 @@ export class LeaderboardModalComponent {
   leaderboard = input.required<Leaderboard>();
   courses = input<Course[]>([]);
   closed = output<void>();
+  readonly translationService = inject(TranslationService);
 
   sortedClasses = computed(() =>
     [...(this.leaderboard()?.Classes ?? [])].sort(

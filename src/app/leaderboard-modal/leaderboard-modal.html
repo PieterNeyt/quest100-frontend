@@ -2,7 +2,7 @@
   <div class="modal modal--standings" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <div class="standings-header-text">
-        <h2>Standings</h2>
+        <h2>{{ translationService.t('leaderboard.standingsModal.title') }}</h2>
         <p class="modal-subtitle">{{ courseName(leaderboard().CourseId) }}</p>
       </div>
       <button class="modal-close" (click)="close()">
@@ -30,7 +30,7 @@
             </div>
           }
           <div class="standings-prize-info">
-            <div class="standings-prize-label">Te winnen</div>
+            <div class="standings-prize-label">{{ translationService.t('leaderboard.standingsModal.prizeLabel') }}</div>
             <div class="standings-prize-name">{{ leaderboard().Prize.Name }}</div>
             @if (leaderboard().Prize.Description) {
               <div class="standings-prize-desc">{{ leaderboard().Prize.Description }}</div>
@@ -50,26 +50,26 @@
         @if (isActive()) {
           <span class="standings-active-badge">
             <span class="status-dot"></span>
-            Actief &middot; {{ daysLeft() }} dagen resterend
+            {{ translationService.t('leaderboard.statusActive') }} &middot; {{ daysLeft() }} {{ translationService.t('leaderboard.daysLeft') }}
           </span>
         } @else if (daysLeft() === 0) {
-          <span class="standings-ended-badge">Afgelopen</span>
+          <span class="standings-ended-badge">{{ translationService.t('leaderboard.statusFinished') }}</span>
         } @else {
-          <span class="standings-planned-badge">Gepland</span>
+          <span class="standings-planned-badge">{{ translationService.t('leaderboard.statusPlanned') }}</span>
         }
       </div>
 
       <!-- Rankings -->
       <div class="standings-section-label">
         <ng-icon hlm name="lucideBarChart2" size="xs"/>
-        Klassement
+        {{ translationService.t('leaderboard.standingsModal.rankingLabel') }}
       </div>
 
       <div class="standings-list">
         @if (sortedClasses().length === 0) {
           <div class="standings-empty">
             <ng-icon hlm name="lucideUsers" size="32"/>
-            <p>Nog geen klassen of kudos geregistreerd.</p>
+            <p>{{ translationService.t('leaderboard.standingsModal.empty') }}</p>
           </div>
         }
 
@@ -109,7 +109,7 @@
                 ></div>
               </div>
               <span class="standings-kudos-num">
-                {{ cls.TotalKudos }}<span class="kudos-label">kudos</span>
+                {{ cls.TotalKudos }}<span class="kudos-label">{{ translationService.t('leaderboard.standingsModal.kudosLabel') }}</span>
               </span>
             </div>
           </div>

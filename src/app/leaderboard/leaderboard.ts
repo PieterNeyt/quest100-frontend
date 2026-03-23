@@ -16,6 +16,7 @@ import { TranslationService } from '../services/translationService';
 import { Leaderboard } from '../model/leaderboard';
 import { Class, Course } from '../model/class';
 import {LeaderboardModalComponent} from '../leaderboard-modal/leaderboard-modal';
+import {ToastService} from '../services/toastService';
 
 @Component({
   selector: 'app-leaderboard',
@@ -35,7 +36,8 @@ import {LeaderboardModalComponent} from '../leaderboard-modal/leaderboard-modal'
 export class LeaderboardComponent implements OnInit {
   private readonly leaderboardService = inject(LeaderboardService);
   private readonly fb = inject(FormBuilder);
-  readonly t = inject(TranslationService);
+  readonly translationService = inject(TranslationService);
+  ts = inject(ToastService);
 
   leaderboards = signal<Leaderboard[]>([]);
   courses = signal<Course[]>([]);
@@ -127,7 +129,7 @@ export class LeaderboardComponent implements OnInit {
         this.loading.set(false);
       },
       error: () => {
-        this.error.set('Failed to load data.');
+        this.error.set(this.translationService.t('leaderboard.error'));
         this.loading.set(false);
       },
     });
@@ -149,21 +151,6 @@ export class LeaderboardComponent implements OnInit {
       (a, b) => b.TotalKudos - a.TotalKudos
     );
   }
-
-  getKudosPercent(kudos: number): number {
-    const top = this.sortedClasses()[0]?.TotalKudos ?? 0;
-    return top > 0 ? (kudos / top) * 100 : 0;
-  }
-
-  classNameById(classId: string): string {
-    for (const course of this.courses()) {
-      const found = course.Classes?.find((c) => c.Id === classId);
-      if (found) return found.Name;
-    }
-    return classId;
-  }
-
-  // ── Helpers ───────────────────────────────────────────────────────────────
 
   isActive(lb: Leaderboard): boolean {
     const now = Date.now();
@@ -191,13 +178,9 @@ export class LeaderboardComponent implements OnInit {
     }
   }
 
-  // ── Helpers (date) ────────────────────────────────────────────────────────
-
   private toMidnightISO(dateStr: string): string {
     return dateStr ? `${dateStr}T00:00:00` : dateStr;
   }
-
-  // ── Create ────────────────────────────────────────────────────────────────
 
   openCreateModal() {
     this.createForm.reset();
@@ -230,7 +213,10 @@ export class LeaderboardComponent implements OnInit {
           this.creating.set(false);
           this.closeCreateModal();
         },
-        error: () => this.creating.set(false),
+        error: () => {
+          this.creating.set(false);
+          this.ts.error(this.translationService.t('leaderboard.createError'));
+        },
       });
   }
 
@@ -259,8 +245,9 @@ export class LeaderboardComponent implements OnInit {
     if (!lb) return;
     this.saving.set(true);
     const v = this.editForm.value;
+
     this.leaderboardService
-      .updateLeaderboard(lb.Id, {
+      .updateLeaderboard(lb.ID, {
         startDate: v.startDate
           ? new Date(this.toMidnightISO(v.startDate)).toISOString()
           : undefined,
@@ -276,16 +263,17 @@ export class LeaderboardComponent implements OnInit {
       .subscribe({
         next: (updated) => {
           this.leaderboards.update((list) =>
-            list.map((i) => (i.Id === updated.Id ? updated : i))
+            list.map((i) => (i.ID === updated.ID ? updated : i))
           );
           this.saving.set(false);
           this.closeEditModal();
         },
-        error: () => this.saving.set(false),
+        error: () => {
+          this.saving.set(false);
+          this.ts.error(this.translationService.t('leaderboard.editError'));
+        },
       });
   }
-
-  // ── Formatting ────────────────────────────────────────────────────────────
 
   formatDate(dateStr: string): string {
     return new Date(dateStr).toLocaleDateString('nl-BE', {
@@ -293,9 +281,5 @@ export class LeaderboardComponent implements OnInit {
       month: 'short',
       year: 'numeric',
     });
-  }
-
-  formatDatetimeLocal(dateStr: string): string {
-    return dateStr ? dateStr.substring(0, 16) : '';
   }
 }

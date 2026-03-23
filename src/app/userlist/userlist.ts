@@ -26,6 +26,7 @@ export class Userlist implements OnInit {
   private toastService = inject(ToastService);
   private router = inject(Router);
   public translate = inject(TranslationService);
+  readonly translationService = inject(TranslationService);
 
   profileAwards = this.profileService.profilesAwards;
   courses = this.leaderboardService.courses;
