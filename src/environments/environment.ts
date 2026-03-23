@@ -1,4 +1,4 @@
-const uri = "localhost"
+const uri = "valuation-ascii-pottery-assumed.trycloudflare.com"
 
 export const environment = {
   production: true,
