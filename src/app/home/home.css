@@ -107,10 +107,6 @@
   object-fit: contain;
 }
 
-/* ================================================
-   DAY-VIEW AGENDA TIMELINE
-   ================================================ */
-
 .accordion-header-left { display: flex; align-items: center; gap: 0.5rem; }
 .accordion-header-icon { width: 1.25rem; height: 1.25rem; color: #5aaab4; flex-shrink: 0; }
 
@@ -183,18 +179,15 @@
 }
 .tl-event:hover { filter: brightness(0.95); }
 
-/* All text inside events: black and fully opaque for readability */
 .tl-ev-time  { font-size: 0.65rem; font-weight: 600; white-space: nowrap; line-height: 1.2; color: rgba(0,0,0,0.55); }
 .tl-ev-name  { font-size: 0.78rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; color: rgba(0,0,0,0.85); }
 .tl-ev-meta  { font-size: 0.65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; color: rgba(0,0,0,0.5); }
 
-/* Event colour variants — brighter backgrounds so black text pops */
 .tl-color-0 { background: rgba(90,170,180,0.35);  border-left-color: #5aaab4; }
 .tl-color-1 { background: rgba(140,200,210,0.30); border-left-color: #8cc8d2; }
 .tl-color-2 { background: rgba(60,130,145,0.32);  border-left-color: #3c8291; }
 .tl-color-3 { background: rgba(30,90,100,0.28);   border-left-color: #1e5a64; }
 
-/* "Now" indicator */
 .tl-now-line {
   position: absolute; left: 0; right: 0;
   height: 2px; background: #5aaab4;
@@ -204,9 +197,7 @@
   position: absolute; left: -4px; top: -3px;
   width: 8px; height: 8px; border-radius: 50%; background: #5aaab4;
 }
-/* --- Agenda event: extra elements --- */
 
-/* Lesson-type badge */
 .tl-ev-tag {
   display: inline-block;
   font-size: 0.6rem;
@@ -225,7 +216,6 @@
   max-width: 100%;
 }
 
-/* Meta rows (campus/room, teachers) */
 .tl-ev-meta {
   display: flex;
   align-items: center;
