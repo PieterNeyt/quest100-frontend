@@ -17,7 +17,8 @@
     <div class="nav-section-right">
       @if (roleService.hasRole(role.LECTOR)) {
         <a routerLink="/leaderboard" class="nav-link">Leaderboard</a>
-      } @else if(roleService.hasRole(role.ADMIN)){
+      }
+      @if(roleService.hasRole(role.ADMIN)){
         <a routerLink="/reports/dashboard" class="nav-link">Reports</a>
       }
 
@@ -131,7 +132,8 @@
       @if (roleService.hasRole(role.LECTOR)) {
         <a routerLink="/leaderboard" class="sidebar-link" (click)="activeMenu.set(null)">Leaderboard</a>
         <div class="sidebar-divider"></div>
-      } @else if (roleService.hasRole(role.ADMIN)){
+      }
+      @if (roleService.hasRole(role.ADMIN)){
         <a routerLink="/reports/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
       }
 
