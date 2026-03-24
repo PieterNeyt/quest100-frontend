@@ -1,14 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { driver, Driver, DriveStep } from "driver.js";
-import "driver.js/dist/driver.css";
 import { TranslationService } from './translationService';
 
 @Injectable({ providedIn: 'root' })
 export class TourService {
   readonly t = inject(TranslationService);
   private driverObj?: Driver;
-
-  // --- VERBETERDE TIMING & POSITIE LOGICA ---
 
   private async safeScroll(selector: string, accordionHeaderSelector?: string) {
     // 1. Als het in een accordion zit, klik die eerst open
@@ -27,7 +24,7 @@ export class TourService {
       el.scrollIntoView({ behavior: 'auto', block: 'center' });
 
       // 3. Forceer een kleine pauze zodat de browser de nieuwe coordinaten 'vastzet'
-      await new Promise(r => setTimeout(r, 100));
+      await new Promise(r => setTimeout(r, 300));
 
       // 4. Update de Driver.js overlay naar de nieuwe plek
       this.driverObj?.refresh();
