@@ -16,8 +16,9 @@
   <div class="flex items-center gap-2">
     <div class="nav-section-right">
       @if (roleService.hasRole(role.LECTOR)) {
-        <a routerLink="/reports/dashboard" class="nav-link">Reports</a>
         <a routerLink="/leaderboard" class="nav-link">Leaderboard</a>
+      } @else if(roleService.hasRole(role.ADMIN)){
+        <a routerLink="/reports/dashboard" class="nav-link">Reports</a>
       }
 
       <button class="nav-pill-button border-yellow-500/30 bg-yellow-500/10 hover:bg-yellow-500/20 transition-all"
@@ -128,9 +129,10 @@
       <div class="sidebar-divider"></div>
 
       @if (roleService.hasRole(role.LECTOR)) {
-        <a routerLink="/reports/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
         <a routerLink="/leaderboard" class="sidebar-link" (click)="activeMenu.set(null)">Leaderboard</a>
         <div class="sidebar-divider"></div>
+      } @else if (roleService.hasRole(role.ADMIN)){
+        <a routerLink="/reports/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
       }
 
       @if (loginDisplay()) {
