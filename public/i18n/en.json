@@ -1090,5 +1090,20 @@
       "ends": "Ends",
       "starts": "Starts"
     }
+  },
+  "navbar": {
+    "home": "Home",
+    "events": "Events",
+    "students": "Students",
+    "about": "About",
+    "avatar": "Avatar",
+    "leaderboard": "Leaderboard",
+    "reports": "Reports",
+    "profile": "Profile",
+    "qrcode": "QR Code",
+    "logout": "Log out",
+    "login": "Login",
+    "tour": "Tour this page",
+    "kudos": "Kudos"
   }
 }

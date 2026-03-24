@@ -11,13 +11,16 @@
         <ng-icon hlm name="lucideSkull" size="xs" />
         {{ t.t('gotcha.tabs.feed') }}
       </button>
-      <button class="tab" [class.tab--active]="activeTab() === 'review'" (click)="switchTab('review')">
-        <ng-icon hlm name="lucideScale" size="xs" />
-        {{ t.t('gotcha.tabs.review') }}
-        @if (pendingCount() > 0) {
-          <span class="tab-badge tab-badge--dot"></span>
-        }
-      </button>
+      <!-- NA -->
+      @if (roleService.hasRole(role.LECTOR)) {
+        <button class="tab" [class.tab--active]="activeTab() === 'review'" (click)="switchTab('review')">
+          <ng-icon hlm name="lucideScale" size="xs" />
+          {{ t.t('gotcha.tabs.review') }}
+          @if (pendingCount() > 0) {
+            <span class="tab-badge tab-badge--dot"></span>
+          }
+        </button>
+      }
     }
   </div>
 
@@ -279,7 +282,7 @@
   }
 
   <!-- ══ REVIEW TAB ══ -->
-  @if (activeTab() === 'review') {
+  @if (activeTab() === 'review' && roleService.hasRole(role.LECTOR))  {
     @if (reviewLoading()) {
       <div class="review-stack-scene">
         <div class="stack-ghost stack-ghost--1"></div>

@@ -5,21 +5,21 @@
     </a>
 
     <ul hlmNavigationMenuList class="nav-links-left">
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/" class="nav-link">Home</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/event" class="nav-link">Events</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">Students</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/about" class="nav-link">About</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/avatar" class="nav-link">Avatar</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/" class="nav-link">{{ translationService.t('navbar.home') }}</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/event" class="nav-link">{{ translationService.t('navbar.events') }}</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">{{ translationService.t('navbar.students') }}</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/about" class="nav-link">{{ translationService.t('navbar.about') }}</a></li>
+      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/avatar" class="nav-link">{{ translationService.t('navbar.avatar') }}</a></li>
     </ul>
   </div>
 
   <div class="flex items-center gap-2">
     <div class="nav-section-right">
       @if (roleService.hasRole(role.LECTOR)) {
-        <a routerLink="/leaderboard" class="nav-link">Leaderboard</a>
+        <a routerLink="/leaderboard" class="nav-link">{{ translationService.t('navbar.leaderboard') }}</a>
       }
       @if(roleService.hasRole(role.ADMIN)){
-        <a routerLink="/reports/dashboard" class="nav-link">Reports</a>
+        <a routerLink="/reports/dashboard" class="nav-link">{{ translationService.t('navbar.reports') }}</a>
       }
 
       <button class="nav-pill-button border-yellow-500/30 bg-yellow-500/10 hover:bg-yellow-500/20 transition-all"
@@ -30,7 +30,7 @@
       @if (loginDisplay() && profile()) {
         <a routerLink="/kudo-overview" class="kudos-badge kudos-badge-clickable">
           <ng-icon name="lucideZap" class="kudos-icon"></ng-icon>
-          <span class="kudos-amount">{{ profile()?.kudos }} Kudos</span>
+          <span class="kudos-amount">{{ profile()?.kudos }} {{ translationService.t('navbar.kudos') }}</span>
           <ng-icon name="lucideChevronRight" class="kudos-chevron"></ng-icon>
         </a>
       }
@@ -53,7 +53,7 @@
       </div>
 
       @if (!loginDisplay()) {
-        <button class="nav-pill-button login-btn-highlight" (click)="login()">Login</button>
+        <button class="nav-pill-button login-btn-highlight" (click)="login()">{{ translationService.t('navbar.login') }}</button>
       }
 
       @if (loginDisplay() && profile()) {
@@ -68,11 +68,11 @@
           </button>
           @if (activeMenu() === 'user') {
             <div class="custom-dropdown-menu">
-              <button class="dropdown-item-pill" routerLink="/profile" (click)="activeMenu.set(null)">Profile</button>
+              <button class="dropdown-item-pill" routerLink="/profile" (click)="activeMenu.set(null)">{{ translationService.t('navbar.profile') }}</button>
               @if (roleService.hasRole(role.LECTOR)) {
-                <button class="dropdown-item-pill" routerLink="/qrcode" (click)="activeMenu.set(null)">QrCode</button>
+                <button class="dropdown-item-pill" routerLink="/qrcode" (click)="activeMenu.set(null)">{{ translationService.t('navbar.qrcode') }}</button>
               }
-              <button class="dropdown-item-pill" (click)="logout()">Log out</button>
+              <button class="dropdown-item-pill" (click)="logout()">{{ translationService.t('navbar.logout') }}</button>
             </div>
           }
         </div>
@@ -102,7 +102,7 @@
             <span class="font-bold text-lg leading-tight">{{ profile()?.firstName }}</span>
             <a class="kudos-badge-mobile" routerLink="/kudo-overview" (click)="activeMenu.set(null)">
               <ng-icon name="lucideZap" class="size-4"></ng-icon>
-              <span>{{ profile()?.kudos }} Kudos</span>
+              <span>{{ profile()?.kudos }} {{ translationService.t('navbar.kudos') }}</span>
               <ng-icon name="lucideChevronRight" class="size-3"></ng-icon>
             </a>
           </div>
@@ -118,33 +118,33 @@
     <nav class="sidebar-nav">
       <button (click)="startContextualTour(); activeMenu.set(null)" class="sidebar-link flex items-center gap-2">
         <ng-icon name="lucideHelpCircle" class="text-yellow-500"></ng-icon>
-        Tour deze pagina
+        {{ translationService.t('navbar.tour') }}
       </button>
 
-      <a routerLink="/" class="sidebar-link" (click)="activeMenu.set(null)">Home</a>
-      <a routerLink="/event" class="sidebar-link" (click)="activeMenu.set(null)">Events</a>
-      <a routerLink="/userlist" class="sidebar-link" (click)="activeMenu.set(null)">Students</a>
-      <a routerLink="/about" class="sidebar-link" (click)="activeMenu.set(null)">About</a>
-      <a routerLink="/avatar" class="sidebar-link" (click)="activeMenu.set(null)">Avatar</a>
+      <a routerLink="/" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.home') }}</a>
+      <a routerLink="/event" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.events') }}</a>
+      <a routerLink="/userlist" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.students') }}</a>
+      <a routerLink="/about" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.about') }}</a>
+      <a routerLink="/avatar" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.avatar') }}</a>
 
       <div class="sidebar-divider"></div>
 
       @if (roleService.hasRole(role.LECTOR)) {
-        <a routerLink="/leaderboard" class="sidebar-link" (click)="activeMenu.set(null)">Leaderboard</a>
+        <a routerLink="/leaderboard" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.leaderboard') }}</a>
         <div class="sidebar-divider"></div>
       }
       @if (roleService.hasRole(role.ADMIN)){
-        <a routerLink="/reports/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
+        <a routerLink="/reports/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.reports') }}</a>
       }
 
       @if (loginDisplay()) {
-        <a routerLink="/profile" class="sidebar-link" (click)="activeMenu.set(null)">Profile</a>
+        <a routerLink="/profile" class="sidebar-link" (click)="activeMenu.set(null)">{{ translationService.t('navbar.profile') }}</a>
         @if (roleService.hasRole(role.LECTOR)) {
-          <button class="sidebar-link" routerLink="/qrcode" (click)="activeMenu.set(null)">QrCode</button>
+          <button class="sidebar-link" routerLink="/qrcode" (click)="activeMenu.set(null)">{{ translationService.t('navbar.qrcode') }}</button>
         }
-        <button (click)="logout(); activeMenu.set(null)" class="sidebar-link text-red-400">Log out</button>
+        <button (click)="logout(); activeMenu.set(null)" class="sidebar-link text-red-400">{{ translationService.t('navbar.logout') }}</button>
       } @else {
-        <button (click)="login(); activeMenu.set(null)" class="sidebar-login-btn">Login</button>
+        <button (click)="login(); activeMenu.set(null)" class="sidebar-login-btn">{{ translationService.t('navbar.login') }}</button>
       }
 
       <div class="sidebar-divider"></div>

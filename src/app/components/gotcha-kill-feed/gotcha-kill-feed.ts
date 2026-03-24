@@ -9,9 +9,10 @@ import {TranslationService} from '../../services/translationService';
 import {ToastService} from '../../services/toastService';
 import {TourService} from '../../services/tourService';
 import {GotchaStateService} from '../../services/GotchaStateService';
-
+import {Role} from '../../model/role';
 import {FullNamePipe, InitialsPipe, PhotoSrcPipe, PropNamePipe, StatusClassPipe} from '../../utils/gotchaPipes';
 import {GotchaGame} from '../../model/gotcha';
+import {RoleService} from '../../services/roleService';
 
 @Component({
   selector: 'app-gotcha-kill-feed',
@@ -34,7 +35,8 @@ export class GotchaKillFeedComponent {
   private readonly gotchaService = inject(GotchaService);
   private readonly toastService = inject(ToastService);
   readonly t = inject(TranslationService);
-
+  readonly roleService = inject(RoleService);
+  public role = Role;
   currentGame = input<GotchaGame | null>(null);
   private readonly tourService = inject(TourService);
   activeTab = signal<'rules' | 'feed' | 'review'>('rules');

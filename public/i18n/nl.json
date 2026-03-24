@@ -1090,5 +1090,20 @@
       "ends": "Eindigt",
       "starts": "Start"
     }
+  },
+  "navbar": {
+    "home": "Home",
+    "events": "Evenementen",
+    "students": "Studenten",
+    "about": "Over",
+    "avatar": "Avatar",
+    "leaderboard": "Scorebord",
+    "reports": "Rapporten",
+    "profile": "Profiel",
+    "qrcode": "QR-code",
+    "logout": "Uitloggen",
+    "login": "Inloggen",
+    "tour": "Tour deze pagina",
+    "kudos": "Kudos"
   }
 }
