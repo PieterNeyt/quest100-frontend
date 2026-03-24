@@ -785,6 +785,50 @@
       "detailsDesc": "Bekijk de titel, organisator en de zichtbaarheidsinstellingen van dit evenement.",
       "attendees": "Deelnemerslijst",
       "attendeesDesc": "Hier kun je zien wie zich allemaal heeft ingeschreven voor dit evenement."
+    },
+    "home": {
+      "welcome": "Welkom op Quest100",
+      "welcomeDesc": "Dit is jouw persoonlijk dashboard voor je eerste 100 dagen als student. Hier vind je alles wat je nodig hebt op één plek.",
+      "platforms": "Studentenplatformen",
+      "platformsDesc": "Snelkoppelingen naar alle belangrijke platformen: KdG Intranet, Canvas, TimeEdit en meer. Klik op een knop om rechtstreeks naar het platform te gaan.",
+      "infoBtn": "Meer info",
+      "infoBtnDesc": "Weet je niet wat een platform doet? Klik op het info-icoontje naast elke knop voor een uitgebreide uitleg op de Over-pagina.",
+      "profile": "Mijn Profiel",
+      "profileDesc": "Bekijk jouw naam, archetype en profielfoto. Klik op de kaart om hem open te klappen.",
+      "minigames": "Mini-games",
+      "minigamesDesc": "Speel dagelijkse mini-games zoals Nerdle, Minesweeper of Sudoku en verdien Kudo-punten. Ze resetten elke dag!",
+      "agenda": "Agenda van vandaag",
+      "agendaDesc": "Bekijk jouw lessen van vandaag op basis van je TimeEdit-rooster. Klik op de kaart om hem open te klappen.",
+      "timeline": "Tijdlijn",
+      "timelineDesc": "Je lessen worden visueel weergegeven op een tijdlijn. De blauwe lijn toont hoe laat het nu is. Bijgewoonde lessen zijn groen gemarkeerd."
+    },
+    "userlist": {
+      "title": "Medestudenten",
+      "titleDesc": "Hier vind je een overzicht van al je medestudenten binnen Quest100. Je kan hen een Kudo-award sturen om hen te bedanken of aan te moedigen.",
+      "leaderboard": "Leaderboard",
+      "leaderboardDesc": "Bekijk het actieve leaderboard en je huidige positie. Klik op de kaart om de volledige rangschikking te zien. Via 'Geschiedenis' zie je afgelopen leaderboards.",
+      "filter": "Zoeken & filteren",
+      "filterDesc": "Zoek op naam of filter op klas om snel de juiste student te vinden.",
+      "grid": "Studentenlijst",
+      "gridDesc": "Elke kaart toont een student met zijn of haar klas. Je kan slechts één award per dag per persoon sturen.",
+      "award": "Award geven",
+      "awardDesc": "Klik op 'Award geven' om een Kudo te sturen. Kies een categorie en schrijf een persoonlijk berichtje — de student krijgt dit te zien!"
+    },
+    "leaderboard": {
+      "title": "Leaderboards",
+      "titleDesc": "Hier beheer je alle leaderboards voor Quest100. Actieve, geplande en afgelopen competities staan overzichtelijk op één plek.",
+      "create": "Nieuw leaderboard",
+      "createDesc": "Klik hier om een nieuw leaderboard aan te maken. Je kiest een vak, een periode en een prijs voor de winnaar.",
+      "filter": "Zoeken",
+      "filterDesc": "Zoek op naam van een prijs om snel het juiste leaderboard terug te vinden.",
+      "sort": "Sorteren",
+      "sortDesc": "Sorteer de leaderboards op startdatum, einddatum of prijisnaam. Klik nogmaals om de volgorde om te draaien.",
+      "grid": "Overzicht",
+      "gridDesc": "Elk kaartje toont een leaderboard met zijn status, prijs, betrokken klassen en looptijd. Klik op een kaart om de rangschikking te bekijken.",
+      "card": "Leaderboard kaart",
+      "cardDesc": "Actieve leaderboards zijn extra opvallend weergegeven. Je ziet ook hoeveel dagen er nog resten en welke klassen meedoen.",
+      "edit": "Bewerken",
+      "editDesc": "Klik op het potloodicoontje om de datums of prijs van een leaderboard aan te passen."
     }
   },
   "mod": {

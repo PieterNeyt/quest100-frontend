@@ -53,6 +53,10 @@ export class TourService {
           title: `${this.getIcon('calendar')} ${this.t.t('tour.event.title')}</span>`,
           description: this.t.t('tour.event.desc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.events-header')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -61,6 +65,10 @@ export class TourService {
           title: `${this.getIcon('plus')} ${this.t.t('tour.event.create')}</span>`,
           description: this.t.t('tour.event.createDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-create')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -69,6 +77,10 @@ export class TourService {
           title: `${this.getIcon('filter')} ${this.t.t('tour.event.filter')}</span>`,
           description: this.t.t('tour.event.filterDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.filter-bar')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -80,6 +92,10 @@ export class TourService {
           title: `${this.getIcon('flag')} ${this.t.t('tour.event.report')}</span>`,
           description: this.t.t('tour.event.reportDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.card-report-btn:first-child')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     } else {
@@ -106,6 +122,10 @@ export class TourService {
           element?.removeEventListener('click', closeTour);
         };
         element?.addEventListener('click', closeTour);
+      },
+      onHighlightStarted: () => {
+        document.querySelector('app-gotcha-banner')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -124,6 +144,10 @@ export class TourService {
           title: `${this.getIcon('shield')} ${this.t.t('tour.mod.header')}</span>`,
           description: this.t.t('tour.mod.headerDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.header-text')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -132,6 +156,10 @@ export class TourService {
           title: `${this.getIcon('sliders')} ${this.t.t('tour.mod.filters')}</span>`,
           description: this.t.t('tour.mod.filtersDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.header-right')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -143,6 +171,10 @@ export class TourService {
           title: `${this.getIcon('alert')} ${this.t.t('tour.mod.open')}</span>`,
           description: this.t.t('tour.mod.openDesc'),
           side: "right"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.column:first-child')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     } else {
@@ -160,6 +192,10 @@ export class TourService {
         title: `${this.getIcon('check')} ${this.t.t('tour.mod.closed')}</span>`,
         description: this.t.t('tour.mod.closedDesc'),
         side: "left"
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.column:last-child')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -176,6 +212,10 @@ export class TourService {
           title: `${this.getIcon('zap')} ${this.t.t('tour.avatar.kudos')}</span>`,
           description: this.t.t('tour.avatar.kudosDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.kudos-badge')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -184,6 +224,10 @@ export class TourService {
           title: `${this.getIcon('user')} ${this.t.t('tour.avatar.preview')}</span>`,
           description: this.t.t('tour.avatar.previewDesc'),
           side: "right"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.preview-panel')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -192,6 +236,10 @@ export class TourService {
           title: `${this.getIcon('shopping')} ${this.t.t('tour.avatar.shop')}</span>`,
           description: this.t.t('tour.avatar.shopDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.shop-panel')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -209,6 +257,10 @@ export class TourService {
           title: `${this.getIcon('rocket')} ${this.t.t('tour.about.hero')}</span>`,
           description: this.t.t('tour.about.heroDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.hero-inner')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -217,6 +269,10 @@ export class TourService {
           title: `${this.getIcon('sliders')} ${this.t.t('tour.about.counters')}</span>`,
           description: this.t.t('tour.about.countersDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.hero-counters')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -225,6 +281,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.about.apps')}</span>`,
           description: this.t.t('tour.about.appsDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.app-section:first-of-type')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -242,6 +302,10 @@ export class TourService {
           title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`,
           description: this.t.t('tour.reportDetail.bannerDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.report-reason-banner')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -250,6 +314,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.reportDetail.content')}</span>`,
           description: this.t.t('tour.reportDetail.contentDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.chat-wrap')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -261,6 +329,10 @@ export class TourService {
           title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`,
           description: this.t.t('tour.reportDetail.actionDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-resolve')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -278,6 +350,10 @@ export class TourService {
           title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`,
           description: this.t.t('tour.reportDetail.bannerDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.report-reason-banner')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -286,6 +362,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.reportMessage.chat')}</span>`,
           description: this.t.t('tour.reportMessage.chatDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.chat-body')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -294,6 +374,10 @@ export class TourService {
           title: `${this.getIcon('flag')} ${this.t.t('tour.reportMessage.flagged')}</span>`,
           description: this.t.t('tour.reportMessage.flaggedDesc'),
           side: "right"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.highlighted')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -305,6 +389,10 @@ export class TourService {
           title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`,
           description: this.t.t('tour.reportDetail.actionDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-resolve')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -323,6 +411,10 @@ export class TourService {
           title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`,
           description: this.t.t('tour.reportDetail.bannerDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.report-reason-banner')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -331,6 +423,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.reportEvent.photo')}</span>`,
           description: this.t.t('tour.reportEvent.photoDesc'),
           side: "right"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.top-photo')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -339,6 +435,10 @@ export class TourService {
           title: `${this.getIcon('sliders')} ${this.t.t('tour.reportEvent.details')}</span>`,
           description: this.t.t('tour.reportEvent.detailsDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.info-grid')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -350,6 +450,10 @@ export class TourService {
           title: `${this.getIcon('user')} ${this.t.t('tour.reportEvent.attendees')}</span>`,
           description: this.t.t('tour.reportEvent.attendeesDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.attendees-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -361,6 +465,10 @@ export class TourService {
           title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`,
           description: this.t.t('tour.reportDetail.actionDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-resolve')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -377,6 +485,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`,
           description: this.t.t('tour.gotcha.tabsDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.tabs')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -385,6 +497,10 @@ export class TourService {
           title: `${this.getIcon('shield')} ${this.t.t('tour.gotcha.rulesInfo')}`,
           description: this.t.t('tour.gotcha.rulesInfoDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.rules-info-card')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -393,6 +509,10 @@ export class TourService {
           title: `${this.getIcon('zap')} ${this.t.t('tour.gotcha.rulesSteps')}`,
           description: this.t.t('tour.gotcha.rulesStepsDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.steps-list')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -401,6 +521,10 @@ export class TourService {
           title: `${this.getIcon('alert')} ${this.t.t('tour.gotcha.rulesImportant')}`,
           description: this.t.t('tour.gotcha.rulesImportantDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.rules-list')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -419,6 +543,10 @@ export class TourService {
           title: `${this.getIcon('crosshair')} ${this.t.t('tour.gotcha.target')}`,
           description: this.t.t('tour.gotcha.targetDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.target-panel')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -430,6 +558,10 @@ export class TourService {
           title: `${this.getIcon('timer')} ${this.t.t('tour.gotcha.timer')}`,
           description: this.t.t('tour.gotcha.timerDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.countdown-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -440,6 +572,10 @@ export class TourService {
         title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`,
         description: this.t.t('tour.gotcha.tabsDesc'),
         side: "bottom"
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.tabs')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -452,6 +588,9 @@ export class TourService {
           ? this.t.t('tour.gotcha.feedDesc')
           : this.t.t('tour.gotcha.feedEmptyDesc'),
         side: "top"
+      },
+      onHighlightStarted: () => {
+        feedEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -462,6 +601,10 @@ export class TourService {
           title: `${this.getIcon('swords')} ${this.t.t('tour.gotcha.submit')}`,
           description: this.t.t('tour.gotcha.submitDesc'),
           side: "left"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-submit-kill')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -479,6 +622,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`,
           description: this.t.t('tour.gotcha.tabsDesc'),
           side: "bottom"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.tabs')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -491,6 +638,10 @@ export class TourService {
           title: `${this.getIcon('scale')} ${this.t.t('tour.gotcha.review')}`,
           description: this.t.t('tour.gotcha.reviewDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.review-card')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
       steps.push({
@@ -499,6 +650,10 @@ export class TourService {
           title: `${this.getIcon('check')} ${this.t.t('tour.gotcha.reviewActions')}`,
           description: this.t.t('tour.gotcha.reviewActionsDesc'),
           side: "top"
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.card-footer.review-actions')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     } else {
@@ -524,6 +679,10 @@ export class TourService {
           title: `${this.getIcon('rocket')} ${this.t.t('tour.gotchaEnd.winner')}`,
           description: this.t.t('tour.gotchaEnd.winnerDesc'),
           side: 'bottom'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.winner-card')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -535,6 +694,10 @@ export class TourService {
           title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaEnd.prize')}`,
           description: this.t.t('tour.gotchaEnd.prizeDesc'),
           side: 'bottom'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.prize-card')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -546,6 +709,10 @@ export class TourService {
           title: `${this.getIcon('shield')} ${this.t.t('tour.gotchaEnd.awards')}`,
           description: this.t.t('tour.gotchaEnd.awardsDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.awards-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -557,6 +724,10 @@ export class TourService {
           title: `${this.getIcon('target')} ${this.t.t('tour.gotchaEnd.graph')}`,
           description: this.t.t('tour.gotchaEnd.graphDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.graph-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -573,6 +744,10 @@ export class TourService {
           title: `${this.getIcon('timer')} ${this.t.t('tour.gotchaHistory.header')}`,
           description: this.t.t('tour.gotchaHistory.headerDesc'),
           side: 'bottom'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.header-title-row')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -586,6 +761,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.gotchaHistory.grid')}`,
           description: this.t.t('tour.gotchaHistory.gridDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.history-grid')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
       steps.push({
@@ -594,6 +773,10 @@ export class TourService {
           title: `${this.getIcon('shield')} ${this.t.t('tour.gotchaHistory.card')}`,
           description: this.t.t('tour.gotchaHistory.cardDesc'),
           side: 'right'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.history-card')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
       steps.push({
@@ -602,6 +785,10 @@ export class TourService {
           title: `${this.getIcon('rocket')} ${this.t.t('tour.gotchaHistory.winner')}`,
           description: this.t.t('tour.gotchaHistory.winnerDesc'),
           side: 'bottom'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.history-card .winner-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
       steps.push({
@@ -610,6 +797,10 @@ export class TourService {
           title: `${this.getIcon('sliders')} ${this.t.t('tour.gotchaHistory.stats')}`,
           description: this.t.t('tour.gotchaHistory.statsDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.history-card .stats-row')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
       steps.push({
@@ -618,6 +809,10 @@ export class TourService {
           title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaHistory.view')}`,
           description: this.t.t('tour.gotchaHistory.viewDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.history-card .card-footer')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     } else {
@@ -641,6 +836,10 @@ export class TourService {
           title: `${this.getIcon('user')} ${this.t.t('tour.profile.picture')}`,
           description: this.t.t('tour.profile.pictureDesc'),
           side: 'bottom'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.profile-picture-wrapper')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -649,6 +848,10 @@ export class TourService {
           title: `${this.getIcon('zap')} ${this.t.t('tour.profile.actions')}`,
           description: this.t.t('tour.profile.actionsDesc'),
           side: 'bottom'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.profile-actions')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -657,6 +860,10 @@ export class TourService {
           title: `${this.getIcon('sliders')} ${this.t.t('tour.profile.info')}`,
           description: this.t.t('tour.profile.infoDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.profile-info')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -675,6 +882,10 @@ export class TourService {
           title: `${this.getIcon('zap')} ${this.t.t('tour.kudoOverview.stats')}`,
           description: this.t.t('tour.kudoOverview.statsDesc'),
           side: 'right'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.content-card:first-of-type')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -683,6 +894,10 @@ export class TourService {
           title: `${this.getIcon('sliders')} ${this.t.t('tour.kudoOverview.summary')}`,
           description: this.t.t('tour.kudoOverview.summaryDesc'),
           side: 'bottom'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.kudo-summary')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -691,6 +906,10 @@ export class TourService {
           title: `${this.getIcon('target')} ${this.t.t('tour.kudoOverview.bars')}`,
           description: this.t.t('tour.kudoOverview.barsDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.stats-bars-container')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       },
       {
@@ -699,6 +918,10 @@ export class TourService {
           title: `${this.getIcon('layout')} ${this.t.t('tour.kudoOverview.timeline')}`,
           description: this.t.t('tour.kudoOverview.timelineDesc'),
           side: 'left'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.content-card:last-of-type')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     ];
@@ -710,6 +933,10 @@ export class TourService {
           title: `${this.getIcon('check')} ${this.t.t('tour.kudoOverview.entry')}`,
           description: this.t.t('tour.kudoOverview.entryDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.timeline-item')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
 
@@ -721,6 +948,10 @@ export class TourService {
             title: `${this.getIcon('flag')} ${this.t.t('tour.kudoOverview.report')}`,
             description: this.t.t('tour.kudoOverview.reportDesc'),
             side: 'left'
+          },
+          onHighlightStarted: () => {
+            document.querySelector('.timeline-report-btn')
+              ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
         });
       } else {
@@ -753,6 +984,10 @@ export class TourService {
         title: `${this.getIcon('layout')} ${this.t.t('tour.eventDetail.photo')}`,
         description: this.t.t('tour.eventDetail.photoDesc'),
         side: 'right'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.top-photo')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -762,6 +997,10 @@ export class TourService {
         title: `${this.getIcon('flag')} ${this.t.t('tour.eventDetail.info')}`,
         description: this.t.t('tour.eventDetail.infoDesc'),
         side: 'left'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.top-info')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -771,6 +1010,10 @@ export class TourService {
         title: `${this.getIcon('alert')} ${this.t.t('tour.eventDetail.report')}`,
         description: this.t.t('tour.eventDetail.reportDesc'),
         side: 'bottom'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.btn-report-flag')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -782,6 +1025,10 @@ export class TourService {
           title: `${this.getIcon('check')} ${this.t.t('tour.eventDetail.action')}`,
           description: this.t.t('tour.eventDetail.actionDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.action-area')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -794,6 +1041,10 @@ export class TourService {
           title: `${this.getIcon('zap')} ${this.t.t('tour.eventDetail.chat')}`,
           description: this.t.t('tour.eventDetail.chatDesc'),
           side: 'right'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.bottom-chat')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     } else {
@@ -805,7 +1056,6 @@ export class TourService {
       });
     }
 
-
     const attendees = document.querySelector('.attendees-panel');
     if (attendees) {
       steps.push({
@@ -814,13 +1064,18 @@ export class TourService {
           title: `${this.getIcon('user')} ${this.t.t('tour.eventDetail.attendees')}`,
           description: this.t.t('tour.eventDetail.attendeesDesc'),
           side: 'left'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.attendees-panel')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
 
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
-  }startGotchaSettingsTour() {
+  }
+  startGotchaSettingsTour() {
     this.initDriver();
     const isLocked = !!document.querySelector('.settings-card--locked');
     const hasProps = !!document.querySelector('.prop-row');
@@ -834,6 +1089,10 @@ export class TourService {
           ? this.t.t('tour.gotchaSettings.gameCardLocked')
           : this.t.t('tour.gotchaSettings.gameCardDesc'),
         side: 'top'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.settings-card:first-child')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -843,6 +1102,10 @@ export class TourService {
         title: `${this.getIcon('calendar')} ${this.t.t('tour.gotchaSettings.startDate')}`,
         description: this.t.t('tour.gotchaSettings.startDateDesc'),
         side: 'bottom'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.field-group--startdate')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -852,6 +1115,10 @@ export class TourService {
         title: `${this.getIcon('timer')} ${this.t.t('tour.gotchaSettings.deadline')}`,
         description: this.t.t('tour.gotchaSettings.deadlineDesc'),
         side: 'bottom'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.field-group--deadline')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -861,6 +1128,10 @@ export class TourService {
         title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaSettings.prize')}`,
         description: this.t.t('tour.gotchaSettings.prizeDesc'),
         side: 'top'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.field-group--prize-photo')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -870,6 +1141,10 @@ export class TourService {
         title: `${this.getIcon('flag')} ${this.t.t('tour.gotchaSettings.prizeDesc2')}`,
         description: this.t.t('tour.gotchaSettings.prizeDesc2Desc'),
         side: 'top'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.field-row--prize-desc')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -879,6 +1154,10 @@ export class TourService {
         title: `${this.getIcon('shopping')} ${this.t.t('tour.gotchaSettings.props')}`,
         description: this.t.t('tour.gotchaSettings.propsDesc'),
         side: 'top'
+      },
+      onHighlightStarted: () => {
+        document.querySelector('.settings-card:last-child')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
@@ -889,6 +1168,10 @@ export class TourService {
           title: `${this.getIcon('check')} ${this.t.t('tour.gotchaSettings.propRow')}`,
           description: this.t.t('tour.gotchaSettings.propRowDesc'),
           side: 'right'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.prop-row')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     } else {
@@ -898,6 +1181,10 @@ export class TourService {
           title: `${this.getIcon('alert')} ${this.t.t('tour.gotchaSettings.noProps')}`,
           description: this.t.t('tour.gotchaSettings.noPropsDesc'),
           side: 'top'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.props-empty')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -909,6 +1196,10 @@ export class TourService {
           title: `${this.getIcon('plus')} ${this.t.t('tour.gotchaSettings.addProp')}`,
           description: this.t.t('tour.gotchaSettings.addPropDesc'),
           side: 'left'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-add-prop')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     }
@@ -916,5 +1207,293 @@ export class TourService {
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
-}
+  startHomeTour() {
+    this.initDriver();
 
+    const scrollAndHighlight = (selector: string): Promise<void> => {
+      return new Promise(resolve => {
+        const el = document.querySelector(selector);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(resolve, 400);
+        } else {
+          resolve();
+        }
+      });
+    };
+
+    const steps: DriveStep[] = [
+      {
+        element: '.welcome-header',
+        popover: {
+          title: `${this.getIcon('rocket')} ${this.t.t('tour.home.welcome')}`,
+          description: this.t.t('tour.home.welcomeDesc'),
+          side: 'bottom',
+          align: 'start'
+        },
+        onHighlightStarted: () => {
+          scrollAndHighlight('.welcome-header');
+        }
+      },
+      {
+        element: '.action-grid',
+        popover: {
+          title: `${this.getIcon('layout')} ${this.t.t('tour.home.platforms')}`,
+          description: this.t.t('tour.home.platformsDesc'),
+          side: 'bottom',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          scrollAndHighlight('.action-grid');
+        }
+      },
+      {
+        element: '.info-pill-btn',
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.home.infoBtn')}`,
+          description: this.t.t('tour.home.infoBtnDesc'),
+          side: 'right',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          scrollAndHighlight('.info-pill-btn');
+        }
+      },
+      {
+        element: '[class*="accordion-item"]:first-of-type',
+        popover: {
+          title: `${this.getIcon('user')} ${this.t.t('tour.home.profile')}`,
+          description: this.t.t('tour.home.profileDesc'),
+          side: 'top',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          scrollAndHighlight('[class*="accordion-item"]:first-of-type');
+        }
+      },
+      {
+        element: '.games-list',
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.home.minigames')}`,
+          description: this.t.t('tour.home.minigamesDesc'),
+          side: 'top',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          // Zorg dat het accordion open is voor het scrollen
+          const accordionHeader = document.querySelector(
+            '[class*="accordion-item"]:first-of-type .accordion-header'
+          ) as HTMLElement;
+          if (accordionHeader) accordionHeader.click();
+          setTimeout(() => scrollAndHighlight('.games-list'), 200);
+        }
+      },
+      {
+        element: '[class*="accordion-item"]:last-of-type',
+        popover: {
+          title: `${this.getIcon('calendar')} ${this.t.t('tour.home.agenda')}`,
+          description: this.t.t('tour.home.agendaDesc'),
+          side: 'top',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          scrollAndHighlight('[class*="accordion-item"]:last-of-type');
+        }
+      },
+      {
+        element: '.tl-wrap',
+        popover: {
+          title: `${this.getIcon('timer')} ${this.t.t('tour.home.timeline')}`,
+          description: this.t.t('tour.home.timelineDesc'),
+          side: 'top',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          const agendaHeader = document.querySelector(
+            '[class*="accordion-item"]:last-of-type .accordion-header'
+          ) as HTMLElement;
+          if (agendaHeader) agendaHeader.click();
+          setTimeout(() => scrollAndHighlight('.tl-wrap'), 200);
+        }
+      }
+    ];
+
+    this.driverObj?.setSteps(steps);
+    this.driverObj?.drive();
+  }
+  startUserlistTour() {
+    this.initDriver();
+
+    const steps: DriveStep[] = [
+      {
+        element: '.header-section',
+        popover: {
+          title: `${this.getIcon('user')} ${this.t.t('tour.userlist.title')}`,
+          description: this.t.t('tour.userlist.titleDesc'),
+          side: 'bottom',
+          align: 'start'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.header-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.leaderboard-section',
+        popover: {
+          title: `${this.getIcon('scale')} ${this.t.t('tour.userlist.leaderboard')}`,
+          description: this.t.t('tour.userlist.leaderboardDesc'),
+          side: 'bottom',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.leaderboard-section')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.filter-bar',
+        popover: {
+          title: `${this.getIcon('filter')} ${this.t.t('tour.userlist.filter')}`,
+          description: this.t.t('tour.userlist.filterDesc'),
+          side: 'bottom',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.filter-bar')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.user-grid',
+        popover: {
+          title: `${this.getIcon('user')} ${this.t.t('tour.userlist.grid')}`,
+          description: this.t.t('tour.userlist.gridDesc'),
+          side: 'top',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.user-grid')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.btn-award',
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.userlist.award')}`,
+          description: this.t.t('tour.userlist.awardDesc'),
+          side: 'left',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-award')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    ];
+
+    this.driverObj?.setSteps(steps);
+    this.driverObj?.drive();
+  }
+  startLeaderboardTour() {
+    this.initDriver();
+
+    const steps: DriveStep[] = [
+      {
+        element: '.lb-header',
+        popover: {
+          title: `${this.getIcon('scale')} ${this.t.t('tour.leaderboard.title')}`,
+          description: this.t.t('tour.leaderboard.titleDesc'),
+          side: 'bottom',
+          align: 'start'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.lb-header')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.btn-create',
+        popover: {
+          title: `${this.getIcon('plus')} ${this.t.t('tour.leaderboard.create')}`,
+          description: this.t.t('tour.leaderboard.createDesc'),
+          side: 'bottom',
+          align: 'end'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.btn-create')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.filter-bar',
+        popover: {
+          title: `${this.getIcon('filter')} ${this.t.t('tour.leaderboard.filter')}`,
+          description: this.t.t('tour.leaderboard.filterDesc'),
+          side: 'bottom',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.filter-bar')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.sort-buttons',
+        popover: {
+          title: `${this.getIcon('sliders')} ${this.t.t('tour.leaderboard.sort')}`,
+          description: this.t.t('tour.leaderboard.sortDesc'),
+          side: 'bottom',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.sort-buttons')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.lb-grid',
+        popover: {
+          title: `${this.getIcon('zap')} ${this.t.t('tour.leaderboard.grid')}`,
+          description: this.t.t('tour.leaderboard.gridDesc'),
+          side: 'top',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.lb-grid')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.lb-card--active, .lb-card',
+        popover: {
+          title: `${this.getIcon('target')} ${this.t.t('tour.leaderboard.card')}`,
+          description: this.t.t('tour.leaderboard.cardDesc'),
+          side: 'right',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          const card = document.querySelector('.lb-card--active') ?? document.querySelector('.lb-card');
+          card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      },
+      {
+        element: '.card-edit-btn',
+        popover: {
+          title: `${this.getIcon('sliders')} ${this.t.t('tour.leaderboard.edit')}`,
+          description: this.t.t('tour.leaderboard.editDesc'),
+          side: 'left',
+          align: 'center'
+        },
+        onHighlightStarted: () => {
+          document.querySelector('.card-edit-btn')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    ];
+
+    this.driverObj?.setSteps(steps);
+    this.driverObj?.drive();
+  }
+
+}

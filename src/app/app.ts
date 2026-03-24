@@ -31,6 +31,7 @@ import {Role} from './model/role';
 import {NoClassModalComponent} from './noclass/no-class-modal';
 
 type MenuState = 'languages' | 'user' | 'mobile' | 'minigames' | null;
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -202,6 +203,12 @@ export class App implements OnInit, OnDestroy {
       this.tourService.startProfileTour();
     } else if (path === 'kudo-overview') {
       this.tourService.startKudoOverviewTour();
+    } else if (path === '') {
+      this.tourService.startHomeTour();
+    } else if (path === 'userlist') {
+      this.tourService.startUserlistTour();
+    }else if (path === 'leaderboard') {
+      this.tourService.startLeaderboardTour();
     }
   }
 
