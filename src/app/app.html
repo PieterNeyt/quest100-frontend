@@ -60,7 +60,7 @@
             <div class="avatar-ring">
               <hlm-avatar class="user-avatar-circle">
                 <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt="Profile picture"/>
-                <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
+                <span hlmAvatarFallback>{{ profile()?.firstName?.[0] ?? '?' }}</span>
               </hlm-avatar>
             </div>
           </button>
@@ -93,7 +93,7 @@
           <div class="avatar-ring w-12! h-12!">
             <hlm-avatar class="user-avatar-circle size-md!">
               <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt="Profile picture"/>
-              <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
+              <span hlmAvatarFallback>{{ profile()?.firstName?.[0] ?? '?' }}</span>
             </hlm-avatar>
           </div>
           <div class="flex flex-col">
