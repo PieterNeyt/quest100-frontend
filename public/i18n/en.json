@@ -785,6 +785,50 @@
       "detailsDesc": "Review the title, organizer, and visibility settings of this event.",
       "attendees": "Participant List",
       "attendeesDesc": "Here you can see everyone who registered for this event."
+    },
+    "home": {
+      "welcome": "Welcome to Quest100",
+      "welcomeDesc": "This is your personal dashboard for your first 100 days as a student. Everything you need is in one place.",
+      "platforms": "Student Platforms",
+      "platformsDesc": "Quick links to all important platforms: KdG Intranet, Canvas, TimeEdit and more. Click a button to go directly to the platform.",
+      "infoBtn": "More Info",
+      "infoBtnDesc": "Not sure what a platform does? Click the info icon next to each button for a detailed explanation on the About page.",
+      "profile": "My Profile",
+      "profileDesc": "View your name, archetype and profile picture. Click the card to expand it.",
+      "minigames": "Mini-games",
+      "minigamesDesc": "Play daily mini-games like Nerdle, Minesweeper or Sudoku and earn Kudo points. They reset every day!",
+      "agenda": "Today's Agenda",
+      "agendaDesc": "View today's classes based on your TimeEdit schedule. Click the card to expand it.",
+      "timeline": "Timeline",
+      "timelineDesc": "Your classes are displayed visually on a timeline. The blue line shows the current time. Attended classes are marked in green."
+    },
+    "userlist": {
+      "title": "Fellow Students",
+      "titleDesc": "Here you'll find an overview of all your fellow students in Quest100. You can send them a Kudo award to thank or encourage them.",
+      "leaderboard": "Leaderboard",
+      "leaderboardDesc": "View the active leaderboard and your current position. Click the card to see the full standings. Use 'History' to browse past leaderboards.",
+      "filter": "Search & Filter",
+      "filterDesc": "Search by name or filter by class to quickly find the right student.",
+      "grid": "Student List",
+      "gridDesc": "Each card shows a student and their class. You can only send one award per person per day.",
+      "award": "Give Award",
+      "awardDesc": "Click 'Give Award' to send a Kudo. Choose a category and write a personal message — the student will see it!"
+    },
+    "leaderboard": {
+      "title": "Leaderboards",
+      "titleDesc": "Here you manage all leaderboards for Quest100. Active, planned, and finished competitions are neatly displayed in one place.",
+      "create": "New Leaderboard",
+      "createDesc": "Click here to create a new leaderboard. You'll choose a course, a time period, and a prize for the winner.",
+      "filter": "Search",
+      "filterDesc": "Search by prize name to quickly find the right leaderboard.",
+      "sort": "Sort",
+      "sortDesc": "Sort leaderboards by start date, end date, or prize name. Click again to reverse the order.",
+      "grid": "Overview",
+      "gridDesc": "Each card shows a leaderboard with its status, prize, participating classes, and duration. Click a card to view the standings.",
+      "card": "Leaderboard Card",
+      "cardDesc": "Active leaderboards are highlighted more prominently. You can also see how many days remain and which classes are participating.",
+      "edit": "Edit",
+      "editDesc": "Click the pencil icon to update the dates or prize of a leaderboard."
     }
   },
   "mod": {

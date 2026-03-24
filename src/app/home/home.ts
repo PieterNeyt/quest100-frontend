@@ -62,16 +62,19 @@ export class Home implements OnInit, OnDestroy {
     {
       label: 'CANVAS',
       key: 'canvas',
+      url: 'https://canvas.kdg.be/',
       logoUrl: 'https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_1/v1706635559/oxnardsdorg/a3jmgjuc95vnrlbehc4j/canvas-logo-1024x1020.png'
     },
     {
       label: 'E-STUDENT SERVICE',
       key: 'estudentservice',
+      url: 'https://e-studentservice.kdg.be/Main.aspx',
       logoUrl: 'https://a.storyblok.com/f/226028/2000x2500/021b91e4b7/placeholder-kdg-mobile.webp'
     },
     {
       label: 'TIME EDIT',
       key: 'timeedit',
+      url: 'https://cloud.timeedit.net',
       logoUrl: 'https://cdn.prod.website-files.com/64e6e4222dd4319151d1537d/652641e10a74cd0d04dd1da5_TE%20Logo%20Symbol.png'
     },
   ];

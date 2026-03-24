@@ -10,17 +10,17 @@
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/userlist" class="nav-link">Students</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/about" class="nav-link">About</a></li>
       <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/avatar" class="nav-link">Avatar</a></li>
-      @if (roleService.hasRole(role.ADMIN)) {
-        <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/reports/dashboard" class="nav-link">Reports</a>
-        </li>
-      }
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/reports/dashboard" class="nav-link">Reports</a></li>
-      <li hlmNavigationMenuItem><a hlmNavigationMenuLink routerLink="/leaderboard" class="nav-link">Leaderboard</a></li>
     </ul>
   </div>
 
   <div class="flex items-center gap-2">
     <div class="nav-section-right">
+      @if (roleService.hasRole(role.LECTOR)) {
+        <a routerLink="/leaderboard" class="nav-link">Leaderboard</a>
+      } @else if(roleService.hasRole(role.ADMIN)){
+        <a routerLink="/reports/dashboard" class="nav-link">Reports</a>
+      }
+
       <button class="nav-pill-button border-yellow-500/30 bg-yellow-500/10 hover:bg-yellow-500/20 transition-all"
               (click)="startContextualTour()" title="Tour">
         <ng-icon name="lucideHelpCircle" class="text-yellow-600 size-5"></ng-icon>
@@ -61,7 +61,7 @@
             <div class="avatar-ring">
               <hlm-avatar class="user-avatar-circle">
                 <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt="Profile picture"/>
-                <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
+                <span hlmAvatarFallback>{{ profile()?.firstName?.[0] ?? '?' }}</span>
               </hlm-avatar>
             </div>
           </button>
@@ -94,7 +94,7 @@
           <div class="avatar-ring w-12! h-12!">
             <hlm-avatar class="user-avatar-circle size-md!">
               <img hlmAvatarImage [src]="profile()?.customProfilePicture" class="object-cover" alt="Profile picture"/>
-              <span hlmAvatarFallback>{{ profile()?.firstName?.charAt(0) }}</span>
+              <span hlmAvatarFallback>{{ profile()?.firstName?.[0] ?? '?' }}</span>
             </hlm-avatar>
           </div>
           <div class="flex flex-col">
@@ -123,12 +123,17 @@
       <a routerLink="/" class="sidebar-link" (click)="activeMenu.set(null)">Home</a>
       <a routerLink="/event" class="sidebar-link" (click)="activeMenu.set(null)">Events</a>
       <a routerLink="/userlist" class="sidebar-link" (click)="activeMenu.set(null)">Students</a>
-      <a routerLink="/avatar" class="sidebar-link" (click)="activeMenu.set(null)">Avatar</a>
       <a routerLink="/about" class="sidebar-link" (click)="activeMenu.set(null)">About</a>
-      @if (roleService.hasRole(role.ADMIN)) {
+      <a routerLink="/avatar" class="sidebar-link" (click)="activeMenu.set(null)">Avatar</a>
+
+      <div class="sidebar-divider"></div>
+
+      @if (roleService.hasRole(role.LECTOR)) {
+        <a routerLink="/leaderboard" class="sidebar-link" (click)="activeMenu.set(null)">Leaderboard</a>
+        <div class="sidebar-divider"></div>
+      } @else if (roleService.hasRole(role.ADMIN)){
         <a routerLink="/reports/dashboard" class="sidebar-link" (click)="activeMenu.set(null)">Reports</a>
       }
-      <div class="sidebar-divider"></div>
 
       @if (loginDisplay()) {
         <a routerLink="/profile" class="sidebar-link" (click)="activeMenu.set(null)">Profile</a>
@@ -139,6 +144,16 @@
       } @else {
         <button (click)="login(); activeMenu.set(null)" class="sidebar-login-btn">Login</button>
       }
+
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-lang-options">
+        @for (lang of translationService.availableLanguages; track lang.code) {
+          <button class="dropdown-item-pill" (click)="changeLanguage(lang.code); activeMenu.set(null)">
+            <span [class]="lang.flagClass"></span>
+            <span>{{ lang.name }}</span>
+          </button>
+        }
+      </div>
     </nav>
   </div>
 }

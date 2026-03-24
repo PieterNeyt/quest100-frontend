@@ -31,6 +31,7 @@
   100% { background-position: 50px 50px; filter: hue-rotate(360deg); }
 }
 
+/* ── Desktop: 3 kolommen links | midden | rechts ── */
 .banner-inner {
   display: flex;
   align-items: center;
@@ -40,11 +41,13 @@
   position: relative;
 }
 
-/* ── Left ── */
-.banner-left { flex: 1; }
+.banner-left   { flex: 1; }
+.banner-center { flex: 2; display: flex; justify-content: center; align-items: center; }
+.banner-right  { flex: 1; display: flex; justify-content: flex-end; }
+
+/* ── Left internals ── */
 .banner-title-row { display: flex; align-items: center; gap: 0.75rem; }
 
-/* Vertikale stack voor de titel en de pill */
 .title-stack {
   display: flex;
   flex-direction: column;
@@ -76,19 +79,15 @@ ng-icon {
   justify-content: center;
 }
 
-.title-icon {
-  width: 24px;
-  height: 24px;
-}
+.title-icon { width: 24px; height: 24px; }
 
 .action-group ng-icon,
 .btn-settings ng-icon {
   width: 18px;
   height: 18px;
 }
-/* ── Center ── */
-.banner-center { flex: 2; display: flex; justify-content: center; align-items: center; }
 
+/* ── Center: countdown ── */
 .countdown-wrapper { display: flex; align-items: center; gap: 1.2rem; }
 .countdown-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; font-weight: 700; }
 .countdown-blocks { display: flex; align-items: center; gap: 0.5rem; }
@@ -103,10 +102,10 @@ ng-icon {
 }
 
 .cd-value { font-size: 1.2rem; font-weight: 900; display: block; line-height: 1; color: #ffffff; }
-.cd-unit { font-size: 0.55rem; text-transform: uppercase; opacity: 0.6; font-weight: 700; margin-top: 2px; display: block; }
-.cd-sep { font-size: 1.2rem; font-weight: 900; opacity: 0.2; }
+.cd-unit  { font-size: 0.55rem; text-transform: uppercase; opacity: 0.6; font-weight: 700; margin-top: 2px; display: block; }
+.cd-sep   { font-size: 1.2rem; font-weight: 900; opacity: 0.2; }
 
-/* ── Winner Card ── */
+/* ── Center: winner card ── */
 .winner-card-premium {
   background: rgba(255, 255, 255, 0.04);
   padding: 0.5rem 1rem;
@@ -116,15 +115,14 @@ ng-icon {
   gap: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.winner-label { font-size: 0.65rem; font-weight: 800; color: #facc15; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 1rem; }
+.winner-label { font-size: 0.65rem; font-weight: 800; color: #facc15; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 1rem; white-space: nowrap; }
 .winner-profile { display: flex; align-items: center; gap: 0.75rem; }
 .winner-avatar-ring { padding: 2px; background: linear-gradient(45deg, #ff873c, #FFD23F); border-radius: 10px; }
 .winner-avatar { width: 36px; height: 36px; border-radius: 8px; background: #1a2332; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.winner-name { font-weight: 800; font-size: 0.9rem; }
+.winner-name  { font-weight: 800; font-size: 0.9rem; }
 .winner-stats { font-size: 0.75rem; color: #9ca3af; display: flex; align-items: center; gap: 0.3rem; }
 
-/* ── Right ── */
-.banner-right { flex: 1; display: flex; justify-content: flex-end; }
+/* ── Right: action group ── */
 .action-group { display: flex; align-items: center; gap: 0.8rem; }
 
 .btn-primary {
@@ -140,12 +138,13 @@ ng-icon {
   align-items: center;
   gap: 0.5rem;
   box-shadow: 0 4px 12px rgba(90, 170, 180, 0.3);
+  white-space: nowrap;
 }
 
-.opted-in-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.opted-in-status { display: flex; align-items: center; gap: 0.3rem; color: #06D6A0; font-weight: 800; font-size: 0.8rem; }
-.btn-optout { background: transparent; border: none; color: #ef4444; font-size: 0.6rem; text-transform: uppercase; font-weight: 700; cursor: pointer; opacity: 0.7; }
-.btn-optout:hover { opacity: 1; text-decoration: underline; }
+.opted-in-wrapper  { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.opted-in-status   { display: flex; align-items: center; gap: 0.3rem; color: #06D6A0; font-weight: 800; font-size: 0.8rem; }
+.btn-optout        { background: transparent; border: none; color: #ef4444; font-size: 0.6rem; text-transform: uppercase; font-weight: 700; cursor: pointer; opacity: 0.7; }
+.btn-optout:hover  { opacity: 1; text-decoration: underline; }
 
 .btn-settings {
   background: rgba(255, 255, 255, 0.05);
@@ -174,3 +173,109 @@ ng-icon {
 
 .pulse-icon { animation: pulse-teal 2s infinite ease-in-out; }
 @keyframes pulse-teal { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* ══════════════════════════════════════════
+   MOBILE  ≤ 640px
+   Layout:
+     rij 1: banner-left  (titel)  +  banner-right  (knop)
+     rij 2: banner-center (countdown / winner)
+   ══════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .gotcha-banner {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  /* Flex wordt een 2×1 grid zodat we items vrij kunnen plaatsen */
+  .banner-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 0.75rem 0.5rem;
+    align-items: center;
+  }
+
+  /* Rij 1 links: titel */
+  .banner-left {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* Rij 1 rechts: knop */
+  .banner-right {
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: flex-end;
+    display: flex;
+  }
+
+  /* Rij 2: countdown / winner over volle breedte */
+  .banner-center {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    flex: unset;
+  }
+
+  .gotcha-title { font-size: 1.1rem; }
+
+  /* Countdown: label boven blokken, blokken verdelen breedte */
+  .countdown-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    width: 100%;
+  }
+
+  .countdown-blocks {
+    gap: 0.25rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cd-block {
+    min-width: unset;
+    flex: 1;
+    padding: 0.35rem 0.4rem;
+    border-radius: 10px;
+  }
+
+  .cd-value { font-size: 1rem; }
+  .cd-unit  { font-size: 0.48rem; }
+  .cd-sep   { font-size: 1rem; flex-shrink: 0; }
+
+  /* Winner card */
+  .winner-card-premium {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .winner-label {
+    border-right: none;
+    padding-right: 0;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    width: 100%;
+  }
+
+  /* Coming soon */
+  .coming-soon {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Knoppen */
+  .btn-primary {
+    font-size: 0.78rem;
+    padding: 0.5rem 0.85rem;
+  }
+
+  .opted-in-wrapper { align-items: flex-end; }
+  .action-group { gap: 0.5rem; }
+}
