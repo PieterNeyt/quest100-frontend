@@ -8,6 +8,32 @@ export class TourService {
   readonly t = inject(TranslationService);
   private driverObj?: Driver;
 
+  // --- VERBETERDE TIMING & POSITIE LOGICA ---
+
+  private async safeScroll(selector: string, accordionHeaderSelector?: string) {
+    // 1. Als het in een accordion zit, klik die eerst open
+    if (accordionHeaderSelector) {
+      const header = document.querySelector(accordionHeaderSelector) as HTMLElement;
+      if (header && !header.classList.contains('active')) { // Check of hij niet al open is
+        header.click();
+        // Geef de browser heel even de tijd om de height te berekenen
+        await new Promise(r => requestAnimationFrame(r));
+      }
+    }
+
+    const el = document.querySelector(selector) as HTMLElement;
+    if (el) {
+      // 2. Instant scroll (GEEN smooth). Dit voorkomt dat Driver.js misrekent.
+      el.scrollIntoView({ behavior: 'auto', block: 'center' });
+
+      // 3. Forceer een kleine pauze zodat de browser de nieuwe coordinaten 'vastzet'
+      await new Promise(r => setTimeout(r, 100));
+
+      // 4. Update de Driver.js overlay naar de nieuwe plek
+      this.driverObj?.refresh();
+    }
+  }
+
   private getIcon(name: 'calendar' | 'plus' | 'filter' | 'flag' | 'target' | 'shield' | 'sliders' | 'alert' | 'check' | 'zap' | 'user' | 'shopping' | 'rocket' | 'layout' | 'crosshair' | 'timer' | 'scale' | 'swords'): string {
     const icons = {
       calendar: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
@@ -39,96 +65,50 @@ export class TourService {
       nextBtnText: this.t.t('tour.btns.next'),
       prevBtnText: this.t.t('tour.btns.prev'),
       doneBtnText: this.t.t('tour.btns.done'),
+      animate: false, // Zet animaties van Driver zelf UIT voor betere precisie
     });
   }
 
   startEventTour() {
     this.initDriver();
     const hasEvents = !!document.querySelector('.event-card');
-
     const steps: DriveStep[] = [
       {
         element: '.events-header',
-        popover: {
-          title: `${this.getIcon('calendar')} ${this.t.t('tour.event.title')}</span>`,
-          description: this.t.t('tour.event.desc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.events-header')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('calendar')} ${this.t.t('tour.event.title')}</span>`, description: this.t.t('tour.event.desc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.events-header')
       },
       {
         element: '.btn-create',
-        popover: {
-          title: `${this.getIcon('plus')} ${this.t.t('tour.event.create')}</span>`,
-          description: this.t.t('tour.event.createDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-create')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('plus')} ${this.t.t('tour.event.create')}</span>`, description: this.t.t('tour.event.createDesc'), side: "left" },
+        onHighlightStarted: () => this.safeScroll('.btn-create')
       },
       {
         element: '.filter-bar',
-        popover: {
-          title: `${this.getIcon('filter')} ${this.t.t('tour.event.filter')}</span>`,
-          description: this.t.t('tour.event.filterDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.filter-bar')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('filter')} ${this.t.t('tour.event.filter')}</span>`, description: this.t.t('tour.event.filterDesc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.filter-bar')
       }
     ];
-
     if (hasEvents) {
       steps.push({
         element: '.card-report-btn:first-child',
-        popover: {
-          title: `${this.getIcon('flag')} ${this.t.t('tour.event.report')}</span>`,
-          description: this.t.t('tour.event.reportDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.card-report-btn:first-child')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('flag')} ${this.t.t('tour.event.report')}</span>`, description: this.t.t('tour.event.reportDesc'), side: "top" },
+        onHighlightStarted: () => this.safeScroll('.card-report-btn:first-child')
       });
     } else {
       steps.push({
-        // Geen element property = modal in het midden
-        popover: {
-          title: `${this.getIcon('flag')} ${this.t.t('tour.event.noEventReport')}</span>`,
-          description: this.t.t('tour.event.noEventReportDesc')
-        }
+        popover: { title: `${this.getIcon('flag')} ${this.t.t('tour.event.noEventReport')}</span>`, description: this.t.t('tour.event.noEventReportDesc') }
       });
     }
-
     steps.push({
       element: 'app-gotcha-banner',
-      popover: {
-        title: `${this.getIcon('target')} ${this.t.t('tour.gotcha.title')}</span>`,
-        description: this.t.t('tour.gotcha.desc'),
-        side: "bottom",
-        align: 'center'
-      },
+      popover: { title: `${this.getIcon('target')} ${this.t.t('tour.gotcha.title')}</span>`, description: this.t.t('tour.gotcha.desc'), side: "bottom", align: 'center' },
       onHighlighted: (element) => {
-        const closeTour = () => {
-          this.driverObj?.destroy();
-          element?.removeEventListener('click', closeTour);
-        };
+        const closeTour = () => { this.driverObj?.destroy(); element?.removeEventListener('click', closeTour); };
         element?.addEventListener('click', closeTour);
       },
-      onHighlightStarted: () => {
-        document.querySelector('app-gotcha-banner')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      onHighlightStarted: () => this.safeScroll('app-gotcha-banner')
     });
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
@@ -136,397 +116,183 @@ export class TourService {
   startModerationTour() {
     this.initDriver();
     const hasOpenReports = !!document.querySelector('.open-header + .column-body .report-card');
-
     const steps: DriveStep[] = [
       {
         element: '.header-text',
-        popover: {
-          title: `${this.getIcon('shield')} ${this.t.t('tour.mod.header')}</span>`,
-          description: this.t.t('tour.mod.headerDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.header-text')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('shield')} ${this.t.t('tour.mod.header')}</span>`, description: this.t.t('tour.mod.headerDesc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.header-text')
       },
       {
         element: '.header-right',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.mod.filters')}</span>`,
-          description: this.t.t('tour.mod.filtersDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.header-right')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.mod.filters')}</span>`, description: this.t.t('tour.mod.filtersDesc'), side: "left" },
+        onHighlightStarted: () => this.safeScroll('.header-right')
       }
     ];
-
     if (hasOpenReports) {
       steps.push({
         element: '.column:first-child',
-        popover: {
-          title: `${this.getIcon('alert')} ${this.t.t('tour.mod.open')}</span>`,
-          description: this.t.t('tour.mod.openDesc'),
-          side: "right"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.column:first-child')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('alert')} ${this.t.t('tour.mod.open')}</span>`, description: this.t.t('tour.mod.openDesc'), side: "right" },
+        onHighlightStarted: () => this.safeScroll('.column:first-child')
       });
     } else {
       steps.push({
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.mod.noOpen')}</span>`,
-          description: this.t.t('tour.mod.noOpenDesc')
-        }
+        popover: { title: `${this.getIcon('check')} ${this.t.t('tour.mod.noOpen')}</span>`, description: this.t.t('tour.mod.noOpenDesc') }
       });
     }
-
     steps.push({
       element: '.column:last-child',
-      popover: {
-        title: `${this.getIcon('check')} ${this.t.t('tour.mod.closed')}</span>`,
-        description: this.t.t('tour.mod.closedDesc'),
-        side: "left"
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.column:last-child')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      popover: { title: `${this.getIcon('check')} ${this.t.t('tour.mod.closed')}</span>`, description: this.t.t('tour.mod.closedDesc'), side: "left" },
+      onHighlightStarted: () => this.safeScroll('.column:last-child')
     });
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startAvatarTour() {
     this.initDriver();
-
     const steps: DriveStep[] = [
       {
         element: '.kudos-badge',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.avatar.kudos')}</span>`,
-          description: this.t.t('tour.avatar.kudosDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.kudos-badge')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.avatar.kudos')}</span>`, description: this.t.t('tour.avatar.kudosDesc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.kudos-badge')
       },
       {
         element: '.preview-panel',
-        popover: {
-          title: `${this.getIcon('user')} ${this.t.t('tour.avatar.preview')}</span>`,
-          description: this.t.t('tour.avatar.previewDesc'),
-          side: "right"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.preview-panel')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('user')} ${this.t.t('tour.avatar.preview')}</span>`, description: this.t.t('tour.avatar.previewDesc'), side: "right" },
+        onHighlightStarted: () => this.safeScroll('.preview-panel')
       },
       {
         element: '.shop-panel',
-        popover: {
-          title: `${this.getIcon('shopping')} ${this.t.t('tour.avatar.shop')}</span>`,
-          description: this.t.t('tour.avatar.shopDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.shop-panel')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('shopping')} ${this.t.t('tour.avatar.shop')}</span>`, description: this.t.t('tour.avatar.shopDesc'), side: "left" },
+        onHighlightStarted: () => this.safeScroll('.shop-panel')
       }
     ];
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startAboutTour() {
     this.initDriver();
-
     const steps: DriveStep[] = [
       {
         element: '.hero-inner',
-        popover: {
-          title: `${this.getIcon('rocket')} ${this.t.t('tour.about.hero')}</span>`,
-          description: this.t.t('tour.about.heroDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.hero-inner')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('rocket')} ${this.t.t('tour.about.hero')}</span>`, description: this.t.t('tour.about.heroDesc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.hero-inner')
       },
       {
         element: '.hero-counters',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.about.counters')}</span>`,
-          description: this.t.t('tour.about.countersDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.hero-counters')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.about.counters')}</span>`, description: this.t.t('tour.about.countersDesc'), side: "top" },
+        onHighlightStarted: () => this.safeScroll('.hero-counters')
       },
       {
         element: '.app-section:first-of-type',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.about.apps')}</span>`,
-          description: this.t.t('tour.about.appsDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.app-section:first-of-type')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.about.apps')}</span>`, description: this.t.t('tour.about.appsDesc'), side: "top" },
+        onHighlightStarted: () => this.safeScroll('.app-section:first-of-type')
       }
     ];
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startReportAwardTour() {
     this.initDriver();
-
     const steps: DriveStep[] = [
       {
         element: '.report-reason-banner',
-        popover: {
-          title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`,
-          description: this.t.t('tour.reportDetail.bannerDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.report-reason-banner')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`, description: this.t.t('tour.reportDetail.bannerDesc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.report-reason-banner')
       },
       {
         element: '.chat-wrap',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.reportDetail.content')}</span>`,
-          description: this.t.t('tour.reportDetail.contentDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.chat-wrap')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.reportDetail.content')}</span>`, description: this.t.t('tour.reportDetail.contentDesc'), side: "top" },
+        onHighlightStarted: () => this.safeScroll('.chat-wrap')
       }
     ];
-
     if (document.querySelector('.btn-resolve')) {
       steps.push({
         element: '.btn-resolve',
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`,
-          description: this.t.t('tour.reportDetail.actionDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-resolve')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`, description: this.t.t('tour.reportDetail.actionDesc'), side: "left" },
+        onHighlightStarted: () => this.safeScroll('.btn-resolve')
       });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startReportMessageTour() {
     this.initDriver();
-
     const steps: DriveStep[] = [
       {
         element: '.report-reason-banner',
-        popover: {
-          title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`,
-          description: this.t.t('tour.reportDetail.bannerDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.report-reason-banner')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`, description: this.t.t('tour.reportDetail.bannerDesc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.report-reason-banner')
       },
       {
         element: '.chat-body',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.reportMessage.chat')}</span>`,
-          description: this.t.t('tour.reportMessage.chatDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.chat-body')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.reportMessage.chat')}</span>`, description: this.t.t('tour.reportMessage.chatDesc'), side: "top" },
+        onHighlightStarted: () => this.safeScroll('.chat-body')
       },
       {
         element: '.highlighted',
-        popover: {
-          title: `${this.getIcon('flag')} ${this.t.t('tour.reportMessage.flagged')}</span>`,
-          description: this.t.t('tour.reportMessage.flaggedDesc'),
-          side: "right"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.highlighted')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('flag')} ${this.t.t('tour.reportMessage.flagged')}</span>`, description: this.t.t('tour.reportMessage.flaggedDesc'), side: "right" },
+        onHighlightStarted: () => this.safeScroll('.highlighted')
       }
     ];
-
     if (document.querySelector('.btn-resolve')) {
       steps.push({
         element: '.btn-resolve',
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`,
-          description: this.t.t('tour.reportDetail.actionDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-resolve')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`, description: this.t.t('tour.reportDetail.actionDesc'), side: "left" },
+        onHighlightStarted: () => this.safeScroll('.btn-resolve')
       });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
 
   startReportEventTour() {
     this.initDriver();
-
     const steps: DriveStep[] = [
       {
         element: '.report-reason-banner',
-        popover: {
-          title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`,
-          description: this.t.t('tour.reportDetail.bannerDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.report-reason-banner')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('alert')} ${this.t.t('tour.reportDetail.banner')}</span>`, description: this.t.t('tour.reportDetail.bannerDesc'), side: "bottom" },
+        onHighlightStarted: () => this.safeScroll('.report-reason-banner')
       },
       {
         element: '.top-photo',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.reportEvent.photo')}</span>`,
-          description: this.t.t('tour.reportEvent.photoDesc'),
-          side: "right"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.top-photo')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.reportEvent.photo')}</span>`, description: this.t.t('tour.reportEvent.photoDesc'), side: "right" },
+        onHighlightStarted: () => this.safeScroll('.top-photo')
       },
       {
         element: '.info-grid',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.reportEvent.details')}</span>`,
-          description: this.t.t('tour.reportEvent.detailsDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.info-grid')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.reportEvent.details')}</span>`, description: this.t.t('tour.reportEvent.detailsDesc'), side: "left" },
+        onHighlightStarted: () => this.safeScroll('.info-grid')
       }
     ];
-
     if (document.querySelector('.attendees-section')) {
       steps.push({
         element: '.attendees-section',
-        popover: {
-          title: `${this.getIcon('user')} ${this.t.t('tour.reportEvent.attendees')}</span>`,
-          description: this.t.t('tour.reportEvent.attendeesDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.attendees-section')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('user')} ${this.t.t('tour.reportEvent.attendees')}</span>`, description: this.t.t('tour.reportEvent.attendeesDesc'), side: "top" },
+        onHighlightStarted: () => this.safeScroll('.attendees-section')
       });
     }
-
     if (document.querySelector('.btn-resolve')) {
       steps.push({
         element: '.btn-resolve',
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`,
-          description: this.t.t('tour.reportDetail.actionDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-resolve')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        popover: { title: `${this.getIcon('check')} ${this.t.t('tour.reportDetail.action')}</span>`, description: this.t.t('tour.reportDetail.actionDesc'), side: "left" },
+        onHighlightStarted: () => this.safeScroll('.btn-resolve')
       });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startGotchaRulesTour() {
     this.initDriver();
     const steps: DriveStep[] = [
-      {
-        element: '.tabs',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`,
-          description: this.t.t('tour.gotcha.tabsDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.tabs')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.rules-info-card',
-        popover: {
-          title: `${this.getIcon('shield')} ${this.t.t('tour.gotcha.rulesInfo')}`,
-          description: this.t.t('tour.gotcha.rulesInfoDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.rules-info-card')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.steps-list',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.gotcha.rulesSteps')}`,
-          description: this.t.t('tour.gotcha.rulesStepsDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.steps-list')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.rules-list',
-        popover: {
-          title: `${this.getIcon('alert')} ${this.t.t('tour.gotcha.rulesImportant')}`,
-          description: this.t.t('tour.gotcha.rulesImportantDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.rules-list')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
+      { element: '.tabs', popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`, description: this.t.t('tour.gotcha.tabsDesc'), side: "bottom" }, onHighlightStarted: () => this.safeScroll('.tabs') },
+      { element: '.rules-info-card', popover: { title: `${this.getIcon('shield')} ${this.t.t('tour.gotcha.rulesInfo')}`, description: this.t.t('tour.gotcha.rulesInfoDesc'), side: "top" }, onHighlightStarted: () => this.safeScroll('.rules-info-card') },
+      { element: '.steps-list', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.gotcha.rulesSteps')}`, description: this.t.t('tour.gotcha.rulesStepsDesc'), side: "top" }, onHighlightStarted: () => this.safeScroll('.steps-list') },
+      { element: '.rules-list', popover: { title: `${this.getIcon('alert')} ${this.t.t('tour.gotcha.rulesImportant')}`, description: this.t.t('tour.gotcha.rulesImportantDesc'), side: "top" }, onHighlightStarted: () => this.safeScroll('.rules-list') }
     ];
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
@@ -535,80 +301,24 @@ export class TourService {
   startGotchaFeedTour() {
     this.initDriver();
     const steps: DriveStep[] = [];
-
     if (document.querySelector('.target-panel')) {
-      steps.push({
-        element: '.target-panel',
-        popover: {
-          title: `${this.getIcon('crosshair')} ${this.t.t('tour.gotcha.target')}`,
-          description: this.t.t('tour.gotcha.targetDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.target-panel')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+      steps.push({ element: '.target-panel', popover: { title: `${this.getIcon('crosshair')} ${this.t.t('tour.gotcha.target')}`, description: this.t.t('tour.gotcha.targetDesc'), side: "bottom" }, onHighlightStarted: () => this.safeScroll('.target-panel') });
     }
-
     if (document.querySelector('.countdown-section')) {
+      steps.push({ element: '.countdown-section', popover: { title: `${this.getIcon('timer')} ${this.t.t('tour.gotcha.timer')}`, description: this.t.t('tour.gotcha.timerDesc'), side: "top" }, onHighlightStarted: () => this.safeScroll('.countdown-section') });
+    }
+    steps.push({ element: '.tabs', popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`, description: this.t.t('tour.gotcha.tabsDesc'), side: "bottom" }, onHighlightStarted: () => this.safeScroll('.tabs') });
+    const feedEl = (document.querySelector('.feed-list') || document.querySelector('.feed-empty')) as HTMLElement;
+    if (feedEl) {
       steps.push({
-        element: '.countdown-section',
-        popover: {
-          title: `${this.getIcon('timer')} ${this.t.t('tour.gotcha.timer')}`,
-          description: this.t.t('tour.gotcha.timerDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.countdown-section')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        element: feedEl,
+        popover: { title: `${this.getIcon('swords')} ${this.t.t('tour.gotcha.feed')}`, description: feedEl.classList.contains('feed-list') ? this.t.t('tour.gotcha.feedDesc') : this.t.t('tour.gotcha.feedEmptyDesc'), side: "top" },
+        onHighlightStarted: () => this.safeScroll(feedEl.classList.contains('feed-list') ? '.feed-list' : '.feed-empty')
       });
     }
-
-    steps.push({
-      element: '.tabs',
-      popover: {
-        title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`,
-        description: this.t.t('tour.gotcha.tabsDesc'),
-        side: "bottom"
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.tabs')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    const feedEl = document.querySelector('.feed-list') ?? document.querySelector('.feed-empty');
-    steps.push({
-      ...(feedEl ? { element: feedEl as HTMLElement } : {}),
-      popover: {
-        title: `${this.getIcon('swords')} ${this.t.t('tour.gotcha.feed')}`,
-        description: feedEl
-          ? this.t.t('tour.gotcha.feedDesc')
-          : this.t.t('tour.gotcha.feedEmptyDesc'),
-        side: "top"
-      },
-      onHighlightStarted: () => {
-        feedEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
     if (document.querySelector('.btn-submit-kill')) {
-      steps.push({
-        element: '.btn-submit-kill',
-        popover: {
-          title: `${this.getIcon('swords')} ${this.t.t('tour.gotcha.submit')}`,
-          description: this.t.t('tour.gotcha.submitDesc'),
-          side: "left"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-submit-kill')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+      steps.push({ element: '.btn-submit-kill', popover: { title: `${this.getIcon('swords')} ${this.t.t('tour.gotcha.submit')}`, description: this.t.t('tour.gotcha.submitDesc'), side: "left" }, onHighlightStarted: () => this.safeScroll('.btn-submit-kill') });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
@@ -616,884 +326,160 @@ export class TourService {
   startGotchaReviewTour() {
     this.initDriver();
     const steps: DriveStep[] = [
-      {
-        element: '.tabs',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`,
-          description: this.t.t('tour.gotcha.tabsDesc'),
-          side: "bottom"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.tabs')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
+      { element: '.tabs', popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.gotcha.tabs')}`, description: this.t.t('tour.gotcha.tabsDesc'), side: "bottom" }, onHighlightStarted: () => this.safeScroll('.tabs') }
     ];
-
-    const reviewCard = document.querySelector('.review-card');
-    if (reviewCard) {
-      steps.push({
-        element: '.review-card',
-        popover: {
-          title: `${this.getIcon('scale')} ${this.t.t('tour.gotcha.review')}`,
-          description: this.t.t('tour.gotcha.reviewDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.review-card')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-      steps.push({
-        element: '.card-footer.review-actions',
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.gotcha.reviewActions')}`,
-          description: this.t.t('tour.gotcha.reviewActionsDesc'),
-          side: "top"
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.card-footer.review-actions')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+    if (document.querySelector('.review-card')) {
+      steps.push({ element: '.review-card', popover: { title: `${this.getIcon('scale')} ${this.t.t('tour.gotcha.review')}`, description: this.t.t('tour.gotcha.reviewDesc'), side: "top" }, onHighlightStarted: () => this.safeScroll('.review-card') });
+      steps.push({ element: '.card-footer.review-actions', popover: { title: `${this.getIcon('check')} ${this.t.t('tour.gotcha.reviewActions')}`, description: this.t.t('tour.gotcha.reviewActionsDesc'), side: "top" }, onHighlightStarted: () => this.safeScroll('.card-footer.review-actions') });
     } else {
-      steps.push({
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.gotcha.reviewEmpty')}`,
-          description: this.t.t('tour.gotcha.reviewEmptyDesc')
-        }
-      });
+      steps.push({ popover: { title: `${this.getIcon('check')} ${this.t.t('tour.gotcha.reviewEmpty')}`, description: this.t.t('tour.gotcha.reviewEmptyDesc') } });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startGotchaEndTour() {
     this.initDriver();
     const steps: DriveStep[] = [];
-
-    if (document.querySelector('.winner-card')) {
-      steps.push({
-        element: '.winner-card',
-        popover: {
-          title: `${this.getIcon('rocket')} ${this.t.t('tour.gotchaEnd.winner')}`,
-          description: this.t.t('tour.gotchaEnd.winnerDesc'),
-          side: 'bottom'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.winner-card')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    }
-
-    if (document.querySelector('.prize-card')) {
-      steps.push({
-        element: '.prize-card',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaEnd.prize')}`,
-          description: this.t.t('tour.gotchaEnd.prizeDesc'),
-          side: 'bottom'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.prize-card')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    }
-
-    if (document.querySelector('.awards-section')) {
-      steps.push({
-        element: '.awards-section',
-        popover: {
-          title: `${this.getIcon('shield')} ${this.t.t('tour.gotchaEnd.awards')}`,
-          description: this.t.t('tour.gotchaEnd.awardsDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.awards-section')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    }
-
-    if (document.querySelector('.graph-section')) {
-      steps.push({
-        element: '.graph-section',
-        popover: {
-          title: `${this.getIcon('target')} ${this.t.t('tour.gotchaEnd.graph')}`,
-          description: this.t.t('tour.gotchaEnd.graphDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.graph-section')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    }
-
+    if (document.querySelector('.winner-card')) steps.push({ element: '.winner-card', popover: { title: `${this.getIcon('rocket')} ${this.t.t('tour.gotchaEnd.winner')}`, description: this.t.t('tour.gotchaEnd.winnerDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.winner-card') });
+    if (document.querySelector('.prize-card')) steps.push({ element: '.prize-card', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaEnd.prize')}`, description: this.t.t('tour.gotchaEnd.prizeDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.prize-card') });
+    if (document.querySelector('.awards-section')) steps.push({ element: '.awards-section', popover: { title: `${this.getIcon('shield')} ${this.t.t('tour.gotchaEnd.awards')}`, description: this.t.t('tour.gotchaEnd.awardsDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.awards-section') });
+    if (document.querySelector('.graph-section')) steps.push({ element: '.graph-section', popover: { title: `${this.getIcon('target')} ${this.t.t('tour.gotchaEnd.graph')}`, description: this.t.t('tour.gotchaEnd.graphDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.graph-section') });
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startGotchaHistoryTour() {
     this.initDriver();
-    const steps: DriveStep[] = [
-      {
-        element: '.header-title-row',
-        popover: {
-          title: `${this.getIcon('timer')} ${this.t.t('tour.gotchaHistory.header')}`,
-          description: this.t.t('tour.gotchaHistory.headerDesc'),
-          side: 'bottom'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.header-title-row')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-    ];
-
-    const hasGames = !!document.querySelector('.history-card');
-
-    if (hasGames) {
-      steps.push({
-        element: '.history-grid',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.gotchaHistory.grid')}`,
-          description: this.t.t('tour.gotchaHistory.gridDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.history-grid')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-      steps.push({
-        element: '.history-card',
-        popover: {
-          title: `${this.getIcon('shield')} ${this.t.t('tour.gotchaHistory.card')}`,
-          description: this.t.t('tour.gotchaHistory.cardDesc'),
-          side: 'right'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.history-card')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-      steps.push({
-        element: '.history-card .winner-section',
-        popover: {
-          title: `${this.getIcon('rocket')} ${this.t.t('tour.gotchaHistory.winner')}`,
-          description: this.t.t('tour.gotchaHistory.winnerDesc'),
-          side: 'bottom'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.history-card .winner-section')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-      steps.push({
-        element: '.history-card .stats-row',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.gotchaHistory.stats')}`,
-          description: this.t.t('tour.gotchaHistory.statsDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.history-card .stats-row')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-      steps.push({
-        element: '.history-card .card-footer',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaHistory.view')}`,
-          description: this.t.t('tour.gotchaHistory.viewDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.history-card .card-footer')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+    const steps: DriveStep[] = [{ element: '.header-title-row', popover: { title: `${this.getIcon('timer')} ${this.t.t('tour.gotchaHistory.header')}`, description: this.t.t('tour.gotchaHistory.headerDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.header-title-row') }];
+    if (document.querySelector('.history-card')) {
+      steps.push({ element: '.history-grid', popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.gotchaHistory.grid')}`, description: this.t.t('tour.gotchaHistory.gridDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.history-grid') });
+      steps.push({ element: '.history-card', popover: { title: `${this.getIcon('shield')} ${this.t.t('tour.gotchaHistory.card')}`, description: this.t.t('tour.gotchaHistory.cardDesc'), side: 'right' }, onHighlightStarted: () => this.safeScroll('.history-card') });
+      steps.push({ element: '.history-card .winner-section', popover: { title: `${this.getIcon('rocket')} ${this.t.t('tour.gotchaHistory.winner')}`, description: this.t.t('tour.gotchaHistory.winnerDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.history-card .winner-section') });
+      steps.push({ element: '.history-card .stats-row', popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.gotchaHistory.stats')}`, description: this.t.t('tour.gotchaHistory.statsDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.history-card .stats-row') });
+      steps.push({ element: '.history-card .card-footer', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaHistory.view')}`, description: this.t.t('tour.gotchaHistory.viewDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.history-card .card-footer') });
     } else {
-      steps.push({
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.gotchaHistory.empty')}`,
-          description: this.t.t('tour.gotchaHistory.emptyDesc')
-        }
-      });
+      steps.push({ popover: { title: `${this.getIcon('check')} ${this.t.t('tour.gotchaHistory.empty')}`, description: this.t.t('tour.gotchaHistory.emptyDesc') } });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startProfileTour() {
     this.initDriver();
     const steps: DriveStep[] = [
-      {
-        element: '.profile-picture-wrapper',
-        popover: {
-          title: `${this.getIcon('user')} ${this.t.t('tour.profile.picture')}`,
-          description: this.t.t('tour.profile.pictureDesc'),
-          side: 'bottom'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.profile-picture-wrapper')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.profile-actions',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.profile.actions')}`,
-          description: this.t.t('tour.profile.actionsDesc'),
-          side: 'bottom'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.profile-actions')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.profile-info',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.profile.info')}`,
-          description: this.t.t('tour.profile.infoDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.profile-info')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
+      { element: '.profile-picture-wrapper', popover: { title: `${this.getIcon('user')} ${this.t.t('tour.profile.picture')}`, description: this.t.t('tour.profile.pictureDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.profile-picture-wrapper') },
+      { element: '.profile-actions', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.profile.actions')}`, description: this.t.t('tour.profile.actionsDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.profile-actions') },
+      { element: '.profile-info', popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.profile.info')}`, description: this.t.t('tour.profile.infoDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.profile-info') }
     ];
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startKudoOverviewTour() {
     this.initDriver();
     const hasEntries = !!document.querySelector('.timeline-item');
-
     const steps: DriveStep[] = [
-      {
-        element: '.content-card:first-of-type',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.kudoOverview.stats')}`,
-          description: this.t.t('tour.kudoOverview.statsDesc'),
-          side: 'right'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.content-card:first-of-type')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.kudo-summary',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.kudoOverview.summary')}`,
-          description: this.t.t('tour.kudoOverview.summaryDesc'),
-          side: 'bottom'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.kudo-summary')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.stats-bars-container',
-        popover: {
-          title: `${this.getIcon('target')} ${this.t.t('tour.kudoOverview.bars')}`,
-          description: this.t.t('tour.kudoOverview.barsDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.stats-bars-container')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.content-card:last-of-type',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.kudoOverview.timeline')}`,
-          description: this.t.t('tour.kudoOverview.timelineDesc'),
-          side: 'left'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.content-card:last-of-type')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
+      { element: '.content-card:first-of-type', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.kudoOverview.stats')}`, description: this.t.t('tour.kudoOverview.statsDesc'), side: 'right' }, onHighlightStarted: () => this.safeScroll('.content-card:first-of-type') },
+      { element: '.kudo-summary', popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.kudoOverview.summary')}`, description: this.t.t('tour.kudoOverview.summaryDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.kudo-summary') },
+      { element: '.stats-bars-container', popover: { title: `${this.getIcon('target')} ${this.t.t('tour.kudoOverview.bars')}`, description: this.t.t('tour.kudoOverview.barsDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.stats-bars-container') },
+      { element: '.content-card:last-of-type', popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.kudoOverview.timeline')}`, description: this.t.t('tour.kudoOverview.timelineDesc'), side: 'left' }, onHighlightStarted: () => this.safeScroll('.content-card:last-of-type') }
     ];
-
     if (hasEntries) {
-      steps.push({
-        element: '.timeline-item',
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.kudoOverview.entry')}`,
-          description: this.t.t('tour.kudoOverview.entryDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.timeline-item')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-
-      const reportBtn = document.querySelector('.timeline-report-btn');
-      if (reportBtn) {
-        steps.push({
-          element: '.timeline-report-btn',
-          popover: {
-            title: `${this.getIcon('flag')} ${this.t.t('tour.kudoOverview.report')}`,
-            description: this.t.t('tour.kudoOverview.reportDesc'),
-            side: 'left'
-          },
-          onHighlightStarted: () => {
-            document.querySelector('.timeline-report-btn')
-              ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        });
+      steps.push({ element: '.timeline-item', popover: { title: `${this.getIcon('check')} ${this.t.t('tour.kudoOverview.entry')}`, description: this.t.t('tour.kudoOverview.entryDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.timeline-item') });
+      if (document.querySelector('.timeline-report-btn')) {
+        steps.push({ element: '.timeline-report-btn', popover: { title: `${this.getIcon('flag')} ${this.t.t('tour.kudoOverview.report')}`, description: this.t.t('tour.kudoOverview.reportDesc'), side: 'left' }, onHighlightStarted: () => this.safeScroll('.timeline-report-btn') });
       } else {
-        steps.push({
-          popover: {
-            title: `${this.getIcon('flag')} ${this.t.t('tour.kudoOverview.report')}`,
-            description: this.t.t('tour.kudoOverview.reportDescNoBtn')
-          }
-        });
+        steps.push({ popover: { title: `${this.getIcon('flag')} ${this.t.t('tour.kudoOverview.report')}`, description: this.t.t('tour.kudoOverview.reportDescNoBtn') } });
       }
     } else {
-      steps.push({
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.kudoOverview.empty')}`,
-          description: this.t.t('tour.kudoOverview.emptyDesc')
-        }
-      });
+      steps.push({ popover: { title: `${this.getIcon('check')} ${this.t.t('tour.kudoOverview.empty')}`, description: this.t.t('tour.kudoOverview.emptyDesc') } });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startEventDetailTour() {
     this.initDriver();
-    const steps: DriveStep[] = [];
-
-    steps.push({
-      element: '.top-photo',
-      popover: {
-        title: `${this.getIcon('layout')} ${this.t.t('tour.eventDetail.photo')}`,
-        description: this.t.t('tour.eventDetail.photoDesc'),
-        side: 'right'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.top-photo')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    steps.push({
-      element: '.top-info',
-      popover: {
-        title: `${this.getIcon('flag')} ${this.t.t('tour.eventDetail.info')}`,
-        description: this.t.t('tour.eventDetail.infoDesc'),
-        side: 'left'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.top-info')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    steps.push({
-      element: '.btn-report-flag',
-      popover: {
-        title: `${this.getIcon('alert')} ${this.t.t('tour.eventDetail.report')}`,
-        description: this.t.t('tour.eventDetail.reportDesc'),
-        side: 'bottom'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.btn-report-flag')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    const actionArea = document.querySelector('.action-area');
-    if (actionArea) {
-      steps.push({
-        element: '.action-area',
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.eventDetail.action')}`,
-          description: this.t.t('tour.eventDetail.actionDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.action-area')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    }
-
-    const chat = document.querySelector('.bottom-chat');
-    if (chat) {
-      steps.push({
-        element: '.bottom-chat',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.eventDetail.chat')}`,
-          description: this.t.t('tour.eventDetail.chatDesc'),
-          side: 'right'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.bottom-chat')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+    const steps: DriveStep[] = [
+      { element: '.top-photo', popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.eventDetail.photo')}`, description: this.t.t('tour.eventDetail.photoDesc'), side: 'right' }, onHighlightStarted: () => this.safeScroll('.top-photo') },
+      { element: '.top-info', popover: { title: `${this.getIcon('flag')} ${this.t.t('tour.eventDetail.info')}`, description: this.t.t('tour.eventDetail.infoDesc'), side: 'left' }, onHighlightStarted: () => this.safeScroll('.top-info') },
+      { element: '.btn-report-flag', popover: { title: `${this.getIcon('alert')} ${this.t.t('tour.eventDetail.report')}`, description: this.t.t('tour.eventDetail.reportDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.btn-report-flag') }
+    ];
+    if (document.querySelector('.action-area')) steps.push({ element: '.action-area', popover: { title: `${this.getIcon('check')} ${this.t.t('tour.eventDetail.action')}`, description: this.t.t('tour.eventDetail.actionDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.action-area') });
+    if (document.querySelector('.bottom-chat')) {
+      steps.push({ element: '.bottom-chat', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.eventDetail.chat')}`, description: this.t.t('tour.eventDetail.chatDesc'), side: 'right' }, onHighlightStarted: () => this.safeScroll('.bottom-chat') });
     } else {
-      steps.push({
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.eventDetail.chatLocked')}`,
-          description: this.t.t('tour.eventDetail.chatLockedDesc')
-        }
-      });
+      steps.push({ popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.eventDetail.chatLocked')}`, description: this.t.t('tour.eventDetail.chatLockedDesc') } });
     }
-
-    const attendees = document.querySelector('.attendees-panel');
-    if (attendees) {
-      steps.push({
-        element: '.attendees-panel',
-        popover: {
-          title: `${this.getIcon('user')} ${this.t.t('tour.eventDetail.attendees')}`,
-          description: this.t.t('tour.eventDetail.attendeesDesc'),
-          side: 'left'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.attendees-panel')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    }
-
+    if (document.querySelector('.attendees-panel')) steps.push({ element: '.attendees-panel', popover: { title: `${this.getIcon('user')} ${this.t.t('tour.eventDetail.attendees')}`, description: this.t.t('tour.eventDetail.attendeesDesc'), side: 'left' }, onHighlightStarted: () => this.safeScroll('.attendees-panel') });
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startGotchaSettingsTour() {
     this.initDriver();
     const isLocked = !!document.querySelector('.settings-card--locked');
-    const hasProps = !!document.querySelector('.prop-row');
-    const steps: DriveStep[] = [];
-
-    steps.push({
-      element: '.settings-card:first-child',
-      popover: {
-        title: `${this.getIcon('sliders')} ${this.t.t('tour.gotchaSettings.gameCard')}`,
-        description: isLocked
-          ? this.t.t('tour.gotchaSettings.gameCardLocked')
-          : this.t.t('tour.gotchaSettings.gameCardDesc'),
-        side: 'top'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.settings-card:first-child')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    steps.push({
-      element: '.field-group--startdate',
-      popover: {
-        title: `${this.getIcon('calendar')} ${this.t.t('tour.gotchaSettings.startDate')}`,
-        description: this.t.t('tour.gotchaSettings.startDateDesc'),
-        side: 'bottom'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.field-group--startdate')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    steps.push({
-      element: '.field-group--deadline',
-      popover: {
-        title: `${this.getIcon('timer')} ${this.t.t('tour.gotchaSettings.deadline')}`,
-        description: this.t.t('tour.gotchaSettings.deadlineDesc'),
-        side: 'bottom'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.field-group--deadline')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    steps.push({
-      element: '.field-group--prize-photo',
-      popover: {
-        title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaSettings.prize')}`,
-        description: this.t.t('tour.gotchaSettings.prizeDesc'),
-        side: 'top'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.field-group--prize-photo')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    steps.push({
-      element: '.field-row--prize-desc',
-      popover: {
-        title: `${this.getIcon('flag')} ${this.t.t('tour.gotchaSettings.prizeDesc2')}`,
-        description: this.t.t('tour.gotchaSettings.prizeDesc2Desc'),
-        side: 'top'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.field-row--prize-desc')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    steps.push({
-      element: '.settings-card:last-child',
-      popover: {
-        title: `${this.getIcon('shopping')} ${this.t.t('tour.gotchaSettings.props')}`,
-        description: this.t.t('tour.gotchaSettings.propsDesc'),
-        side: 'top'
-      },
-      onHighlightStarted: () => {
-        document.querySelector('.settings-card:last-child')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    if (hasProps) {
-      steps.push({
-        element: '.prop-row',
-        popover: {
-          title: `${this.getIcon('check')} ${this.t.t('tour.gotchaSettings.propRow')}`,
-          description: this.t.t('tour.gotchaSettings.propRowDesc'),
-          side: 'right'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.prop-row')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+    const steps: DriveStep[] = [
+      { element: '.settings-card:first-child', popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.gotchaSettings.gameCard')}`, description: isLocked ? this.t.t('tour.gotchaSettings.gameCardLocked') : this.t.t('tour.gotchaSettings.gameCardDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.settings-card:first-child') },
+      { element: '.field-group--startdate', popover: { title: `${this.getIcon('calendar')} ${this.t.t('tour.gotchaSettings.startDate')}`, description: this.t.t('tour.gotchaSettings.startDateDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.field-group--startdate') },
+      { element: '.field-group--deadline', popover: { title: `${this.getIcon('timer')} ${this.t.t('tour.gotchaSettings.deadline')}`, description: this.t.t('tour.gotchaSettings.deadlineDesc'), side: 'bottom' }, onHighlightStarted: () => this.safeScroll('.field-group--deadline') },
+      { element: '.field-group--prize-photo', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.gotchaSettings.prize')}`, description: this.t.t('tour.gotchaSettings.prizeDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.field-group--prize-photo') },
+      { element: '.field-row--prize-desc', popover: { title: `${this.getIcon('flag')} ${this.t.t('tour.gotchaSettings.prizeDesc2')}`, description: this.t.t('tour.gotchaSettings.prizeDesc2Desc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.field-row--prize-desc') },
+      { element: '.settings-card:last-child', popover: { title: `${this.getIcon('shopping')} ${this.t.t('tour.gotchaSettings.props')}`, description: this.t.t('tour.gotchaSettings.propsDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.settings-card:last-child') }
+    ];
+    if (document.querySelector('.prop-row')) {
+      steps.push({ element: '.prop-row', popover: { title: `${this.getIcon('check')} ${this.t.t('tour.gotchaSettings.propRow')}`, description: this.t.t('tour.gotchaSettings.propRowDesc'), side: 'right' }, onHighlightStarted: () => this.safeScroll('.prop-row') });
     } else {
-      steps.push({
-        element: '.props-empty',
-        popover: {
-          title: `${this.getIcon('alert')} ${this.t.t('tour.gotchaSettings.noProps')}`,
-          description: this.t.t('tour.gotchaSettings.noPropsDesc'),
-          side: 'top'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.props-empty')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+      steps.push({ element: '.props-empty', popover: { title: `${this.getIcon('alert')} ${this.t.t('tour.gotchaSettings.noProps')}`, description: this.t.t('tour.gotchaSettings.noPropsDesc'), side: 'top' }, onHighlightStarted: () => this.safeScroll('.props-empty') });
     }
-
     if (!isLocked && document.querySelector('.btn-add-prop')) {
-      steps.push({
-        element: '.btn-add-prop',
-        popover: {
-          title: `${this.getIcon('plus')} ${this.t.t('tour.gotchaSettings.addProp')}`,
-          description: this.t.t('tour.gotchaSettings.addPropDesc'),
-          side: 'left'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-add-prop')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
+      steps.push({ element: '.btn-add-prop', popover: { title: `${this.getIcon('plus')} ${this.t.t('tour.gotchaSettings.addProp')}`, description: this.t.t('tour.gotchaSettings.addPropDesc'), side: 'left' }, onHighlightStarted: () => this.safeScroll('.btn-add-prop') });
     }
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startHomeTour() {
     this.initDriver();
-
-    const scrollAndHighlight = (selector: string): Promise<void> => {
-      return new Promise(resolve => {
-        const el = document.querySelector(selector);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          setTimeout(resolve, 400);
-        } else {
-          resolve();
-        }
-      });
-    };
-
     const steps: DriveStep[] = [
-      {
-        element: '.welcome-header',
-        popover: {
-          title: `${this.getIcon('rocket')} ${this.t.t('tour.home.welcome')}`,
-          description: this.t.t('tour.home.welcomeDesc'),
-          side: 'bottom',
-          align: 'start'
-        },
-        onHighlightStarted: () => {
-          scrollAndHighlight('.welcome-header');
-        }
-      },
-      {
-        element: '.action-grid',
-        popover: {
-          title: `${this.getIcon('layout')} ${this.t.t('tour.home.platforms')}`,
-          description: this.t.t('tour.home.platformsDesc'),
-          side: 'bottom',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          scrollAndHighlight('.action-grid');
-        }
-      },
-      {
-        element: '.info-pill-btn',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.home.infoBtn')}`,
-          description: this.t.t('tour.home.infoBtnDesc'),
-          side: 'right',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          scrollAndHighlight('.info-pill-btn');
-        }
-      },
-      {
-        element: '[class*="accordion-item"]:first-of-type',
-        popover: {
-          title: `${this.getIcon('user')} ${this.t.t('tour.home.profile')}`,
-          description: this.t.t('tour.home.profileDesc'),
-          side: 'top',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          scrollAndHighlight('[class*="accordion-item"]:first-of-type');
-        }
-      },
-      {
-        element: '.games-list',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.home.minigames')}`,
-          description: this.t.t('tour.home.minigamesDesc'),
-          side: 'top',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          // Zorg dat het accordion open is voor het scrollen
-          const accordionHeader = document.querySelector(
-            '[class*="accordion-item"]:first-of-type .accordion-header'
-          ) as HTMLElement;
-          if (accordionHeader) accordionHeader.click();
-          setTimeout(() => scrollAndHighlight('.games-list'), 200);
-        }
-      },
-      {
-        element: '[class*="accordion-item"]:last-of-type',
-        popover: {
-          title: `${this.getIcon('calendar')} ${this.t.t('tour.home.agenda')}`,
-          description: this.t.t('tour.home.agendaDesc'),
-          side: 'top',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          scrollAndHighlight('[class*="accordion-item"]:last-of-type');
-        }
-      },
-      {
-        element: '.tl-wrap',
-        popover: {
-          title: `${this.getIcon('timer')} ${this.t.t('tour.home.timeline')}`,
-          description: this.t.t('tour.home.timelineDesc'),
-          side: 'top',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          const agendaHeader = document.querySelector(
-            '[class*="accordion-item"]:last-of-type .accordion-header'
-          ) as HTMLElement;
-          if (agendaHeader) agendaHeader.click();
-          setTimeout(() => scrollAndHighlight('.tl-wrap'), 200);
-        }
-      }
+      { element: '.welcome-header', popover: { title: `${this.getIcon('rocket')} ${this.t.t('tour.home.welcome')}`, description: this.t.t('tour.home.welcomeDesc'), side: 'bottom', align: 'start' }, onHighlightStarted: () => this.safeScroll('.welcome-header') },
+      { element: '.action-grid', popover: { title: `${this.getIcon('layout')} ${this.t.t('tour.home.platforms')}`, description: this.t.t('tour.home.platformsDesc'), side: 'bottom', align: 'center' }, onHighlightStarted: () => this.safeScroll('.action-grid') },
+      { element: '.info-pill-btn', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.home.infoBtn')}`, description: this.t.t('tour.home.infoBtnDesc'), side: 'right', align: 'center' }, onHighlightStarted: () => this.safeScroll('.info-pill-btn') },
+      { element: '[class*="accordion-item"]:first-of-type', popover: { title: `${this.getIcon('user')} ${this.t.t('tour.home.profile')}`, description: this.t.t('tour.home.profileDesc'), side: 'top', align: 'center' }, onHighlightStarted: () => this.safeScroll('[class*="accordion-item"]:first-of-type') },
+      { element: '.games-list', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.home.minigames')}`, description: this.t.t('tour.home.minigamesDesc'), side: 'top', align: 'center' }, onHighlightStarted: () => this.safeScroll('.games-list', '[class*="accordion-item"]:first-of-type .accordion-header') },
+      { element: '[class*="accordion-item"]:last-of-type', popover: { title: `${this.getIcon('calendar')} ${this.t.t('tour.home.agenda')}`, description: this.t.t('tour.home.agendaDesc'), side: 'top', align: 'center' }, onHighlightStarted: () => this.safeScroll('[class*="accordion-item"]:last-of-type') },
+      { element: '.tl-wrap', popover: { title: `${this.getIcon('timer')} ${this.t.t('tour.home.timeline')}`, description: this.t.t('tour.home.timelineDesc'), side: 'top', align: 'center' }, onHighlightStarted: () => this.safeScroll('.tl-wrap', '[class*="accordion-item"]:last-of-type .accordion-header') }
     ];
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startUserlistTour() {
     this.initDriver();
-
     const steps: DriveStep[] = [
-      {
-        element: '.header-section',
-        popover: {
-          title: `${this.getIcon('user')} ${this.t.t('tour.userlist.title')}`,
-          description: this.t.t('tour.userlist.titleDesc'),
-          side: 'bottom',
-          align: 'start'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.header-section')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.leaderboard-section',
-        popover: {
-          title: `${this.getIcon('scale')} ${this.t.t('tour.userlist.leaderboard')}`,
-          description: this.t.t('tour.userlist.leaderboardDesc'),
-          side: 'bottom',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.leaderboard-section')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.filter-bar',
-        popover: {
-          title: `${this.getIcon('filter')} ${this.t.t('tour.userlist.filter')}`,
-          description: this.t.t('tour.userlist.filterDesc'),
-          side: 'bottom',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.filter-bar')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.user-grid',
-        popover: {
-          title: `${this.getIcon('user')} ${this.t.t('tour.userlist.grid')}`,
-          description: this.t.t('tour.userlist.gridDesc'),
-          side: 'top',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.user-grid')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.btn-award',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.userlist.award')}`,
-          description: this.t.t('tour.userlist.awardDesc'),
-          side: 'left',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-award')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
+      { element: '.header-section', popover: { title: `${this.getIcon('user')} ${this.t.t('tour.userlist.title')}`, description: this.t.t('tour.userlist.titleDesc'), side: 'bottom', align: 'start' }, onHighlightStarted: () => this.safeScroll('.header-section') },
+      { element: '.leaderboard-section', popover: { title: `${this.getIcon('scale')} ${this.t.t('tour.userlist.leaderboard')}`, description: this.t.t('tour.userlist.leaderboardDesc'), side: 'bottom', align: 'center' }, onHighlightStarted: () => this.safeScroll('.leaderboard-section') },
+      { element: '.filter-bar', popover: { title: `${this.getIcon('filter')} ${this.t.t('tour.userlist.filter')}`, description: this.t.t('tour.userlist.filterDesc'), side: 'bottom', align: 'center' }, onHighlightStarted: () => this.safeScroll('.filter-bar') },
+      { element: '.user-grid', popover: { title: `${this.getIcon('user')} ${this.t.t('tour.userlist.grid')}`, description: this.t.t('tour.userlist.gridDesc'), side: 'top', align: 'center' }, onHighlightStarted: () => this.safeScroll('.user-grid') },
+      { element: '.btn-award', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.userlist.award')}`, description: this.t.t('tour.userlist.awardDesc'), side: 'left', align: 'center' }, onHighlightStarted: () => this.safeScroll('.btn-award') }
     ];
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
+
   startLeaderboardTour() {
     this.initDriver();
-
     const steps: DriveStep[] = [
-      {
-        element: '.lb-header',
-        popover: {
-          title: `${this.getIcon('scale')} ${this.t.t('tour.leaderboard.title')}`,
-          description: this.t.t('tour.leaderboard.titleDesc'),
-          side: 'bottom',
-          align: 'start'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.lb-header')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.btn-create',
-        popover: {
-          title: `${this.getIcon('plus')} ${this.t.t('tour.leaderboard.create')}`,
-          description: this.t.t('tour.leaderboard.createDesc'),
-          side: 'bottom',
-          align: 'end'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.btn-create')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.filter-bar',
-        popover: {
-          title: `${this.getIcon('filter')} ${this.t.t('tour.leaderboard.filter')}`,
-          description: this.t.t('tour.leaderboard.filterDesc'),
-          side: 'bottom',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.filter-bar')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.sort-buttons',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.leaderboard.sort')}`,
-          description: this.t.t('tour.leaderboard.sortDesc'),
-          side: 'bottom',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.sort-buttons')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.lb-grid',
-        popover: {
-          title: `${this.getIcon('zap')} ${this.t.t('tour.leaderboard.grid')}`,
-          description: this.t.t('tour.leaderboard.gridDesc'),
-          side: 'top',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.lb-grid')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.lb-card--active, .lb-card',
-        popover: {
-          title: `${this.getIcon('target')} ${this.t.t('tour.leaderboard.card')}`,
-          description: this.t.t('tour.leaderboard.cardDesc'),
-          side: 'right',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          const card = document.querySelector('.lb-card--active') ?? document.querySelector('.lb-card');
-          card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      },
-      {
-        element: '.card-edit-btn',
-        popover: {
-          title: `${this.getIcon('sliders')} ${this.t.t('tour.leaderboard.edit')}`,
-          description: this.t.t('tour.leaderboard.editDesc'),
-          side: 'left',
-          align: 'center'
-        },
-        onHighlightStarted: () => {
-          document.querySelector('.card-edit-btn')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
+      { element: '.lb-header', popover: { title: `${this.getIcon('scale')} ${this.t.t('tour.leaderboard.title')}`, description: this.t.t('tour.leaderboard.titleDesc'), side: 'bottom', align: 'start' }, onHighlightStarted: () => this.safeScroll('.lb-header') },
+      { element: '.btn-create', popover: { title: `${this.getIcon('plus')} ${this.t.t('tour.leaderboard.create')}`, description: this.t.t('tour.leaderboard.createDesc'), side: 'bottom', align: 'end' }, onHighlightStarted: () => this.safeScroll('.btn-create') },
+      { element: '.filter-bar', popover: { title: `${this.getIcon('filter')} ${this.t.t('tour.leaderboard.filter')}`, description: this.t.t('tour.leaderboard.filterDesc'), side: 'bottom', align: 'center' }, onHighlightStarted: () => this.safeScroll('.filter-bar') },
+      { element: '.sort-buttons', popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.leaderboard.sort')}`, description: this.t.t('tour.leaderboard.sortDesc'), side: 'bottom', align: 'center' }, onHighlightStarted: () => this.safeScroll('.sort-buttons') },
+      { element: '.lb-grid', popover: { title: `${this.getIcon('zap')} ${this.t.t('tour.leaderboard.grid')}`, description: this.t.t('tour.leaderboard.gridDesc'), side: 'top', align: 'center' }, onHighlightStarted: () => this.safeScroll('.lb-grid') },
+      { element: '.lb-card--active, .lb-card', popover: { title: `${this.getIcon('target')} ${this.t.t('tour.leaderboard.card')}`, description: this.t.t('tour.leaderboard.cardDesc'), side: 'right', align: 'center' }, onHighlightStarted: () => this.safeScroll(document.querySelector('.lb-card--active') ? '.lb-card--active' : '.lb-card') },
+      { element: '.card-edit-btn', popover: { title: `${this.getIcon('sliders')} ${this.t.t('tour.leaderboard.edit')}`, description: this.t.t('tour.leaderboard.editDesc'), side: 'left', align: 'center' }, onHighlightStarted: () => this.safeScroll('.card-edit-btn') }
     ];
-
     this.driverObj?.setSteps(steps);
     this.driverObj?.drive();
   }
-
 }
