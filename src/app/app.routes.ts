@@ -61,5 +61,5 @@ export const routes: Routes = [
   { path: 'minigames/minesweeper', component: MinesweeperPageComponent, canActivate: [MsalGuard] },
   { path: 'minigames/sudoku', component: SudokuPageComponent, canActivate: [MsalGuard] },
 
-  {path: 'leaderboard', component: LeaderboardComponent, canActivate: [MsalGuard]},
+  {path: 'leaderboard', component: LeaderboardComponent, canActivate: [MsalGuard,roleGuard], data: {role: Role.LECTOR}},
 ];

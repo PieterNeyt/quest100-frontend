@@ -14,10 +14,10 @@
       <div class="action-grid">
         @for (btn of actionButtons; track btn.key) {
           <div class="action-group">
-            <button class="main-action-btn" (click)="navigateToAbout(btn.key)">
+            <a class="main-action-btn" [href]="btn.url" target="_blank" rel="noopener">
               <img [src]="btn.logoUrl" [alt]="btn.label" class="action-btn-logo"/>
               {{ btn.label }}
-            </button>
+            </a>
             <button class="info-pill-btn" (click)="navigateToAbout(btn.key)">
               <ng-icon name="lucideInfo" class="size-6"></ng-icon>
             </button>
